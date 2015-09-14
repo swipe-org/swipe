@@ -30,7 +30,7 @@ Swipe was born to fill this gap. It allows non-developers to create interactive 
 
 A Swipe document is a UTF8 JSON file, which consists of a collection of pages. 
 
-Here is a Swipe document which consits of two pages:
+Here is a Swipe document which consists of two pages:
 
 ```
 {
@@ -48,3 +48,13 @@ Here is a Swipe document which consits of two pages:
     ]
 }
 ```
+When the user opens this document with a Swipe viewer, the user will see only the first page with text "Hello World!" in the middle of screen. The user needs to swipe up (since the vertical scrolling is the default) to see the second page.
+
+### Document Properties
+
+- *title*(String): Title of the document, optional
+- *bc*(Color): Background color, defalut is dark gray
+- *dimension*([Int, Int]): Dimension of the document, default is [320, 568]
+- *paging*(String): Paging direction, *vertical* (default), *leftToRight* or *rightToLeft*
+- *orientation*(String): Document orientation, *portrait* (default) or *landscape*
+- *duration*(Float): Duration of the animation in seconds, default is 0.2 seconds
