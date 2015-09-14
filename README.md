@@ -160,14 +160,16 @@ An *Element* is a visible entity on a Page. It occupies a specified rectangle ar
   - **fillColor** (Color): Fill color, default is clear, animatable
   - **strokeStart** (Float): Starting offset, default is 0, animatable
   - **strokeEnd** (Float): Ending offset, default is 1, animatable
-- **video** (String):
-  - **videoStart** (Float):
-  - **videoDuration** (Float):
-- **to** ():
-- **loop** ():
-- **action** ():
+- **video** (String): Vide to play
+  - **videoStart** (Float): Starting point of the video in seconds, default is 0
+  - **videoDuration** (Float): Ending point of the video in seconds
+- **to** (Transition): Specifies the Transitional Animation
+- **loop** (Loop): Specifies the Loop Animation
+- **action** (String): Specifies the Action
 
-##7. Animation
+##7. Transition
 
 ##8. Loop Animation
+
+##9. Action
 
