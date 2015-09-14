@@ -136,26 +136,30 @@ An *Element* is a visible entity on a Page. It occupies a specified rectangle ar
 - **y** (Float or Percent): y-position of the element, default is 0
 - **w** (Float or Percent): width of the element, default is "100%"
 - **h** (Float or Percent): height of the element, default is "100%"
-- **bc** (Color): background color, default is *clear*
+- **bc** (Color): background color, default is *clear*, animatable
 - **clip** (Boolean): Specifies clipping behavior, default is false
-- **borderWidth** (Float): Width of the border, default is 0
-- **borderColor** (Color): Color of the border
-- **cornerRadius** (Float): Size of the corner radius
-- **opacity** (Float): Opacity of the element, between 0 to 1
+- **borderWidth** (Float): Width of the border, default is 0, animatable
+- **borderColor** (Color): Color of the border, animatable
+- **cornerRadius** (Float): Size of the corner radius, animatable
+- **opacity** (Float): Opacity of the element, between 0 to 1, animatable
+- **rotate** (Float): Rotation in degree, clockwise, defalut is 0, animatable
+- **scale** (Float or [Float, Float]): Scaling factor, default is [1, 1], animatable
+- **translate** ([Float, Float]): Translation, default is [0, 0], animatable
 - **text** (String): Text to display
   - **textAlign** (String): Text alignment, *center* (default), *left* or *right*
   - **fontSize** (Float or Percent): Font size
-  - **textColor** (Color): Color of the text
-- **img** (URL): Image to display
-- **mask** (URL): Image mask
+  - **textColor** (Color): Color of the text, animatable
+- **img** (URL): Image to display, animatable
+- **mask** (URL): Image mask (PNG with the alpha channel)
 - **sprite** (URL): Sprite to display
-  - **slice** ([Int, Int]):
-  - **slot** ([Int, Int]):
-- **path** (String):
-  - **lineWidth** (Float):
-  - **fillColor** (Float):
-  - **strokeStart** (Float):
-  - **strokeEnd** (Float):
+  - **slice** ([Int, Int]): Dimension of the sprite
+  - **slot** ([Int, Int]): Slot to diplay, animatable
+- **path** (String): Path to display (SVG style), animatable
+  - **lineWidth** (Float): Width of stroke, default is 0
+  - **strokeColor** (Color): Color of the stroke, default is black, animatable
+  - **fillColor** (Color): Fill color, default is clear, animatable
+  - **strokeStart** (Float): Starting offset, default is 0, animatable
+  - **strokeEnd** (Float): Ending offset, default is 1, animatable
 - **video** (String):
   - **videoStart** (Float):
   - **videoDuration** (Float):
