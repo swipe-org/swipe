@@ -58,3 +58,7 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **paging** (String): Paging direction, *vertical* (default), *leftToRight* or *rightToLeft*
 - **orientation** (String): Document orientation, *portrait* (default) or *landscape*
 - **duration** (Float): Duration of the animation in seconds, default is 0.2 seconds
+- **pages** ([Page+]): Collection of **Pages** 
+- **scene** ({Name:Scene}): Named **Scenes** dictionary
+- **elements** ({Name:Element}): Named **Elements** dictionary
+- **paths** ({Name:Path}): Named **Paths** dictionary
