@@ -90,4 +90,6 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 - **duration** (Float): Duration of the auto animation in seconds, default is 0.2 seconds
 - **repeat** (Boolean): Repeat rule of the auto animation, default is *false*
 - **rewind** (Boolean): Rewind rule of the auto animation when the user leaves the page, defaul is *false*
-- **scene** (String): Name of the scene, default is *\**
+- **scene** (String): Name of the scene, default is *
+- **audio** (URL): Specifies the sound effect to be played in sync with the animation
+- **speech** (String): Specifies the text-to-speech to be played in sync with the animation
