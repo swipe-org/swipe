@@ -193,7 +193,49 @@ An *Element* is a visible entity on a Page. It occupies a specified rectangle ar
 
 ##7. Transition Animation
 
-The **Transition Animation** specifies a set of animations to play right after or during the page transition (depending on the "transition" property of the page).  
+The **Transition Animation** specifies a set of animations to play right after or during the page transition (depending on the "transition" property of the page).
+
+The "to" property of each element specifies the animation to be performed on the element, by specifying a new value for animatable properties (such as "opacity", "rotate", "translate", "bc", "path"). 
+
+Following example animates the text "I'm animatable!" down when the second page appears on the screen. 
+
+```
+{
+    "pages": [
+        {
+            "elements": [
+                { "text":"Hello World!" }
+            ]
+        },
+        {
+            "elements": [
+                { "text":"I'm animatable!", "to":{ "translate":[0, 200] } }
+            ]
+        }
+    ]
+}
+```
+If the "animation" property of the page is "auto" (which is default) like the sample above, the animation happens after the page scrolling, and the duration of the animation is determined by the "duration" property of the page (the default is 0.2 seconds). 
+
+If the "animation" property of the page is "scroll" like the example below, the animation takes place while the user swipes the previous page up to see this page, and the "duration" property of the page will be ignored (since the user's swipe action determines the duration). 
+
+```
+{
+    "pages": [
+        {
+            "elements": [
+                { "text":"Hello World!" }
+            ]
+        },
+        {
+            "animation":"scroll",
+            "elements": [
+                { "text":"Hello World!", "to":{ "translate":[0, 200] } }
+            ]
+        }
+    ]
+}
+```
 
 ##8. Loop Animation
 
