@@ -103,10 +103,10 @@ The inter-page transition is defined by the "transition" property of the procedi
 ### Value for the "transition" property
 
 - *scroll*: regular scrolling behavior (default)
-- *fadeIn*: The proceding *Page* will fade-in while the user drags it in.
-- *replace*: The proceding *Page* will replace when the user start dragging.
+- *fadeIn*: The proceding **Page** will fade-in while the user drags it in.
+- *replace*: The proceding **Page** will replace when the user start dragging.
 
-The "animation" property defines the timing of animation defined on the *Page*, and it must be either *auto*, *pause* or *scroll*. If "auto" is specified, the animation will start automatically after the completion of the paging action. If *scroll* is specified, the animation will be played while the user is scrolling the page. 
+The "animation" property defines the timing of animation defined on the **Page**, and it must be either *auto*, *pause* or *scroll*. If "auto" is specified, the animation will start automatically after the completion of the paging action. If *scroll* is specified, the animation will be played while the user is scrolling the page. 
 
 ### Values for "animation" property
 
@@ -116,8 +116,13 @@ The "animation" property defines the timing of animation defined on the *Page*, 
 
 ##5. Scene
 
-A Scene defines a set of properties and *Elements* to be shared among multile *Pages*. It also defines a background music to be played when one of those *Pages* is active.
+A Scene defines a set of properties and **Elements** to be shared among multile **Pages**. It also defines a background music to be played when one of those **Pages** is active.
 
 A **Page** is always associated with a Scene, either explicity with the "scene" property or implicitly with the default scene with name "*". 
 
-The **page** inherits all the properties from the associated scene, including *Elements*. When the same property is specified both in the **Page** and the **Scene**, the value specified in the **Page** will be used. The only exception to this rule is *Elements*, which will be merged and *Elements* specified in the *Scene* are placed below *Elements* specified in the page.
+The **Page** inherits all the properties from the associated **scene**, including **Elements**. When the same property is specified both in the **Page** and the **Scene**, the value specified in the **Page** will be used. The only exception to this rule is *Elements*, which will be merged and *Elements* specified in the **Scene** are placed below **Elements** specified in the page.
+
+### Scene specific properties 
+- bgm (URL): Specifies the background music to play 
+
+
