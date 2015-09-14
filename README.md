@@ -93,3 +93,24 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 - **scene** (String): Name of the scene, default is *
 - **audio** (URL): Specifies the sound effect to be played in sync with the animation
 - **speech** (String): Specifies the text-to-speech to be played in sync with the animation
+ 
+##4. Paging direction, inter-page transition and animation
+
+The paging direction is defined by the "paging" property of the **Document**. It must be either *vertical*, *leftToRight* or *rightToLeft*, and the default is *vertical*.
+
+The inter-page transition is defined by the "transition" property of the proceding **Page**. It should be either *scroll*, *fadeIn* or "*eplace*. The default is *scroll* unless the "animation" property is *scroll*. If the "animation" property is *scroll*, the default is *replace*.
+
+### Value for the "transition" property
+
+- *scroll*: regular scrolling behavior (default)
+- *fadeIn*: The proceding *Page* will fade-in while the user drags it in.
+- *replace*: The proceding *Page* will replace when the user start dragging.
+
+The "animation" property defines the timing of animation defined on the *Page*, and it must be either *auto*, *pause* or *scroll*. If "auto" is specified, the animation will start automatically after the completion of the paging action. If *scroll* is specified, the animation will be played while the user is scrolling the page. 
+
+### Values for "animation" property
+
+- *auto*: The animation on the **page** will be played after finish scrolling to this page (default)
+- *pause*: The animation on the **Page** will not automatically start
+- *scroll*: The animation on the **Page** will be performed while the user scrolls the page
+
