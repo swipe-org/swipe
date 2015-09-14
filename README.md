@@ -85,7 +85,7 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 
 - **elements** ([Element+]): Collection of Elements
 - **bc** (Color): Background color, default is *white*
-- **transaction** (String): Inter-page transaction style, *scroll* (default), *fadeIn* or *replace*
+- **transition** (String): Inter-page transition style, *scroll* (default), *fadeIn* or *replace*
 - **animation** (String): Animation timing, *auto* (default), *pause* or *scroll*
 - **duration** (Float): Duration of the auto animation in seconds, default is 0.2 seconds
 - **repeat** (Boolean): Repeat rule of the auto animation, default is *false*
@@ -122,8 +122,32 @@ A **Page** is always associated with a Scene, either explicity with the "scene" 
 
 The **Page** inherits all the properties from the associated **scene**, including **Elements**. When the same property is specified both in the **Page** and the **Scene**, the value specified in the **Page** will be used. The only exception to this rule is *Elements*, which will be merged and *Elements* specified in the **Scene** are placed below **Elements** specified in the page.
 
+Here is a **Document** with two **Pages**, where the first **Page** is associated with the default **Scene**, and the second **Page** is associated with the "alternative" **Scene**. Because each **Scene** specifies the backgroud color, those **Pages** inherite those background colors.   
+
+```
+{
+    "scenes": {
+        "*": { "bc":"blue" },
+        "alternative": { "bc":"green" },
+    },
+    "pages": [
+        {
+            "elements": [
+                { "text":"Hello World!" }
+            ]
+        },
+        {
+            "scene":"alternative",
+            "elements": [
+                { "text":"Good Bye!" }
+            ]
+        }
+    ]
+}
+```
+
 ### Scene specific properties 
-- bgm (URL): Specifies the background music to play 
+- bgm (URL): Specifies the background music to play. 
 
 ##6. Element
 
@@ -167,7 +191,9 @@ An *Element* is a visible entity on a Page. It occupies a specified rectangle ar
 - **loop** (Loop): Specifies the Loop Animation
 - **action** (String): Specifies the Action
 
-##7. Transition
+##7. Transition Animation
+
+The **Transition Animation** specifies a set of animations to play right after or during the page transition (depending on the "transition" property of the page).  
 
 ##8. Loop Animation
 
