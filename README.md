@@ -138,17 +138,27 @@ An *Element* is a visible entity on a Page. It occupies a specified rectangle ar
 - **h** (Float or Percent): height of the element, default is "100%"
 - **bc** (Color): background color, default is *clear*
 - **clip** (Boolean): Specifies clipping behavior, default is false
-- **borderWidth** (float): Width of the border, default is 0
+- **borderWidth** (Float): Width of the border, default is 0
 - **borderColor** (Color): Color of the border
+- **cornerRadius** (Float): Size of the corner radius
+- **opacity** (Float): Opacity of the element, between 0 to 1
 - **text** (String): Text to display
   - **textAlign** (String): Text alignment, *center* (default), *left* or *right*
   - **fontSize** (Float or Percent): Font size
   - **textColor** (Color): Color of the text
-- **img** (URL):
-- **mask** (URL):
+- **img** (URL): Image to display
+- **mask** (URL): Image mask
+- **sprite** (URL): Sprite to display
+  - **slice** ([Int, Int]):
+  - **slot** ([Int, Int]):
 - **path** (String):
   - **lineWidth** (Float):
   - **fillColor** (Float):
+  - **strokeStart** (Float):
+  - **strokeEnd** (Float):
+- **video** (String):
+  - **videoStart** (Float):
+  - **videoDuration** (Float):
 - **to** ():
 - **loop** ():
 - **action** ():
