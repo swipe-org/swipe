@@ -125,4 +125,35 @@ The **Page** inherits all the properties from the associated **scene**, includin
 ### Scene specific properties 
 - bgm (URL): Specifies the background music to play 
 
+##6. Element
+
+An *Element* is a visible entity on a Page. It occupies a specified rectangle area within a page. An *Element* may contain child *Elements*. 
+
+### Element properties
+
+- **element** (String): the name of the named **Element** to inherit properties from
+- **x** (Float or Percent): x-position of the element, default is 0
+- **y** (Float or Percent): y-position of the element, default is 0
+- **w** (Float or Percent): width of the element, default is "100%"
+- **h** (Float or Percent): height of the element, default is "100%"
+- **bc** (Color): background color, default is *clear*
+- **clip** (Boolean): Specifies clipping behavior, default is false
+- **borderWidth** (float): Width of the border, default is 0
+- **borderColor** (Color): Color of the border
+- **text** (String): Text to display
+- **textAlign** (String): Text alignment, *center* (default), *left* or *right*
+- **fontSize** (Float or Percent): Font size
+- **textColor** (Color): Color of the text
+- **img** (URL):
+- **mask** (URL):
+- **path** (String):
+- **lineWidth** (Float):
+- **fillColor** (Float):
+- **to** ():
+- **loop** ():
+- **action** ():
+
+##7. Animation
+
+##8. Loop Animation
 
