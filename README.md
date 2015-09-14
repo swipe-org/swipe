@@ -141,14 +141,14 @@ An *Element* is a visible entity on a Page. It occupies a specified rectangle ar
 - **borderWidth** (float): Width of the border, default is 0
 - **borderColor** (Color): Color of the border
 - **text** (String): Text to display
-- **textAlign** (String): Text alignment, *center* (default), *left* or *right*
-- **fontSize** (Float or Percent): Font size
-- **textColor** (Color): Color of the text
+  - **textAlign** (String): Text alignment, *center* (default), *left* or *right*
+  - **fontSize** (Float or Percent): Font size
+  - **textColor** (Color): Color of the text
 - **img** (URL):
 - **mask** (URL):
 - **path** (String):
-- **lineWidth** (Float):
-- **fillColor** (Float):
+  - **lineWidth** (Float):
+  - **fillColor** (Float):
 - **to** ():
 - **loop** ():
 - **action** ():
