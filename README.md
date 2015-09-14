@@ -34,16 +34,15 @@ Here is a Swipe document which consits of two pages:
 
 ```
 {
-    "title": "Hello World",
     "pages": [
         {
             "elements": [
-                { "label":"Page 1" }
+                { "text":"Hello World!" }
             ]
         },
         {
             "elements": [
-                { "label":"Page 2" }
+                { "text":"Good Bye!" }
             ]
         }
     ]
