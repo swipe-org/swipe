@@ -28,9 +28,9 @@ Swipe was born to fill this gap. It allows non-developers to create interactive 
 
 ##2. Document
 
-A Swipe document is a UTF8 JSON file, which consists of a collection of pages. 
+A **Document** is a UTF8 JSON file, which consists of a collection of **Pages**. The order of **Pages** in the collection is significant, and they will be presented to the user in the order specified in the collection. 
 
-Here is a Swipe document which consists of two pages:
+Here is a **Document** with two pages:
 
 ```
 {
@@ -53,12 +53,41 @@ When the user opens this document with a Swipe viewer, the user will see only th
 ### Document Properties
 
 - **title** (String): Title of the document, optional
-- **bc** (Color): Background color, defalut is dark gray
+- **bc** (Color): Background color, defalut is *darkGray*
 - **dimension** ([Int, Int]): Dimension of the document, default is [320, 568]
 - **paging** (String): Paging direction, *vertical* (default), *leftToRight* or *rightToLeft*
 - **orientation** (String): Document orientation, *portrait* (default) or *landscape*
-- **duration** (Float): Duration of the animation in seconds, default is 0.2 seconds
 - **pages** ([Page+]): Collection of **Pages** 
 - **scene** ({Name:Scene}): Named **Scenes** dictionary
 - **elements** ({Name:Element}): Named **Elements** dictionary
 - **paths** ({Name:Path}): Named **Paths** dictionary
+
+##3. Page
+
+**Page** consists of a collection of **Elements**. The order of **Elements** in the collection is significant, those elements will be rendered in the specified order (from bottom to top). 
+
+Here is a **Document** with a **Page**, which has two **Elements**. 
+
+```
+{
+    "pages": [
+        {
+            "elements": [
+                { "x":50, "y":100, "w":100, "h":100, "bc":"red" },
+                { "x":100, "y":150, "w":100, "h":100, "bc":"blue" },
+            ]
+        },
+    ]
+}
+```
+
+### Page Properties
+
+- **elements** ([Element+]): Collection of Elements
+- **bc** (Color): Background color, default is *white*
+- **transaction** (String): Inter-page transaction style, *scroll* (default), *fadeIn* or *replace*
+- **animation** (String): Animation timing, *auto* (default), *pause* or *scroll*
+- **duration** (Float): Duration of the auto animation in seconds, default is 0.2 seconds
+- **repeat** (Boolean): Repeat rule of the auto animation, default is *false*
+- **rewind** (Boolean): Rewind rule of the auto animation when the user leaves the page, defaul is *false*
+- **scene** (String): Name of the scene, default is *\**
