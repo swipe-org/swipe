@@ -52,9 +52,9 @@ When the user opens this document with a Swipe viewer, the user will see only th
 
 ### Document Properties
 
-- *title*(String): Title of the document, optional
-- *bc*(Color): Background color, defalut is dark gray
-- *dimension*([Int, Int]): Dimension of the document, default is [320, 568]
-- *paging*(String): Paging direction, *vertical* (default), *leftToRight* or *rightToLeft*
-- *orientation*(String): Document orientation, *portrait* (default) or *landscape*
-- *duration*(Float): Duration of the animation in seconds, default is 0.2 seconds
+- **title** (String): Title of the document, optional
+- **bc** (Color): Background color, defalut is dark gray
+- **dimension** ([Int, Int]): Dimension of the document, default is [320, 568]
+- **paging** (String): Paging direction, *vertical* (default), *leftToRight* or *rightToLeft*
+- **orientation** (String): Document orientation, *portrait* (default) or *landscape*
+- **duration** (Float): Duration of the animation in seconds, default is 0.2 seconds
