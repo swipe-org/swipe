@@ -120,7 +120,7 @@ A Scene defines a set of properties and **Elements** to be shared among multile 
 
 A **Page** is always associated with a Scene, either explicity with the "scene" property or implicitly with the default scene with name "*". 
 
-The **Page** inherits all the properties from the associated **scene**, including **Elements**. When the same property is specified both in the **Page** and the **Scene**, the value specified in the **Page** will be used. The only exception to this rule is *Elements*, which will be merged and *Elements* specified in the **Scene** are placed below **Elements** specified in the page.
+The **Page** inherits all the properties from the associated **scene**, including **Elements**. When the same property is specified both in the **Page** and the **Scene**, the value specified in the **Page** will be used. The only exception to this rule is **Elements**, which will be deep-merged. **Elements** with the *id* property will be merged, and other **Elements** will be appended (**Elements** defined in the **Scene** are always placed below **Elements** specified in the page).
 
 Here is a **Document** with two **Pages**, where the first **Page** is associated with the default **Scene**, and the second **Page** is associated with the "alternative" **Scene**. Because each **Scene** specifies the backgroud color, those **Pages** inherite those background colors.   
 
@@ -146,6 +146,28 @@ Here is a **Document** with two **Pages**, where the first **Page** is associate
 }
 ```
 
+The following example uses the "id" to identify a particular **Element** in the **Scene** and modify its "textColor" property. 
+
+```
+{
+    "scenes": {
+        "*": { "id":"hello", "text":"Hello World" },
+    },
+    "pages": [
+        {
+            "elements": [
+                { "id":"hello", "textColor":"red" }
+            ]
+        },
+        {
+            "elements": [
+                { "id":"hello", "textColor":"green" }
+            ]
+        },
+    ]
+}
+```
+
 ### Scene specific properties 
 - bgm (URL): Specifies the background music to play. 
 
@@ -155,6 +177,7 @@ An *Element* is a visible entity on a Page. It occupies a specified rectangle ar
 
 ### Element properties
 
+- **id** (String): the element identifier to identify an element in the associated **Scene**
 - **element** (String): the name of the named **Element** to inherit properties from
 - **x** (Float or Percent): x-position of the element, default is 0
 - **y** (Float or Percent): y-position of the element, default is 0
