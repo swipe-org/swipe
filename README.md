@@ -183,8 +183,10 @@ An *Element* is a visible entity on a Page. It occupies a specified rectangle ar
 
 - **id** (String): the element identifier to identify an element in the associated **Scene**
 - **element** (String): the name of the named **Element** to inherit properties from
-- **x** (Float or Percent): x-position of the element, default is 0
-- **y** (Float or Percent): y-position of the element, default is 0
+- **x** (Float or Percent): x-position of the left-top corner of element, default is 0
+- **y** (Float or Percent): y-position of the left-top corner of the element, default is 0
+- **pos** ([Float/Percent, Float/Percent]): alternative way to specificy the position by the location of the anchor point
+- **anchor** ([Float/Percent, Float/Percent]): anchor point, default is ["50%", "50%"]
 - **w** (Float or Percent): width of the element, default is "100%"
 - **h** (Float or Percent): height of the element, default is "100%"
 - **bc** (Color): background color, default is *clear*, animatable
@@ -193,8 +195,8 @@ An *Element* is a visible entity on a Page. It occupies a specified rectangle ar
 - **borderColor** (Color): Color of the border, animatable
 - **cornerRadius** (Float): Size of the corner radius, animatable
 - **opacity** (Float): Opacity of the element, between 0 to 1, animatable
-- **rotate** (Float): Rotation in degree, clockwise, defalut is 0, animatable
-- **scale** (Float or [Float, Float]): Scaling factor, default is [1, 1], animatable
+- **rotate** (Float): Rotation in degree around the anchor point, clockwise, defalut is 0, animatable
+- **scale** (Float or [Float, Float]): Scaling factor around the anchor point, default is [1, 1], animatable
 - **translate** ([Float, Float]): Translation, default is [0, 0], animatable
 - **text** (String): Text to display
   - **textAlign** (String): Text alignment, *center* (default), *left* or *right*
