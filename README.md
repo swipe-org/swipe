@@ -187,8 +187,8 @@ An *Element* is a visible entity on a Page. It occupies a specified rectangle ar
 - **video** (String): Vide to play
   - **videoStart** (Float): Starting point of the video in seconds, default is 0
   - **videoDuration** (Float): Ending point of the video in seconds
-- **to** (Transition): Specifies the Transitional Animation
-- **loop** (Loop): Specifies the Loop Animation
+- **to** (Transition Animation): Specifies the Transitional Animation
+- **loop** (Loop Animation): Specifies the Loop Animation
 - **action** (String): Specifies the Action
 
 ##7. Transition Animation
@@ -239,5 +239,35 @@ If the "animation" property of the page is "scroll" like the example below, the 
 
 ##8. Loop Animation
 
+The "loop" property of the element specifies the **Loop Animation** associated with the element. Unlike **Transition Animation**, it repeats the same animation multiple times specified by the *repeat* property (the default is 1). 
+
+The **Loop Animation** must have a "style" property, and the value of this property must be one of following.
+
+- *vibrate*: The **Element** vibrates left to right, where the "delta" property specifies the distance (the default is 10)
+- *blink*: The **Element** blinks changing its opacity from 1 to 0. 
+- *wiggle*: The **Element** rotates left and right, where the "delta" property specifies the angree in degree (the default is 15)
+- *path*: The **Element** performs path animation, where the "path" property specifies a collection of paths. 
+- *sprite*: The **Element** performs a sprite animation. 
+ 
+Following example wiggles the text "I'm wiggling!" three times when the second page appears on the screen. 
+
+```
+{
+    "pages": [
+        {
+            "elements": [
+                { "text":"Hello World!" }
+            ]
+        },
+        {
+            "elements": [
+                { "text":"I'm wiggling!", "loop":{ "style":"wiggle", "repeat":3 } }
+            ]
+        }
+    ]
+}
+```
+
 ##9. Action
 
+To be described
