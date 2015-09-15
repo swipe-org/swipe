@@ -151,7 +151,11 @@ The following example uses the "id" to identify a particular **Element** in the 
 ```
 {
     "scenes": {
-        "*": { "id":"hello", "text":"Hello World" },
+        "*": {
+            "elements": [
+                { "id":"hello", "text":"Hello World" },
+            ]
+        },
     },
     "pages": [
         {
