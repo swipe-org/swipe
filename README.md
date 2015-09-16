@@ -137,7 +137,7 @@ The paging direction is defined by the "paging" property of the **Document**. It
 
 The inter-page transition is defined by the "transition" property of the proceding **Page**. It should be either *scroll*, *fadeIn* or *replace*. The default is *scroll* unless the "animation" property is *scroll*. If the "animation" property is *scroll*, the default is *replace*.
 
-### Value for the "transition" property
+### Values for the "transition" property
 
 - *scroll*: regular scrolling behavior (default)
 - *fadeIn*: The proceding **Page** will fade-in while the user drags it in.
@@ -145,7 +145,7 @@ The inter-page transition is defined by the "transition" property of the procedi
 
 The "animation" property defines the timing of animation defined on the **Page**, and it must be either *auto*, *pause* or *scroll*. If "auto" is specified, the animation will start automatically after the completion of the paging action. If *scroll* is specified, the animation will be played while the user is scrolling the page. 
 
-### Values for "animation" property
+### Values for the "animation" property
 
 - *auto*: The animation on the **page** will be played after finish scrolling to this page (default)
 - *pause*: The animation on the **Page** will not automatically start
@@ -214,7 +214,7 @@ The following example uses the "id" to identify a particular **Element** in the 
 
 ##6. Element
 
-An *Element* is a visible entity on a Page. It occupies a specified rectangle area within a page. An *Element* may contain child *Elements*. 
+An **Element** is a visible entity on a **Page**. It occupies a specified rectangle area within a **Page**. An **Element** may contain child **Elements**. 
 
 ### Element properties
 
