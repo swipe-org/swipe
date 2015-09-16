@@ -397,6 +397,3 @@ Following example wiggles the text "I'm wiggling!" three times when the second p
 }
 ```
 
-##9. Action
-
-To be described
