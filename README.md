@@ -35,6 +35,7 @@ Swipe was designed for a specific set of applications and contents.
 - Sound Novels (Story book with pictures, BGM and sound-effects)
 - Graphical Audio Books
 - Photo & Video Books
+- Graphical Music Albums
 - Media-rich Presentations
 - Video Instructions & Tutorials
 
