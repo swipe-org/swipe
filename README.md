@@ -259,6 +259,40 @@ The sample below uses a named **Element**, "stroke" as a template for five diffe
 }
 ```
 
+Just like a regular **Element**, named **Element** may have child **Elements**, and they will be deep-merged just like **Elements** in **Scene**. 
+
+The following example shows how to use a named **Element** with child **Elements**, and how to override their properties using the "id" property. 
+
+```
+{
+    "elements": {
+        "helloWorld": {
+            "w":160, "h":100,
+            "elements":[
+                { "id":"hello", "text":"Hello", "textAlign":"left" },
+                { "id":"world", "text":"World", "textAlign":"left", "x":80 },
+            ],
+        },
+    },
+    "pages": [
+        {
+            "elements": [
+                { "element":"helloWorld", "pos":[160, 100] },
+                { "element":"helloWorld", "pos":[160, 200],
+                  "elements":[
+                    { "id":"hello", "textColor":"red", },
+                    { "id":"world", "textColor":"blue", },
+                  ]},
+                { "element":"helloWorld", "pos":[160, 300],
+                  "elements":[
+                    { "id":"world", "text":"Swipe!" },
+                  ]},
+            ],
+        },
+    ]
+}
+```
+
 ##7. Transition Animation
 
 The **Transition Animation** specifies a set of animations to play right after or during the page transition (depending on the "transition" property of the page).
