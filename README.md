@@ -26,6 +26,24 @@ This disadvantage makes it very difficult for those creative people to make quic
 
 Swipe was born to fill this gap. It allows non-developers to create interactive and media-rich documents without any help from developers. The declarative nature of Swipe language (and the lack of "procedual programming environment") makes very easy to learn, write and read. It also makes it easy to auto-generate documents (from data) and create authoring environments. 
 
+### Scope
+
+Swipe was designed for a specific set of applications and contents. 
+
+- Animated Comics
+- Animated Children Books
+- Sound Novels (Story book with pictures, BGM and sound-effects)
+- Graphical Audio Books
+- Photo & Video Books
+- Media-rich Presentations
+- Video Instructions & Tutorials
+
+Swipe is NOT 
+
+- a replacement of ePub, supporting flow layout
+- a programming environment where programmers write precedural code
+- a game engine
+
 ##2. Document
 
 A **Document** is a UTF8 JSON file, which consists of a collection of **Pages**. The order of **Pages** in the collection is significant, and they will be presented to the user in the order specified in the collection. 
