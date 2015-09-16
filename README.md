@@ -230,6 +230,35 @@ An *Element* is a visible entity on a Page. It occupies a specified rectangle ar
 - **loop** (Loop Animation): Specifies the Loop Animation
 - **action** (String): Specifies the Action
 
+### Named Element
+
+Named **Elements** are a set of **Elements** defined in "elements" property of the **Document**. Any **Element** can inherit properties from one of those named **Elements** by specifying its name in the "element" property. 
+
+The sample below uses a named **Element**, "stroke" as a template for five different **Elements** in a page. 
+
+```
+{
+    "elements": {
+        "smile": {
+            "lineWidth":3,
+            "path":"M0,0 C10,50 90,50 100,0",
+            "strokeColor":"red",
+        },
+    },
+    "pages": [
+        {
+            "elements": [
+                { "smile":"stroke", "pos":["50%", 100] },
+                { "smile":"stroke", "pos":["50%", 200], "rotate":30 },
+                { "smile":"stroke", "pos":["50%", 300], "lineWidth":10 },
+                { "smile":"stroke", "pos":["50%", 400], "strokeColor":"#37F" },
+                { "smile":"stroke", "pos":["50%", 500], "scale":[2,1] },
+            ],
+        },
+    ]
+}
+```
+
 ##7. Transition Animation
 
 The **Transition Animation** specifies a set of animations to play right after or during the page transition (depending on the "transition" property of the page).
