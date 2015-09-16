@@ -2,7 +2,7 @@
 
 ##Abstract
 
-This specification defines the features and syntax of Swipe, a mark-up language for describing interactive, media-rich and animated documents for touch-enabled devices.
+This specification defines the features and syntax of Swipe, a mark-up language for non-developers to create media-rich and animated documents for touch-enabled devices.
 
 ##Status of this document
 
