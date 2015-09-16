@@ -44,6 +44,14 @@ Swipe is NOT
 - a replacement of ePub, supporting flow layout
 - a programming environment where programmers write precedural code
 - a game engine
+ 
+### Design Principles
+
+- Domain-specific (not general purpose)
+- Declarative (not a programming environment)
+- JSON instead of XML
+- Lightweight
+- Designer friendly
 
 ##2. Document
 
