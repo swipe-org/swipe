@@ -24,7 +24,7 @@ People often debate over those three approaches, but they often overlook one imp
 
 This disadvantage makes it very difficult for those creative people to make quick prototypes and experimental works, just like an artist makes sketches with pencils and erasers. It is economically impossible for individual creators to create interactive, media-rich books and publish them. 
 
-Swipe was born to fill this gap. It allows non-developers to create interactive and media-rich documents without any help from developers. The declarative nature of Swipe language (and the lack of "procedual programming environment") makes very easy to learn, write and read. It also makes it easy to auto-generate documents (from data) and create authoring environments.   
+Swipe was born to fill this gap. It allows non-developers to create interactive and media-rich documents without any help from developers. The declarative nature of Swipe language (and the lack of "procedual programming environment") makes very easy to learn, write and read. It also makes it easy to auto-generate documents (from data) and create authoring environments. 
 
 ##2. Document
 
@@ -61,6 +61,16 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **scene** ({Name:Scene}): Named **Scenes** dictionary
 - **elements** ({Name:Element}): Named **Elements** dictionary
 - **paths** ({Name:Path}): Named **Paths** dictionary
+
+### Data Types
+
+A **Document** is a JSON object with a number of properties, and property values are either a Number (Float,  Int), a Boolean value (true or false), String, a JSON object or an array of values. 
+
+String has following subtypes. 
+- *Color*: either "#RRGGBB", "#RGB", "#RRGGBBAA", "#RGBA", or "red", "black", "blue", "white", "green", "yellow", "purple", "gray", "darkGray", "lightGray", "brown", "orange", "cyan", "maganta" 
+- *Percent*: "NN%"
+- *Path*: SVG-style Path String
+- *URL*: relative or absolute URL
 
 ##3. Page
 
@@ -207,7 +217,7 @@ An *Element* is a visible entity on a Page. It occupies a specified rectangle ar
 - **sprite** (URL): Sprite to display
   - **slice** ([Int, Int]): Dimension of the sprite
   - **slot** ([Int, Int]): Slot to diplay, animatable
-- **path** (String): Path to display (SVG style), animatable
+- **path** (Path): Path to display (SVG style), animatable
   - **lineWidth** (Float): Width of stroke, default is 0
   - **strokeColor** (Color): Color of the stroke, default is black, animatable
   - **fillColor** (Color): Fill color, default is clear, animatable
