@@ -41,7 +41,7 @@ Swipe was designed for a specific set of applications and contents.
 
 Swipe is NOT 
 
-- a replacement of ePub, supporting flow layout
+- a replacement of ePub which supports flow layout
 - a programming environment where programmers write precedural code
 - a game engine
  
