@@ -285,7 +285,7 @@ The **Loop Animation** must have a "style" property, and the value of this prope
 - *vibrate*: The **Element** vibrates left to right, where the "delta" property specifies the distance (the default is 10)
 - *blink*: The **Element** blinks changing its opacity from 1 to 0. 
 - *wiggle*: The **Element** rotates left and right, where the "delta" property specifies the angree in degree (the default is 15)
-- *path*: The **Element** performs path animation, where the "path" property specifies a collection of paths. 
+- *path*: The **Element** performs path animation, where the "path" property specifies a collection of **Paths**. 
 - *sprite*: The **Element** performs a sprite animation. 
  
 Following example wiggles the text "I'm wiggling!" three times when the second page appears on the screen. 
