@@ -261,7 +261,7 @@ The sample below uses a named **Element**, "stroke" as a template for five diffe
 
 Just like a regular **Element**, named **Element** may have child **Elements**, and they will be deep-merged just like **Elements** in **Scene**. 
 
-The following example shows how to use a named **Element** with child **Elements**, and how to override their properties using the "id" property. 
+The following example shows how to use a named **Element** with child **Elements**, and override their properties using the "id" property. 
 
 ```
 {
