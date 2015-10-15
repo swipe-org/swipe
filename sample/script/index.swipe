@@ -1,0 +1,6 @@
+{
+    "type":"net.swipe.list",
+    "items":[
+        { "url":"speech.swipe", "title":"Speech" },
+    ]
+}

@@ -1,0 +1,62 @@
+{
+    "title": "Speech",
+    "voices":{
+        "*":{ "lang":"en-US" },
+        "american":{ "lang":"en-US" },
+        "japanese":{ "lang":"ja-JP" },
+        "british":{ "lang":"en-GB" },
+        "french":{ "lang":"fr-FR" },
+        "german":{ "lang":"de-DE" },
+        "vader":{ "pitch":2.0, "rate":0.2 },
+    },
+    "pages": [
+        {
+            "speech":{ "text":"Hello World" },
+            "elements": [
+                { "text":"Hello World" }
+            ]
+        },
+        {
+            "speech":{ "text":"こんにちは", "voice":"japanese" },
+            "elements": [
+                { "text":"こんにちは" }
+            ]
+        },
+        {
+            "speech":{ "text":"Bonjour", "voice":"french" },
+            "elements": [
+                { "text":"Bonjour" }
+            ]
+        },
+        {
+            "speech":{ "text":"Guten Tag", "voice":"german" },
+            "elements": [
+                { "text":"Guten Tag" }
+            ]
+        },
+        {
+            "speech":{ "text":"I'm an American in New York.", "voice":"american" },
+            "elements": [
+                { "text":"I'm an American in New York." }
+            ]
+        },
+        {
+            "speech":{ "text":"I'm an Englishman in New York.", "voice":"british" },
+            "elements": [
+                { "text":"I'm an Englishman in New York." }
+            ]
+        },
+        {
+            "speech":{ "text":"I'm a Japanese in New York", "voice":"japanese" },
+            "elements": [
+                { "text":"I'm a Japanese in New York." }
+            ]
+        },
+        {
+            "speech":{ "text":"May the force be with you.", "voice":"vader" },
+            "elements": [
+                { "text":"May the force be with you." }
+            ]
+        },
+    ]
+}
