@@ -12,6 +12,23 @@
 		74EA71801BD047F0006808EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74EA717E1BD047F0006808EA /* Main.storyboard */; };
 		74EA71821BD047F0006808EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71811BD047F0006808EA /* Assets.xcassets */; };
 		74EA71851BD047F0006808EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71831BD047F0006808EA /* LaunchScreen.storyboard */; };
+		74EA71B21BD04DA7006808EA /* SwipeDocumentViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71A71BD04DA7006808EA /* SwipeDocumentViewer.swift */; };
+		74EA71B31BD04DA7006808EA /* SwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71A81BD04DA7006808EA /* SwipeViewController.swift */; };
+		74EA71B41BD04DA7006808EA /* SwipeBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71A91BD04DA7006808EA /* SwipeBook.swift */; };
+		74EA71B51BD04DA7006808EA /* SwipePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71AA1BD04DA7006808EA /* SwipePage.swift */; };
+		74EA71B61BD04DA7006808EA /* SwipeElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71AB1BD04DA7006808EA /* SwipeElement.swift */; };
+		74EA71B71BD04DA7006808EA /* SwipePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71AC1BD04DA7006808EA /* SwipePath.swift */; };
+		74EA71B81BD04DA7006808EA /* SwipeSynthesizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71AD1BD04DA7006808EA /* SwipeSynthesizer.swift */; };
+		74EA71B91BD04DA7006808EA /* SwipeMarkdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71AE1BD04DA7006808EA /* SwipeMarkdown.swift */; };
+		74EA71BA1BD04DA7006808EA /* SwipeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71AF1BD04DA7006808EA /* SwipeParser.swift */; };
+		74EA71BB1BD04DA7006808EA /* SwipeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71B01BD04DA7006808EA /* SwipeScene.swift */; };
+		74EA71BC1BD04DA7006808EA /* SwipeWebViewPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71B11BD04DA7006808EA /* SwipeWebViewPool.swift */; };
+		74EA71C21BD04E47006808EA /* SwipeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C11BD04E47006808EA /* SwipeExtensions.swift */; };
+		74EA71C91BD04EAD006808EA /* SNNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C41BD04EAD006808EA /* SNNotificationManager.swift */; };
+		74EA71CA1BD04EAD006808EA /* SwipeAssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C51BD04EAD006808EA /* SwipeAssetManager.swift */; };
+		74EA71CB1BD04EAD006808EA /* SwipeConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C61BD04EAD006808EA /* SwipeConnection.swift */; };
+		74EA71CC1BD04EAD006808EA /* SwipePrefetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C71BD04EAD006808EA /* SwipePrefetcher.swift */; };
+		74EA71CD1BD04EAD006808EA /* asset.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C81BD04EAD006808EA /* asset.xcdatamodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +41,23 @@
 		74EA71861BD047F0006808EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74EA718C1BD04B3A006808EA /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE.txt; path = ../LICENSE.txt; sourceTree = "<group>"; };
 		74EA718D1BD04C44006808EA /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		74EA71A71BD04DA7006808EA /* SwipeDocumentViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeDocumentViewer.swift; sourceTree = "<group>"; };
+		74EA71A81BD04DA7006808EA /* SwipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeViewController.swift; sourceTree = "<group>"; };
+		74EA71A91BD04DA7006808EA /* SwipeBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeBook.swift; sourceTree = "<group>"; };
+		74EA71AA1BD04DA7006808EA /* SwipePage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipePage.swift; sourceTree = "<group>"; };
+		74EA71AB1BD04DA7006808EA /* SwipeElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeElement.swift; sourceTree = "<group>"; };
+		74EA71AC1BD04DA7006808EA /* SwipePath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipePath.swift; sourceTree = "<group>"; };
+		74EA71AD1BD04DA7006808EA /* SwipeSynthesizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeSynthesizer.swift; sourceTree = "<group>"; };
+		74EA71AE1BD04DA7006808EA /* SwipeMarkdown.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeMarkdown.swift; sourceTree = "<group>"; };
+		74EA71AF1BD04DA7006808EA /* SwipeParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeParser.swift; sourceTree = "<group>"; };
+		74EA71B01BD04DA7006808EA /* SwipeScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeScene.swift; sourceTree = "<group>"; };
+		74EA71B11BD04DA7006808EA /* SwipeWebViewPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeWebViewPool.swift; sourceTree = "<group>"; };
+		74EA71C11BD04E47006808EA /* SwipeExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeExtensions.swift; sourceTree = "<group>"; };
+		74EA71C41BD04EAD006808EA /* SNNotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNNotificationManager.swift; sourceTree = "<group>"; };
+		74EA71C51BD04EAD006808EA /* SwipeAssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAssetManager.swift; sourceTree = "<group>"; };
+		74EA71C61BD04EAD006808EA /* SwipeConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeConnection.swift; sourceTree = "<group>"; };
+		74EA71C71BD04EAD006808EA /* SwipePrefetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipePrefetcher.swift; sourceTree = "<group>"; };
+		74EA71C81BD04EAD006808EA /* asset.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = asset.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +76,9 @@
 			children = (
 				74EA718D1BD04C44006808EA /* README.md */,
 				74EA718C1BD04B3A006808EA /* LICENSE.txt */,
+				74EA718F1BD04D86006808EA /* browser */,
+				74EA71C31BD04E95006808EA /* network */,
+				74EA71901BD04D86006808EA /* core */,
 				74EA71791BD047F0006808EA /* sample */,
 				74EA71781BD047F0006808EA /* Products */,
 			);
@@ -66,6 +103,47 @@
 				74EA71861BD047F0006808EA /* Info.plist */,
 			);
 			path = sample;
+			sourceTree = "<group>";
+		};
+		74EA718F1BD04D86006808EA /* browser */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = browser;
+			path = ../browser;
+			sourceTree = "<group>";
+		};
+		74EA71901BD04D86006808EA /* core */ = {
+			isa = PBXGroup;
+			children = (
+				74EA71A71BD04DA7006808EA /* SwipeDocumentViewer.swift */,
+				74EA71A81BD04DA7006808EA /* SwipeViewController.swift */,
+				74EA71A91BD04DA7006808EA /* SwipeBook.swift */,
+				74EA71AA1BD04DA7006808EA /* SwipePage.swift */,
+				74EA71AB1BD04DA7006808EA /* SwipeElement.swift */,
+				74EA71AC1BD04DA7006808EA /* SwipePath.swift */,
+				74EA71AD1BD04DA7006808EA /* SwipeSynthesizer.swift */,
+				74EA71AE1BD04DA7006808EA /* SwipeMarkdown.swift */,
+				74EA71AF1BD04DA7006808EA /* SwipeParser.swift */,
+				74EA71B01BD04DA7006808EA /* SwipeScene.swift */,
+				74EA71B11BD04DA7006808EA /* SwipeWebViewPool.swift */,
+				74EA71C11BD04E47006808EA /* SwipeExtensions.swift */,
+			);
+			name = core;
+			path = ../core;
+			sourceTree = "<group>";
+		};
+		74EA71C31BD04E95006808EA /* network */ = {
+			isa = PBXGroup;
+			children = (
+				74EA71C41BD04EAD006808EA /* SNNotificationManager.swift */,
+				74EA71C51BD04EAD006808EA /* SwipeAssetManager.swift */,
+				74EA71C61BD04EAD006808EA /* SwipeConnection.swift */,
+				74EA71C71BD04EAD006808EA /* SwipePrefetcher.swift */,
+				74EA71C81BD04EAD006808EA /* asset.xcdatamodel */,
+			);
+			name = network;
+			path = ../network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,8 +217,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74EA71CD1BD04EAD006808EA /* asset.xcdatamodel in Sources */,
+				74EA71B41BD04DA7006808EA /* SwipeBook.swift in Sources */,
+				74EA71BB1BD04DA7006808EA /* SwipeScene.swift in Sources */,
+				74EA71B81BD04DA7006808EA /* SwipeSynthesizer.swift in Sources */,
+				74EA71B51BD04DA7006808EA /* SwipePage.swift in Sources */,
 				74EA717D1BD047F0006808EA /* ViewController.swift in Sources */,
+				74EA71CA1BD04EAD006808EA /* SwipeAssetManager.swift in Sources */,
+				74EA71B61BD04DA7006808EA /* SwipeElement.swift in Sources */,
+				74EA71C21BD04E47006808EA /* SwipeExtensions.swift in Sources */,
+				74EA71B21BD04DA7006808EA /* SwipeDocumentViewer.swift in Sources */,
 				74EA717B1BD047F0006808EA /* AppDelegate.swift in Sources */,
+				74EA71CC1BD04EAD006808EA /* SwipePrefetcher.swift in Sources */,
+				74EA71B31BD04DA7006808EA /* SwipeViewController.swift in Sources */,
+				74EA71CB1BD04EAD006808EA /* SwipeConnection.swift in Sources */,
+				74EA71B71BD04DA7006808EA /* SwipePath.swift in Sources */,
+				74EA71B91BD04DA7006808EA /* SwipeMarkdown.swift in Sources */,
+				74EA71BC1BD04DA7006808EA /* SwipeWebViewPool.swift in Sources */,
+				74EA71C91BD04EAD006808EA /* SNNotificationManager.swift in Sources */,
+				74EA71BA1BD04DA7006808EA /* SwipeParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

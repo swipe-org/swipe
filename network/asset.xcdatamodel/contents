@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9056" systemVersion="15B30a" minimumToolsVersion="Xcode 7.0">
+    <entity name="Asset" syncable="YES">
+        <attribute name="lastModified" attributeType="Date" syncable="YES"/>
+        <attribute name="loaded" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="size" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="url" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="uuid" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Asset" positionX="-63" positionY="-18" width="128" height="120"/>
+    </elements>
+</model>
