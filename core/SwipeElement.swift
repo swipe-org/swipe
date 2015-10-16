@@ -36,11 +36,13 @@ protocol SwipeElementDelegate:NSObjectProtocol {
     func parseMarkdown(element:SwipeElement, markdowns:[String]) -> NSAttributedString
     func baseURL() -> NSURL?
     func map(url:NSURL) -> NSURL?
+    func pageIndex() -> Int // for debugging
 }
 
 class SwipeElement:NSObject {
     // Debugging
     static var objectCount = 0
+    private let pageIndex:Int
     
     // public properties
     weak var delegate:SwipeElementDelegate!
@@ -98,10 +100,12 @@ class SwipeElement:NSObject {
         self.info = elementInfo
         self.scale = scale
         self.delegate = delegate
+        self.pageIndex = delegate.pageIndex() // only for debugging
         super.init()
         self.setTimeOffsetTo(0.0)
         
         SwipeElement.objectCount++
+        MyLog("SWEleme  init \(pageIndex)", level:2)
     }
     
     deinit {
@@ -119,6 +123,7 @@ class SwipeElement:NSObject {
         if (SwipeElement.objectCount == 0) {
             MyLog("SWEleme zero object!", level:1)
         }
+        MyLog("SWEleme  deinit \(pageIndex)", level: 2)
     }
     
     static func checkMemoryLeak() {
@@ -544,10 +549,18 @@ class SwipeElement:NSObject {
             videoLayer.frame = CGRectMake(0.0, 0.0, w, h)
             layer.addSublayer(videoLayer)
 
-            func loadVideoAsset(urlLocalOrStream:NSURL) {
-                //let asset = AVURLAsset(URL: urlLocal, options: [AVURLAssetPreferPreciseDurationAndTimingKey:true])
-                //let playerItem = AVPlayerItem(asset: asset)
-                let playerItem = AVPlayerItem(URL: urlLocalOrStream)
+            let urlLocalOrStream:NSURL?
+            if let fStream = info["stream"] as? Bool where fStream == true {
+                MyLog("SWEleme stream=\(url)", level:1)
+                urlLocalOrStream = url
+            } else if let urlLocal = self.delegate.map(url) {
+                urlLocalOrStream = urlLocal
+            } else {
+                urlLocalOrStream = nil
+            }
+            
+            if let urlVideo = urlLocalOrStream {
+                let playerItem = AVPlayerItem(URL: urlVideo)
                 videoPlayer.replaceCurrentItemWithPlayerItem(playerItem)
 
                 notificationManager.addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: playerItem, queue: NSOperationQueue.mainQueue()) {
@@ -563,13 +576,6 @@ class SwipeElement:NSObject {
                         }
                     }
                 }
-            }
-            
-            if let fStream = info["stream"] as? Bool where fStream == true {
-                MyLog("SWEleme stream=\(url)", level:1)
-                loadVideoAsset(url)
-            } else if let urlLocal = self.delegate.map(url) {
-                loadVideoAsset(urlLocal)
             }
             
             notificationManager.addObserverForName(SwipePage.shouldPauseAutoPlay, object: delegate, queue: NSOperationQueue.mainQueue()) {

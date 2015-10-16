@@ -514,6 +514,11 @@ class SwipePage: NSObject, SwipeElementDelegate {
         return delegate.baseURL()
     }
     
+    // <SwipeElementDelegate> method
+    func pageIndex() -> Int {
+        return index
+    }
+    
     private func didStartPlayingInternal() {
         cPlaying++
         if cPlaying==1 {
