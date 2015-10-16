@@ -9,10 +9,20 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>sampletv.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>74EA71761BD047F0006808EA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>74EA71E01BD0B0EE006808EA</key>
 		<dict>
 			<key>primary</key>
 			<true/>

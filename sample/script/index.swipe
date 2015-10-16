@@ -4,5 +4,6 @@
         { "url":"videostream.swipe", "title":"Streaming Video" },
         { "url":"markdown.swipe", "title":"Rich Text" },
         { "url":"speech.swipe", "title":"Speech" },
+        { "url":"espresso/espresso_machine.swipe", "title":"Espresso Machine" },
     ]
 }

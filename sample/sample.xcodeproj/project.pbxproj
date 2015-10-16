@@ -21,7 +21,6 @@
 		74EA71B91BD04DA7006808EA /* SwipeMarkdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71AE1BD04DA7006808EA /* SwipeMarkdown.swift */; };
 		74EA71BA1BD04DA7006808EA /* SwipeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71AF1BD04DA7006808EA /* SwipeParser.swift */; };
 		74EA71BB1BD04DA7006808EA /* SwipeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71B01BD04DA7006808EA /* SwipeScene.swift */; };
-		74EA71BC1BD04DA7006808EA /* SwipeWebViewPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71B11BD04DA7006808EA /* SwipeWebViewPool.swift */; };
 		74EA71C21BD04E47006808EA /* SwipeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C11BD04E47006808EA /* SwipeExtensions.swift */; };
 		74EA71C91BD04EAD006808EA /* SNNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C41BD04EAD006808EA /* SNNotificationManager.swift */; };
 		74EA71CA1BD04EAD006808EA /* SwipeAssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C51BD04EAD006808EA /* SwipeAssetManager.swift */; };
@@ -35,6 +34,33 @@
 		74EA71D81BD04FE1006808EA /* speech.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71D71BD04FE1006808EA /* speech.swipe */; };
 		74EA71DA1BD0596D006808EA /* markdown.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71D91BD0596D006808EA /* markdown.swipe */; };
 		74EA71DC1BD05998006808EA /* videostream.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71DB1BD05998006808EA /* videostream.swipe */; };
+		74EA71E41BD0B0EE006808EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71E31BD0B0EE006808EA /* AppDelegate.swift */; };
+		74EA71E91BD0B0EE006808EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71E71BD0B0EE006808EA /* Main.storyboard */; };
+		74EA71EB1BD0B0EE006808EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71EA1BD0B0EE006808EA /* Assets.xcassets */; };
+		74EA71F01BD0B14C006808EA /* SwipeBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71CE1BD04F22006808EA /* SwipeBrowser.swift */; };
+		74EA71F21BD0B14C006808EA /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71D01BD04F22006808EA /* SwipeTableViewController.swift */; };
+		74EA71F31BD0B156006808EA /* SNNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C41BD04EAD006808EA /* SNNotificationManager.swift */; };
+		74EA71F41BD0B156006808EA /* SwipeAssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C51BD04EAD006808EA /* SwipeAssetManager.swift */; };
+		74EA71F51BD0B156006808EA /* SwipeConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C61BD04EAD006808EA /* SwipeConnection.swift */; };
+		74EA71F61BD0B156006808EA /* SwipePrefetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C71BD04EAD006808EA /* SwipePrefetcher.swift */; };
+		74EA71F71BD0B156006808EA /* asset.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C81BD04EAD006808EA /* asset.xcdatamodel */; };
+		74EA71F81BD0B15C006808EA /* SwipeDocumentViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71A71BD04DA7006808EA /* SwipeDocumentViewer.swift */; };
+		74EA71F91BD0B15C006808EA /* SwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71A81BD04DA7006808EA /* SwipeViewController.swift */; };
+		74EA71FA1BD0B15C006808EA /* SwipeBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71A91BD04DA7006808EA /* SwipeBook.swift */; };
+		74EA71FB1BD0B15C006808EA /* SwipePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71AA1BD04DA7006808EA /* SwipePage.swift */; };
+		74EA71FC1BD0B15C006808EA /* SwipeElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71AB1BD04DA7006808EA /* SwipeElement.swift */; };
+		74EA71FD1BD0B15C006808EA /* SwipePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71AC1BD04DA7006808EA /* SwipePath.swift */; };
+		74EA71FE1BD0B15C006808EA /* SwipeSynthesizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71AD1BD04DA7006808EA /* SwipeSynthesizer.swift */; };
+		74EA71FF1BD0B15C006808EA /* SwipeMarkdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71AE1BD04DA7006808EA /* SwipeMarkdown.swift */; };
+		74EA72001BD0B15C006808EA /* SwipeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71AF1BD04DA7006808EA /* SwipeParser.swift */; };
+		74EA72011BD0B15C006808EA /* SwipeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71B01BD04DA7006808EA /* SwipeScene.swift */; };
+		74EA72031BD0B15C006808EA /* SwipeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C11BD04E47006808EA /* SwipeExtensions.swift */; };
+		74EA72041BD0B16A006808EA /* index.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71D51BD04FA0006808EA /* index.swipe */; };
+		74EA72051BD0B16A006808EA /* videostream.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71DB1BD05998006808EA /* videostream.swipe */; };
+		74EA72061BD0B16A006808EA /* markdown.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71D91BD0596D006808EA /* markdown.swipe */; };
+		74EA72071BD0B16A006808EA /* speech.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71D71BD04FE1006808EA /* speech.swipe */; };
+		74EA72091BD0B479006808EA /* espresso in Resources */ = {isa = PBXBuildFile; fileRef = 74EA72081BD0B479006808EA /* espresso */; };
+		74EA720A1BD0B479006808EA /* espresso in Resources */ = {isa = PBXBuildFile; fileRef = 74EA72081BD0B479006808EA /* espresso */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,7 +82,6 @@
 		74EA71AE1BD04DA7006808EA /* SwipeMarkdown.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeMarkdown.swift; sourceTree = "<group>"; };
 		74EA71AF1BD04DA7006808EA /* SwipeParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeParser.swift; sourceTree = "<group>"; };
 		74EA71B01BD04DA7006808EA /* SwipeScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeScene.swift; sourceTree = "<group>"; };
-		74EA71B11BD04DA7006808EA /* SwipeWebViewPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeWebViewPool.swift; sourceTree = "<group>"; };
 		74EA71C11BD04E47006808EA /* SwipeExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeExtensions.swift; sourceTree = "<group>"; };
 		74EA71C41BD04EAD006808EA /* SNNotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNNotificationManager.swift; sourceTree = "<group>"; };
 		74EA71C51BD04EAD006808EA /* SwipeAssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAssetManager.swift; sourceTree = "<group>"; };
@@ -70,10 +95,23 @@
 		74EA71D71BD04FE1006808EA /* speech.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = speech.swipe; sourceTree = "<group>"; };
 		74EA71D91BD0596D006808EA /* markdown.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = markdown.swipe; sourceTree = "<group>"; };
 		74EA71DB1BD05998006808EA /* videostream.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = videostream.swipe; sourceTree = "<group>"; };
+		74EA71E11BD0B0EE006808EA /* sampletv.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sampletv.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		74EA71E31BD0B0EE006808EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		74EA71E81BD0B0EE006808EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		74EA71EA1BD0B0EE006808EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		74EA71EC1BD0B0EE006808EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		74EA72081BD0B479006808EA /* espresso */ = {isa = PBXFileReference; lastKnownFileType = folder; path = espresso; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		74EA71741BD047F0006808EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		74EA71DE1BD0B0EE006808EA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -92,6 +130,7 @@
 				74EA71C31BD04E95006808EA /* network */,
 				74EA71901BD04D86006808EA /* core */,
 				74EA71791BD047F0006808EA /* sample */,
+				74EA71E21BD0B0EE006808EA /* sampletv */,
 				74EA71781BD047F0006808EA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -100,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				74EA71771BD047F0006808EA /* sample.app */,
+				74EA71E11BD0B0EE006808EA /* sampletv.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -107,6 +147,7 @@
 		74EA71791BD047F0006808EA /* sample */ = {
 			isa = PBXGroup;
 			children = (
+				74EA72081BD0B479006808EA /* espresso */,
 				74EA71D41BD04F8A006808EA /* script */,
 				74EA717A1BD047F0006808EA /* AppDelegate.swift */,
 				74EA717E1BD047F0006808EA /* Main.storyboard */,
@@ -141,7 +182,6 @@
 				74EA71AE1BD04DA7006808EA /* SwipeMarkdown.swift */,
 				74EA71AF1BD04DA7006808EA /* SwipeParser.swift */,
 				74EA71B01BD04DA7006808EA /* SwipeScene.swift */,
-				74EA71B11BD04DA7006808EA /* SwipeWebViewPool.swift */,
 				74EA71C11BD04E47006808EA /* SwipeExtensions.swift */,
 			);
 			name = core;
@@ -172,6 +212,17 @@
 			path = script;
 			sourceTree = SOURCE_ROOT;
 		};
+		74EA71E21BD0B0EE006808EA /* sampletv */ = {
+			isa = PBXGroup;
+			children = (
+				74EA71E31BD0B0EE006808EA /* AppDelegate.swift */,
+				74EA71E71BD0B0EE006808EA /* Main.storyboard */,
+				74EA71EA1BD0B0EE006808EA /* Assets.xcassets */,
+				74EA71EC1BD0B0EE006808EA /* Info.plist */,
+			);
+			path = sampletv;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -192,6 +243,23 @@
 			productReference = 74EA71771BD047F0006808EA /* sample.app */;
 			productType = "com.apple.product-type.application";
 		};
+		74EA71E01BD0B0EE006808EA /* sampletv */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 74EA71ED1BD0B0EE006808EA /* Build configuration list for PBXNativeTarget "sampletv" */;
+			buildPhases = (
+				74EA71DD1BD0B0EE006808EA /* Sources */,
+				74EA71DE1BD0B0EE006808EA /* Frameworks */,
+				74EA71DF1BD0B0EE006808EA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = sampletv;
+			productName = sampletv;
+			productReference = 74EA71E11BD0B0EE006808EA /* sampletv.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -203,6 +271,9 @@
 				ORGANIZATIONNAME = "Satoshi Nakajima";
 				TargetAttributes = {
 					74EA71761BD047F0006808EA = {
+						CreatedOnToolsVersion = 7.1;
+					};
+					74EA71E01BD0B0EE006808EA = {
 						CreatedOnToolsVersion = 7.1;
 					};
 				};
@@ -221,6 +292,7 @@
 			projectRoot = "";
 			targets = (
 				74EA71761BD047F0006808EA /* sample */,
+				74EA71E01BD0B0EE006808EA /* sampletv */,
 			);
 		};
 /* End PBXProject section */
@@ -236,8 +308,23 @@
 				74EA71D81BD04FE1006808EA /* speech.swipe in Resources */,
 				74EA71DA1BD0596D006808EA /* markdown.swipe in Resources */,
 				74EA71821BD047F0006808EA /* Assets.xcassets in Resources */,
+				74EA72091BD0B479006808EA /* espresso in Resources */,
 				74EA71D61BD04FA0006808EA /* index.swipe in Resources */,
 				74EA71801BD047F0006808EA /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		74EA71DF1BD0B0EE006808EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				74EA720A1BD0B479006808EA /* espresso in Resources */,
+				74EA72051BD0B16A006808EA /* videostream.swipe in Resources */,
+				74EA72061BD0B16A006808EA /* markdown.swipe in Resources */,
+				74EA72041BD0B16A006808EA /* index.swipe in Resources */,
+				74EA72071BD0B16A006808EA /* speech.swipe in Resources */,
+				74EA71EB1BD0B0EE006808EA /* Assets.xcassets in Resources */,
+				74EA71E91BD0B0EE006808EA /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,9 +352,34 @@
 				74EA71CB1BD04EAD006808EA /* SwipeConnection.swift in Sources */,
 				74EA71B71BD04DA7006808EA /* SwipePath.swift in Sources */,
 				74EA71B91BD04DA7006808EA /* SwipeMarkdown.swift in Sources */,
-				74EA71BC1BD04DA7006808EA /* SwipeWebViewPool.swift in Sources */,
 				74EA71C91BD04EAD006808EA /* SNNotificationManager.swift in Sources */,
 				74EA71BA1BD04DA7006808EA /* SwipeParser.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		74EA71DD1BD0B0EE006808EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				74EA71F41BD0B156006808EA /* SwipeAssetManager.swift in Sources */,
+				74EA71FD1BD0B15C006808EA /* SwipePath.swift in Sources */,
+				74EA72001BD0B15C006808EA /* SwipeParser.swift in Sources */,
+				74EA71FA1BD0B15C006808EA /* SwipeBook.swift in Sources */,
+				74EA71E41BD0B0EE006808EA /* AppDelegate.swift in Sources */,
+				74EA71F51BD0B156006808EA /* SwipeConnection.swift in Sources */,
+				74EA71F31BD0B156006808EA /* SNNotificationManager.swift in Sources */,
+				74EA72011BD0B15C006808EA /* SwipeScene.swift in Sources */,
+				74EA72031BD0B15C006808EA /* SwipeExtensions.swift in Sources */,
+				74EA71F81BD0B15C006808EA /* SwipeDocumentViewer.swift in Sources */,
+				74EA71F91BD0B15C006808EA /* SwipeViewController.swift in Sources */,
+				74EA71FB1BD0B15C006808EA /* SwipePage.swift in Sources */,
+				74EA71FF1BD0B15C006808EA /* SwipeMarkdown.swift in Sources */,
+				74EA71F21BD0B14C006808EA /* SwipeTableViewController.swift in Sources */,
+				74EA71FC1BD0B15C006808EA /* SwipeElement.swift in Sources */,
+				74EA71F71BD0B156006808EA /* asset.xcdatamodel in Sources */,
+				74EA71F01BD0B14C006808EA /* SwipeBrowser.swift in Sources */,
+				74EA71FE1BD0B15C006808EA /* SwipeSynthesizer.swift in Sources */,
+				74EA71F61BD0B156006808EA /* SwipePrefetcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +400,14 @@
 				74EA71841BD047F0006808EA /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		74EA71E71BD0B0EE006808EA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				74EA71E81BD0B0EE006808EA /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -396,6 +516,36 @@
 			};
 			name = Release;
 		};
+		74EA71EE1BD0B0EE006808EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				INFOPLIST_FILE = sampletv/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = swipe.swipe.sampletv;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Debug;
+		};
+		74EA71EF1BD0B0EE006808EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				INFOPLIST_FILE = sampletv/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = swipe.swipe.sampletv;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -413,6 +563,14 @@
 			buildConfigurations = (
 				74EA718A1BD047F0006808EA /* Debug */,
 				74EA718B1BD047F0006808EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		74EA71ED1BD0B0EE006808EA /* Build configuration list for PBXNativeTarget "sampletv" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				74EA71EE1BD0B0EE006808EA /* Debug */,
+				74EA71EF1BD0B0EE006808EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
