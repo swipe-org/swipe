@@ -60,7 +60,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
     
     deinit {
-        MyLog("SwipeVC deinit \(Int(0.4)), \(Int(0.6)), \(Int(1.1))", level:1)
+        MyLog("SWView deinit \(Int(0.4)), \(Int(0.6)), \(Int(1.1))", level:1)
         // Even though book is unwrapped, there is a rare case that book is nil 
         // (during the construction).
         if self.book != nil {
@@ -117,7 +117,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     
         notificationManager.addObserverForName(UIApplicationDidBecomeActiveNotification, object: nil, queue: NSOperationQueue.mainQueue()) {
             [unowned self] (_:NSNotification!) -> Void in
-            MyLog("SwipeVC DidBecomeActive")
+            MyLog("SWView DidBecomeActive")
             // iOS & tvOS removes all the animations associated with CALayers when the app becomes the background mode. 
             // Therefore, we need to recreate all the pages. 
             //
@@ -233,7 +233,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         let _:CGFloat, index:Int = self.scrollIndex
         //MyLog("SwipeVCWillBeginDragging, \(self.book.pageIndex) to \(index)")
         if self.adjustIndex(index) {
-            MyLog("SwipeVC detected continuous scrolling to @\(self.book.pageIndex)")
+            MyLog("SWView detected continuous scrolling to @\(self.book.pageIndex)")
         }
     }
     
@@ -242,7 +242,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         let target = Int(pagePosition(pt) + 0.5)
         if target != self.book.pageIndex {
             // Forward paging was just initiated by the user's dragging
-            //MyLog("SwipeVC willEndDragging \(self.book.pageIndex) \(target)")
+            //MyLog("SWView willEndDragging \(self.book.pageIndex) \(target)")
             self.book.currenPage.willLeave(fAdvancing)
             
             let page = self.book.pages[target]
@@ -255,7 +255,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         let index = self.scrollIndex
         
         if !self.adjustIndex(index) {
-            MyLog("SWView  didEndDecelerating same", level: 1)
+            MyLog("SWView didEndDecelerating same", level: 1)
         }
         self.fAdvancing = false
     }
@@ -264,21 +264,21 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
 
     func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
         let index = self.scrollIndex
-        MyLog("SWView  didEndScrolling \(index), \(scrollingTarget)", level: 1)
+        MyLog("SWView didEndScrolling \(index), \(scrollingTarget)", level: 1)
         if let target = scrollingTarget {
             if target == index {
-                MyLog("SWView  didEndScrolling processing \(index), \(scrollingTarget)", level: 1)
+                MyLog("SWView didEndScrolling processing \(index), \(scrollingTarget)", level: 1)
                 scrollingTarget = nil
             } else {
-                MyLog("SWView  didEndScrolling ignoring \(index), \(scrollingTarget) ###", level: 1)
+                MyLog("SWView didEndScrolling ignoring \(index), \(scrollingTarget) ###", level: 1)
                 return
             }
         } else {
-            MyLog("SWView  didEndScrolling no scrollingTarget \(index) ???", level: 1)
+            MyLog("SWView didEndScrolling no scrollingTarget \(index) ???", level: 1)
         }
         
         if !self.adjustIndex(index) {
-            MyLog("SWView  didEndScrolling same", level: 1)
+            MyLog("SWView didEndScrolling same", level: 1)
         }
         self.fAdvancing = false
     }
@@ -291,12 +291,12 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         ratio = min(max(ratio, -0.99), 0.99)
         
         if let target = self.scrollingTarget {
-            MyLog("SWView  handlePan continuous \(self.book.pageIndex) to \(target) [\(recognizer.state.rawValue)]", level:1)
+            MyLog("SWView handlePan continuous \(self.book.pageIndex) to \(target) [\(recognizer.state.rawValue)]", level:1)
             self.adjustIndex(target)
             self.fAdvancing = false
             self.scrollingTarget = nil
         } else {
-            MyLog("SWView  handlePan normal \(self.book.pageIndex) [\(recognizer.state.rawValue)]", level:2)
+            MyLog("SWView handlePan normal \(self.book.pageIndex) [\(recognizer.state.rawValue)]", level:2)
         }
 
         var offset = self.book.horizontal ? CGPointMake((CGFloat(self.book.pageIndex) + ratio) * size.width, 0) : CGPointMake(0, (CGFloat(self.book.pageIndex) + ratio) * size.height)
@@ -337,7 +337,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
                 fAdvancing = target > self.book.pageIndex
                 page.willEnter(fAdvancing)
                 scrollingTarget = target
-                MyLog("SWView  handlePan paging \(self.book.pageIndex) to \(target)", level:1)
+                MyLog("SWView handlePan paging \(self.book.pageIndex) to \(target)", level:1)
             }
             scrollView.setContentOffset(offset, animated: true)
             break
@@ -423,7 +423,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             preparePage(self.book.pageIndex + i, frame: CGRectOffset(rc, CGFloat(i) * d.x, CGFloat(i) * d.y))
         }
 
-        //MyLog("SwipeVC tags=\(tags), \(pageIndex)")
+        //MyLog("SWView tags=\(tags), \(pageIndex)")
         self.book.setActivePage(self.book.currenPage)
 
         // debugging

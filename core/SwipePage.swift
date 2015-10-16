@@ -218,11 +218,11 @@ class SwipePage: NSObject, SwipeElementDelegate {
         if self.rewind || fGoingBack {
             prepareToPlay()
         }
-        MyLog("SWPage  didLeave @\(index) \(fGoingBack)", level: 1)
+        MyLog("SWPage  didLeave @\(index) \(fGoingBack)", level: 2)
     }
     
     func willEnter(fForward:Bool) {
-        MyLog("SWPage  willEnter @\(index) \(fForward)", level: 1)
+        MyLog("SWPage  willEnter @\(index) \(fForward)", level: 2)
         if self.autoplay && fForward {
             prepareToPlay()
         }
@@ -251,7 +251,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         if fForward && self.autoplay {
             autoPlay()
         }
-        MyLog("SWPage  didEnter @\(index) \(fForward)", level: 1)
+        MyLog("SWPage  didEnter @\(index) \(fForward)", level: 2)
     }
     
     func prepare() {
@@ -496,7 +496,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     // <SwipeElementDelegate> method
     func onAction(element:SwipeElement) {
         if let action = element.action {
-            MyLog("SWPage  onAction \(action)", level: 1)
+            MyLog("SWPage  onAction \(action)", level: 2)
             if action == "play" {
                 prepareToPlay()
                 autoPlay()

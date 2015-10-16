@@ -19,7 +19,7 @@ import AVFoundation
 import ImageIO
 
 private func MyLog(text:String, level:Int = 0) {
-    let s_verbosLevel = 1
+    let s_verbosLevel = 0
     if level <= s_verbosLevel {
         NSLog(text)
     }
@@ -105,7 +105,7 @@ class SwipeElement:NSObject {
         self.setTimeOffsetTo(0.0)
         
         SwipeElement.objectCount++
-        MyLog("SWEleme  init \(pageIndex) \(scale.width)", level:1)
+        MyLog("SWElem init \(pageIndex) \(scale.width)", level:1)
     }
     
     deinit {
@@ -120,10 +120,10 @@ class SwipeElement:NSObject {
 #endif
     
         SwipeElement.objectCount--
+        MyLog("SWElem deinit \(pageIndex) \(scale.width)", level: 1)
         if (SwipeElement.objectCount == 0) {
-            MyLog("SWEleme zero object!", level:1)
+            MyLog("SWElem zero object!", level:1)
         }
-        MyLog("SWEleme  deinit \(pageIndex) \(scale.width)", level: 1)
     }
     
     static func checkMemoryLeak() {
@@ -149,7 +149,7 @@ class SwipeElement:NSObject {
             if let src = self.info[key] as? String,
                    url = NSURL.url(src, baseURL: baseURL) {
                 if let fStream = self.info["stream"] as? Bool where fStream == true {
-                    MyLog("SWEleme skipping stream \(url)", level: 2)
+                    MyLog("SWElem skipping stream \(url)", level: 2)
                 } else {
                     urls[url] = prefix
                 }
@@ -551,7 +551,7 @@ class SwipeElement:NSObject {
 
             let urlLocalOrStream:NSURL?
             if let fStream = info["stream"] as? Bool where fStream == true {
-                MyLog("SWEleme stream=\(url)", level:2)
+                MyLog("SWElem stream=\(url)", level:2)
                 urlLocalOrStream = url
             } else if let urlLocal = self.delegate.map(url) {
                 urlLocalOrStream = urlLocal
@@ -565,7 +565,7 @@ class SwipeElement:NSObject {
 
                 notificationManager.addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: playerItem, queue: NSOperationQueue.mainQueue()) {
                     [unowned self] (_:NSNotification!) -> Void in
-                    MyLog("SWEleme play to end!", level: 1)
+                    MyLog("SWElem play to end!", level: 1)
                     if self.delegate != nil && self.delegate!.shouldRepeat(self) {
                         videoPlayer.seekToTime(kCMTimeZero)
                         videoPlayer.play()
@@ -591,7 +591,7 @@ class SwipeElement:NSObject {
                 if !self.fPlaying {
                     self.fPlaying = true
                     self.delegate.didStartPlaying(self)
-                    MyLog("SWEleme videoPlayer.state = \(videoPlayer.status.rawValue)", level: 1)
+                    MyLog("SWElem videoPlayer.state = \(videoPlayer.status.rawValue)", level: 1)
                     videoPlayer.play()
                 }
             }
@@ -875,7 +875,7 @@ class SwipeElement:NSObject {
     }
     
     func buttonPressed() {
-        MyLog("SWEleme buttonPressed", level: 1)
+        MyLog("SWElem buttonPressed", level: 1)
         layer?.opacity = 1.0
         if let delegate = self.delegate {
             delegate.onAction(self)
@@ -883,12 +883,12 @@ class SwipeElement:NSObject {
     }
 
     func touchDown() {
-        MyLog("SWEleme touchDown", level: 1)
+        MyLog("SWElem touchDown", level: 1)
         layer?.opacity = 0.5
     }
     
     func touchUpOutside() {
-        MyLog("SWEleme touchUpOutside", level: 1)
+        MyLog("SWElem touchUpOutside", level: 1)
         layer?.opacity = 1.0
     }
     
@@ -924,7 +924,9 @@ class SwipeElement:NSObject {
             let tolerance = CMTimeMake(10, 600) // 1/60sec
             if player.status == AVPlayerStatus.ReadyToPlay {
                 self.fSeeking = true
+                SwipeElement.objectCount-- // to avoid false memory leak detection
                 player.seekToTime(time, toleranceBefore: tolerance, toleranceAfter: tolerance) { (_:Bool) -> Void in
+                    SwipeElement.objectCount++
                     self.fSeeking = false
                     if let pendingOffset = self.pendingOffset {
                         self.pendingOffset = nil
