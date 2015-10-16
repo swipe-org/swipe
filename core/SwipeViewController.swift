@@ -253,6 +253,10 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             if self.book.horizontal && scrollView.contentOffset.x < -size.width/8.0
               || !self.book.horizontal && scrollView.contentOffset.y < -size.height/8.0 {
                 NSLog("SWView  EndDragging underscrolling detected \(scrollView.contentOffset)")
+                let page = self.book.currenPage
+                page.willLeave(false)
+                page.willEnter(true)
+                page.didEnter(true)
             }
         }
     }
@@ -347,7 +351,11 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             } else {
                 if !self.book.horizontal && offset.y < -size.height/3.0
                    || self.book.horizontal && offset.x < -size.width/3.0 {
-                    NSLog("SWView over-scrolling detected \(offset.x), \(offset.y)")
+                    NSLog("SWView underscrolling detected \(offset.x), \(offset.y)")
+                    let page = self.book.currenPage
+                    page.willLeave(false)
+                    page.willEnter(true)
+                    page.didEnter(true)
                 }
             }
             scrollView.setContentOffset(offsetAligned, animated: true)
