@@ -926,6 +926,7 @@ class SwipeElement:NSObject {
                 self.fSeeking = true
                 SwipeElement.objectCount-- // to avoid false memory leak detection
                 player.seekToTime(time, toleranceBefore: tolerance, toleranceAfter: tolerance) { (_:Bool) -> Void in
+                    assert(NSThread.currentThread() == NSThread.mainThread(), "thread error")
                     SwipeElement.objectCount++
                     self.fSeeking = false
                     if let pendingOffset = self.pendingOffset {
