@@ -1,6 +1,8 @@
 {
     "type":"net.swipe.list",
     "items":[
+        { "url":"videostream.swipe", "title":"Streaming Video" },
+        { "url":"markdown.swipe", "title":"Rich Text" },
         { "url":"speech.swipe", "title":"Speech" },
     ]
 }

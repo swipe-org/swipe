@@ -41,6 +41,9 @@ protocol SwipePageDelegate: NSObjectProtocol {
 }
 
 class SwipePage: NSObject, SwipeElementDelegate {
+    // Debugging
+    static var objectCount = 0
+
     static let didStartPlaying = "SwipePageDidStartPlaying"
     static let didFinishPlaying = "SwipePageDidFinishPlaying"
     static let shouldStartAutoPlay = "SwipePageShouldStartAutoPlay"
@@ -84,6 +87,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         self.delegate = delegate
         self.scene = delegate.sceneWith(pageInfo["scene"] as? String)
         self.pageInfo = SwipeParser.inheritProperties(pageInfo, baseObject: scene?.sceneInfo)
+        SwipePage.objectCount++
     }
 
     func unloadView() {
@@ -105,6 +109,11 @@ class SwipePage: NSObject, SwipeElementDelegate {
         if self.autoplay {
             NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.shouldPauseAutoPlay, object: self)
         }
+        SwipePage.objectCount--
+    }
+
+    static func checkMemoryLeak() {
+        assert(SwipePage.objectCount == 0)
     }
     
     // Private lazy properties

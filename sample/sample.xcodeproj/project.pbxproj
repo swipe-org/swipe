@@ -33,6 +33,8 @@
 		74EA71D31BD04F22006808EA /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71D01BD04F22006808EA /* SwipeTableViewController.swift */; };
 		74EA71D61BD04FA0006808EA /* index.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71D51BD04FA0006808EA /* index.swipe */; };
 		74EA71D81BD04FE1006808EA /* speech.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71D71BD04FE1006808EA /* speech.swipe */; };
+		74EA71DA1BD0596D006808EA /* markdown.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71D91BD0596D006808EA /* markdown.swipe */; };
+		74EA71DC1BD05998006808EA /* videostream.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71DB1BD05998006808EA /* videostream.swipe */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +68,8 @@
 		74EA71D01BD04F22006808EA /* SwipeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		74EA71D51BD04FA0006808EA /* index.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = index.swipe; sourceTree = "<group>"; };
 		74EA71D71BD04FE1006808EA /* speech.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = speech.swipe; sourceTree = "<group>"; };
+		74EA71D91BD0596D006808EA /* markdown.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = markdown.swipe; sourceTree = "<group>"; };
+		74EA71DB1BD05998006808EA /* videostream.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = videostream.swipe; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +165,8 @@
 			isa = PBXGroup;
 			children = (
 				74EA71D51BD04FA0006808EA /* index.swipe */,
+				74EA71DB1BD05998006808EA /* videostream.swipe */,
+				74EA71D91BD0596D006808EA /* markdown.swipe */,
 				74EA71D71BD04FE1006808EA /* speech.swipe */,
 			);
 			path = script;
@@ -226,7 +232,9 @@
 			files = (
 				74EA71851BD047F0006808EA /* LaunchScreen.storyboard in Resources */,
 				74EA71D21BD04F22006808EA /* SwipeBrowser.xib in Resources */,
+				74EA71DC1BD05998006808EA /* videostream.swipe in Resources */,
 				74EA71D81BD04FE1006808EA /* speech.swipe in Resources */,
+				74EA71DA1BD0596D006808EA /* markdown.swipe in Resources */,
 				74EA71821BD047F0006808EA /* Assets.xcassets in Resources */,
 				74EA71D61BD04FA0006808EA /* index.swipe in Resources */,
 				74EA71801BD047F0006808EA /* Main.storyboard in Resources */,

@@ -245,6 +245,12 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         if self.isBeingDismissed() {
             SwipeBrowser.stack.popLast()
             MyLog("SWBrows pop \(SwipeBrowser.stack.count)", level:1)
+            if SwipeBrowser.stack.count == 1 {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    SwipeElement.checkMemoryLeak()
+                    SwipePage.checkMemoryLeak()
+                })
+            }
         }
     }
 

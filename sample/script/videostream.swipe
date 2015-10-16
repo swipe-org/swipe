@@ -1,0 +1,71 @@
+{
+    "title": "VideoStream",
+    "orientation":"landscape",
+    "pages":[
+        {
+            "elements":[
+                { "video":"http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8", "stream":true },
+            ],
+        },
+        {
+            "elements":[
+                { "video":"https://devimages.apple.com.edgekey.net/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8", "stream":true },
+            ],
+        },
+        {
+            "elements":[
+                { "video":"https://devimages.apple.com.edgekey.net/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8", "stream":true },
+            ],
+        },
+        {
+            "elements":[
+                { "video":"http://playertest.longtailvideo.com/adaptive/oceans_aes/oceans_aes.m3u8", "stream":true },
+            ],
+        },
+        {
+            "elements":[
+                { "video":"http://playertest.longtailvideo.com/adaptive/captions/playlist.m3u8", "stream":true },
+            ],
+        },
+        {
+            "elements":[
+                { "video":"http://playertest.longtailvideo.com/adaptive/wowzaid3/playlist.m3u8", "stream":true },
+            ],
+        },
+        {
+            "elements":[
+                { "video":"http://content.jwplatform.com/manifests/vM7nH0Kl.m3u8", "stream":true },
+            ],
+        },
+        {
+            "elements":[
+                { "video":"http://cdn-fms.rbs.com.br/hls-vod/sample1_1500kbps.f4v.m3u8", "stream":true },
+            ],
+        },
+        {
+            "elements":[
+                { "video":"http://cdn-fms.rbs.com.br/vod/hls_sample1_manifest.m3u8", "stream":true },
+            ],
+        },
+        {
+            "elements":[
+                { "video":"http://vevoplaylist-live.hls.adaptive.level3.net/vevo/ch1/appleman.m3u8", "stream":true },
+            ],
+        },
+        {
+            "elements":[
+                { "video":"http://srv6.zoeweb.tv:1935/z330-live/stream/playlist.m3u8", "stream":true },
+            ],
+        },
+        {
+            "elements":[
+                { "video":"http://srv6.zoeweb.tv:1935/z330-live/stream/playlist.m3u8", "stream":true },
+            ],
+        },
+        {
+            "elements":[
+                { "video":"http://walterebert.com/playground/video/hls/sintel-trailer.m3u8", "stream":true },
+            ],
+        },
+    ]
+}

@@ -117,8 +117,12 @@ class SwipeElement:NSObject {
     
         SwipeElement.objectCount--
         if (SwipeElement.objectCount == 0) {
-            MyLog("SWEleme zero object!", level:0)
+            MyLog("SWEleme zero object!", level:1)
         }
+    }
+    
+    static func checkMemoryLeak() {
+        assert(SwipeElement.objectCount == 0)
     }
     
     private func valueFrom(info:[NSObject:AnyObject], key:String, defaultValue:CGFloat) -> CGFloat {
