@@ -19,7 +19,7 @@ import AVFoundation
 import ImageIO
 
 private func MyLog(text:String, level:Int = 0) {
-    let s_verbosLevel = 0
+    let s_verbosLevel = 1
     if level <= s_verbosLevel {
         NSLog(text)
     }
@@ -105,7 +105,7 @@ class SwipeElement:NSObject {
         self.setTimeOffsetTo(0.0)
         
         SwipeElement.objectCount++
-        MyLog("SWEleme  init \(pageIndex)", level:2)
+        MyLog("SWEleme  init \(pageIndex) \(scale.width)", level:1)
     }
     
     deinit {
@@ -123,7 +123,7 @@ class SwipeElement:NSObject {
         if (SwipeElement.objectCount == 0) {
             MyLog("SWEleme zero object!", level:1)
         }
-        MyLog("SWEleme  deinit \(pageIndex)", level: 2)
+        MyLog("SWEleme  deinit \(pageIndex) \(scale.width)", level: 1)
     }
     
     static func checkMemoryLeak() {
@@ -149,7 +149,7 @@ class SwipeElement:NSObject {
             if let src = self.info[key] as? String,
                    url = NSURL.url(src, baseURL: baseURL) {
                 if let fStream = self.info["stream"] as? Bool where fStream == true {
-                    MyLog("SWEleme skipping stream \(url)", level: 1)
+                    MyLog("SWEleme skipping stream \(url)", level: 2)
                 } else {
                     urls[url] = prefix
                 }
@@ -551,7 +551,7 @@ class SwipeElement:NSObject {
 
             let urlLocalOrStream:NSURL?
             if let fStream = info["stream"] as? Bool where fStream == true {
-                MyLog("SWEleme stream=\(url)", level:1)
+                MyLog("SWEleme stream=\(url)", level:2)
                 urlLocalOrStream = url
             } else if let urlLocal = self.delegate.map(url) {
                 urlLocalOrStream = urlLocal

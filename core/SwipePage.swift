@@ -334,7 +334,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
             }
         }
         if let elementsInfo = self.pageInfo["elements"] as? [[String:AnyObject]] {
-            let scaleDummy = CGSizeMake(1.0, 1.0)
+            let scaleDummy = CGSizeMake(0.1, 0.1)
             for e in elementsInfo {
                 let element = SwipeElement(info: e, scale:scaleDummy, delegate:self)
                 for (url, prefix) in element.resourceURLs {
