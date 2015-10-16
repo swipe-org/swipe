@@ -299,7 +299,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             MyLog("SWView handlePan normal \(self.book.pageIndex) [\(recognizer.state.rawValue)]", level:2)
         }
 
-        var offset = self.book.horizontal ? CGPointMake((CGFloat(self.book.pageIndex) + ratio) * size.width, 0) : CGPointMake(0, (CGFloat(self.book.pageIndex) + ratio) * size.height)
+        let offset = self.book.horizontal ? CGPointMake((CGFloat(self.book.pageIndex) + ratio) * size.width, 0) : CGPointMake(0, (CGFloat(self.book.pageIndex) + ratio) * size.height)
         //MyLog("SwiftVC handlePan: \(recognizer.state.rawValue), \(ratio)")
         switch(recognizer.state) {
         case .Began:
@@ -329,7 +329,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             }
             target = min(max(target, 0), self.book.pages.count - 1)
 
-            offset = self.book.horizontal ? CGPointMake(size.width * CGFloat(target), 0) : CGPointMake(0, size.height * CGFloat(target))
+            let offsetAligned = self.book.horizontal ? CGPointMake(size.width * CGFloat(target), 0) : CGPointMake(0, size.height * CGFloat(target))
             if target != self.book.pageIndex {
                 // Paging was initiated by the swiping (forward or backward)
                 self.book.currenPage.willLeave(fAdvancing)
@@ -338,8 +338,13 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
                 page.willEnter(fAdvancing)
                 scrollingTarget = target
                 MyLog("SWView handlePan paging \(self.book.pageIndex) to \(target)", level:1)
+            } else {
+                if !self.book.horizontal && offset.y < -size.height/3.0
+                   || self.book.horizontal && offset.x < -size.width/3.0 {
+                    NSLog("SWView over-scrolling detected \(offset.x), \(offset.y)")
+                }
             }
-            scrollView.setContentOffset(offset, animated: true)
+            scrollView.setContentOffset(offsetAligned, animated: true)
             break
         case .Changed:
             scrollView.contentOffset = offset
