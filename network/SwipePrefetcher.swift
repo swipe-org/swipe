@@ -14,7 +14,7 @@ import UIKit
 
 
 private func MyLog(text:String, level:Int = 0) {
-    let s_verbosLevel = 1
+    let s_verbosLevel = 0
     if level <= s_verbosLevel {
         NSLog(text)
     }
@@ -57,7 +57,7 @@ class SwipePrefetcher {
                     count--
                     if (count == 0) {
                         self.fComplete = true
-                        NSLog("SWPrefe complete \(self.urlsFetched.count)")
+                        MyLog("SWPrefe completed \(self.urlsFetched.count)", level: 1)
                         callback(self.urlsFailed, self.errors)
                     }
                 })
