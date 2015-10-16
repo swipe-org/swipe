@@ -14,7 +14,7 @@ import UIKit
 
 
 private func MyLog(text:String, level:Int = 0) {
-    let s_verbosLevel = 0
+    let s_verbosLevel = 1
     if level <= s_verbosLevel {
         NSLog(text)
     }

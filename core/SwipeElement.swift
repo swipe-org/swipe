@@ -860,6 +860,12 @@ class SwipeElement:NSObject {
         return view
     }
 
+    // This function is called by SwipePage when unloading the view.
+    // PARANOIA: Extra effort to clean up everything
+    func clear() {
+        notificationManager.clear()
+    }
+
     private func parsePath(shape:AnyObject?, w:CGFloat, h:CGFloat, scale:CGSize) -> CGPathRef? {
         var shape0: AnyObject? = shape
         if let refs = shape as? [NSObject:AnyObject], key = refs["ref"] as? String {

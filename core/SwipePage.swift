@@ -94,6 +94,9 @@ class SwipePage: NSObject, SwipeElementDelegate {
         if let view = self.view {
             MyLog("SWPage  unloading @\(index)", level: 2)
             view.removeFromSuperview()
+            for element in elements {
+                element.clear() // PARANOIA (extra effort to clean up everything)
+            }
             elements.removeAll()
             self.view = nil
             self.viewAnimation = nil
