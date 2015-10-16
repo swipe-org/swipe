@@ -36,6 +36,7 @@ class SwipePrefetcher {
         if fComplete {
             MyLog("SWPrefe already completed", level:1)
             callback(self.urlsFailed, self.errors)
+            return
         }
         
         let manager = SwipeAssetManager.sharedInstance()
