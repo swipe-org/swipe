@@ -66,6 +66,10 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         if self.book != nil {
             self.book.currenPage.willLeave(false)
             self.book.currenPage.didLeave(false)
+            // PARANOIA
+            for i in -2...2 {
+                removeViewAtIndex(self.book.pageIndex - i)
+            }
         }
     }
 
