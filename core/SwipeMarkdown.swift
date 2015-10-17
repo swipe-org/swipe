@@ -50,14 +50,14 @@ class SwipeMarkdown {
         ]
     }
     
-    init(info:AnyObject?, scale:CGSize, dimension:CGSize) {
+    init(info:[String:AnyObject]?, scale:CGSize, dimension:CGSize) {
         self.scale = scale
-        if let params = info as? [String:AnyObject] {
+        if let params = info {
             shadow = SwipeParser.parseShadow(params["shadow"], scale: scale)
         }
         attrs = genAttrs()
 
-        if let markdownInfo = info as? [String:AnyObject],
+        if let markdownInfo = info,
            let styles = markdownInfo["styles"] as? [String:AnyObject] {
             for (keyMark, value) in styles {
                 if let attrInfo = value as? [String:AnyObject] {

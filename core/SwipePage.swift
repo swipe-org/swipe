@@ -29,7 +29,6 @@ protocol SwipePageDelegate: NSObjectProtocol {
     func prototypeWith(name:String?) -> [String:AnyObject]?
     func sceneWith(name:String?) -> SwipeScene?
     func pathWith(name:String?) -> AnyObject?
-    func styleWith(name:String?) -> String?
 #if !os(OSX) // REVIEW
     func speak(utterance:AVSpeechUtterance)
     func stopSpeaking()
@@ -479,11 +478,6 @@ class SwipePage: NSObject, SwipeElementDelegate {
     // <SwipeElementDelegate> method
     func pathWith(name:String?) -> AnyObject? {
         return delegate.pathWith(name)
-    }
-
-    // <SwipeElementDelegate> method
-    func styleWith(name:String?) -> String? {
-        return delegate.styleWith(name)
     }
 
     // <SwipeElementDelegate> method

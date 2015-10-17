@@ -55,12 +55,11 @@ Swipe is NOT
 
 ### Data Types
 
-String has following subtypes. 
-- *Color*: either "#RRGGBB", "#RGB", "#RRGGBBAA", "#RGBA", or "red", "black", "blue", "white", "green", "yellow", "purple", "gray", "darkGray", "lightGray", "brown", "orange", "cyan", "maganta" 
-- *Percent*: "NN%"
-- *Path*: SVG-style Path String
-- *URL*: relative or absolute URL
-
+- **String**: Regular string
+- **Color**: One of RBG(A) styles ("#RRGGBB", "#RGB", "#RRGGBBAA", "#RGBA") or, one of standard color names ("red", "black", "blue", "white", "green", "yellow", "purple", "gray", "darkGray", "lightGray", "brown", "orange", "cyan", "maganta")
+- **Percent**: "NN%" relative to the parent
+- **Path**: SVG-style Path String
+- **URL**: relative or absolute URL
 
 ##2. Document
 
@@ -91,12 +90,14 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **title** (String): Title of the document, optional
 - **bc** (Color): Background color, defalut is *darkGray*
 - **dimension** ([Int, Int]): Dimension of the document, default is [320, 568]
-- **paging** (String): Paging direction, *vertical* (default), *leftToRight* or *rightToLeft*
+- **paging** (String): Paging direction, *vertical* (default), or *leftToRight*
 - **orientation** (String): Document orientation, *portrait* (default) or *landscape*
-- **pages** ([Page+]): Collection of **Pages** 
 - **scene** ({Name:Scene}): Named **Scenes** dictionary
 - **elements** ({Name:Element}): Named **Elements** dictionary
 - **paths** ({Name:Path}): Named **Paths** dictionary
+- **markdown** ({Name:Style}): Named **Markdown** style
+- **voices** ({Name:VoiceInfo}): Named **Voice** style
+- **pages** ([Page+]): Collection of **Pages** 
 
 ##3. Page
 
@@ -119,16 +120,18 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 
 ### Page Properties
 
-- **elements** ([Element+]): Collection of Elements
-- **bc** (Color): Background color, default is *white*
+- **bc** (Color): Background color, the default is *white*
+- **fpt** (Int): Frame per second, the default is 60
 - **transition** (String): Inter-page transition style, *scroll* (default), *fadeIn* or *replace*
 - **animation** (String): Animation timing, *auto* (default), *pause* or *scroll*
-- **duration** (Float): Duration of the auto animation in seconds, default is 0.2 seconds
+- **duration** (Float): Duration of the auto animation in seconds, the default is 0.2 seconds
 - **repeat** (Boolean): Repeat rule of the auto animation, default is *false*
 - **rewind** (Boolean): Rewind rule of the auto animation when the user leaves the page, defaul is *false*
 - **scene** (String): Name of the scene, default is *
 - **audio** (URL): Specifies the sound effect to be played in sync with the animation
-- **speech** (String): Specifies the text-to-speech to be played in sync with the animation
+- **speech** (SpeechInfo): Specifies the text-to-speech to be played in sync with the animation
+- **vibrate** (Bool): Specifies the vibration in sync with the animation, the default is false
+- **elements** ([Element+]): Collection of Elements
  
 ##4. Paging direction, inter-page transition and animation
 

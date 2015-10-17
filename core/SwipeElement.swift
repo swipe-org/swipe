@@ -28,7 +28,6 @@ private func MyLog(text:String, level:Int = 0) {
 protocol SwipeElementDelegate:NSObjectProtocol {
     func prototypeWith(name:String?) -> [String:AnyObject]?
     func pathWith(name:String?) -> AnyObject?
-    func styleWith(name:String?) -> String?
     func shouldRepeat(element:SwipeElement) -> Bool
     func onAction(element:SwipeElement)
     func didStartPlaying(element:SwipeElement)

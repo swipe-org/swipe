@@ -99,13 +99,6 @@ class SwipeBook: NSObject, SwipePageDelegate {
         }
         return [NSObject:AnyObject]()
     }()
-
-    private lazy var namedStyles:[String:String] = {
-        if let css = self.bookInfo["styles"] as? [String:String] {
-            return css
-        }
-        return [String:String]()
-    }()
     
     private lazy var paging:String = {
         if let paging = self.bookInfo["paging"] as? String {
@@ -144,7 +137,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
     }()
 
     lazy private var markdown:SwipeMarkdown = {
-        let info = self.bookInfo["markdown"]
+        let info = self.bookInfo["markdown"] as? [String:AnyObject]
         let markdown = SwipeMarkdown(info:info, scale:self.scale, dimension:self.dimension)
         return markdown
     }()
@@ -213,15 +206,6 @@ class SwipeBook: NSObject, SwipePageDelegate {
     func pathWith(name:String?) -> AnyObject? {
         if let key = name,
            let value:AnyObject = self.namedPaths[key] {
-            return value
-        }
-        return nil
-    }
-
-    // <SwipePageDelegate> method
-    func styleWith(name:String?) -> String? {
-        let key = (name == nil) ? "*" : name!
-        if let value:String = self.namedStyles[key] {
             return value
         }
         return nil
