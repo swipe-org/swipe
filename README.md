@@ -41,9 +41,9 @@ Swipe was designed for a specific set of applications and contents.
 
 Swipe is NOT 
 
-- a replacement of ePub, which is designed for text-centric books and supports flow layout
-- a programming environment where programmers write precedural code
-- a game engine
+- A replacement of ePub, which is designed for text-centric books and supports flow layout
+- A general-purpose programming environment where programmers write procedural code
+- A game engine
  
 ### Design Principles
 
@@ -53,11 +53,20 @@ Swipe is NOT
 - Lightweight
 - Designer friendly
 
+### Data Types
+
+String has following subtypes. 
+- *Color*: either "#RRGGBB", "#RGB", "#RRGGBBAA", "#RGBA", or "red", "black", "blue", "white", "green", "yellow", "purple", "gray", "darkGray", "lightGray", "brown", "orange", "cyan", "maganta" 
+- *Percent*: "NN%"
+- *Path*: SVG-style Path String
+- *URL*: relative or absolute URL
+
+
 ##2. Document
 
-A **Document** is a UTF8 JSON file, which consists of a collection of **Pages**. The order of **Pages** in the collection is significant, and they will be presented to the user in the order specified in the collection. 
+A **Document** is a UTF8 JSON file, which consists of a collection of **Pages**. The order of **Pages** in the collection is significant, and they will be presented to the user in the specified order. 
 
-Here is a **Document** with two pages:
+Here is a sample **Document** which concists of two pages:
 
 ```
 {
@@ -88,16 +97,6 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **scene** ({Name:Scene}): Named **Scenes** dictionary
 - **elements** ({Name:Element}): Named **Elements** dictionary
 - **paths** ({Name:Path}): Named **Paths** dictionary
-
-### Data Types
-
-A **Document** is a JSON object with a number of properties, and property values are either a Number (Float,  Int), a Boolean value (true or false), String, a JSON object or an array of values. 
-
-String has following subtypes. 
-- *Color*: either "#RRGGBB", "#RGB", "#RRGGBBAA", "#RGBA", or "red", "black", "blue", "white", "green", "yellow", "purple", "gray", "darkGray", "lightGray", "brown", "orange", "cyan", "maganta" 
-- *Percent*: "NN%"
-- *Path*: SVG-style Path String
-- *URL*: relative or absolute URL
 
 ##3. Page
 
