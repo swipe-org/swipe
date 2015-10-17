@@ -246,10 +246,12 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             SwipeBrowser.stack.popLast()
             MyLog("SWBrows pop \(SwipeBrowser.stack.count)", level:1)
             if SwipeBrowser.stack.count == 1 {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                // Wait long enough (200ms > 1/30fps) and check the memory leak. 
+                // This gives the timerTick() in SwipePage to complete the shutdown sequence
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(200 * NSEC_PER_MSEC)), dispatch_get_main_queue()) { () -> Void in
                     SwipePage.checkMemoryLeak()
                     SwipeElement.checkMemoryLeak()
-                })
+                }
             }
         }
     }

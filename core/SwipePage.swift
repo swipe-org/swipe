@@ -408,7 +408,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
             }
         }
 
-// REVIEW
+// REVIEW: Disabled for OSX for now
 #if !os(OSX)
         if let speech = self.pageInfo["speech"] as? [NSObject:AnyObject],
            let text = speech["text"] as? String {
