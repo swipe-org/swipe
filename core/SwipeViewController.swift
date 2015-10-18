@@ -17,7 +17,7 @@ import UIKit
 import AVFoundation
 
 private func MyLog(text:String, level:Int = 0) {
-    let s_verbosLevel = 0
+    let s_verbosLevel = 1
     if level <= s_verbosLevel {
         NSLog(text)
     }
@@ -32,6 +32,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     // scrollingTarget has an index to the target page during the scrolling animation
     // as the result of swiping
     private var scrollingTarget:Int?
+    private var scrollingCount = 0 // number of pending animations
 #endif
 
     lazy var scrollView:UIScrollView = {
@@ -60,7 +61,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
     
     deinit {
-        MyLog("SWView deinit \(Int(0.4)), \(Int(0.6)), \(Int(1.1))", level:1)
+        MyLog("SWView deinit c=\(scrollingCount)", level:1)
         // Even though book is unwrapped, there is a rare case that book is nil 
         // (during the construction).
         if self.book != nil {
@@ -271,10 +272,15 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
     
 #elseif os(tvOS)
-
     func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
         let index = self.scrollIndex
-        MyLog("SWView didEndScrolling \(index), \(scrollingTarget)", level: 1)
+        self.scrollingCount--
+        MyLog("SWView didEndScrolling \(index), \(scrollingTarget), c=\(scrollingCount)", level: 1)
+        if self.scrollingCount > 0 {
+            return
+        }
+        self.scrollingTarget = nil
+/*
         if let target = scrollingTarget {
             if target == index {
                 MyLog("SWView didEndScrolling processing \(index), \(scrollingTarget)", level: 1)
@@ -286,6 +292,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         } else {
             MyLog("SWView didEndScrolling no scrollingTarget \(index) ???", level: 1)
         }
+*/
         
         if !self.adjustIndex(index) {
             MyLog("SWView didEndScrolling same", level: 1)
@@ -347,7 +354,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
                 fAdvancing = target > self.book.pageIndex
                 page.willEnter(fAdvancing)
                 scrollingTarget = target
-                MyLog("SWView handlePan paging \(self.book.pageIndex) to \(target)", level:1)
+                MyLog("SWView handlePan paging \(self.book.pageIndex) to \(target), c=\(scrollingCount+1)", level:1)
             } else {
                 if !self.book.horizontal && offset.y < -size.height/3.0
                    || self.book.horizontal && offset.x < -size.width/3.0 {
@@ -356,8 +363,11 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
                     page.willLeave(false)
                     page.willEnter(true)
                     page.didEnter(true)
+                } else {
+                    MyLog("SWView scrolling back c=\(scrollingCount+1)")
                 }
             }
+            self.scrollingCount++
             scrollView.setContentOffset(offsetAligned, animated: true)
             break
         case .Changed:

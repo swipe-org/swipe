@@ -126,7 +126,10 @@ class SwipeElement:NSObject {
     }
     
     static func checkMemoryLeak() {
-        assert(SwipeElement.objectCount == 0)
+        //assert(SwipeElement.objectCount == 0)
+        if SwipeElement.objectCount > 0 {
+            NSLog("SWElem  memory leak detected ###")
+        }
     }
     
     private func valueFrom(info:[NSObject:AnyObject], key:String, defaultValue:CGFloat) -> CGFloat {

@@ -17,7 +17,7 @@ import MediaPlayer
 
 
 private func MyLog(text:String, level:Int = 0) {
-    let s_verbosLevel = 0
+    let s_verbosLevel = 2
     if level <= s_verbosLevel {
         NSLog(text)
     }
@@ -115,7 +115,10 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }
 
     static func checkMemoryLeak() {
-        assert(SwipePage.objectCount == 0)
+        //assert(SwipePage.objectCount == 0)
+        if SwipePage.objectCount > 0 {
+            NSLog("SWPage  memory leak detected ###")
+        }
     }
     
     // Private lazy properties
