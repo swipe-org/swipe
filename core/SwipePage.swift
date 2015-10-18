@@ -425,6 +425,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
                 let voices = AVSpeechSynthesisVoice.speechVoices()
                 var theVoice:AVSpeechSynthesisVoice?
                 for voice in voices {
+                    //NSLog("SWPage lang=\(voice.language)")
                     if lang == voice.language {
                         theVoice = voice
                         break;

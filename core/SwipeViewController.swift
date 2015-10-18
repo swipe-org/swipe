@@ -61,7 +61,9 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
     
     deinit {
+#if os(tvOS)
         MyLog("SWView deinit c=\(scrollingCount)", level:1)
+#endif
         // Even though book is unwrapped, there is a rare case that book is nil 
         // (during the construction).
         if self.book != nil {
