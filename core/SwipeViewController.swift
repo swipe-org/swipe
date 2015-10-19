@@ -370,9 +370,11 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
                 }
             }
             self.scrollingCount++
+            MyLog("SWView scrollling to \(offsetAligned)", level:1)
             scrollView.setContentOffset(offsetAligned, animated: true)
             break
         case .Changed:
+            MyLog("SWView scrolls to \(offset)", level:1)
             scrollView.contentOffset = offset
             break
         case .Cancelled:
