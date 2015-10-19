@@ -240,7 +240,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
         }
         return [String:AnyObject]()
     }
-    
+
     func sourceCode() -> String {
         if let url = self.url {
             let data = NSData(contentsOfURL: url)

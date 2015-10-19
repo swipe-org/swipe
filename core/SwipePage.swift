@@ -42,6 +42,8 @@ protocol SwipePageDelegate: NSObjectProtocol {
 class SwipePage: NSObject, SwipeElementDelegate {
     // Debugging
     static var objectCount = 0
+    var accessCount = 0
+    var completionCount = 0
 
     static let didStartPlaying = "SwipePageDidStartPlaying"
     static let didFinishPlaying = "SwipePageDidFinishPlaying"
@@ -107,7 +109,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }
     
     deinit {
-        MyLog("SWPage  deinit \(index)", level: 1)
+        MyLog("SWPage  deinit \(index) \(accessCount) \(completionCount)", level: 1)
         if self.autoplay {
             NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.shouldPauseAutoPlay, object: self)
         }
@@ -250,6 +252,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
 
     func didEnter(fForward:Bool) {
         fEntered = true
+        accessCount++
         if fForward && self.autoplay {
             autoPlay()
         }
@@ -506,7 +509,10 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }
     
     // <SwipeElementDelegate> method
-    func didFinishPlaying(element:SwipeElement) {
+    func didFinishPlayingVideo(element:SwipeElement, completed:Bool) {
+        if completed {
+            completionCount++
+        }
         didFinishPlayingInternal()
     }
 
