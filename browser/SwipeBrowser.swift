@@ -37,6 +37,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     @IBOutlet var slider:UISlider!
     @IBOutlet var labelTitle:UILabel?
 #endif
+    private var resourceRequest:NSBundleResourceRequest?
     var url:NSURL? = NSBundle.mainBundle().URLForResource("index.swipe", withExtension: nil)
     var controller:UIViewController?
     var documentViewer:SwipeDocumentViewer?
@@ -61,6 +62,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     }
     
     deinit {
+        if let request = self.resourceRequest {
+            request.endAccessingResources()
+        }
         MyLog("SWBrows deinit", level:1)
     }
 
@@ -79,14 +83,14 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         if let url = self.url {
             if url.scheme == "file" {
                 if let data = NSData(contentsOfURL: url) {
-                    self.openData(data)
+                    self.openData(data, localResource: true)
                 }
             } else {
                 let manager = SwipeAssetManager.sharedInstance()
                 manager.loadAsset(url, prefix: "") { (urlLocal:NSURL?, error:NSError!) -> Void in
                     if let urlL = urlLocal,
                            data = NSData(contentsOfURL: urlL) {
-                        self.openData(data)
+                        self.openData(data, localResource: false)
                     } else {
                         self.processError(error.localizedDescription)
                     }
@@ -98,7 +102,54 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
     }
     
-    private func openData(dataRetrieved:NSData?) {
+    private func openDocument(document:[String:AnyObject]) {
+        var documentType = "net.swipe.swipe" // default
+        if let type = document["type"] as? String {
+            documentType = type
+        }
+        guard let type = g_typeMapping[documentType] else {
+            return processError("Unknown type: \(g_typeMapping[documentType]).")
+        }
+        let vc = type()
+        guard let documentViewer = vc as? SwipeDocumentViewer else {
+            return processError("Programming Error: Not SwipeDocumentViewer.")
+        }
+        self.documentViewer = documentViewer
+        do {
+            documentViewer.setDelegate(self)
+            try documentViewer.loadDocument(document, url: url)
+#if os(iOS)
+            if let title = documentViewer.documentTitle() {
+                labelTitle?.text = title
+            } else {
+                labelTitle?.text = url?.lastPathComponent
+            }
+#endif
+            controller = vc
+            self.addChildViewController(vc)
+#if os(OSX)
+            self.view.addSubview(vc.view, positioned: .Below, relativeTo: nil)
+#else
+            self.view.insertSubview(vc.view, atIndex: 0)
+#endif
+            var rcFrame = self.view.bounds
+#if os(iOS)
+            if documentViewer.hideUI() {
+                let tap = UITapGestureRecognizer(target: self, action: "tapped")
+                self.view.addGestureRecognizer(tap)
+                hideUI()
+            } else if let toolbar = self.toolbar, let bottombar = self.bottombar {
+                rcFrame.origin.y = toolbar.bounds.size.height
+                rcFrame.size.height -= rcFrame.origin.y + bottombar.bounds.size.height
+            }
+#endif
+            vc.view.frame = rcFrame
+        } catch let error as NSError {
+            return processError("load Document Error: \(error.localizedDescription).")
+        }
+    }
+    
+    private func openData(dataRetrieved:NSData?, localResource:Bool) {
         guard let data = dataRetrieved else {
             return processError("failed to open: no data")
         }
@@ -106,49 +157,22 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             guard let document = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? [String:AnyObject] else {
                 return processError("Not a dictionary.")
             }
-            var documentType = "net.swipe.swipe" // default
-            if let type = document["type"] as? String {
-                documentType = type
-            }
-            guard let type = g_typeMapping[documentType] else {
-                return processError("Unknown type: \(g_typeMapping[documentType]).")
-            }
-            let vc = type()
-            guard let documentViewer = vc as? SwipeDocumentViewer else {
-                return processError("Programming Error: Not SwipeDocumentViewer.")
-            }
-            self.documentViewer = documentViewer
-            do {
-                documentViewer.setDelegate(self)
-                try documentViewer.loadDocument(document, url: url)
-#if os(iOS)
-                if let title = documentViewer.documentTitle() {
-                    labelTitle?.text = title
-                } else {
-                    labelTitle?.text = url?.lastPathComponent
+            if let tags = document["resource"] as? [String] where localResource {
+                NSLog("tags = \(tags)")
+                let request = NSBundleResourceRequest(tags: Set<String>(tags))
+                self.resourceRequest = request
+                request.beginAccessingResourcesWithCompletionHandler() { (error:NSError?) -> Void in
+                    dispatch_async(dispatch_get_main_queue()) {
+                        NSLog("SWBrowse resource error=\(error)")
+                        if let e = error {
+                            return self.processError(e.localizedDescription)
+                        } else {
+                            self.openDocument(document)
+                        }
+                    }
                 }
-#endif
-                controller = vc
-                self.addChildViewController(vc)
-#if os(OSX)
-                self.view.addSubview(vc.view, positioned: .Below, relativeTo: nil)
-#else
-                self.view.insertSubview(vc.view, atIndex: 0)
-#endif
-                var rcFrame = self.view.bounds
-#if os(iOS)
-                if documentViewer.hideUI() {
-                    let tap = UITapGestureRecognizer(target: self, action: "tapped")
-                    self.view.addGestureRecognizer(tap)
-                    hideUI()
-                } else if let toolbar = self.toolbar, let bottombar = self.bottombar {
-                    rcFrame.origin.y = toolbar.bounds.size.height
-                    rcFrame.size.height -= rcFrame.origin.y + bottombar.bounds.size.height
-                }
-#endif
-                vc.view.frame = rcFrame
-            } catch let error as NSError {
-                return processError("load Document Error: \(error.localizedDescription).")
+            } else {
+                self.openDocument(document)
             }
         } catch let error as NSError {
             let value = error.userInfo["NSDebugDescription"]!
