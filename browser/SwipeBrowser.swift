@@ -126,7 +126,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         self.documentViewer = documentViewer
         do {
             documentViewer.setDelegate(self)
-            try documentViewer.loadDocument(document, url: url, state:["page":0])
+            let defaults = NSUserDefaults.standardUserDefaults()
+            let state = defaults.objectForKey(self.url!.absoluteString) as? [String:AnyObject]
+            try documentViewer.loadDocument(document, url: url, state:state)
 #if os(iOS)
             if let title = documentViewer.documentTitle() {
                 labelTitle?.text = title
@@ -306,6 +308,15 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
         if self.isBeingDismissed() {
+            if let documentViewer = self.documentViewer,
+                   state = documentViewer.saveState(),
+                   url = self.url {
+                NSLog("SWBrows state=\(state)")
+                let defaults = NSUserDefaults.standardUserDefaults()
+                defaults.setObject(state, forKey: url.absoluteString)
+                defaults.synchronize()
+            }
+        
             SwipeBrowser.stack.popLast()
             MyLog("SWBrows pop \(SwipeBrowser.stack.count)", level:1)
             if SwipeBrowser.stack.count == 1 {
