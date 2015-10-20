@@ -306,7 +306,7 @@ class SwipeElement:NSObject {
         
         if let value = info["action"] as? String {
             action = value
-#if !os(OSX) // REVIEW
+#if os(iOS) // tvOS has some focus issue with UIButton, figure out OSX later
             let btn = UIButton(type: UIButtonType.Custom)
             btn.frame = view.bounds
             btn.addTarget(self, action: "buttonPressed", forControlEvents: UIControlEvents.TouchUpInside)

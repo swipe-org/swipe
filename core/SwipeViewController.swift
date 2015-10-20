@@ -17,7 +17,7 @@ import UIKit
 import AVFoundation
 
 private func MyLog(text:String, level:Int = 0) {
-    let s_verbosLevel = 1
+    let s_verbosLevel = 0
     if level <= s_verbosLevel {
         NSLog(text)
     }
@@ -114,6 +114,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
 #if os(tvOS)
         // Since the paging is not enabled on tvOS, we handle PanGesture directly at this view instead.
         // scrollView.panGestureRecognizer.allowedTouchTypes = [UITouchType.Indirect.rawValue, UITouchType.Direct.rawValue]
+        //scrollView.panGestureRecognizer.enabled = false
         let recognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
         self.view.addGestureRecognizer(recognizer)
 #endif
@@ -382,6 +383,26 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         default:
             break
         }
+    }
+    
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        MyLog("SWView  scrollViewWillBeginDragging was called")
+    }
+    func scrollViewDidEndDragging(scrollView: UIScrollView,
+                        willDecelerate decelerate: Bool) {
+        MyLog("SWView  scrollViewDidEndDragging was called")
+    }
+    func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
+        MyLog("SWView  scrollViewWillBeginDecelerating was called")
+    }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        MyLog("SWView  scrollViewDidEndDecelerating was called")
+    }
+    
+    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
+        MyLog("SWView  scrollViewShouldScrollToTop was called")
+        return true
     }
 #endif
     
