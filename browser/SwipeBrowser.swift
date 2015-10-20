@@ -157,7 +157,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             guard let document = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? [String:AnyObject] else {
                 return processError("Not a dictionary.")
             }
-            if let tags = document["resource"] as? [String] where localResource {
+            if let tags = document["resources"] as? [String] where localResource {
                 NSLog("tags = \(tags)")
                 let request = NSBundleResourceRequest(tags: Set<String>(tags))
                 self.resourceRequest = request
