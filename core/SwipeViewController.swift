@@ -358,8 +358,8 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
                 scrollingTarget = target
                 MyLog("SWView handlePan paging \(self.book.pageIndex) to \(target), c=\(scrollingCount+1)", level:1)
             } else {
-                if !self.book.horizontal && offset.y < -size.height/3.0
-                   || self.book.horizontal && offset.x < -size.width/3.0 {
+                if !self.book.horizontal && offset.y < -size.height/8.0
+                   || self.book.horizontal && offset.x < -size.width/8.0 {
                     MyLog("SWView underscrolling detected \(offset.x), \(offset.y)", level:1)
                     let page = self.book.currenPage
                     page.willLeave(false)

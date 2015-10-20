@@ -85,6 +85,13 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             if url.scheme == "file" {
                 if let data = NSData(contentsOfURL: url) {
                     self.openData(data, localResource: true)
+                } else {
+                    if let urlLocal = NSBundle.mainBundle().URLForResource(url.lastPathComponent, withExtension: nil),
+                           data = NSData(contentsOfURL: urlLocal) {
+                        self.openData(data, localResource: true)
+                    } else {
+                        self.processError("Missing resource \(url)")
+                    }
                 }
             } else {
                 let manager = SwipeAssetManager.sharedInstance()
@@ -172,10 +179,22 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                             self.openDocument(document)
                         } else {
                             let alert = UIAlertController(title: "Swipe", message: "Loading Rerouces...", preferredStyle: UIAlertControllerStyle.Alert)
-                            self.presentViewController(alert, animated: true, completion: nil)
+                            var fPresented = false
+                            var fLoaded = false
+                            self.presentViewController(alert, animated: true) { () -> Void in
+                                if fLoaded {
+                                    self.dismissViewControllerAnimated(true, completion: nil)
+                                } else {
+                                    fPresented = true // presentation completed before the loading
+                                }
+                            }
                             request.beginAccessingResourcesWithCompletionHandler() { (error:NSError?) -> Void in
                                 dispatch_async(dispatch_get_main_queue()) {
-                                    self.dismissViewControllerAnimated(true, completion: nil)
+                                    if fPresented {
+                                        self.dismissViewControllerAnimated(true, completion: nil)
+                                    } else {
+                                        fLoaded = true // loading completed before the presentation
+                                    }
                                     MyLog("SWBrowse resource error=\(error)")
                                     if let e = error {
                                         return self.processError(e.localizedDescription)
