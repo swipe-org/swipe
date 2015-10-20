@@ -91,7 +91,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                            data = NSData(contentsOfURL: urlLocal) {
                         self.openData(data, localResource: true)
                     } else {
-                        self.processError("Missing resource \(url)")
+                        self.processError("Missing resource:".localized + "\(url)")
                     }
                 }
             } else {
@@ -107,7 +107,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             }
         } else {
             MyLog("SWBrows nil URL")
-            processError("No URL to load")
+            processError("No URL to load".localized)
         }
     }
     
@@ -117,11 +117,11 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             documentType = type
         }
         guard let type = g_typeMapping[documentType] else {
-            return processError("Unknown type: \(g_typeMapping[documentType]).")
+            return processError("Unknown type:".localized + "\(g_typeMapping[documentType]).")
         }
         let vc = type()
         guard let documentViewer = vc as? SwipeDocumentViewer else {
-            return processError("Programming Error: Not SwipeDocumentViewer.")
+            return processError("Programming Error: Not SwipeDocumentViewer.".localized)
         }
         self.documentViewer = documentViewer
         do {
@@ -154,32 +154,32 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 #endif
             vc.view.frame = rcFrame
         } catch let error as NSError {
-            return processError("load Document Error: \(error.localizedDescription).")
+            return processError("load Document Error:".localized + "\(error.localizedDescription).")
         }
     }
     
     private func openData(dataRetrieved:NSData?, localResource:Bool) {
         guard let data = dataRetrieved else {
-            return processError("failed to open: no data")
+            return processError("failed to open: no data".localized)
         }
         do {
             guard let document = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? [String:AnyObject] else {
-                return processError("Not a dictionary.")
+                return processError("Not a dictionary.".localized)
             }
             if let orientation = document["orientation"] as? String where orientation == "landscape" {
                 self.landscapeMode = true
             }
             if let tags = document["resources"] as? [String] where localResource {
-                NSLog("tags = \(tags)")
+                //NSLog("tags = \(tags)")
                 let request = NSBundleResourceRequest(tags: Set<String>(tags))
                 self.resourceRequest = request
                 request.conditionallyBeginAccessingResourcesWithCompletionHandler() { (resourcesAvailable:Bool) -> Void in
-                    MyLog("SWBrowse resourceAvailable = \(resourcesAvailable)")
+                    MyLog("SWBrowse resourceAvailable(\(tags)) = \(resourcesAvailable)", level:1)
                     dispatch_async(dispatch_get_main_queue()) {
                         if resourcesAvailable {
                             self.openDocument(document)
                         } else {
-                            let alert = UIAlertController(title: "Swipe", message: "Loading Rerouces...", preferredStyle: UIAlertControllerStyle.Alert)
+                            let alert = UIAlertController(title: "Swipe", message: "Loading Rerouces...".localized, preferredStyle: UIAlertControllerStyle.Alert)
                             var fPresented = false
                             var fLoaded = false
                             self.presentViewController(alert, animated: true) { () -> Void in
@@ -212,7 +212,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             }
         } catch let error as NSError {
             let value = error.userInfo["NSDebugDescription"]!
-            processError("Invalid JSON file: \(error.localizedDescription). \(value)")
+            processError("Invalid JSON file".localized + "\(error.localizedDescription). \(value)")
             return
         }
     }

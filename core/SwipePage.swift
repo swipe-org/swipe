@@ -365,6 +365,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         MyLog("SWPage  loading @\(index)", level: 2)
         assert(self.view == nil, "loadView self.view must be nil")
         let view = UIView(frame: CGRectMake(0.0, 0.0, 100.0, 100.0))
+        view.clipsToBounds = true
         self.view = view
         let viewAnimation = UIView(frame: view.bounds)
         self.viewAnimation = viewAnimation

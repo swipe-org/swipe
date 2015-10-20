@@ -277,6 +277,7 @@ class SwipeElement:NSObject {
                 y = SwipeParser.parsePercent(value, full: dimension.height, defaultValue: 0)
             }
         }
+        //NSLog("SWEleme \(x),\(y),\(w0),\(h0),\(sizeContents),\(dimension),\(scale)")
         
         x *= scale.width
         y *= scale.height

@@ -8,6 +8,12 @@
 
 import UIKit
 
+extension String {
+    var localized:String {
+        return NSLocalizedString(self, comment:"")
+    }
+}
+
 extension NSURL {
     static func url(urlString:String, baseURL:NSURL?) -> NSURL? {
         let url = NSURL(string: urlString, relativeToURL: baseURL)
