@@ -18,11 +18,12 @@ protocol SwipeDocumentViewerDelegate: NSObjectProtocol {
 
 protocol SwipeDocumentViewer {
     func documentTitle() -> String?
-    func loadDocument(document:[String:AnyObject], url:NSURL?) throws
+    func loadDocument(document:[String:AnyObject], url:NSURL?, state:[String:AnyObject]?) throws
     func hideUI() -> Bool
     func landscape() -> Bool
     func setDelegate(delegate:SwipeDocumentViewerDelegate)
     func becomeZombie()
+    func saveState() -> [String:AnyObject]?
 }
 
 enum SwipeError: ErrorType {

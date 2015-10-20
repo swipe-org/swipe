@@ -126,7 +126,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         self.documentViewer = documentViewer
         do {
             documentViewer.setDelegate(self)
-            try documentViewer.loadDocument(document, url: url)
+            try documentViewer.loadDocument(document, url: url, state:["page":0])
 #if os(iOS)
             if let title = documentViewer.documentTitle() {
                 labelTitle?.text = title

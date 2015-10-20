@@ -82,8 +82,11 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
 
     // <SwipeDocumentViewer> method
-    func loadDocument(document:[String:AnyObject], url:NSURL?) throws {
+    func loadDocument(document:[String:AnyObject], url:NSURL?, state:[String:AnyObject]?) throws {
         self.book = SwipeBook(bookInfo: document, url: url)
+        if let pageIndex = state?["page"] as? Int where pageIndex < self.book.pages.count {
+            self.book.pageIndex = pageIndex
+        }
     }
 
     // <SwipeDocumentViewer> method
@@ -105,8 +108,13 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     func becomeZombie() {
         notificationManager.clear()
     }
-    
-    override func viewDidLoad() {    
+
+    // <SwipeDocumentViewer> method
+    func saveState() -> [String:AnyObject]? {
+        return ["page":self.book.currenPage]
+    }
+
+    override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(self.scrollView)
         
@@ -173,7 +181,9 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         
         if scrollView.contentSize != size {
             scrollView.contentSize = size
-            adjustIndex(0, fForced: true)
+            adjustIndex(self.book.pageIndex, fForced: true)
+            let offset = self.book.horizontal ? CGPointMake((CGFloat(self.book.pageIndex)) * frame.size.width, 0) : CGPointMake(0, (CGFloat(self.book.pageIndex)) * frame.size.height)
+            self.scrollView.contentOffset = offset
         }
     }
     

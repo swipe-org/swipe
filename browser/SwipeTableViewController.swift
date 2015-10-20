@@ -20,7 +20,7 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
     private weak var delegate:SwipeDocumentViewerDelegate?
 
     // <SwipeDocumentViewer> method
-    func loadDocument(document:[String:AnyObject], url:NSURL?) throws {
+    func loadDocument(document:[String:AnyObject], url:NSURL?, state:[String:AnyObject]?) throws {
         self.document = document
         self.url = url
         if let sections = document["sections"] as? [[String:AnyObject]] {
@@ -57,7 +57,12 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
     func becomeZombie() {
         // no op
     }
-    
+
+    // <SwipeDocumentViewer> method
+    func saveState() -> [String:AnyObject]? {
+        return nil
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
