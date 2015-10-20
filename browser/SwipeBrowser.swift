@@ -161,13 +161,25 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 NSLog("tags = \(tags)")
                 let request = NSBundleResourceRequest(tags: Set<String>(tags))
                 self.resourceRequest = request
-                request.beginAccessingResourcesWithCompletionHandler() { (error:NSError?) -> Void in
+                request.conditionallyBeginAccessingResourcesWithCompletionHandler() { (resourcesAvailable:Bool) -> Void in
+                    MyLog("SWBrowse resourceAvailable = \(resourcesAvailable)")
                     dispatch_async(dispatch_get_main_queue()) {
-                        NSLog("SWBrowse resource error=\(error)")
-                        if let e = error {
-                            return self.processError(e.localizedDescription)
-                        } else {
+                        if resourcesAvailable {
                             self.openDocument(document)
+                        } else {
+                            let alert = UIAlertController(title: "Swipe", message: "Loading Rerouces...", preferredStyle: UIAlertControllerStyle.Alert)
+                            self.presentViewController(alert, animated: true, completion: nil)
+                            request.beginAccessingResourcesWithCompletionHandler() { (error:NSError?) -> Void in
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    self.dismissViewControllerAnimated(true, completion: nil)
+                                    MyLog("SWBrowse resource error=\(error)")
+                                    if let e = error {
+                                        return self.processError(e.localizedDescription)
+                                    } else {
+                                        self.openDocument(document)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
