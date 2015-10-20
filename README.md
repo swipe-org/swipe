@@ -97,7 +97,9 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **paths** ({Name:Path}): Named **Paths** dictionary
 - **markdown** ({Name:Style}): Named **Markdown** style
 - **voices** ({Name:VoiceInfo}): Named **Voice** style
-- **pages** ([Page+]): Collection of **Pages** 
+- **pages** ([Page,...]): Collection of **Pages** 
+- **resources** ([String,...]):Resource keys for on-demand resources
+- **viewstate** (Bool):Indicate if we need to save&restore view state. The default is true. 
 
 ##3. Page
 

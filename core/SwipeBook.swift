@@ -62,6 +62,13 @@ class SwipeBook: NSObject, SwipePageDelegate {
         return self.orientation == "landscape"
     }()
     
+    lazy var viewstate:Bool = {
+        if let state = self.bookInfo["viewstate"] as? Bool {
+            return state
+        }
+        return true
+    }()
+    
     lazy var pages:[SwipePage] = {
         var pages = [SwipePage]()
         if let pageInfos = self.bookInfo["pages"] as? [[String:AnyObject]] {
