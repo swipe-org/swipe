@@ -86,6 +86,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 if let data = NSData(contentsOfURL: url) {
                     self.openData(data, localResource: true)
                 } else {
+                    // On-demand resource support
                     if let urlLocal = NSBundle.mainBundle().URLForResource(url.lastPathComponent, withExtension: nil),
                            data = NSData(contentsOfURL: urlLocal) {
                         self.openData(data, localResource: true)
