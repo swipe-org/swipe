@@ -256,7 +256,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
                 scene.didLeave()
             }
             if let scene = page.scene {
-                scene.didEnter()
+                scene.didEnter(page.prefetcher)
             }
             self.sceneActive = page.scene
         }

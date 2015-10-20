@@ -356,7 +356,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         return urls
     }()
     
-    private lazy var prefetcher:SwipePrefetcher = {
+    lazy var prefetcher:SwipePrefetcher = {
         return SwipePrefetcher(urls:self.resourceURLs)
     }()
 

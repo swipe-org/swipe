@@ -39,12 +39,13 @@ class SwipeScene: NSObject, AVAudioPlayerDelegate {
     
     // This function is called when a page associated with this scene is activated (entered)
     //  AND the previous page is NOT associated with this scene object.
-    func didEnter() {
+    func didEnter(prefetcher:SwipePrefetcher) {
         assert(fDebugEntered == false, "re-entering")
         fDebugEntered = true
         
         if let value = self.sceneInfo["bgm"] as? String,
-               url = NSURL.url(value, baseURL: baseURL) {
+               urlRaw = NSURL.url(value, baseURL: baseURL),
+               url = prefetcher.map(urlRaw) {
             NSLog("SWScene didEnter with bgm=\(value)")
             SwipeAssetManager.sharedInstance().loadAsset(url, prefix: "", callback: { (urlLocal:NSURL?, _:NSError!) -> Void in
                 if self.fDebugEntered,
