@@ -41,6 +41,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     var url:NSURL? = NSBundle.mainBundle().URLForResource("index.swipe", withExtension: nil)
     var controller:UIViewController?
     var documentViewer:SwipeDocumentViewer?
+    private var landscapeMode = false
 
     func browseTo(url:NSURL) {
 #if os(iOS)
@@ -157,6 +158,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             guard let document = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? [String:AnyObject] else {
                 return processError("Not a dictionary.")
             }
+            if let orientation = document["orientation"] as? String where orientation == "landscape" {
+                self.landscapeMode = true
+            }
             if let tags = document["resources"] as? [String] where localResource {
                 NSLog("tags = \(tags)")
                 let request = NSBundleResourceRequest(tags: Set<String>(tags))
@@ -199,7 +203,10 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return (self.documentViewer != nil && self.documentViewer!.landscape()) ?
+        if let documentViewer = self.documentViewer where documentViewer.landscape() {
+            return UIInterfaceOrientationMask.Landscape
+        }
+        return landscapeMode ?
             UIInterfaceOrientationMask.Landscape
             : UIInterfaceOrientationMask.Portrait
     }
