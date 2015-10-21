@@ -41,7 +41,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     var url:NSURL? = NSBundle.mainBundle().URLForResource("index.swipe", withExtension: nil)
     var controller:UIViewController?
     var documentViewer:SwipeDocumentViewer?
+#if os(iOS)
     private var landscapeMode = false
+#endif
 
     func browseTo(url:NSURL) {
 #if os(iOS)
@@ -160,18 +162,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
     }
     
-    private func openData(dataRetrieved:NSData?, localResource:Bool) {
-        guard let data = dataRetrieved else {
-            return processError("failed to open: no data".localized)
-        }
-        do {
-            guard let document = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? [String:AnyObject] else {
-                return processError("Not a dictionary.".localized)
-            }
-            if let orientation = document["orientation"] as? String where orientation == "landscape" {
-                self.landscapeMode = true
-                UIViewController.attemptRotationToDeviceOrientation() // attempt
-            }
+    private func openDataInternal(document:[String:AnyObject], localResource:Bool) {
             if let tags = document["resources"] as? [String] where localResource {
                 //NSLog("tags = \(tags)")
                 let request = NSBundleResourceRequest(tags: Set<String>(tags))
@@ -212,6 +203,38 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 }
             } else {
                 self.openDocument(document)
+            }
+    }
+    
+    private func openData(dataRetrieved:NSData?, localResource:Bool) {
+        guard let data = dataRetrieved else {
+            return processError("failed to open: no data".localized)
+        }
+        do {
+            guard let document = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? [String:AnyObject] else {
+                return processError("Not a dictionary.".localized)
+            }
+            var deferred = false
+#if os(iOS)
+            if let orientation = document["orientation"] as? String where orientation == "landscape" {
+                self.landscapeMode = true
+                if !localResource {
+                    // HACK ALERT: If the resource is remote and the orientation is landscape, it is too late to specify
+                    // the allowed orientations. Until iOS7, we could just call attemptRotationToDeviceOrientation(), 
+                    // but it no longer works. Therefore, we work-around by presenting a dummy VC, and dismiss it
+                    // before opening the document.
+                    deferred = true
+                    //UIViewController.attemptRotationToDeviceOrientation() // NOTE: attempt but not working
+                    let vcDummy = UIViewController()
+                    self.presentViewController(vcDummy, animated: false, completion: { () -> Void in
+                        self.dismissViewControllerAnimated(false, completion: nil)
+                        self.openDataInternal(document, localResource: localResource)
+                    })
+                }
+            }
+#endif
+            if !deferred {
+                self.openDataInternal(document, localResource: localResource)
             }
         } catch let error as NSError {
             let value = error.userInfo["NSDebugDescription"]!
