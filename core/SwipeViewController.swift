@@ -123,8 +123,13 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         // Since the paging is not enabled on tvOS, we handle PanGesture directly at this view instead.
         // scrollView.panGestureRecognizer.allowedTouchTypes = [UITouchType.Indirect.rawValue, UITouchType.Direct.rawValue]
         //scrollView.panGestureRecognizer.enabled = false
-        let recognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
-        self.view.addGestureRecognizer(recognizer)
+        let pan = UIPanGestureRecognizer(target: self, action: "handlePan:")
+        self.view.addGestureRecognizer(pan)
+        let tap = UITapGestureRecognizer(target: self, action: "handleTap:")
+        tap.allowedPressTypes = [NSNumber(integer: UIPressType.Select.rawValue), NSNumber(integer: UIPressType.PlayPause.rawValue)]
+        self.view.addGestureRecognizer(tap)
+        //self.view.becomeFirstResponder()
+        MyLog("SWView  \(self.view.gestureRecognizers)")
 #endif
     
         notificationManager.addObserverForName(UIApplicationDidBecomeActiveNotification, object: nil, queue: NSOperationQueue.mainQueue()) {
@@ -312,6 +317,10 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         }
         self.fAdvancing = false
     }
+    
+    func handleTap(recognizer:UITapGestureRecognizer) {
+        NSLog("SWView  handleTap")
+    }
 
     func handlePan(recognizer:UIPanGestureRecognizer) {
         let translation = recognizer.translationInView(self.view)
@@ -377,7 +386,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
                     page.willEnter(true)
                     page.didEnter(true)
                 } else {
-                    MyLog("SWView scrolling back c=\(scrollingCount+1)")
+                    MyLog("SWView scrolling back c=\(scrollingCount+1)", level:1)
                 }
             }
             self.scrollingCount++
