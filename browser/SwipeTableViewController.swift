@@ -20,7 +20,7 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
     private weak var delegate:SwipeDocumentViewerDelegate?
 
     // <SwipeDocumentViewer> method
-    func loadDocument(document:[String:AnyObject], url:NSURL?, state:[String:AnyObject]?) throws {
+    func loadDocument(document:[String:AnyObject], size:CGSize, url:NSURL?, state:[String:AnyObject]?) throws {
         self.document = document
         self.url = url
         if let sections = document["sections"] as? [[String:AnyObject]] {
@@ -31,8 +31,17 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
         } else {
             throw SwipeError.InvalidDocument
         }
+        if let value = document["rowHeight"] as? CGFloat {
+            self.tableView.rowHeight = value
+        } else if let value = document["rowHeight"] as? String {
+            self.tableView.rowHeight = SwipeParser.parsePercent(value, full: size.height, defaultValue: self.tableView.rowHeight)
+        }
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    }
+    
     // <SwipeDocumentViewer> method
     func documentTitle() -> String? {
         return document?["title"] as? String
@@ -108,6 +117,7 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
         } else if let url = item["url"] as? String {
             cell.textLabel!.text = url
         }
+        cell.imageView?.image = UIImage(named: "iTunesArtwork")
         return cell
     }
     
