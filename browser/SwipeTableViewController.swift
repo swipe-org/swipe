@@ -18,7 +18,29 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
     //private var items = [[String:AnyObject]]()
     private var url:NSURL?
     private weak var delegate:SwipeDocumentViewerDelegate?
+    private var prefetching = true
 
+    // Returns the list of URLs of required resouces for this element (including children)
+    private lazy var resourceURLs:[NSURL:String] = {
+        var urls = [NSURL:String]()
+        for section in self.sections {
+            guard let items = section["items"] as? [[String:AnyObject]] else {
+                continue
+            }
+            for item in items {
+                if let icon = item["icon"] as? String,
+                       url = NSURL.url(icon, baseURL: self.url) {
+                    urls[url] = "" // no prefix
+                }
+            }
+        }
+        return urls
+    }()
+
+    lazy var prefetcher:SwipePrefetcher = {
+        return SwipePrefetcher(urls:self.resourceURLs)
+    }()
+        
     // <SwipeDocumentViewer> method
     func loadDocument(document:[String:AnyObject], size:CGSize, url:NSURL?, state:[String:AnyObject]?) throws {
         self.document = document
@@ -80,6 +102,11 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.prefetcher.start { (_:[NSURL], _:[NSError]) -> Void in
+            NSLog("SWTable prefetch complete")
+            self.prefetching = false
+            self.tableView.reloadData()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -91,7 +118,7 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return self.sections.count
+        return prefetching ? 0 : self.sections.count
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -119,7 +146,8 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
         }
         if let icon = item["icon"] as? String,
                url = NSURL.url(icon, baseURL: self.url),
-               path = url.path,
+               urlLocal = self.prefetcher.map(url),
+               path = urlLocal.path,
                image = UIImage(contentsOfFile: path) {
             cell.imageView?.image = image
         }
