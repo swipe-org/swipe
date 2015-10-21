@@ -1,9 +1,9 @@
 {
     "type":"net.swipe.list",
     "items":[
-        { "url":"videostream.swipe", "title":"Streaming Video" },
-        { "url":"markdown.swipe", "title":"Rich Text" },
-        { "url":"speech.swipe", "title":"Speech" },
-        { "url":"http://www.swipejs.org/espresso/espresso_machine.swipe", "title":"Espresso Machine" },
+        { "url":"videostream.swipe", "title":"Streaming Video", "icon":"movie.png" },
+        { "url":"markdown.swipe", "title":"Rich Text", "icon":"text.png" },
+        { "url":"speech.swipe", "title":"Speech", "icon":"speech.png" },
+        { "url":"http://www.swipe.net/index.swipe", "title":"More...", "icon":"more.png" },
     ]
 }
