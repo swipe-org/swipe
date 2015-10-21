@@ -117,7 +117,12 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
         } else if let url = item["url"] as? String {
             cell.textLabel!.text = url
         }
-        cell.imageView?.image = UIImage(named: "iTunesArtwork")
+        if let icon = item["icon"] as? String,
+               url = NSURL.url(icon, baseURL: self.url),
+               path = url.path,
+               image = UIImage(contentsOfFile: path) {
+            cell.imageView?.image = image
+        }
         return cell
     }
     
