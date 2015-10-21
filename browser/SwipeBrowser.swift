@@ -170,6 +170,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             }
             if let orientation = document["orientation"] as? String where orientation == "landscape" {
                 self.landscapeMode = true
+                UIViewController.attemptRotationToDeviceOrientation() // attempt
             }
             if let tags = document["resources"] as? [String] where localResource {
                 //NSLog("tags = \(tags)")
@@ -223,7 +224,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
-
+    
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         if let documentViewer = self.documentViewer where documentViewer.landscape() {
             return UIInterfaceOrientationMask.Landscape
