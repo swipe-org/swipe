@@ -205,6 +205,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
 #if !os(OSX)
         if let _ = self.utterance {
             delegate.stopSpeaking()
+            prepareUtterance() // recreate a new utterance to avoid reusing itt
         }
 #endif
     }
@@ -414,6 +415,28 @@ class SwipePage: NSObject, SwipeElementDelegate {
             }
         }
 
+        prepareUtterance()
+
+        if let elementsInfo = self.pageInfo["elements"] as? [[String:AnyObject]] {
+            for e in elementsInfo {
+                let element = SwipeElement(info: e, scale:scale, delegate:self)
+                if let subview = element.loadView(dimension) {
+                    if self.autoplay && element.isVideoElement() {
+#if os(OSX)
+                        self.view!.addSubview(subview, positioned: NSWindowOrderingMode.Below, relativeTo: self.viewAnimation)
+#else
+                        self.view!.insertSubview(subview, belowSubview: self.viewAnimation!)
+#endif
+                    } else {
+                        self.viewAnimation!.addSubview(subview)
+                    }
+                    elements.append(element)
+                }
+            } // for e in elementsInfo
+        }
+    }
+    
+    private func prepareUtterance() {
 // REVIEW: Disabled for OSX for now
 #if !os(OSX)
         if let speech = self.pageInfo["speech"] as? [NSObject:AnyObject],
@@ -458,24 +481,6 @@ class SwipePage: NSObject, SwipeElementDelegate {
             self.utterance = utterance
         }
 #endif
-
-        if let elementsInfo = self.pageInfo["elements"] as? [[String:AnyObject]] {
-            for e in elementsInfo {
-                let element = SwipeElement(info: e, scale:scale, delegate:self)
-                if let subview = element.loadView(dimension) {
-                    if self.autoplay && element.isVideoElement() {
-#if os(OSX)
-                        self.view!.addSubview(subview, positioned: NSWindowOrderingMode.Below, relativeTo: self.viewAnimation)
-#else
-                        self.view!.insertSubview(subview, belowSubview: self.viewAnimation!)
-#endif
-                    } else {
-                        self.viewAnimation!.addSubview(subview)
-                    }
-                    elements.append(element)
-                }
-            } // for e in elementsInfo
-        }
     }
     
     // <SwipeElementDelegate> method
