@@ -104,7 +104,7 @@ class SwipeAssetManager {
         }
     }
 
-    func loadAsset(url:NSURL, prefix:String, callback:((NSURL?, NSError!) -> Void)?) {
+    func loadAsset(url:NSURL, prefix:String, bypassCache:Bool, callback:((NSURL?, NSError!) -> Void)?) {
         assert(NSThread.currentThread() == NSThread.mainThread(), "thread error")
         
         if url.scheme == "file" {
@@ -141,7 +141,7 @@ class SwipeAssetManager {
             let fm = NSFileManager.defaultManager()
             let loaded = entity.valueForKey("loaded") as? Bool
             let fileSize = entity.valueForKey("size") as? Int
-            if loaded == true && fm.fileExistsAtPath(urlLocal.path!) {
+            if !bypassCache && loaded == true && fm.fileExistsAtPath(urlLocal.path!) {
                 MyLog("SWAsset reuse \(url.lastPathComponent!), \(fileSize)", level:1)
                 // We should call it asynchronously, which the caller expects.
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in

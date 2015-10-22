@@ -15,7 +15,7 @@ import UIKit
 import CoreData
 
 private func MyLog(text:String, level:Int = 0) {
-    let s_verbosLevel = 0
+    let s_verbosLevel = 1
     if level <= s_verbosLevel {
         NSLog(text)
     }
@@ -25,7 +25,7 @@ class SwipeConnection: NSObject {
     private static var connections = [NSURL:SwipeConnection]()
     static let session:NSURLSession = {
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        //config.URLCache = NSURLCache(memoryCapacity: 1024 * 1024, diskCapacity: 20 * 1024 * 1024, diskPath: cachePath.path)
+        config.URLCache = nil // disable cache by NSURLSession (because we do)
         return NSURLSession(configuration: config, delegate: nil, delegateQueue: NSOperationQueue.mainQueue())
     }()
     static func connection(url:NSURL, urlLocal:NSURL, entity:NSManagedObject) -> SwipeConnection {
@@ -54,6 +54,9 @@ class SwipeConnection: NSObject {
                         }
                         MyLog("SWConn  loaded \(url.lastPathComponent!) in \(duration)s (\(connection.fileSize))", level:1)
                         do {
+                            if fm.fileExistsAtPath(urlLocal.path!) {
+                                try fm.removeItemAtURL(urlLocal)
+                            }
                             try fm.copyItemAtURL(urlT, toURL: urlLocal)
                         } catch {
                             connection.callbackAll(error as NSError)

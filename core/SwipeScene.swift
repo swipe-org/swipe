@@ -47,7 +47,7 @@ class SwipeScene: NSObject, AVAudioPlayerDelegate {
                urlRaw = NSURL.url(value, baseURL: baseURL),
                url = prefetcher.map(urlRaw) {
             NSLog("SWScene didEnter with bgm=\(value)")
-            SwipeAssetManager.sharedInstance().loadAsset(url, prefix: "", callback: { (urlLocal:NSURL?, _:NSError!) -> Void in
+            SwipeAssetManager.sharedInstance().loadAsset(url, prefix: "", bypassCache:false, callback: { (urlLocal:NSURL?, _:NSError!) -> Void in
                 if self.fDebugEntered,
                    let urlL = urlLocal,
                        player = try? AVAudioPlayer(contentsOfURL: urlL) {
