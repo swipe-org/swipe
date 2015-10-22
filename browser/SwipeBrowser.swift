@@ -6,13 +6,16 @@
 //  Copyright © 2015 Satoshi Nakajima. All rights reserved.
 //
 
-#if os(OSX)
+#if os(OSX) // WARNING: OSX support is not done yet
 import Cocoa
 public typealias UIViewController = NSViewController
 #else
 import UIKit
 #endif
 
+//
+// Change s_verbosLevel to 1 to see debug messages for this class
+//
 private func MyLog(text:String, level:Int = 0) {
     let s_verbosLevel = 0
     if level <= s_verbosLevel {
@@ -20,13 +23,19 @@ private func MyLog(text:String, level:Int = 0) {
     }
 }
 
-
-
+//
+// This is the place you can add more document types. 
+// Those UIViewControllers MUST support SwipeDocumentViewer protocol.
+//
 let g_typeMapping:[String:Void -> UIViewController] = [
     "net.swipe.list": { return SwipeTableViewController() },
     "net.swipe.swipe": { return SwipeViewController() },
 ]
 
+//
+// SwipeBrowser is the main UIViewController that is pushed into the navigation stack.
+// SwipeBrowser "hosts" another UIViewController, which supports SwipeDocumentViewer protocol.
+//
 class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     static var stack = [SwipeBrowser]()
 
@@ -36,17 +45,14 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     @IBOutlet var bottombar:UIView?
     @IBOutlet var slider:UISlider!
     @IBOutlet var labelTitle:UILabel?
+    private var landscapeMode = false
+#elseif os(tvOS)
+    override weak var preferredFocusedView: UIView? { return controller?.view }
 #endif
     private var resourceRequest:NSBundleResourceRequest?
     var url:NSURL? = NSBundle.mainBundle().URLForResource("index.swipe", withExtension: nil)
     var controller:UIViewController?
     var documentViewer:SwipeDocumentViewer?
-#if os(iOS)
-    private var landscapeMode = false
-#endif
-#if os(tvOS)
-    override weak var preferredFocusedView: UIView? { return controller?.view }
-#endif
 
     func browseTo(url:NSURL) {
 #if os(iOS)
@@ -321,17 +327,6 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     }
 #endif
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
         if self.isBeingDismissed() {
@@ -395,16 +390,5 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 SwipeBrowser.stack.last!.browseTo(url)
             }
         }
-/*
-        if SwipeBrowser.stack.count > 1 {
-            SwipeBrowser.stack.last!.becomeZombie()
-            SwipeBrowser.stack.popLast()
-            SwipeBrowser.stack.last!.dismissViewControllerAnimated(false, completion: { () -> Void in
-                SwipeBrowser.openURL(urlString)
-            })
-        } else {
-            SwipeBrowser.stack.last!.browseTo(urlString)
-        }
-*/
     }
 }

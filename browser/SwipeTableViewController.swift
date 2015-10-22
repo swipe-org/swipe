@@ -6,7 +6,7 @@
 //  Copyright © 2015 Satoshi Nakajima. All rights reserved.
 //
 
-#if os(OSX)
+#if os(OSX) // WARNING: OSX support is not done yet
 import Cocoa
 #else
 import UIKit
@@ -19,6 +19,9 @@ private func MyLog(text:String, level:Int = 0) {
     }
 }
 
+//
+// SwipeTableViewController is the "viewer" of documents with type "net.swipe.list"
+//
 class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
     private var document:[String:AnyObject]?
     private var sections = [[String:AnyObject]]()
