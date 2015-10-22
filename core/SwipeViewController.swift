@@ -125,11 +125,9 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         //scrollView.panGestureRecognizer.enabled = false
         let pan = UIPanGestureRecognizer(target: self, action: "handlePan:")
         self.view.addGestureRecognizer(pan)
-        let tap = UITapGestureRecognizer(target: self, action: "handleTap:")
-        tap.allowedPressTypes = [NSNumber(integer: UIPressType.Select.rawValue), NSNumber(integer: UIPressType.PlayPause.rawValue)]
+        let tap = UITapGestureRecognizer(target: self, action: "handlePlayButton:")
+        tap.allowedPressTypes = [UIPressType.PlayPause.rawValue]
         self.view.addGestureRecognizer(tap)
-        //self.view.becomeFirstResponder()
-        MyLog("SWView  \(self.view.gestureRecognizers)")
 #endif
     
         notificationManager.addObserverForName(UIApplicationDidBecomeActiveNotification, object: nil, queue: NSOperationQueue.mainQueue()) {
@@ -318,8 +316,12 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         self.fAdvancing = false
     }
     
-    func handleTap(recognizer:UITapGestureRecognizer) {
-        NSLog("SWView  handleTap")
+    func handlePlayButton(recognizer:UITapGestureRecognizer) {
+        NSLog("SWView  handlePlayButton")
+        let page = self.book.currenPage
+        page.willLeave(false)
+        page.willEnter(true)
+        page.didEnter(true)
     }
 
     func handlePan(recognizer:UIPanGestureRecognizer) {

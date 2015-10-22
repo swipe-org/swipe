@@ -44,6 +44,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 #if os(iOS)
     private var landscapeMode = false
 #endif
+#if os(tvOS)
+    override weak var preferredFocusedView: UIView? { return controller?.view }
+#endif
 
     func browseTo(url:NSURL) {
 #if os(iOS)
