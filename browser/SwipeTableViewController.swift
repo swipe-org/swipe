@@ -12,6 +12,13 @@ import Cocoa
 import UIKit
 #endif
 
+private func MyLog(text:String, level:Int = 0) {
+    let s_verbosLevel = 0
+    if level <= s_verbosLevel {
+        NSLog(text)
+    }
+}
+
 class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
     private var document:[String:AnyObject]?
     private var sections = [[String:AnyObject]]()
@@ -103,7 +110,7 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         self.prefetcher.start { (_:[NSURL], _:[NSError]) -> Void in
-            NSLog("SWTable prefetch complete")
+            MyLog("SWTable prefetch complete", level:1)
             self.prefetching = false
             self.tableView.reloadData()
         }

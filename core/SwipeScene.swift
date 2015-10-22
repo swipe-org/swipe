@@ -15,6 +15,13 @@ import UIKit
 #endif
 import AVFoundation
 
+private func MyLog(text:String, level:Int = 0) {
+    let s_verbosLevel = 0
+    if level <= s_verbosLevel {
+        NSLog(text)
+    }
+}
+
 class SwipeScene: NSObject, AVAudioPlayerDelegate {
     let sceneInfo:[String:AnyObject]
     private let baseURL:NSURL?
@@ -46,7 +53,7 @@ class SwipeScene: NSObject, AVAudioPlayerDelegate {
         if let value = self.sceneInfo["bgm"] as? String,
                urlRaw = NSURL.url(value, baseURL: baseURL),
                url = prefetcher.map(urlRaw) {
-            NSLog("SWScene didEnter with bgm=\(value)")
+            MyLog("SWScene didEnter with bgm=\(value)", level:1)
             SwipeAssetManager.sharedInstance().loadAsset(url, prefix: "", bypassCache:false, callback: { (urlLocal:NSURL?, _:NSError!) -> Void in
                 if self.fDebugEntered,
                    let urlL = urlLocal,

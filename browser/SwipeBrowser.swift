@@ -171,7 +171,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 let request = NSBundleResourceRequest(tags: Set<String>(tags))
                 self.resourceRequest = request
                 request.conditionallyBeginAccessingResourcesWithCompletionHandler() { (resourcesAvailable:Bool) -> Void in
-                    MyLog("SWBrowse resourceAvailable(\(tags)) = \(resourcesAvailable)", level:1)
+                    MyLog("SWBrows resourceAvailable(\(tags)) = \(resourcesAvailable)", level:1)
                     dispatch_async(dispatch_get_main_queue()) {
                         if resourcesAvailable {
                             self.openDocument(document)
@@ -193,7 +193,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                                     } else {
                                         fLoaded = true // loading completed before the presentation
                                     }
-                                    MyLog("SWBrowse resource error=\(error)")
+                                    MyLog("SWBrows resource error=\(error)", level:1)
                                     if let e = error {
                                         return self.processError(e.localizedDescription)
                                     } else {
@@ -338,7 +338,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             if let documentViewer = self.documentViewer,
                    state = documentViewer.saveState(),
                    url = self.url {
-                NSLog("SWBrows state=\(state)")
+                MyLog("SWBrows state=\(state)", level:1)
                 let defaults = NSUserDefaults.standardUserDefaults()
                 defaults.setObject(state, forKey: url.absoluteString)
                 defaults.synchronize()
