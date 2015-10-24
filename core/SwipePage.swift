@@ -561,4 +561,13 @@ class SwipePage: NSObject, SwipeElementDelegate {
     func map(url:NSURL) -> NSURL? {
         return self.prefetcher.map(url)
     }
+    
+    func isPlaying() -> Bool {
+        for element in elements {
+            if element.isPlaying() {
+                return true
+            }
+        }
+        return false
+    }
 }

@@ -973,4 +973,16 @@ class SwipeElement:NSObject {
         }
         return false
     }
+    
+    func isPlaying() -> Bool {
+        if self.fPlaying {
+            return true
+        }
+        for element in elements {
+            if element.isPlaying() {
+                return true
+            }
+        }
+        return false
+    }
 }
