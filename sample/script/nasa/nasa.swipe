@@ -1,0 +1,108 @@
+{
+    "type":"net.swipe.swipe",
+    "title": "NASA HQ Images",
+    "dimension":[1920.0, 1080.0],
+    "orientation":"landscape",
+    "viewstate":false,
+    "resources":["nasa", "bgm"],
+    "scenes":{
+        "descent": { "duration":5.0, "bgm":"TheDescent.mp3" },
+        "agenda": { "duration":5.0, "bgm":"HiddenAgenda.mp3" },
+        "monkey": { "duration":5.0, "bgm":"MonkeysSpinningMonkeys.mp3" },
+    },
+    "elements":{
+        "caption": { "y":"top", "h":"5%" },
+        "fullw": { "y":"bottom", "w":"100%", "to":{ "scale":1.1 } },
+        "fullh": { "x":"center", "h":"100%", "to":{ "scale":1.1 } },
+    },
+    "markdown":{
+        "shadow":{ "color":"#000", "offset":[-2,2] },
+        "styles":{
+            "+":{ "color":"#fff8", "prefix":"♫ ", "alignment":"right",
+                  "font":{ "size":"3.5%", "name":"Helvetica" }},
+        },
+    },
+    "pages":[
+        {
+            "scene":"descent",
+            "elements":[
+                { "element":"fullw", "img":"nasa001.jpg" },
+                { "element":"caption", "markdown":"+ The Decent by Kevin MacLeod"},
+            ]
+        },
+        {
+            "scene":"descent",
+            "elements":[
+                { "element":"fullw", "img":"nasa002.jpg"},
+            ]
+        },
+        {
+            "scene":"descent",
+            "elements":[
+                { "element":"fullw", "img":"nasa003.jpg" },
+            ]
+        },
+        {
+            "scene":"descent",
+            "elements":[
+                { "element":"fullw", "img":"nasa004.jpg" },
+            ]
+        },
+        {
+            "scene":"agenda",
+            "elements":[
+                { "element":"fullw", "img":"nasa005.jpg" },
+                { "element":"caption", "markdown":"+ Hidden Agenda by Kevin MacLeod"},
+            ]
+        },
+        {
+            "scene":"agenda",
+            "elements":[
+                { "element":"fullh", "img":"nasa006.jpg" },
+            ]
+        },
+        {
+            "scene":"agenda",
+            "elements":[
+                { "element":"fullw", "img":"nasa007.jpg" },
+            ]
+        },
+        {
+            "scene":"agenda",
+            "elements":[
+                { "element":"fullw", "img":"nasa008.jpg" },
+            ]
+        },
+        {
+            "scene":"agenda",
+            "elements":[
+                { "element":"fullw", "img":"nasa009.jpg" },
+            ]
+        },
+        {
+            "scene":"monkey",
+            "elements":[
+                { "element":"fullw", "img":"nasa010.jpg" },
+                { "element":"caption", "markdown":"+ Monkeys Spinning Monkeys by Kevin MacLeod"},
+            ]
+        },
+        {
+            "scene":"monkey",
+            "elements":[
+                { "element":"fullw", "img":"nasa011.jpg" },
+            ]
+        },
+        {
+            "scene":"monkey",
+            "elements":[
+                { "element":"fullw", "img":"nasa012.jpg" },
+            ]
+        },
+        {
+            "scene":"monkey",
+            "elements":[
+                { "element":"fullw", "img":"nasa013.jpg" },
+            ]
+        },
+    ]
+}

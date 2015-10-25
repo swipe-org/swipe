@@ -1,0 +1,60 @@
+{
+    "type":"net.swipe.swipe",
+    "title": "Scenes with BGM",
+    "resources":["bgm"],
+    "elements":{
+        "caption": { "y":"bottom", "h":"10%", "fontSize":"5%" },
+    },
+    "scenes":{
+        "sun": { "bc":"#ff8", "bgm":"TheDescent.mp3", "elements":[ { "element":"caption", "text":"Scene 1"} ] },
+        "ocean": { "bc":"#77f", "bgm":"HiddenAgenda.mp3", "elements":[ { "element":"caption", "text":"Scene 2"} ] },
+        "orange": { "bc":"#f80", "bgm":"MonkeysSpinningMonkeys.mp3", "elements":[ { "element":"caption", "text":"Scene 3"} ] },
+    },
+    "pages":[
+        {
+            "scene":"sun",
+            "elements":[
+            ]
+        },
+        {
+            "scene":"sun",
+            "elements":[
+            ]
+        },
+        {
+            "scene":"sun",
+            "elements":[
+            ]
+        },
+        {
+            "scene":"ocean",
+            "elements":[
+            ]
+        },
+        {
+            "scene":"ocean",
+            "elements":[
+            ]
+        },
+        {
+            "scene":"ocean",
+            "elements":[
+            ]
+        },
+        {
+            "scene":"orange",
+            "elements":[
+            ]
+        },
+        {
+            "scene":"orange",
+            "elements":[
+            ]
+        },
+        {
+            "scene":"orange",
+            "elements":[
+            ]
+        },
+    ]
+}
