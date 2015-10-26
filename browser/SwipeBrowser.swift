@@ -182,7 +182,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                         if resourcesAvailable {
                             self.openDocument(document)
                         } else {
-                            let alert = UIAlertController(title: "Swipe", message: "Loading Rerouces...".localized, preferredStyle: UIAlertControllerStyle.Alert)
+                            let alert = UIAlertController(title: "Swipe", message: "Loading Resources...".localized, preferredStyle: UIAlertControllerStyle.Alert)
                             var fPresented = false
                             var fLoaded = false
                             self.presentViewController(alert, animated: true) { () -> Void in

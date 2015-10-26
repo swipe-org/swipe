@@ -151,7 +151,7 @@ class SwipeElement:NSObject {
             if let src = self.info[key] as? String,
                    url = NSURL.url(src, baseURL: baseURL) {
                 if let fStream = self.info["stream"] as? Bool where fStream == true {
-                    MyLog("SWElem skipping stream \(url)", level: 2)
+                    MyLog("SWElem no need to cache streaming video \(url)", level: 2)
                 } else {
                     urls[url] = prefix
                 }
