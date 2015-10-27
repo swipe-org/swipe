@@ -10,9 +10,17 @@ Swipe Engine is the **viewer** of documents described in Swipe. Since it support
 
 ##Why do we need Swipe?
 
-Because all other platforms (such as HTML5, ePub, Flash and iBooks) requires some form of **programming** to create media-rich/animated documents. HTML used be a simple declarative language, but becamse a full-brown programming environment with DOM and JavaScript. Flash took the same path. 
+Because all existing platforms (such as HTML5, ePub, Flash and iBooks) require some form of programming to create media-rich/animated documents, which is expensive and error-prone. HTML used be a simple declarative language, but became a full-brown programming environment with DOM and JavaScript. Flash took the same path with the introduction of ActionScript. 
 
-That's why we came to the conclusion that it's time to design a new langauge, which is powerful enough to describe media-rich documents that allow us to take full advantage of modern devices, but is also **strictly declarative** (no API, no script), easy to read, easy to write and easy to auto-generate. 
+That's why I came to the conclusion that it's time to design a new langauge, which is powerful enough to describe media-rich documents that allow us to take full advantage of modern devices, but is also **strictly declarative** (no API, no script), easy to read, easy to write and easy to auto-generate. 
+
+##Why is it open?
+
+Because I want to make it an industry standard so that everybody can benefit from it. I was lucky enough to work on several successful products, such as Windows 95, which were used by hundreds of millions of people. I'd like to see such a success again.
+
+##Is it really free?
+
+Yes, I still maintain the copyright, but it's **absolutely free**. You can use it for non-commercial and commercial applications, modify it as needed, port it to other platforms (I'd really apprecaite if you open source it as well), re-distribute it with your applications, as long as you explicitly mention that your application uses Swipe and recognize me (Satoshi Nakajima) as the copyright holder.
 
 ##Specification
 
