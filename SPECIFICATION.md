@@ -1,4 +1,4 @@
-#Swipe
+#Swipe Language Specification
 
 ##Abstract
 
