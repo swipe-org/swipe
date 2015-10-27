@@ -1,5 +1,5 @@
 {
-    "title": "VideoStream",
+    "title": "Video Stream Test",
     "orientation":"landscape",
     "pages":[
         {
@@ -15,12 +15,6 @@
         {
             "elements":[
                 { "video":"https://devimages.apple.com.edgekey.net/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8", "stream":true },
-            ],
-        },
-        {
-            "elements":[
-                { "video":"http://play.radiopanteon.pl:8000/stream", "stream":true },
-                { "text":"Radio Panteon" },
             ],
         },
     ]
