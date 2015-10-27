@@ -319,7 +319,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     func handlePlayButton(recognizer:UITapGestureRecognizer) {
         let page = self.book.currenPage
         let fPlaying = page.isPlaying()
-        MyLog("SWView  handlePlayButton \(fPlaying)")
+        MyLog("SWView  handlePlayButton \(fPlaying)", level: 1)
         page.willLeave(false)
         page.didLeave(false)
         page.willEnter(!fPlaying)
