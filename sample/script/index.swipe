@@ -9,6 +9,7 @@
         { "url":"speech.swipe", "title":"Speech", "icon":"speech.png" },
         { "url":"nasa.swipe", "title":"NASA HQ Images", "icon":"nasa.png" },
         { "url":"espresso_machine_l.swipe", "title":"Espresso Machine", "icon":"espresso.png" },
-        { "url":"http://www.swipe.net/index.swipe", "title":"More...", "icon":"more.png" },
+        { "url":"http://www.swipe.net/index.swipe", "title":"More ...", "icon":"more.png" },
+        { "url":"http://www.swipe.net/index2.swipe", "title":"More 2...", "icon":"more.png" },
     ]
 }

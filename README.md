@@ -255,9 +255,10 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
   - **fillColor** (Color): Fill color, default is clear, animatable
   - **strokeStart** (Float): Starting offset, default is 0, animatable
   - **strokeEnd** (Float): Ending offset, default is 1, animatable
-- **video** (URL): Video to play
+- **video** or **radio** (URL): Video/Radio to play
   - **videoStart** (Float): Starting point of the video in seconds, default is 0
   - **videoDuration** (Float): Ending point of the video in seconds
+- **stream** (Bool): Specifies if the resource specified with the video tag is stream or not, default is false
 - **to** (Transition Animation): Specifies the Transitional Animation
 - **loop** (Loop Animation): Specifies the Loop Animation
 - **action** (String): Specifies the Action
