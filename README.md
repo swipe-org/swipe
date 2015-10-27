@@ -28,22 +28,22 @@ Yes, I still maintain the copyright, but it's **absolutely free**. You can use i
 
 ##Target applications
 
--Interactive Comics
--Sound Novels
--Graphical Audio Books and Music Albums
--Interactive Videos
--Media-rich Tutorials and Presentations
--Interactive Arts
+* Interactive Comics
+* Sound Novels
+* Graphical Audio Books and Music Albums
+* Interactive Videos
+* Media-rich Tutorials and Presentations
+* Interactive Arts
 
 ##Design Principles
 
--Optmized for touch-enabled devices
--100% declarative (no programming)
--Rich & interactive animations
--Re-invent the video experience
--Customizable page-transitions
--Designer friendly
--Lightweight & portable
+* Optmized for touch-enabled devices
+* 100% declarative (no programming)
+* Rich & interactive animations
+* Re-invent the video experience
+* Customizable page-transitions
+* Designer friendly
+* Lightweight & portable
 
 ##Is there an authoring tool?
 
