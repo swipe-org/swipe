@@ -2,7 +2,7 @@
     "type":"net.swipe.list",
     "items":[
         { "url":"videostream.swipe", "title":"Streaming Video", "icon":"movie.png" },
-        { "url":"radiostream.swipe", "title":"Internet Radio Stations", "icon":"movie.png" },
+        { "url":"radiostream.swipe", "title":"Internet Radio Stations", "icon":"radio.png" },
         { "url":"markdown.swipe", "title":"Rich Text", "icon":"text.png" },
         { "url":"speech.swipe", "title":"Speech", "icon":"speech.png" },
         { "url":"nasa.swipe", "title":"NASA HQ Images", "icon":"nasa.png" },

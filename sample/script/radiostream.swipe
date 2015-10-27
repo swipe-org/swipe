@@ -1,6 +1,11 @@
 {
     "title": "Internet Radios",
     "orientation":"landscape",
+    "scenes":{
+        "*":{
+            "animation":"always",
+        },
+    },
     "pages":[
         {
             "elements":[

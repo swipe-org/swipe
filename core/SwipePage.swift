@@ -153,7 +153,11 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }()
 
     private lazy var autoplay:Bool = {
-        return self.animation == "auto"
+        return self.animation == "auto" || self.animation == "always"
+    }()
+
+    private lazy var always:Bool = {
+        return self.animation == "always"
     }()
 
     private lazy var scroll:Bool = {
@@ -228,7 +232,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     
     func willEnter(fForward:Bool) {
         MyLog("SWPage  willEnter @\(index) \(fForward)", level: 2)
-        if self.autoplay && fForward {
+        if self.autoplay && fForward || self.always {
             prepareToPlay()
         }
         if fForward && self.scroll {
@@ -254,7 +258,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     func didEnter(fForward:Bool) {
         fEntered = true
         accessCount++
-        if fForward && self.autoplay {
+        if fForward && self.autoplay || self.always {
             autoPlay()
         }
         MyLog("SWPage  didEnter @\(index) \(fForward)", level: 2)
