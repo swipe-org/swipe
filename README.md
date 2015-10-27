@@ -12,9 +12,9 @@ Swipe Engine is the **viewer** of documents described in Swipe. Since it support
 
 Because existing platforms (such as HTML5, ePub, Flash and iBooks) require some form of programming to create media-rich/animated documents, which is expensive and error-prone. 
 
--HTML used be a simple declarative language, but became a full-blown programming environment with DOM and JavaScript. 
--Flash used be a great animation tool for esigners, but became a full-blown programming environment with the introduction of ActionScript. 
--ePub does not directly support animations, and the author needs to embed some JavaScript code to enable animations, which may or may not work depending on the eBook paltform. 
+*HTML used be a simple declarative language, but became a full-blown programming environment with DOM and JavaScript. 
+*Flash used be a great animation tool for esigners, but became a full-blown programming environment with the introduction of ActionScript. 
+*ePub does not directly support animations, and the author needs to embed some JavaScript code to enable animations, which may or may not work depending on the eBook paltform. 
 
 That's why I came to the conclusion that it's time to design a new platform, which is powerful enough to describe media-rich documents that allow us to take full advantage of modern devices, but is also **strictly declarative** (no API, no script), easy to read, easy to write and easy to auto-generate. 
 
