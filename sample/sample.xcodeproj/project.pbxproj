@@ -211,6 +211,7 @@
 		74DD7FE01BDFE33F0042BB9D /* swipe.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = swipe.swipe; sourceTree = "<group>"; };
 		74DD7FE11BDFE33F0042BB9D /* tutorial.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tutorial.swipe; sourceTree = "<group>"; };
 		74DD7FF01BDFE3F60042BB9D /* Icon-180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-180.png"; path = "../../../../myswipe/swipe/Icon-180.png"; sourceTree = "<group>"; };
+		74DD7FF31BE01D470042BB9D /* SPECIFICATION.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = SPECIFICATION.md; path = ../SPECIFICATION.md; sourceTree = "<group>"; };
 		74EA71771BD047F0006808EA /* sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74EA717A1BD047F0006808EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		74EA717F1BD047F0006808EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -346,6 +347,7 @@
 			isa = PBXGroup;
 			children = (
 				74EA718D1BD04C44006808EA /* README.md */,
+				74DD7FF31BE01D470042BB9D /* SPECIFICATION.md */,
 				74EA718C1BD04B3A006808EA /* LICENSE.txt */,
 				74EA718F1BD04D86006808EA /* browser */,
 				74EA71C31BD04E95006808EA /* network */,
