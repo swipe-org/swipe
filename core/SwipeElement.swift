@@ -544,8 +544,25 @@ class SwipeElement:NSObject {
         }
         
         // http://stackoverflow.com/questions/9290972/is-it-possible-to-make-avurlasset-work-without-a-file-extension
-        if let src = info["video"] as? String,
-           let url = NSURL.url(src, baseURL: baseURL) {
+        var fStream:Bool = {
+            if let fStream = info["stream"] as? Bool {
+                return fStream
+            }
+            return false
+        }()
+        let urlVideoOrRadio:NSURL? = {
+            if let src = info["video"] as? String,
+                let url = NSURL.url(src, baseURL: baseURL) {
+                return url
+            }
+            if let src = info["radio"] as? String,
+                let url = NSURL.url(src, baseURL: baseURL) {
+                fStream = true
+                return url
+            }
+            return nil
+        }()
+        if let url = urlVideoOrRadio {
             let videoPlayer = AVPlayer()
             self.videoPlayer = videoPlayer
             let videoLayer = AVPlayerLayer(player: videoPlayer)
@@ -553,7 +570,7 @@ class SwipeElement:NSObject {
             layer.addSublayer(videoLayer)
 
             let urlLocalOrStream:NSURL?
-            if let fStream = info["stream"] as? Bool where fStream == true {
+            if fStream {
                 MyLog("SWElem stream=\(url)", level:2)
                 urlLocalOrStream = url
             } else if let urlLocal = self.delegate.map(url) {

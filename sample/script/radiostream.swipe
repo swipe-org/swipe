@@ -9,49 +9,49 @@
     "pages":[
         {
             "elements":[
-                { "video":"http://play.radiopanteon.pl:8000/stream", "stream":true },
+                { "radio":"http://play.radiopanteon.pl:8000/stream" },
                 { "text":"Radio Panteon" },
             ],
         },
         {
             "elements":[
-                { "video":"http://dir.xiph.org/listen/3754848/listen.m3u", "stream":true },
+                { "radio":"http://dir.xiph.org/listen/3754848/listen.m3u" },
                 { "text":"Russian Hit - PYCCKUU XUT" },
             ],
         },
         {
             "elements":[
-                { "video":"http://dir.xiph.org/listen/3618988/listen.m3u", "stream":true },
+                { "radio":"http://dir.xiph.org/listen/3618988/listen.m3u" },
                 { "text":"MEGA RADIO" },
             ],
         },
         {
             "elements":[
-                { "video":"http://dir.xiph.org/listen/4061925/listen.m3u", "stream":true },
+                { "radio":"http://dir.xiph.org/listen/4061925/listen.m3u" },
                 { "text":"DUSHEVNOE RADIO" },
             ],
         },
         {
             "elements":[
-                { "video":"http://dir.xiph.org/listen/3716076/listen.m3u", "stream":true },
+                { "radio":"http://dir.xiph.org/listen/3716076/listen.m3u" },
                 { "text":"I Love Radio" },
             ],
         },
         {
             "elements":[
-                { "video":"http://dir.xiph.org/listen/3956748/listen.m3u", "stream":true },
+                { "radio":"http://dir.xiph.org/listen/3956748/listen.m3u" },
                 { "text":"ABCLounge" },
             ],
         },
         {
             "elements":[
-                { "video":"http://dir.xiph.org/listen/3851921/listen.m3u", "stream":true },
+                { "radio":"http://dir.xiph.org/listen/3851921/listen.m3u" },
                 { "text":"sunshine live" },
             ],
         },
         {
             "elements":[
-                { "video":"http://dir.xiph.org/listen/3753780/listen.m3u", "stream":true },
+                { "radio":"http://dir.xiph.org/listen/3753780/listen.m3u" },
                 { "text":"Mundo Livre FM Curitiba" },
             ],
         },

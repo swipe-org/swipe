@@ -1,10 +1,20 @@
 {
     "title": "Video Stream Test",
     "orientation":"landscape",
+    "scenes":{
+        "*":{
+            "play":"always",
+        },
+    },
     "pages":[
         {
             "elements":[
                 { "video":"http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8", "stream":true },
+            ],
+        },
+        {
+            "elements":[
+                { "video":"http://devstreaming.apple.com/videos/wwdc/2015/214dh5q5d0kswh/214/hls_vod_mvp.m3u8", "stream":true },
             ],
         },
         {
