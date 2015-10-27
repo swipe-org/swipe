@@ -35,6 +35,16 @@ Yes, I still maintain the copyright, but it's **absolutely free**. You can use i
 * Media-rich Tutorials and Presentations
 * Interactive Arts
 
+##Primary Audiences
+
+* Designers/Illustrators
+* Animators
+* Comic Writers
+* Musicians/Artists
+* Videographers/Photographors
+* Teachers/Educators
+* Weekend Programmers
+
 ##Design Principles
 
 * Optmized for touch-enabled devices
