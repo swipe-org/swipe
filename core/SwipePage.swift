@@ -146,7 +146,11 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }()
 
     private lazy var animation:String = {
+        if let value = self.pageInfo["play"] as? String {
+            return value
+        }
         if let value = self.pageInfo["animation"] as? String {
+            NSLog("SWPage  #### animation instead of play ####")
             return value
         }
         return "auto" // default

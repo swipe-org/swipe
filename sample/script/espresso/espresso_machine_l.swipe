@@ -52,7 +52,6 @@
             ]
         },
         {
-            "animation":"auto",
             "elements":[
                 { "element":"full", "video":"IMG_8159.m4v" },
                 { "element":"caption", "markdown":"## 5. Insert the Portafilter underneath the group head, and rotate the handle towards the center." },
