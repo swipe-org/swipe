@@ -1,0 +1,187 @@
+{
+    "title": "Swipe",
+    "dimension":[1280, 720],
+    "orientation":"landscape",
+    "elements":{
+        "body": { "x":"center", "w":"66.7%" },
+        "code": { "x":"4%", "y":"4%", "w":"44%", "h":"92%", "bc":"#eff" },
+        "demo": { "x":"52%", "y":"4%", "w":"44%", "h":"92%" },
+        "logo": {
+            "elements":[
+                {
+                    "id":"back", "w":192, "h":192, "x":"center", "y":"center", "bc":"#00ACC1",
+                },
+                {
+                    "id":"frame", "w":192, "h":192, "x":"center", "y":"center", "bc":"#00ACC1",
+                    "clip":true,
+                    "elements": [
+                        { "w":192, "h":288, "bc":"#00BCD4",
+                          "anchor":[0, 144], "pos":["50%","50%"], "rotate":-45,
+                          "shadow":{ "offset":[-0.7,0], "opacity":0.1, "radius":1 } },
+                        { "w":288, "h":40, "bc":"#80DEEA",
+                          "anchor":[144, 40], "pos":["50%","50%"], "rotate":-45,
+                          "shadow":{ "offset":[0,1.4], "opacity":0.2, "radius":2 } },
+                        { "w":40, "h":40, "fillColor":"#E0F7FA", "path":"ellipse",
+                          "anchor":[20, 40], "pos":["50%","50%"], "rotate":-45,
+                          "shadow":{ "offset":[-2,2], "opacity":0.3, "radius":3 } },
+                    ],
+                },
+            ]
+        },
+    },
+    "markdown":{
+        "styles": {
+            "#":{ "color":"#616161", "font":{ "size":92, "name":"Helvetica-Bold" }, "alignment":"center" },
+            "#2":{ "color":"#616161", "font":{ "size":60, "name":"Helvetica-Bold" }, "alignment":"center" },
+            "##":{ "color":"#008", "font":{ "size":60 } },
+            "###":{ "color":"#040", "font":{ "size":48, "name":"HelveticaNeue-Italic" } },
+            "-":{ "font":{ "size":42 } },
+            "*":{ "font":{ "size":42 } },
+            "```": { "font":{ "size":24, "name":"Damascus" } },
+        }
+    },
+    "scenes":{
+        "*": { "bc":"#ddf" },
+        "demo": { "bc":"#fff" },
+    },
+
+    "pages":[
+        {
+            "elements":[
+                { "w":"body", "markdown":[
+                    "# Swipe",
+                ]},
+                { "element":"logo", "x":300, "w":192,
+                    "elements":[
+                        {
+                            "id":"back", "w":128, "h":176, "cornerRadius":12,
+                            "shadow":{ "offset":[0,8], "opacity":0.2, "radius":8 },
+                        },
+                        {
+                            "id":"frame", "w":128, "h":176, "cornerRadius":12,
+                        },
+                    ]
+                },
+            ],
+        },
+
+        {
+            "elements":[
+                { "element":"body", "markdown":[
+                    "## Problems",
+                    "- Native vs. HTML5 dilemma",
+                    "- Not enough developers",
+                    "- Too expensive to develop apps",
+                    "- ePub is not designed for multi-media",
+                    "### Hard to innovate without programming!",
+                ]},
+            ]
+        },
+
+        {
+            "elements":[
+                { "element":"body", "markdown":[
+                    "## Media Format Evolutions",
+                    "- Book & Magazine for Paper",
+                    "- Movie & Animation for TV",
+                    "- HTML for PC",
+                    "- PowerPoint & Keynote for Projector",
+                    "- ePub for eBook",
+                    "### Let's design a new media format specificaly for touch-enabled smart devices!",
+                ]},
+            ]
+        },
+
+        {
+            "elements":[
+                { "element":"body", "markdown":[
+                    "## Target Applications",
+                    "- Interactive Comics",
+                    "- Sound Novels",
+                    "- Graphical Audio Books",
+                    "- Interactive Videos",
+                    "- Media-rich Presentations",
+                    "- Interactive Arts",
+                ]},
+            ]
+        },
+
+        {
+            "elements":[
+                { "element":"body", "markdown":[
+                    "## Design Principles",
+                    "- Optimized for touch-enabled devices",
+                    "- 100% declarative (no programming)",
+                    "- Rich & interactive animations",
+                    "- Re-invent the video experience",
+                    "- Custimizable page-transitions",
+                    "- Designer friendly",
+                    "- Lighweight & portable",
+                ]},
+            ]
+        },
+
+        {
+            "elements":[
+                { "w":"body", "markdown":[
+                    "#2 Swipe Engine & Language",
+                ]},
+            ],
+        },
+
+        {
+            "elements":[
+                { "element":"body", "markdown":[
+                    "## Swipe Engine",
+                    "- enables media-rich/animated documents",
+                    "- is optimized for touch-enabled devices",
+                    "- is portable",
+                    "- is lightweight",
+                    "- is open source",
+                    "### github.com/snakajima/swipe",
+                ]},
+            ]
+        },
+
+        {
+            "elements":[
+                { "element":"body", "markdown":[
+                    "## Swipe Engine",
+                    "- is not a general purpose platform",
+                    "- is not a programming environment",
+                    "- is not a game engine",
+                    "- does not replace ePub",
+                ]},
+            ]
+        },
+        {
+            "elements":[
+                { "element":"body", "markdown":[
+                    "## Swipe Language",
+                    "- is a domain-specific language",
+                    "- is declarative (like HTML)",
+                    "- is based on JSON (not XML)",
+                    "- is designer-friendly",
+                ]},
+            ]
+        },
+
+        {
+            "elements":[
+                { "element":"body", "markdown":[
+                    "## Status",
+                    "### Now (October 2015)",
+                    "- Specification (0.1)",
+                    "- iOS/tvOS Runtime (0.1)",
+                    "### Next Step",
+                    "- Further improvement based on feedback",
+                    "- Android/HTML5/Windows Runtime",
+                    "- Authoring Tool",
+                    "#### https://github.com/snakajima/swipe",
+                    "#### http://www.swipe.net",
+                ]},
+            ]
+        },
+
+    ]
+}
