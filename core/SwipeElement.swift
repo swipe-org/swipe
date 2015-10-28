@@ -31,7 +31,7 @@ protocol SwipeElementDelegate:NSObjectProtocol {
     func shouldRepeat(element:SwipeElement) -> Bool
     func onAction(element:SwipeElement)
     func didStartPlaying(element:SwipeElement)
-    func didFinishPlayingVideo(element:SwipeElement, completed:Bool)
+    func didFinishPlaying(element:SwipeElement, completed:Bool)
     func parseMarkdown(element:SwipeElement, markdowns:[String]) -> NSAttributedString
     func baseURL() -> NSURL?
     func map(url:NSURL) -> NSURL?
@@ -594,7 +594,7 @@ class SwipeElement:NSObject {
                         self.fNeedRewind = true
                         if self.fPlaying {
                             self.fPlaying = false
-                            self.delegate.didFinishPlayingVideo(self, completed:true)
+                            self.delegate.didFinishPlaying(self, completed:true)
                         }
                     }
                 }
@@ -604,7 +604,7 @@ class SwipeElement:NSObject {
                 [unowned self] (_:NSNotification!) -> Void in
                 if self.fPlaying {
                     self.fPlaying = false
-                    self.delegate.didFinishPlayingVideo(self, completed:false)
+                    self.delegate.didFinishPlaying(self, completed:false)
                     videoPlayer.pause()
                 }
             }

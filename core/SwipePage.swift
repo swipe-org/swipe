@@ -529,7 +529,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }
     
     // <SwipeElementDelegate> method
-    func didFinishPlayingVideo(element:SwipeElement, completed:Bool) {
+    func didFinishPlaying(element:SwipeElement, completed:Bool) {
         if completed {
             completionCount++
         }
@@ -575,8 +575,14 @@ class SwipePage: NSObject, SwipeElementDelegate {
     func map(url:NSURL) -> NSURL? {
         return self.prefetcher.map(url)
     }
-    
+
     func isPlaying() -> Bool {
+        let fPlaying = cPlaying > 0
+        assert(fPlaying == self.isPlayingOld())
+        return fPlaying
+    }
+    
+    private func isPlayingOld() -> Bool {
         for element in elements {
             if element.isPlaying() {
                 return true
