@@ -320,10 +320,17 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         let page = self.book.currenPage
         let fPlaying = page.isPlaying()
         MyLog("SWView  handlePlayButton \(fPlaying)", level: 1)
+        if fPlaying {
+            page.pause(false)
+        } else {
+            page.play()
+        }
+        /*
         page.willLeave(false)
         page.didLeave(false)
         page.willEnter(!fPlaying)
         page.didEnter(!fPlaying)
+        */
     }
 
     func handlePan(recognizer:UIPanGestureRecognizer) {

@@ -72,6 +72,7 @@ class SwipeElement:NSObject {
     
     // Video Element Specific
     private var videoPlayer:AVPlayer?
+    private var fNeedRewind = false
     private var fSeeking = false
     private var pendingOffset:CGFloat?
     private var fPlaying = false
@@ -590,6 +591,7 @@ class SwipeElement:NSObject {
                         videoPlayer.seekToTime(kCMTimeZero)
                         videoPlayer.play()
                     } else {
+                        self.fNeedRewind = true
                         if self.fPlaying {
                             self.fPlaying = false
                             self.delegate.didFinishPlayingVideo(self, completed:true)
@@ -612,7 +614,11 @@ class SwipeElement:NSObject {
                     self.fPlaying = true
                     self.delegate.didStartPlaying(self)
                     MyLog("SWElem videoPlayer.state = \(videoPlayer.status.rawValue)", level: 1)
+                    if self.fNeedRewind {
+                        videoPlayer.seekToTime(kCMTimeZero)
+                    }
                     videoPlayer.play()
+                    self.fNeedRewind = false
                 }
             }
         }

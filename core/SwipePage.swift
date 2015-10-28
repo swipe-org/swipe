@@ -218,19 +218,21 @@ class SwipePage: NSObject, SwipeElementDelegate {
 #endif
     }
     
-    func didLeave(fGoingBack:Bool) {
-        fEntered = false
-        if let player = audioPlayer {
+    func pause(fForceRewind:Bool) {
+        if let player = self.audioPlayer {
             player.stop()
         }
         
-        if self.autoplay {
-            NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.shouldPauseAutoPlay, object: self)
-        }
+        NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.shouldPauseAutoPlay, object: self)
         // auto rewind
-        if self.rewind || fGoingBack {
+        if self.rewind || fForceRewind {
             prepareToPlay()
         }
+    }
+    
+    func didLeave(fGoingBack:Bool) {
+        fEntered = false
+        self.pause(fGoingBack)
         MyLog("SWPage  didLeave @\(index) \(fGoingBack)", level: 2)
     }
     
@@ -286,6 +288,10 @@ class SwipePage: NSObject, SwipeElementDelegate {
             element.setTimeOffsetTo(fForward ? 0.0 : 1.0)
         }
         CATransaction.commit()
+    }
+    
+    func play() {
+        self.autoPlay()
     }
     
     private func autoPlay() {

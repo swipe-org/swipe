@@ -26,7 +26,7 @@ Because I want to make it an industry standard so that everybody can benefit fro
 
 Yes, I still maintain the copyright, but it's **absolutely free**. You can use it for non-commercial and commercial applications, modify it as needed, port it to other platforms (I'd really apprecaite if you open source it as well), re-distribute it with your applications, as long as you explicitly mention that your application uses Swipe and recognize me (Satoshi Nakajima) as the copyright holder.
 
-##Target applications
+##Target Applications
 
 * Interactive Comics
 * Sound Novels
