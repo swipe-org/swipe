@@ -73,6 +73,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     private var fEntered = false
     private var cPlaying = 0
     private var cDebug = 0
+    private var fPausing = false
     
     // Private lazy properties
     // Private properties allocated in loadView (we need to clean up in unloadView)
@@ -219,6 +220,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }
     
     func pause(fForceRewind:Bool) {
+        fPausing = true
         if let player = self.audioPlayer {
             player.stop()
         }
@@ -291,10 +293,17 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }
     
     func play() {
+        // REVIEW: Remove this block once we detect the end of speech
+        if let _ = self.utterance {
+            delegate.stopSpeaking()
+            prepareUtterance() // recreate a new utterance to avoid reusing it
+        }
+        
         self.autoPlay()
     }
     
     private func autoPlay() {
+        fPausing = false
         playAudio()
         NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.shouldStartAutoPlay, object: self)
         /*
@@ -305,7 +314,8 @@ class SwipePage: NSObject, SwipeElementDelegate {
         //NSLog("SWPage  autoPlay @\(index) with \(cPlaying)")
         assert(self.viewAnimation != nil, "must have self.viewAnimation")
         timerTick(0.0)
-        cDebug++
+        self.cDebug++
+        self.cPlaying++
         self.didStartPlayingInternal()
     }
     
@@ -315,7 +325,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(1000 * NSEC_PER_MSEC / UInt64(self.fps))), dispatch_get_main_queue(), {
             () -> Void in
             var offsetForNextTick:CGFloat?
-            if self.fEntered {
+            if self.fEntered && !self.fPausing {
                 var nextOffset = offset + 1.0 / self.duration / CGFloat(self.fps)
                 if nextOffset < 1.0 {
                     offsetForNextTick = nextOffset
@@ -337,6 +347,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
             if let value = offsetForNextTick {
                 self.timerTick(value)
             } else {
+                self.cPlaying--
                 self.cDebug--
                 self.didFinishPlayingInternal()
             }
@@ -578,10 +589,11 @@ class SwipePage: NSObject, SwipeElementDelegate {
 
     func isPlaying() -> Bool {
         let fPlaying = cPlaying > 0
-        assert(fPlaying == self.isPlayingOld())
+        //assert(fPlaying == self.isPlayingOld())
         return fPlaying
     }
     
+    /*
     private func isPlayingOld() -> Bool {
         for element in elements {
             if element.isPlaying() {
@@ -590,4 +602,5 @@ class SwipePage: NSObject, SwipeElementDelegate {
         }
         return false
     }
+    */
 }
