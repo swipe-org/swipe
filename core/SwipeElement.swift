@@ -997,6 +997,7 @@ class SwipeElement:NSObject {
         return false
     }
     
+    /*
     func isPlaying() -> Bool {
         if self.fPlaying {
             return true
@@ -1008,4 +1009,5 @@ class SwipeElement:NSObject {
         }
         return false
     }
+    */
 }
