@@ -229,8 +229,8 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **y** (Float or Percent): y-position of the left-top corner of the element, default is 0
 - **pos** ([Float/Percent, Float/Percent]): alternative way to specificy the position by the location of the anchor point
 - **anchor** ([Float/Percent, Float/Percent]): anchor point, default is ["50%", "50%"]
-- **w** (Float or Percent): width of the element, default is "100%"
-- **h** (Float or Percent): height of the element, default is "100%"
+- **w** (Float, Percent or "fill"): width of the element, default is "100%".
+- **h** (Float, Percent or "fill"): height of the element, default is "100%"
 - **bc** (Color): background color, default is *clear*, animatable
 - **clip** (Boolean): Specifies clipping behavior, default is false
 - **borderWidth** (Float): Width of the border, default is 0, animatable

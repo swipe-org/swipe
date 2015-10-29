@@ -182,20 +182,26 @@ class SwipeElement:NSObject {
         var imageSrc:CGImageSourceRef?
         var maskSrc:CGImage?
         var pathSrc:CGPath?
-        
-        if let value = info["w"] as? CGFloat {
-            w0 = value
-            fNaturalW = false
-        } else if let value = info["w"] as? String {
-            w0 = SwipeParser.parsePercent(value, full: dimension.width, defaultValue: dimension.width)
-            fNaturalW = false
-        }
-        if let value = info["h"] as? CGFloat {
-            h0 = value
-            fNaturalH = false
-        } else if let value = info["h"] as? String {
-            h0 = SwipeParser.parsePercent(value, full: dimension.height, defaultValue: dimension.height)
-            fNaturalH = false
+
+        let fScaleToFill = info["w"] as? String == "fill" || info["h"] as? String == "fill"
+        if fScaleToFill {
+            w0 = dimension.width // we'll adjust it later
+            h0 = dimension.height // we'll adjust it later
+        } else {
+            if let value = info["w"] as? CGFloat {
+                w0 = value
+                fNaturalW = false
+            } else if let value = info["w"] as? String {
+                w0 = SwipeParser.parsePercent(value, full: dimension.width, defaultValue: dimension.width)
+                fNaturalW = false
+            }
+            if let value = info["h"] as? CGFloat {
+                h0 = value
+                fNaturalH = false
+            } else if let value = info["h"] as? String {
+                h0 = SwipeParser.parsePercent(value, full: dimension.height, defaultValue: dimension.height)
+                fNaturalH = false
+            }
         }
         
         if let src = info["img"] as? String {
@@ -238,7 +244,13 @@ class SwipeElement:NSObject {
         }
         
         if let sizeNatural = sizeContents {
-            if fNaturalW {
+            if fScaleToFill {
+                if w0 / sizeNatural.width * sizeNatural.height > h0 {
+                    h0 = w0 / sizeNatural.width * sizeNatural.height
+                } else {
+                    w0 = h0 / sizeNatural.height * sizeNatural.width
+                }
+            } else if fNaturalW {
                 if fNaturalH {
                     w0 = sizeNatural.width
                     h0 = sizeNatural.height

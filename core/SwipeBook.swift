@@ -127,11 +127,11 @@ class SwipeBook: NSObject, SwipePageDelegate {
                 return CGSizeMake(dimension[0], dimension[1])
             }
         }
+        let size = UIScreen.mainScreen().bounds.size
 #if os(tvOS)
-        let screen = UIScreen.mainScreen()
-        return screen.bounds.size
+        return size
 #else
-        return self.landscape ? CGSizeMake(568.0, 320.0) : CGSizeMake(320.0, 568.0) // iPhone5
+        return size
 #endif
     }()
     
