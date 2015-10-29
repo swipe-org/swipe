@@ -1,11 +1,16 @@
 {
     "type":"net.swipe.swipe",
     "title": "Breville BES870XL Quick Start Guide",
-    "dimension":[640.0, 360.0],
+    "dimension":[640.0, 0.0],
     "orientation":"landscape",
     "resources":["es1"],
+    "scenes":{
+        "*":{
+            "bc":"#333",
+        },
+    },
     "elements":{
-        "full": { "w":"100%", "h":"100%" },
+        "full": { "w":"fill", "h":"fill" },
         "caption" : { "y":"bottom", "h":100, "x":"5%", "w":"90%" },
         "play" : { "x":"center", "y":"center", "w":80, "h":80, "text":"▶︎", "fontSize":40.0, "textColor":"#fffe",
                     "borderWidth":3.0, "borderColor":"#fffe",

@@ -122,17 +122,18 @@ class SwipeBook: NSObject, SwipePageDelegate {
     }()
     
     lazy var dimension:CGSize = {
+        let size = UIScreen.mainScreen().bounds.size
         if let dimension = self.bookInfo["dimension"] as? [CGFloat] {
             if dimension.count == 2 {
+                if dimension[0] == 0.0 {
+                    return CGSizeMake(dimension[1] / size.height * size.width, dimension[1])
+                } else if dimension[1] == 0.0 {
+                    return CGSizeMake(dimension[0], dimension[0] / size.width * size.height)
+                }
                 return CGSizeMake(dimension[0], dimension[1])
             }
         }
-        let size = UIScreen.mainScreen().bounds.size
-#if os(tvOS)
         return size
-#else
-        return size
-#endif
     }()
     
     lazy private var scale:CGSize = {
