@@ -1,6 +1,6 @@
 {
     "title": "Swipe",
-    "dimension":[1280, 720],
+    "dimension":[1280, 0],
     "orientation":"landscape",
     "elements":{
         "body": { "x":"center", "w":"66.7%" },

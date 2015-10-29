@@ -1,6 +1,6 @@
 {
     "title": "Swipe Tutorial",
-    "dimension":[1280, 720],
+    "dimension":[1280, 0],
     "orientation":"landscape",
     "resources":["tutorial"],
     "elements":{
