@@ -74,6 +74,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     private var cPlaying = 0
     private var cDebug = 0
     private var fPausing = false
+    private var offsetPaused:CGFloat?
     
     // Private lazy properties
     // Private properties allocated in loadView (we need to clean up in unloadView)
@@ -290,6 +291,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
             element.setTimeOffsetTo(fForward ? 0.0 : 1.0)
         }
         CATransaction.commit()
+        self.offsetPaused = nil
     }
     
     func play() {
@@ -313,7 +315,11 @@ class SwipePage: NSObject, SwipeElementDelegate {
         */
         //NSLog("SWPage  autoPlay @\(index) with \(cPlaying)")
         assert(self.viewAnimation != nil, "must have self.viewAnimation")
-        timerTick(0.0)
+        if let offset = self.offsetPaused {
+            timerTick(offset)
+        } else {
+            timerTick(0.0)
+        }
         self.cDebug++
         self.cPlaying++
         self.didStartPlayingInternal()
@@ -347,6 +353,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
             if let value = offsetForNextTick {
                 self.timerTick(value)
             } else {
+                self.offsetPaused = self.fPausing ? offset : nil
                 self.cPlaying--
                 self.cDebug--
                 self.didFinishPlayingInternal()
