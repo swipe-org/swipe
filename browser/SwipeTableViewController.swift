@@ -30,6 +30,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     private weak var delegate:SwipeDocumentViewerDelegate?
     private var prefetching = true
     @IBOutlet private var tableView:UITableView!
+    @IBOutlet private var imageView:UIImageView?
 
     // Returns the list of URLs of required resouces for this element (including children)
     private lazy var resourceURLs:[NSURL:String] = {
@@ -63,6 +64,23 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
             sections.append(section)
         } else {
             throw SwipeError.InvalidDocument
+        }
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        if let imageView = self.imageView {
+            let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+            effectView.frame = imageView.frame
+            effectView.autoresizingMask = UIViewAutoresizing([.FlexibleWidth, .FlexibleHeight])
+            imageView.addSubview(effectView)
+        }
+
+        self.prefetcher.start { (_:[NSURL], _:[NSError]) -> Void in
+            MyLog("SWTable prefetch complete", level:1)
+            self.prefetching = false
+            self.tableView.reloadData()
         }
     }
 
@@ -107,22 +125,6 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
         return nil
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        self.prefetcher.start { (_:[NSURL], _:[NSError]) -> Void in
-            MyLog("SWTable prefetch complete", level:1)
-            self.prefetching = false
-            self.tableView.reloadData()
-        }
-    }
-
-    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

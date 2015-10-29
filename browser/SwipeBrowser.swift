@@ -149,6 +149,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 #endif
             controller = vc
             self.addChildViewController(vc)
+            vc.view.autoresizingMask = UIViewAutoresizing([.FlexibleWidth, .FlexibleHeight])
 #if os(OSX)
             self.view.addSubview(vc.view, positioned: .Below, relativeTo: nil)
 #else

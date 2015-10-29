@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SwipeTableViewController" customModule="sampletv" customModuleProvider="target">
             <connections>
+                <outlet property="imageView" destination="PQg-m9-GXz" id="1zv-56-8CU"/>
                 <outlet property="tableView" destination="36I-q2-KRG" id="4JM-Df-ads"/>
                 <outlet property="view" destination="UPt-f2-HjB" id="DHg-8V-PAs"/>
             </connections>
@@ -15,6 +16,10 @@
             <rect key="frame" x="0.0" y="0.0" width="500" height="500"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" image="iTunesArtwork.png" translatesAutoresizingMaskIntoConstraints="NO" id="PQg-m9-GXz">
+                    <rect key="frame" x="0.0" y="0.0" width="500" height="500"/>
+                    <animations/>
+                </imageView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="66" sectionHeaderHeight="40" sectionFooterHeight="40" translatesAutoresizingMaskIntoConstraints="NO" id="36I-q2-KRG">
                     <rect key="frame" x="90" y="60" width="320" height="380"/>
                     <animations/>
@@ -28,8 +33,12 @@
             <animations/>
             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstItem="PQg-m9-GXz" firstAttribute="leading" secondItem="UPt-f2-HjB" secondAttribute="leading" id="6nN-Ov-WE9"/>
+                <constraint firstItem="PQg-m9-GXz" firstAttribute="top" secondItem="UPt-f2-HjB" secondAttribute="top" id="7xJ-z4-iyI"/>
                 <constraint firstItem="36I-q2-KRG" firstAttribute="top" secondItem="UPt-f2-HjB" secondAttribute="top" constant="60" id="Cqd-sE-4uQ"/>
+                <constraint firstAttribute="bottom" secondItem="PQg-m9-GXz" secondAttribute="bottom" id="HJb-ax-fQw"/>
                 <constraint firstAttribute="bottom" secondItem="36I-q2-KRG" secondAttribute="bottom" constant="60" id="Syp-l5-WEf"/>
+                <constraint firstAttribute="trailing" secondItem="PQg-m9-GXz" secondAttribute="trailing" id="jCx-oC-ES8"/>
                 <constraint firstItem="36I-q2-KRG" firstAttribute="leading" secondItem="UPt-f2-HjB" secondAttribute="leading" constant="90" id="nF3-ZO-c3j"/>
                 <constraint firstAttribute="trailing" secondItem="36I-q2-KRG" secondAttribute="trailing" constant="90" id="o7b-YS-lfR"/>
             </constraints>
@@ -37,4 +46,7 @@
             <point key="canvasLocation" x="97" y="180"/>
         </view>
     </objects>
+    <resources>
+        <image name="iTunesArtwork.png" width="512" height="512"/>
+    </resources>
 </document>

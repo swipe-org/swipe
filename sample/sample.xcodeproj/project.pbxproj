@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		740FD4841BE2D5B800C2D91D /* SwipeTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 740FD4831BE2D5B800C2D91D /* SwipeTableViewController.xib */; };
 		740FD4881BE2D7A700C2D91D /* SwipeTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 740FD4861BE2D7A700C2D91D /* SwipeTableViewController.xib */; };
+		740FD4901BE2DD6300C2D91D /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 740FD48F1BE2DD6300C2D91D /* iTunesArtwork@2x.png */; };
+		740FD4911BE2DD6300C2D91D /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 740FD48F1BE2DD6300C2D91D /* iTunesArtwork@2x.png */; };
 		74DD7F151BDD3E570042BB9D /* HiddenAgenda.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7F111BDD3E570042BB9D /* HiddenAgenda.mp3 */; settings = {ASSET_TAGS = (bgm, ); }; };
 		74DD7F161BDD3E570042BB9D /* HiddenAgenda.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7F111BDD3E570042BB9D /* HiddenAgenda.mp3 */; settings = {ASSET_TAGS = (bgm, ); }; };
 		74DD7F171BDD3E570042BB9D /* MonkeysSpinningMonkeys.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7F121BDD3E570042BB9D /* MonkeysSpinningMonkeys.mp3 */; settings = {ASSET_TAGS = (bgm, ); }; };
@@ -168,6 +170,7 @@
 /* Begin PBXFileReference section */
 		740FD4831BE2D5B800C2D91D /* SwipeTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwipeTableViewController.xib; sourceTree = "<group>"; };
 		740FD4861BE2D7A700C2D91D /* SwipeTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwipeTableViewController.xib; sourceTree = "<group>"; };
+		740FD48F1BE2DD6300C2D91D /* iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork@2x.png"; sourceTree = "<group>"; };
 		74DD7F111BDD3E570042BB9D /* HiddenAgenda.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HiddenAgenda.mp3; sourceTree = "<group>"; };
 		74DD7F121BDD3E570042BB9D /* MonkeysSpinningMonkeys.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = MonkeysSpinningMonkeys.mp3; sourceTree = "<group>"; };
 		74DD7F131BDD3E570042BB9D /* music.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = music.swipe; sourceTree = "<group>"; };
@@ -372,6 +375,8 @@
 				74EA718F1BD04D86006808EA /* browser */,
 				74EA71C31BD04E95006808EA /* network */,
 				74EA71901BD04D86006808EA /* core */,
+				74F1794A1BD8551100126B49 /* icons */,
+				74EA71D41BD04F8A006808EA /* script */,
 				74EA71791BD047F0006808EA /* sample */,
 				74EA71E21BD0B0EE006808EA /* sampletv */,
 				74EA71781BD047F0006808EA /* Products */,
@@ -390,8 +395,6 @@
 		74EA71791BD047F0006808EA /* sample */ = {
 			isa = PBXGroup;
 			children = (
-				74F1794A1BD8551100126B49 /* icons */,
-				74EA71D41BD04F8A006808EA /* script */,
 				74EA717A1BD047F0006808EA /* AppDelegate.swift */,
 				74EA717E1BD047F0006808EA /* Main.storyboard */,
 				74EA71811BD047F0006808EA /* Assets.xcassets */,
@@ -477,6 +480,7 @@
 		74F1794A1BD8551100126B49 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				740FD48F1BE2DD6300C2D91D /* iTunesArtwork@2x.png */,
 				74F1794E1BD8553F00126B49 /* text.png */,
 				74F1794B1BD8552700126B49 /* speech.png */,
 				74F179471BD8550800126B49 /* movie.png */,
@@ -485,6 +489,7 @@
 				74DD7FD71BDFCC880042BB9D /* radio.png */,
 			);
 			name = icons;
+			path = sample;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -621,6 +626,7 @@
 				74DD7F4A1BDD3E610042BB9D /* IMG_8169.m4v in Resources */,
 				74DD7F191BDD3E570042BB9D /* music.swipe in Resources */,
 				74DD7FA51BDD3E770042BB9D /* nasa010.jpg in Resources */,
+				740FD4901BE2DD6300C2D91D /* iTunesArtwork@2x.png in Resources */,
 				74DD7F301BDD3E610042BB9D /* IMG_8152.JPG in Resources */,
 				74DD7F441BDD3E610042BB9D /* IMG_8166.m4v in Resources */,
 				74EA71821BD047F0006808EA /* Assets.xcassets in Resources */,
@@ -668,6 +674,7 @@
 				74DD7FE91BDFE33F0042BB9D /* shuttle.png in Resources */,
 				74F1794D1BD8552700126B49 /* speech.png in Resources */,
 				74DD7F961BDD3E770042BB9D /* nasa002.jpg in Resources */,
+				740FD4911BE2DD6300C2D91D /* iTunesArtwork@2x.png in Resources */,
 				74DD7F391BDD3E610042BB9D /* IMG_8156.JPG in Resources */,
 				74DD7F351BDD3E610042BB9D /* IMG_8154.m4v in Resources */,
 				74DD7F981BDD3E770042BB9D /* nasa003.jpg in Resources */,
