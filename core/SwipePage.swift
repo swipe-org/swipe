@@ -528,8 +528,9 @@ class SwipePage: NSObject, SwipeElementDelegate {
         if let action = element.action {
             MyLog("SWPage  onAction \(action)", level: 2)
             if action == "play" {
-                prepareToPlay()
-                autoPlay()
+                //prepareToPlay()
+                //autoPlay()
+                play()
             }
         }
     }
