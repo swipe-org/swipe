@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SwipeTableViewController" customModule="sample" customModuleProvider="target">
+            <connections>
+                <outlet property="tableView" destination="NWn-sr-VEq" id="8U5-Fh-dfO"/>
+                <outlet property="view" destination="57Y-md-d8l" id="nEY-oY-3jB"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="57Y-md-d8l">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="NWn-sr-VEq">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                    <animations/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="Tfw-bx-cHN"/>
+                        <outlet property="delegate" destination="-1" id="vqd-Np-vDl"/>
+                    </connections>
+                </tableView>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="NWn-sr-VEq" secondAttribute="bottom" id="THL-4a-cuD"/>
+                <constraint firstItem="NWn-sr-VEq" firstAttribute="top" secondItem="57Y-md-d8l" secondAttribute="top" id="fzL-Le-1AL"/>
+                <constraint firstAttribute="trailing" secondItem="NWn-sr-VEq" secondAttribute="trailing" id="mIL-mO-naX"/>
+                <constraint firstItem="NWn-sr-VEq" firstAttribute="leading" secondItem="57Y-md-d8l" secondAttribute="leading" id="wRc-PZ-r59"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="368" y="298"/>
+        </view>
+    </objects>
+</document>

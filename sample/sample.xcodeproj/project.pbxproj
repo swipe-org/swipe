@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		740FD4841BE2D5B800C2D91D /* SwipeTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 740FD4831BE2D5B800C2D91D /* SwipeTableViewController.xib */; };
+		740FD4881BE2D7A700C2D91D /* SwipeTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 740FD4861BE2D7A700C2D91D /* SwipeTableViewController.xib */; };
 		74DD7F151BDD3E570042BB9D /* HiddenAgenda.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7F111BDD3E570042BB9D /* HiddenAgenda.mp3 */; settings = {ASSET_TAGS = (bgm, ); }; };
 		74DD7F161BDD3E570042BB9D /* HiddenAgenda.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7F111BDD3E570042BB9D /* HiddenAgenda.mp3 */; settings = {ASSET_TAGS = (bgm, ); }; };
 		74DD7F171BDD3E570042BB9D /* MonkeysSpinningMonkeys.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7F121BDD3E570042BB9D /* MonkeysSpinningMonkeys.mp3 */; settings = {ASSET_TAGS = (bgm, ); }; };
@@ -164,6 +166,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		740FD4831BE2D5B800C2D91D /* SwipeTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwipeTableViewController.xib; sourceTree = "<group>"; };
+		740FD4861BE2D7A700C2D91D /* SwipeTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwipeTableViewController.xib; sourceTree = "<group>"; };
 		74DD7F111BDD3E570042BB9D /* HiddenAgenda.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HiddenAgenda.mp3; sourceTree = "<group>"; };
 		74DD7F121BDD3E570042BB9D /* MonkeysSpinningMonkeys.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = MonkeysSpinningMonkeys.mp3; sourceTree = "<group>"; };
 		74DD7F131BDD3E570042BB9D /* music.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = music.swipe; sourceTree = "<group>"; };
@@ -272,6 +276,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		740FD4821BE2D5A000C2D91D /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				740FD4831BE2D5B800C2D91D /* SwipeTableViewController.xib */,
+			);
+			path = ios;
+			sourceTree = "<group>";
+		};
+		740FD4851BE2D7A700C2D91D /* tvos */ = {
+			isa = PBXGroup;
+			children = (
+				740FD4861BE2D7A700C2D91D /* SwipeTableViewController.xib */,
+			);
+			path = tvos;
+			sourceTree = "<group>";
+		};
 		74DD7F101BDD3E570042BB9D /* bgm */ = {
 			isa = PBXGroup;
 			children = (
@@ -387,6 +407,8 @@
 				74EA71CE1BD04F22006808EA /* SwipeBrowser.swift */,
 				74EA71CF1BD04F22006808EA /* SwipeBrowser.xib */,
 				74EA71D01BD04F22006808EA /* SwipeTableViewController.swift */,
+				740FD4851BE2D7A700C2D91D /* tvos */,
+				740FD4821BE2D5A000C2D91D /* ios */,
 			);
 			name = browser;
 			path = ../browser;
@@ -554,6 +576,7 @@
 				74DD7F3E1BDD3E610042BB9D /* IMG_8161.JPG in Resources */,
 				74DD7F421BDD3E610042BB9D /* IMG_8163.m4v in Resources */,
 				74DD7FB11BDD3EE90042BB9D /* espresso.png in Resources */,
+				740FD4841BE2D5B800C2D91D /* SwipeTableViewController.xib in Resources */,
 				74DD7F911BDD3E770042BB9D /* nasa000.jpg in Resources */,
 				74EA71851BD047F0006808EA /* LaunchScreen.storyboard in Resources */,
 				74DD7F361BDD3E610042BB9D /* IMG_8155.JPG in Resources */,
@@ -660,6 +683,7 @@
 				74F179501BD8553F00126B49 /* text.png in Resources */,
 				74DD7FAC1BDD3E770042BB9D /* nasa013.jpg in Resources */,
 				74DD7FE31BDFE33F0042BB9D /* chara_walk.png in Resources */,
+				740FD4881BE2D7A700C2D91D /* SwipeTableViewController.xib in Resources */,
 				74DD7F9A1BDD3E770042BB9D /* nasa004.jpg in Resources */,
 				74DD7FA01BDD3E770042BB9D /* nasa007.jpg in Resources */,
 				74EA71EB1BD0B0EE006808EA /* Assets.xcassets in Resources */,

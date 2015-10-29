@@ -28,7 +28,7 @@ private func MyLog(text:String, level:Int = 0) {
 // Those UIViewControllers MUST support SwipeDocumentViewer protocol.
 //
 let g_typeMapping:[String:Void -> UIViewController] = [
-    "net.swipe.list": { return SwipeTableViewController() },
+    "net.swipe.list": { return SwipeTableViewController(nibName:"SwipeTableViewController", bundle:nil) },
     "net.swipe.swipe": { return SwipeViewController() },
 ]
 

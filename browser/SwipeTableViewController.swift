@@ -22,13 +22,14 @@ private func MyLog(text:String, level:Int = 0) {
 //
 // SwipeTableViewController is the "viewer" of documents with type "net.swipe.list"
 //
-class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
+class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeDocumentViewer {
     private var document:[String:AnyObject]?
     private var sections = [[String:AnyObject]]()
     //private var items = [[String:AnyObject]]()
     private var url:NSURL?
     private weak var delegate:SwipeDocumentViewerDelegate?
     private var prefetching = true
+    @IBOutlet private var tableView:UITableView!
 
     // Returns the list of URLs of required resouces for this element (including children)
     private lazy var resourceURLs:[NSURL:String] = {
@@ -63,15 +64,17 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
         } else {
             throw SwipeError.InvalidDocument
         }
-        if let value = document["rowHeight"] as? CGFloat {
-            self.tableView.rowHeight = value
-        } else if let value = document["rowHeight"] as? String {
-            self.tableView.rowHeight = SwipeParser.parsePercent(value, full: size.height, defaultValue: self.tableView.rowHeight)
-        }
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        let size = self.tableView.bounds.size
+        if let value = document?["rowHeight"] as? CGFloat {
+            self.tableView.rowHeight = value
+        } else if let value = document?["rowHeight"] as? String {
+            self.tableView.rowHeight = SwipeParser.parsePercent(value, full: size.height, defaultValue: self.tableView.rowHeight)
+        }
     }
     
     // <SwipeDocumentViewer> method
@@ -119,6 +122,8 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
         }
     }
 
+    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -126,12 +131,12 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return prefetching ? 0 : self.sections.count
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         let section = self.sections[section]
         guard let items = section["items"] as? [[String:AnyObject]] else {
@@ -140,7 +145,7 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
         return items.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "foo")
 
         // Configure the cell...
@@ -164,7 +169,7 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let section = self.sections[indexPath.section]
         guard let items = section["items"] as? [[String:AnyObject]] else {
             return
@@ -176,7 +181,7 @@ class SwipeTableViewController: UITableViewController, SwipeDocumentViewer {
         }
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let section = self.sections[section]
         return section["title"] as? String
     }
