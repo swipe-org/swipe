@@ -580,6 +580,9 @@ class SwipeElement:NSObject {
             self.videoPlayer = videoPlayer
             let videoLayer = AVPlayerLayer(player: videoPlayer)
             videoLayer.frame = CGRectMake(0.0, 0.0, w, h)
+            if fScaleToFill {
+                videoLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+            }
             layer.addSublayer(videoLayer)
 
             let urlLocalOrStream:NSURL?
