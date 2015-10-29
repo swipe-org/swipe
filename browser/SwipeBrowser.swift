@@ -183,27 +183,16 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                             self.openDocument(document)
                         } else {
                             let alert = UIAlertController(title: "Swipe", message: "Loading Resources...".localized, preferredStyle: UIAlertControllerStyle.Alert)
-                            var fPresented = false
-                            var fLoaded = false
                             self.presentViewController(alert, animated: true) { () -> Void in
-                                if fLoaded {
-                                    self.dismissViewControllerAnimated(true, completion: nil)
-                                } else {
-                                    fPresented = true // presentation completed before the loading
-                                }
-                            }
-                            request.beginAccessingResourcesWithCompletionHandler() { (error:NSError?) -> Void in
-                                dispatch_async(dispatch_get_main_queue()) {
-                                    if fPresented {
-                                        self.dismissViewControllerAnimated(true, completion: nil)
-                                    } else {
-                                        fLoaded = true // loading completed before the presentation
-                                    }
-                                    MyLog("SWBrows resource error=\(error)", level:1)
-                                    if let e = error {
-                                        return self.processError(e.localizedDescription)
-                                    } else {
-                                        self.openDocument(document)
+                                request.beginAccessingResourcesWithCompletionHandler() { (error:NSError?) -> Void in
+                                    dispatch_async(dispatch_get_main_queue()) {
+                                        self.dismissViewControllerAnimated(false, completion: nil)
+                                        if let e = error {
+                                            MyLog("SWBrows resource error=\(error)", level:0)
+                                            return self.processError(e.localizedDescription)
+                                        } else {
+                                            self.openDocument(document)
+                                        }
                                     }
                                 }
                             }
