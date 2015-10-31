@@ -92,7 +92,7 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **dimension** ([Int, Int]): Dimension of the document, default is [320, 568]
 - **paging** (String): Paging direction, *vertical* (default), or *leftToRight*
 - **orientation** (String): Document orientation, *portrait* (default) or *landscape*
-- **scene** ({Name:Scene}): Named **Scenes** dictionary
+- **scenes** ({Name:Scene}): Named **Scenes** dictionary
 - **elements** ({Name:Element}): Named **Elements** dictionary
 - **paths** ({Name:Path}): Named **Paths** dictionary
 - **markdown** ({Name:Style}): Named **Markdown** style
@@ -125,7 +125,7 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 - **bc** (Color): Background color, the default is *white*
 - **fpt** (Int): Frame per second, the default is 60
 - **transition** (String): Inter-page transition style, *scroll* (default), *fadeIn* or *replace*
-- **play** (String): Play(animation) control, *auto* (default), *pause*, *always* or *scroll*
+- **animation** (String): Play(animation) control, *auto* (default), *pause*, *always* or *scroll*
 - **duration** (Float): Duration of the animation in seconds, the default is 0.2 seconds
 - **repeat** (Boolean): Repeat rule of the animation, default is *false*
 - **rewind** (Boolean): Rewind rule of the animation when the user leaves the page, defaul is *false*
