@@ -281,11 +281,11 @@ The sample below uses a named **Element**, "stroke" as a template for five diffe
     "pages": [
         {
             "elements": [
-                { "smile":"stroke", "pos":["50%", 100] },
-                { "smile":"stroke", "pos":["50%", 200], "rotate":30 },
-                { "smile":"stroke", "pos":["50%", 300], "lineWidth":10 },
-                { "smile":"stroke", "pos":["50%", 400], "strokeColor":"#37F" },
-                { "smile":"stroke", "pos":["50%", 500], "scale":[2,1] },
+                { "element":"smile", "pos":["50%", 100] },
+                { "element":"smile", "pos":["50%", 200], "rotate":30 },
+                { "element":"smile", "pos":["50%", 300], "lineWidth":10 },
+                { "element":"smile", "pos":["50%", 400], "strokeColor":"#37F" },
+                { "element":"smile", "pos":["50%", 500], "scale":[2,1] },
             ],
         },
     ]
