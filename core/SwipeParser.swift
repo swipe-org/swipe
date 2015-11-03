@@ -103,6 +103,12 @@ class SwipeParser {
         if let value = param as? NSDictionary {
             var xf = CATransform3DIdentity
             var hasValue = false
+            if let translate = value["translate"] as? [CGFloat] {
+                if translate.count == 2 {
+                    xf = CATransform3DTranslate(xf, translate[0] * scaleX, translate[1] * scaleY, 0)
+                }
+                hasValue = true
+            }
             if let rot = value["rotate"] as? CGFloat {
                 xf = CATransform3DRotate(xf, rot * CGFloat(M_PI / 180.0), 0, 0, 1)
                 hasValue = true
@@ -114,12 +120,6 @@ class SwipeParser {
             if let scales = value["scale"] as? [CGFloat] {
                 if scales.count == 2 {
                     xf = CATransform3DScale(xf, scales[0], scales[1], 1.0)
-                }
-                hasValue = true
-            }
-            if let translate = value["translate"] as? [CGFloat] {
-                if translate.count == 2 {
-                    xf = CATransform3DTranslate(xf, translate[0] * scaleX, translate[1] * scaleY, 0)
                 }
                 hasValue = true
             }
