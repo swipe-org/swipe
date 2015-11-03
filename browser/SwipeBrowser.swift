@@ -51,6 +51,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 #endif
     private var resourceRequest:NSBundleResourceRequest?
     var url:NSURL? = NSBundle.mainBundle().URLForResource("index.swipe", withExtension: nil)
+    var jsonDocument:[String:AnyObject]?
     var controller:UIViewController?
     var documentViewer:SwipeDocumentViewer?
 
@@ -116,6 +117,8 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                     }
                 }
             }
+        } else if let document = self.jsonDocument {
+            self.openDocument(document, localResource: false)
         } else {
             MyLog("SWBrows nil URL")
             processError("No URL to load".localized)
