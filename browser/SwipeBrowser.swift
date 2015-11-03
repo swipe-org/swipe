@@ -205,6 +205,31 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             }
     }
     
+    private func openDocument(document:[String:AnyObject], localResource:Bool) {
+        var deferred = false
+#if os(iOS)
+        if let orientation = document["orientation"] as? String where orientation == "landscape" {
+            self.landscapeMode = true
+            if !localResource {
+                // HACK ALERT: If the resource is remote and the orientation is landscape, it is too late to specify
+                // the allowed orientations. Until iOS7, we could just call attemptRotationToDeviceOrientation(), 
+                // but it no longer works. Therefore, we work-around by presenting a dummy VC, and dismiss it
+                // before opening the document.
+                deferred = true
+                //UIViewController.attemptRotationToDeviceOrientation() // NOTE: attempt but not working
+                let vcDummy = UIViewController()
+                self.presentViewController(vcDummy, animated: false, completion: { () -> Void in
+                    self.dismissViewControllerAnimated(false, completion: nil)
+                    self.openDocumentWithODR(document, localResource: localResource)
+                })
+            }
+        }
+#endif
+        if !deferred {
+            self.openDocumentWithODR(document, localResource: localResource)
+        }
+    }
+    
     private func openData(dataRetrieved:NSData?, localResource:Bool) {
         guard let data = dataRetrieved else {
             return processError("failed to open: no data".localized)
@@ -213,28 +238,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             guard let document = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? [String:AnyObject] else {
                 return processError("Not a dictionary.".localized)
             }
-            var deferred = false
-#if os(iOS)
-            if let orientation = document["orientation"] as? String where orientation == "landscape" {
-                self.landscapeMode = true
-                if !localResource {
-                    // HACK ALERT: If the resource is remote and the orientation is landscape, it is too late to specify
-                    // the allowed orientations. Until iOS7, we could just call attemptRotationToDeviceOrientation(), 
-                    // but it no longer works. Therefore, we work-around by presenting a dummy VC, and dismiss it
-                    // before opening the document.
-                    deferred = true
-                    //UIViewController.attemptRotationToDeviceOrientation() // NOTE: attempt but not working
-                    let vcDummy = UIViewController()
-                    self.presentViewController(vcDummy, animated: false, completion: { () -> Void in
-                        self.dismissViewControllerAnimated(false, completion: nil)
-                        self.openDocumentWithODR(document, localResource: localResource)
-                    })
-                }
-            }
-#endif
-            if !deferred {
-                self.openDocumentWithODR(document, localResource: localResource)
-            }
+            openDocument(document, localResource: localResource)
         } catch let error as NSError {
             let value = error.userInfo["NSDebugDescription"]!
             processError("Invalid JSON file".localized + "\(error.localizedDescription). \(value)")
