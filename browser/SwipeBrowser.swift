@@ -141,7 +141,10 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         do {
             documentViewer.setDelegate(self)
             let defaults = NSUserDefaults.standardUserDefaults()
-            let state = defaults.objectForKey(self.url!.absoluteString) as? [String:AnyObject]
+            var state:[String:AnyObject]? = nil
+            if let url = self.url {
+                state = defaults.objectForKey(url.absoluteString) as? [String:AnyObject]
+            }
             try documentViewer.loadDocument(document, size:self.view.frame.size, url: url, state:state)
 #if os(iOS)
             if let title = documentViewer.documentTitle() {
