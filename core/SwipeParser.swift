@@ -99,10 +99,18 @@ class SwipeParser {
         return UIColor.greenColor().CGColor
     }
     
-    static func parseTransform(param:[String:AnyObject]?, scaleX:CGFloat, scaleY:CGFloat) -> CATransform3D? {
-        if let value = param {
+    static func parseTransform(param:[String:AnyObject]?, scaleX:CGFloat, scaleY:CGFloat, base:[String:AnyObject]?) -> CATransform3D? {
+        if let p = param {
+            var value = p
             var xf = CATransform3DIdentity
             var hasValue = false
+            if let b = base {
+                for key in ["translate", "rotate", "scale"] {
+                    if let v = b[key] where value[key]==nil {
+                        value[key] = v
+                    }
+                }
+            }
             if let translate = value["translate"] as? [CGFloat] {
                 if translate.count == 2 {
                     xf = CATransform3DTranslate(xf, translate[0] * scaleX, translate[1] * scaleY, 0)

@@ -638,13 +638,13 @@ class SwipeElement:NSObject {
             }
         }
         
-        if let transform = SwipeParser.parseTransform(info, scaleX:scale.width, scaleY:scale.height) {
+        if let transform = SwipeParser.parseTransform(info, scaleX:scale.width, scaleY:scale.height, base: nil) {
             layer.transform = transform
         }
         layer.opacity = SwipeParser.parseFloat(info["opacity"])
         
         if let to = info["to"] as? [String:AnyObject] {
-            if let transform = SwipeParser.parseTransform(to, scaleX:scale.width, scaleY:scale.height) {
+            if let transform = SwipeParser.parseTransform(to, scaleX:scale.width, scaleY:scale.height, base:info) {
                 let aniT = CABasicAnimation(keyPath: "transform")
                 aniT.fromValue = NSValue(CATransform3D : layer.transform)
                 aniT.toValue = NSValue(CATransform3D : transform)
