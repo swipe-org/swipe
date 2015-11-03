@@ -51,7 +51,7 @@ class SwipeElement:NSObject {
     private var layer:CALayer?
     private var elements = [SwipeElement]()
     private var btn:UIButton?
-    private let info:[NSObject:AnyObject]
+    private let info:[String:AnyObject]
     private let scale:CGSize
     private var repeatCount = CGFloat(1.0)
     private let blackColor = UIColor.blackColor().CGColor
@@ -643,7 +643,7 @@ class SwipeElement:NSObject {
         }
         layer.opacity = SwipeParser.parseFloat(info["opacity"])
         
-        if let to = info["to"] as? [NSObject:AnyObject] {
+        if let to = info["to"] as? [String:AnyObject] {
             if let transform = SwipeParser.parseTransform(to, scaleX:scale.width, scaleY:scale.height) {
                 let aniT = CABasicAnimation(keyPath: "transform")
                 aniT.fromValue = NSValue(CATransform3D : layer.transform)
