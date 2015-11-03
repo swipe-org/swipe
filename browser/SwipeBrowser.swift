@@ -122,7 +122,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
     }
     
-    private func openDocument(document:[String:AnyObject]) {
+    private func openDocumentViewer(document:[String:AnyObject]) {
         var documentType = "net.swipe.swipe" // default
         if let type = document["type"] as? String {
             documentType = type
@@ -172,7 +172,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
     }
     
-    private func openDataInternal(document:[String:AnyObject], localResource:Bool) {
+    private func openDocumentWithODR(document:[String:AnyObject], localResource:Bool) {
             if let tags = document["resources"] as? [String] where localResource {
                 //NSLog("tags = \(tags)")
                 let request = NSBundleResourceRequest(tags: Set<String>(tags))
@@ -181,7 +181,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                     MyLog("SWBrows resourceAvailable(\(tags)) = \(resourcesAvailable)", level:1)
                     dispatch_async(dispatch_get_main_queue()) {
                         if resourcesAvailable {
-                            self.openDocument(document)
+                            self.openDocumentViewer(document)
                         } else {
                             let alert = UIAlertController(title: "Swipe", message: "Loading Resources...".localized, preferredStyle: UIAlertControllerStyle.Alert)
                             self.presentViewController(alert, animated: true) { () -> Void in
@@ -192,7 +192,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                                             MyLog("SWBrows resource error=\(error)", level:0)
                                             return self.processError(e.localizedDescription)
                                         } else {
-                                            self.openDocument(document)
+                                            self.openDocumentViewer(document)
                                         }
                                     }
                                 }
@@ -201,7 +201,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                     }
                 }
             } else {
-                self.openDocument(document)
+                self.openDocumentViewer(document)
             }
     }
     
@@ -227,13 +227,13 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                     let vcDummy = UIViewController()
                     self.presentViewController(vcDummy, animated: false, completion: { () -> Void in
                         self.dismissViewControllerAnimated(false, completion: nil)
-                        self.openDataInternal(document, localResource: localResource)
+                        self.openDocumentWithODR(document, localResource: localResource)
                     })
                 }
             }
 #endif
             if !deferred {
-                self.openDataInternal(document, localResource: localResource)
+                self.openDocumentWithODR(document, localResource: localResource)
             }
         } catch let error as NSError {
             let value = error.userInfo["NSDebugDescription"]!
