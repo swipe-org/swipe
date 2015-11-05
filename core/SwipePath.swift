@@ -89,8 +89,8 @@ class SwipePath {
                         var i = 0
                         while(p.count >= i+4) {
                             CGPathAddCurveToPoint(path, nil, pt.x * 2 - cp.x, pt.y * 2 - cp.y, pt.x+p[i], pt.y+p[i+1], pt.x+p[i+2], pt.y+p[i+3])
-                            cp.x = p[i]
-                            cp.y = p[i+1]
+                            cp.x = pt.x + p[i]
+                            cp.y = pt.y + p[i+1]
                             pt.x += p[i+2]
                             pt.y += p[i+3]
                             i += 4
