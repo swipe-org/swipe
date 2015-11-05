@@ -121,6 +121,34 @@ class SwipePath {
                             pt.y = p[i+1]
                             i += 2
                         }
+                    case "v":
+                        var i = 0
+                        while(p.count >= i+1) {
+                            CGPathAddLineToPoint(path, nil, pt.x, pt.y+p[i])
+                            pt.y += p[i]
+                            i++
+                        }
+                    case "V":
+                        var i = 0
+                        while(p.count >= i+1) {
+                            CGPathAddLineToPoint(path, nil, pt.x, p[i])
+                            pt.y = p[i]
+                            i++
+                        }
+                    case "h":
+                        var i = 0
+                        while(p.count >= i+1) {
+                            CGPathAddLineToPoint(path, nil, pt.x+p[i], pt.y)
+                            pt.x += p[i]
+                            i++
+                        }
+                    case "H":
+                        var i = 0
+                        while(p.count >= i+1) {
+                            CGPathAddLineToPoint(path, nil, p[i], pt.y)
+                            pt.x = p[i]
+                            i++
+                        }
                     default:
                         NSLog("SwipeElement ### unkwnown \(cmd)")
                         break;
