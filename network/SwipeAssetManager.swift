@@ -39,6 +39,11 @@ class SwipeAssetManager {
         return urls[urls.count-1]
     }()
 
+    lazy var applicationLibraryDirectory: NSURL = {
+        let urls = NSFileManager.defaultManager().URLsForDirectory(.LibraryDirectory, inDomains: .UserDomainMask)
+        return urls[urls.count-1]
+    }()
+
     lazy var urlFolder:NSURL = {
         let urlFolder = self.applicationCachesDirectory.URLByAppendingPathComponent("cache.swipe.net")
         let fm = NSFileManager.defaultManager()
@@ -61,7 +66,7 @@ class SwipeAssetManager {
 #if os(tvOS)
         let url = self.applicationCachesDirectory.URLByAppendingPathComponent(filename)
 #else
-        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent(filename)
+        let url = self.applicationLibraryDirectory.URLByAppendingPathComponent(filename)
 #endif
         var failureReason = "There was an error creating or loading the application's saved data."
         do {
