@@ -54,6 +54,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     var jsonDocument:[String:AnyObject]?
     var controller:UIViewController?
     var documentViewer:SwipeDocumentViewer?
+    var ignoreViewState = false
 
     func browseTo(url:NSURL) {
 #if os(iOS)
@@ -142,7 +143,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             documentViewer.setDelegate(self)
             let defaults = NSUserDefaults.standardUserDefaults()
             var state:[String:AnyObject]? = nil
-            if let url = self.url {
+            if let url = self.url where ignoreViewState == false {
                 state = defaults.objectForKey(url.absoluteString) as? [String:AnyObject]
             }
             try documentViewer.loadDocument(document, size:self.view.frame.size, url: url, state:state)
