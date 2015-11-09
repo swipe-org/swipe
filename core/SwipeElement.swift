@@ -182,6 +182,7 @@ class SwipeElement:NSObject {
         var imageSrc:CGImageSourceRef?
         var maskSrc:CGImage?
         var pathSrc:CGPath?
+        var innerLayer:CALayer? // for loop shift
 
         let fScaleToFill = info["w"] as? String == "fill" || info["h"] as? String == "fill"
         if fScaleToFill {
@@ -353,13 +354,38 @@ class SwipeElement:NSObject {
         }
         
         if let image = imageRef {
+            var rc = view.bounds
             let imageLayer = CALayer()
             imageLayer.contentsScale = contentScale
-            imageLayer.frame = view.bounds
+            imageLayer.frame = rc
             imageLayer.contents = image
             imageLayer.contentsGravity = kCAGravityResizeAspectFill
             imageLayer.masksToBounds = true
             layer.addSublayer(imageLayer)
+            if let tiling = info["tiling"] as? Bool where tiling {
+                let hostLayer = CALayer()
+                innerLayer = hostLayer
+                rc.origin = CGPointZero
+                imageLayer.frame = rc
+                hostLayer.addSublayer(imageLayer)
+                layer.addSublayer(hostLayer)
+                layer.masksToBounds = true
+            
+                var rcs = [rc, rc, rc, rc]
+                rcs[0].origin.x -= rc.size.width
+                rcs[1].origin.x += rc.size.width
+                rcs[2].origin.y -= rc.size.height
+                rcs[3].origin.y += rc.size.height
+                for rc in rcs {
+                    let imageLayer = CALayer()
+                    imageLayer.contentsScale = contentScale
+                    imageLayer.frame = rc
+                    imageLayer.contents = image
+                    imageLayer.contentsGravity = kCAGravityResizeAspectFill
+                    imageLayer.masksToBounds = true
+                    innerLayer!.addSublayer(imageLayer)
+                }
+            }
             
             // Handling GIF animation
             if let isrc = imageSrc {
@@ -837,6 +863,7 @@ class SwipeElement:NSObject {
                 ani.fillMode = kCAFillModeBoth
                 layer.addAnimation(ani, forKey: "transform")
             } else if type == "shift" {
+                let shiftLayer = (innerLayer == nil) ? layer : innerLayer!
                 let ani = CAKeyframeAnimation(keyPath: "transform")
                 let shift:CGSize = {
                     if let dir = animation["direction"] as? String {
@@ -854,13 +881,13 @@ class SwipeElement:NSObject {
                         return CGSizeMake(0, h)
                     }
                 }()
-                ani.values = [NSValue(CATransform3D:layer.transform),
-                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeTranslation(shift.width, shift.height, 0.0), layer.transform))]
+                ani.values = [NSValue(CATransform3D:shiftLayer.transform),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeTranslation(shift.width, shift.height, 0.0), shiftLayer.transform))]
                 ani.repeatCount = repeatCount
                 ani.beginTime = 1e-10
                 ani.duration = CFTimeInterval(1.0 / ani.repeatCount)
                 ani.fillMode = kCAFillModeBoth
-                layer.addAnimation(ani, forKey: "transform")
+                shiftLayer.addAnimation(ani, forKey: "transform")
             } else if type == "blink" {
                 let ani = CAKeyframeAnimation(keyPath: "opacity")
                 ani.values = [1.0, 0.0, 1.0]
