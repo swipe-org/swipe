@@ -836,6 +836,31 @@ class SwipeElement:NSObject {
                 ani.duration = CFTimeInterval(1.0 / ani.repeatCount)
                 ani.fillMode = kCAFillModeBoth
                 layer.addAnimation(ani, forKey: "transform")
+            } else if type == "shift" {
+                let ani = CAKeyframeAnimation(keyPath: "transform")
+                let shift:CGSize = {
+                    if let dir = animation["direction"] as? String {
+                        switch(dir) {
+                        case "n":
+                            return CGSizeMake(0, -h)
+                        case "e":
+                            return CGSizeMake(w, 0)
+                        case "w":
+                            return CGSizeMake(-w, 0)
+                        default:
+                            return CGSizeMake(0, h)
+                        }
+                    } else {
+                        return CGSizeMake(0, h)
+                    }
+                }()
+                ani.values = [NSValue(CATransform3D:layer.transform),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeTranslation(shift.width, shift.height, 0.0), layer.transform))]
+                ani.repeatCount = repeatCount
+                ani.beginTime = 1e-10
+                ani.duration = CFTimeInterval(1.0 / ani.repeatCount)
+                ani.fillMode = kCAFillModeBoth
+                layer.addAnimation(ani, forKey: "transform")
             } else if type == "blink" {
                 let ani = CAKeyframeAnimation(keyPath: "opacity")
                 ani.values = [1.0, 0.0, 1.0]
