@@ -702,8 +702,15 @@ class SwipeElement:NSObject {
         layer.opacity = SwipeParser.parseFloat(info["opacity"])
         
         if let to = info["to"] as? [String:AnyObject] {
-            let start = 1e-10
-            let duration = 1.0
+            let start, duration:Double
+            if let timing = to["timing"] as? [Double]
+                where timing.count == 2 && timing[0] >= 0 && timing[0] <= timing[1] && timing[1] <= 1 {
+                start = timing[0] == 0 ? 1e-10 : timing[0]
+                duration = timing[1] - start
+            } else {
+                start = 1e-10
+                duration = 1.0
+            }
             if let transform = SwipeParser.parseTransform(to, scaleX:scale.width, scaleY:scale.height, base:info) {
                 let ani = CABasicAnimation(keyPath: "transform")
                 ani.fromValue = NSValue(CATransform3D : layer.transform)
