@@ -354,7 +354,7 @@ class SwipeElement:NSObject {
         }
         
         if let image = imageRef {
-            var rc = view.bounds
+            let rc = view.bounds
             let imageLayer = CALayer()
             imageLayer.contentsScale = contentScale
             imageLayer.frame = rc
@@ -365,8 +365,8 @@ class SwipeElement:NSObject {
             if let tiling = info["tiling"] as? Bool where tiling {
                 let hostLayer = CALayer()
                 innerLayer = hostLayer
-                rc.origin = CGPointZero
-                imageLayer.frame = rc
+                //rc.origin = CGPointZero
+                //imageLayer.frame = rc
                 hostLayer.addSublayer(imageLayer)
                 layer.addSublayer(hostLayer)
                 layer.masksToBounds = true
@@ -377,13 +377,13 @@ class SwipeElement:NSObject {
                 rcs[2].origin.y -= rc.size.height
                 rcs[3].origin.y += rc.size.height
                 for rc in rcs {
-                    let imageLayer = CALayer()
-                    imageLayer.contentsScale = contentScale
-                    imageLayer.frame = rc
-                    imageLayer.contents = image
-                    imageLayer.contentsGravity = kCAGravityResizeAspectFill
-                    imageLayer.masksToBounds = true
-                    innerLayer!.addSublayer(imageLayer)
+                    let subLayer = CALayer()
+                    subLayer.contentsScale = contentScale
+                    subLayer.frame = rc
+                    subLayer.contents = image
+                    subLayer.contentsGravity = kCAGravityResizeAspectFill
+                    subLayer.masksToBounds = true
+                    hostLayer.addSublayer(subLayer)
                 }
             }
             
@@ -510,6 +510,38 @@ class SwipeElement:NSObject {
             shapeLayer.strokeEnd = SwipeParser.parseCGFloat(info["strokeEnd"], defalutValue: 1.0)
             layer.addSublayer(shapeLayer)
             self.shapeLayer = shapeLayer
+            if let tiling = info["tiling"] as? Bool where tiling {
+                let hostLayer = CALayer()
+                innerLayer = hostLayer
+                let rc = view.bounds
+                hostLayer.addSublayer(shapeLayer)
+                layer.addSublayer(hostLayer)
+                layer.masksToBounds = true
+            
+                var rcs = [rc, rc, rc, rc]
+                rcs[0].origin.x -= rc.size.width
+                rcs[1].origin.x += rc.size.width
+                rcs[2].origin.y -= rc.size.height
+                rcs[3].origin.y += rc.size.height
+                for rc in rcs {
+                    let subLayer = CAShapeLayer()
+                    subLayer.frame = rc
+                    subLayer.contentsScale = shapeLayer.contentsScale
+                    subLayer.path = shapeLayer.path
+                    subLayer.fillColor = shapeLayer.fillColor
+                    subLayer.strokeColor = shapeLayer.strokeColor
+                    subLayer.lineWidth = shapeLayer.lineWidth
+                    subLayer.shadowColor = shapeLayer.shadowColor
+                    subLayer.shadowOffset = shapeLayer.shadowOffset
+                    subLayer.shadowOpacity = shapeLayer.shadowOpacity
+                    subLayer.shadowRadius = shapeLayer.shadowRadius
+                    subLayer.lineCap = shapeLayer.lineCap
+                    subLayer.strokeStart = shapeLayer.strokeStart
+                    subLayer.strokeEnd = shapeLayer.strokeEnd
+                    hostLayer.addSublayer(subLayer)
+                }
+            }
+            
         } else {
             if let shadowInfo = info["shadow"] as? [String:AnyObject] {
                 layer.shadowColor = SwipeParser.parseColor(shadowInfo["color"], defaultColor: blackColor)
