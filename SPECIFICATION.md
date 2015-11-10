@@ -261,6 +261,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **stream** (Bool): Specifies if the resource specified with the video tag is stream or not, default is false
 - **to** (Transition Animation): Specifies the Transitional Animation
 - **loop** (Loop Animation): Specifies the Loop Animation
+- **tiling** (Bool): Specifies the tiling (to be used with *shift* loop animation)
 - **action** (String): Specifies the Action
 
 ### Named Element
@@ -332,6 +333,8 @@ The **Transition Animation** specifies a set of animations to play right after o
 
 The "to" property of each element specifies the animation to be performed on the element, by specifying a new value for animatable properties (such as "opacity", "rotate", "translate", "bc", "path"). 
 
+The "timing" property specifies the timing of animation with two floating values, start and end (must be between 0.0 and 1.0). The default is [0.0, 1.0].
+
 Following example animates the text "I'm animatable!" down when the second page appears on the screen. 
 
 ```
@@ -381,6 +384,7 @@ The **Loop Animation** must have a "style" property, and the value of this prope
 - *vibrate*: The **Element** vibrates left to right, where the "delta" property specifies the distance (the default is 10)
 - *blink*: The **Element** blinks changing its opacity from 1 to 0. 
 - *wiggle*: The **Element** rotates left and right, where the "delta" property specifies the angree in degree (the default is 15)
+- *shift*: The **Element** shift to the specified direction where the "direction" property specifies the direction ("n", "s", "e" or "w", the default is "n"). Use it with the "tiling" property.
 - *path*: The **Element** performs path animation, where the "path" property specifies a collection of **Paths**. 
 - *sprite*: The **Element** performs a sprite animation. 
  
