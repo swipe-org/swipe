@@ -702,14 +702,16 @@ class SwipeElement:NSObject {
         layer.opacity = SwipeParser.parseFloat(info["opacity"])
         
         if let to = info["to"] as? [String:AnyObject] {
+            let start = 1e-10
+            let duration = 1.0
             if let transform = SwipeParser.parseTransform(to, scaleX:scale.width, scaleY:scale.height, base:info) {
-                let aniT = CABasicAnimation(keyPath: "transform")
-                aniT.fromValue = NSValue(CATransform3D : layer.transform)
-                aniT.toValue = NSValue(CATransform3D : transform)
-                aniT.beginTime = 1e-10
-                aniT.duration = 1.0
-                aniT.fillMode = kCAFillModeBoth
-                layer.addAnimation(aniT, forKey: "transform")
+                let ani = CABasicAnimation(keyPath: "transform")
+                ani.fromValue = NSValue(CATransform3D : layer.transform)
+                ani.toValue = NSValue(CATransform3D : transform)
+                ani.fillMode = kCAFillModeBoth
+                ani.beginTime = start
+                ani.duration = duration
+                layer.addAnimation(ani, forKey: "transform")
             }
 
             if let opacity = to["opacity"] as? Float {
@@ -717,8 +719,8 @@ class SwipeElement:NSObject {
                 ani.fromValue = layer.opacity
                 ani.toValue = opacity
                 ani.fillMode = kCAFillModeBoth
-                ani.beginTime = 1e-10
-                ani.duration = 1.0
+                ani.beginTime = start
+                ani.duration = duration
                 layer.addAnimation(ani, forKey: "opacity")
             }
             
@@ -727,8 +729,8 @@ class SwipeElement:NSObject {
                 ani.fromValue = layer.backgroundColor
                 ani.toValue = SwipeParser.parseColor(backgroundColor)
                 ani.fillMode = kCAFillModeBoth
-                ani.beginTime = 1e-10
-                ani.duration = 1.0
+                ani.beginTime = start
+                ani.duration = duration
                 layer.addAnimation(ani, forKey: "backgroundColor")
             }
             if let borderColor:AnyObject = to["borderColor"] {
@@ -736,8 +738,8 @@ class SwipeElement:NSObject {
                 ani.fromValue = layer.borderColor
                 ani.toValue = SwipeParser.parseColor(borderColor)
                 ani.fillMode = kCAFillModeBoth
-                ani.beginTime = 1e-10
-                ani.duration = 1.0
+                ani.beginTime = start
+                ani.duration = duration
                 layer.addAnimation(ani, forKey: "borderColor")
             }
             if let borderWidth = to["borderWidth"] as? CGFloat {
@@ -745,8 +747,8 @@ class SwipeElement:NSObject {
                 ani.fromValue = layer.borderWidth
                 ani.toValue = borderWidth * scale.width
                 ani.fillMode = kCAFillModeBoth
-                ani.beginTime = 1e-10
-                ani.duration = 1.0
+                ani.beginTime = start
+                ani.duration = duration
                 layer.addAnimation(ani, forKey: "borderWidth")
             }
             if let borderWidth = to["cornerRadius"] as? CGFloat {
@@ -754,8 +756,8 @@ class SwipeElement:NSObject {
                 ani.fromValue = layer.cornerRadius
                 ani.toValue = borderWidth * scale.width
                 ani.fillMode = kCAFillModeBoth
-                ani.beginTime = 1e-10
-                ani.duration = 1.0
+                ani.beginTime = start
+                ani.duration = duration
                 layer.addAnimation(ani, forKey: "cornerRadius")
             }
             
@@ -764,8 +766,8 @@ class SwipeElement:NSObject {
                     let ani = CABasicAnimation(keyPath: "foregroundColor")
                     ani.fromValue = textLayer.foregroundColor
                     ani.toValue = SwipeParser.parseColor(textColor)
-                    ani.beginTime = 1e-10
-                    ani.duration = 1.0
+                    ani.beginTime = start
+                    ani.duration = duration
                     ani.fillMode = kCAFillModeBoth
                     textLayer.addAnimation(ani, forKey: "foregroundColor")
                 }
@@ -787,8 +789,8 @@ class SwipeElement:NSObject {
                 if let imageLayer = self.imageLayer {
                     let ani = CAKeyframeAnimation(keyPath: "contents")
                     ani.values = images
-                    ani.beginTime = 1e-10
-                    ani.duration = 1.0
+                    ani.beginTime = start
+                    ani.duration = duration
                     ani.fillMode = kCAFillModeBoth
                     imageLayer.addAnimation(ani, forKey: "contents")
                 }
@@ -799,8 +801,8 @@ class SwipeElement:NSObject {
                 var xform = CGAffineTransformMakeTranslation(pos.x, pos.y)
                 let ani = CAKeyframeAnimation(keyPath: "position")
                 ani.path = CGPathCreateCopyByTransformingPath(path, &xform)
-                ani.beginTime = 1e-10
-                ani.duration = 1.0
+                ani.beginTime = start
+                ani.duration = duration
                 ani.fillMode = kCAFillModeBoth
                 ani.calculationMode = kCAAnimationPaced
                 ani.rotationMode = kCAAnimationRotateAuto
@@ -817,16 +819,16 @@ class SwipeElement:NSObject {
                     }
                     let ani = CAKeyframeAnimation(keyPath: "path")
                     ani.values = values
-                    ani.beginTime = 1e-10
-                    ani.duration = 1.0
+                    ani.beginTime = start
+                    ani.duration = duration
                     ani.fillMode = kCAFillModeBoth
                     shapeLayer.addAnimation(ani, forKey: "path")
                 } else if let path = parsePath(to["path"], w: w0, h: h0, scale:scale) {
                     let ani = CABasicAnimation(keyPath: "path")
                     ani.fromValue = shapeLayer.path
                     ani.toValue = path
-                    ani.beginTime = 1e-10
-                    ani.duration = 1.0
+                    ani.beginTime = start
+                    ani.duration = duration
                     ani.fillMode = kCAFillModeBoth
                     shapeLayer.addAnimation(ani, forKey: "path")
                 }
@@ -834,8 +836,8 @@ class SwipeElement:NSObject {
                     let ani = CABasicAnimation(keyPath: "fillColor")
                     ani.fromValue = shapeLayer.fillColor
                     ani.toValue = SwipeParser.parseColor(fillColor)
-                    ani.beginTime = 1e-10
-                    ani.duration = 1.0
+                    ani.beginTime = start
+                    ani.duration = duration
                     ani.fillMode = kCAFillModeBoth
                     shapeLayer.addAnimation(ani, forKey: "fillColor")
                 }
@@ -843,8 +845,8 @@ class SwipeElement:NSObject {
                     let ani = CABasicAnimation(keyPath: "strokeColor")
                     ani.fromValue = shapeLayer.strokeColor
                     ani.toValue = SwipeParser.parseColor(strokeColor)
-                    ani.beginTime = 1e-10
-                    ani.duration = 1.0
+                    ani.beginTime = start
+                    ani.duration = duration
                     ani.fillMode = kCAFillModeBoth
                     shapeLayer.addAnimation(ani, forKey: "strokeColor")
                 }
@@ -852,8 +854,8 @@ class SwipeElement:NSObject {
                     let ani = CABasicAnimation(keyPath: "lineWidth")
                     ani.fromValue = shapeLayer.lineWidth
                     ani.toValue = lineWidth * scale.width
-                    ani.beginTime = 1e-10
-                    ani.duration = 1.0
+                    ani.beginTime = start
+                    ani.duration = duration
                     ani.fillMode = kCAFillModeBoth
                     shapeLayer.addAnimation(ani, forKey: "lineWidth")
                 }
@@ -861,8 +863,8 @@ class SwipeElement:NSObject {
                     let ani = CABasicAnimation(keyPath: "strokeStart")
                     ani.fromValue = shapeLayer.strokeStart
                     ani.toValue = strokeStart
-                    ani.beginTime = 1e-10
-                    ani.duration = 1.0
+                    ani.beginTime = start
+                    ani.duration = duration
                     ani.fillMode = kCAFillModeBoth
                     shapeLayer.addAnimation(ani, forKey: "strokeStart")
                 }
@@ -870,8 +872,8 @@ class SwipeElement:NSObject {
                     let ani = CABasicAnimation(keyPath: "strokeEnd")
                     ani.fromValue = shapeLayer.strokeEnd
                     ani.toValue = strokeEnd
-                    ani.beginTime = 1e-10
-                    ani.duration = 1.0
+                    ani.beginTime = start
+                    ani.duration = duration
                     ani.fillMode = kCAFillModeBoth
                     shapeLayer.addAnimation(ani, forKey: "strokeEnd")
                 }
