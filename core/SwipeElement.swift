@@ -890,6 +890,8 @@ class SwipeElement:NSObject {
         if let animation = info["loop"] as? [NSObject:AnyObject],
            let style = animation["style"] as? String {
             let repeatCount = Float(valueFrom(animation, key: "count", defaultValue: 1))
+            layer.speed = 0 // Independently animate it
+        
             switch(style) {
             case "vibrate":
                 let delta = valueFrom(animation, key: "delta", defaultValue: 10.0)
@@ -1032,6 +1034,11 @@ class SwipeElement:NSObject {
     func setTimeOffsetTo(offset:CGFloat, fAutoPlay:Bool = false) {
         if offset < 0.0 || offset > 1.0 {
             return
+        }
+        
+        if let layer = self.layer where layer.speed == 0 {
+            // independently animated
+            layer.timeOffset = CFTimeInterval(offset)
         }
         
         for element in elements {
