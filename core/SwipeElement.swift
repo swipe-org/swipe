@@ -889,7 +889,7 @@ class SwipeElement:NSObject {
         
         if let animation = info["loop"] as? [NSObject:AnyObject],
            let type = animation["style"] as? String {
-            let repeatCount = Float(valueFrom(animation, key: "repeat", defaultValue: 1))
+            let repeatCount = Float(valueFrom(animation, key: "count", defaultValue: 1))
             if type == "vibrate" {
                 let delta = valueFrom(animation, key: "delta", defaultValue: 10.0)
                 let ani = CAKeyframeAnimation(keyPath: "transform")

@@ -377,7 +377,7 @@ If the "animation" property of the page is "scroll" like the example below, the 
 
 ##8. Loop Animation
 
-The "loop" property of the element specifies the **Loop Animation** associated with the element. Unlike **Transition Animation**, it repeats the same animation multiple times specified by the *repeat* property (the default is 1). 
+The "loop" property of the element specifies the **Loop Animation** associated with the element. Unlike **Transition Animation**, it repeats the same animation multiple times specified by the *count* property (the default is 1). 
 
 The **Loop Animation** must have a "style" property, and the value of this property must be one of following.
 
@@ -400,7 +400,7 @@ Following example wiggles the text "I'm wiggling!" three times when the second p
         },
         {
             "elements": [
-                { "text":"I'm wiggling!", "loop":{ "style":"wiggle", "repeat":3 } }
+                { "text":"I'm wiggling!", "loop":{ "style":"wiggle", "count":3 } }
             ]
         }
     ]
