@@ -888,9 +888,10 @@ class SwipeElement:NSObject {
         }
         
         if let animation = info["loop"] as? [NSObject:AnyObject],
-           let type = animation["style"] as? String {
+           let style = animation["style"] as? String {
             let repeatCount = Float(valueFrom(animation, key: "count", defaultValue: 1))
-            if type == "vibrate" {
+            switch(style) {
+            case "vibrate":
                 let delta = valueFrom(animation, key: "delta", defaultValue: 10.0)
                 let ani = CAKeyframeAnimation(keyPath: "transform")
                 ani.values = [NSValue(CATransform3D:layer.transform),
@@ -903,7 +904,7 @@ class SwipeElement:NSObject {
                 ani.duration = CFTimeInterval(1.0 / ani.repeatCount)
                 ani.fillMode = kCAFillModeBoth
                 layer.addAnimation(ani, forKey: "transform")
-            } else if type == "shift" {
+            case "shift":
                 let shiftLayer = (innerLayer == nil) ? layer : innerLayer!
                 let ani = CAKeyframeAnimation(keyPath: "transform")
                 let shift:CGSize = {
@@ -929,7 +930,7 @@ class SwipeElement:NSObject {
                 ani.duration = CFTimeInterval(1.0 / ani.repeatCount)
                 ani.fillMode = kCAFillModeBoth
                 shiftLayer.addAnimation(ani, forKey: "transform")
-            } else if type == "blink" {
+            case "blink":
                 let ani = CAKeyframeAnimation(keyPath: "opacity")
                 ani.values = [1.0, 0.0, 1.0]
                 ani.repeatCount = repeatCount
@@ -937,7 +938,7 @@ class SwipeElement:NSObject {
                 ani.duration = CFTimeInterval(1.0 / ani.repeatCount)
                 ani.fillMode = kCAFillModeBoth
                 layer.addAnimation(ani, forKey: "opacity")
-            } else if type == "wiggle" {
+            case "wiggle":
                 let delta = valueFrom(animation, key: "delta", defaultValue: 15) * CGFloat(M_PI / 180.0)
                 let ani = CAKeyframeAnimation(keyPath: "transform")
                 ani.values = [NSValue(CATransform3D:layer.transform),
@@ -950,7 +951,7 @@ class SwipeElement:NSObject {
                 ani.duration = CFTimeInterval(1.0 / ani.repeatCount)
                 ani.fillMode = kCAFillModeBoth
                 layer.addAnimation(ani, forKey: "transform")
-            } else if type == "path" {
+            case "path":
                 if let shapeLayer = self.shapeLayer {
                     var values = [shapeLayer.path!]
                     if let params = animation["path"] as? [AnyObject] {
@@ -973,9 +974,11 @@ class SwipeElement:NSObject {
                         shapeLayer.addAnimation(ani, forKey: "path")
                     }
                 }
-            } else if type == "sprite" {
+            case "sprite":
                 self.dir = (1,0)
                 self.repeatCount = CGFloat(repeatCount)
+            default:
+                break
             }
         }
         
