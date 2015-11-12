@@ -184,7 +184,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         return 0.2
     }()
 
-    private lazy var repeatCount:Bool = {
+    private lazy var fRepeat:Bool = {
         if let value = self.pageInfo["repeat"] as? Bool {
             return value
         }
@@ -337,7 +337,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
                     offsetForNextTick = nextOffset
                 } else {
                     nextOffset = 1.0
-                    if self.repeatCount {
+                    if self.fRepeat {
                         self.playAudio()
                         offsetForNextTick = 0.0
                     }
@@ -527,7 +527,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
 
     // <SwipeElementDelegate> method
     func shouldRepeat(element:SwipeElement) -> Bool {
-        return fEntered && self.repeatCount
+        return fEntered && self.fRepeat
     }
     
     // <SwipeElementDelegate> method
