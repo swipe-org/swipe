@@ -263,6 +263,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **loop** (Loop Animation): Specifies the Loop Animation
 - **tiling** (Bool): Specifies the tiling (to be used with *shift* loop animation)
 - **action** (String): Specifies the Action
+- **repeat** (Bool): Repeat rule for the element. The default is false.
 
 ### Named Element
 
