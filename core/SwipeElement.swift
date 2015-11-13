@@ -60,6 +60,7 @@ class SwipeElement:NSObject {
 #else
     private let contentScale = UIScreen.mainScreen().scale
 #endif
+    private var fRepeat = false
     
     // Image Element Specific
     private var imageLayer:CALayer?
@@ -887,10 +888,15 @@ class SwipeElement:NSObject {
             }
         }
         
+        if let fRepeat = info["repeat"] as? Bool where fRepeat {
+            NSLog("SE detected an element with repeat")
+            self.fRepeat = fRepeat
+            layer.speed = 0 // Independently animate it
+        }
+        
         if let animation = info["loop"] as? [NSObject:AnyObject],
            let style = animation["style"] as? String {
             let repeatCount = Float(valueFrom(animation, key: "count", defaultValue: 1))
-            layer.speed = 0 // Independently animate it
         
             switch(style) {
             case "vibrate":
@@ -1031,7 +1037,7 @@ class SwipeElement:NSObject {
         layer?.opacity = 1.0
     }
     
-    func setTimeOffsetTo(offset:CGFloat, fAutoPlay:Bool = false) {
+    func setTimeOffsetTo(offset:CGFloat, fAutoPlay:Bool = false, fElementRepeat:Bool = false) {
         if offset < 0.0 || offset > 1.0 {
             return
         }
@@ -1042,7 +1048,11 @@ class SwipeElement:NSObject {
         }
         
         for element in elements {
-            element.setTimeOffsetTo(offset, fAutoPlay: fAutoPlay)
+            element.setTimeOffsetTo(offset, fAutoPlay: fAutoPlay, fElementRepeat: fElementRepeat)
+        }
+        
+        if fElementRepeat && !self.fRepeat {
+            return
         }
         
         if let layer = spriteLayer, let _ = self.dir {
@@ -1075,7 +1085,7 @@ class SwipeElement:NSObject {
                     self.fSeeking = false
                     if let pendingOffset = self.pendingOffset {
                         self.pendingOffset = nil
-                        self.setTimeOffsetTo(pendingOffset) 
+                        self.setTimeOffsetTo(pendingOffset, fAutoPlay: false, fElementRepeat: fElementRepeat)
                     }
                 }
             }
@@ -1109,6 +1119,18 @@ class SwipeElement:NSObject {
         }
         for element in elements {
             if element.isVideoElement() {
+                return true
+            }
+        }
+        return false
+    }
+    
+    func isRepeatElement() -> Bool {
+        if fRepeat {
+            return true
+        }
+        for element in elements {
+            if element.isRepeatElement() {
                 return true
             }
         }

@@ -316,16 +316,17 @@ class SwipePage: NSObject, SwipeElementDelegate {
         //NSLog("SWPage  autoPlay @\(index) with \(cPlaying)")
         assert(self.viewAnimation != nil, "must have self.viewAnimation")
         if let offset = self.offsetPaused {
-            timerTick(offset)
+            timerTick(offset, fElementRepeat: false)
         } else {
-            timerTick(0.0)
+            timerTick(0.0, fElementRepeat: false)
         }
         self.cDebug++
         self.cPlaying++
         self.didStartPlayingInternal()
     }
     
-    private func timerTick(offset:CGFloat) {
+    private func timerTick(offset:CGFloat, fElementRepeat:Bool) {
+        var fElementRepeatNext = fElementRepeat
         // NOTE: We don't want to add [unowned self] because the timer will fire anyway. 
         // During the shutdown sequence, the loop will stop when didLeave was called. 
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(1000 * NSEC_PER_MSEC / UInt64(self.fps))), dispatch_get_main_queue(), {
@@ -340,18 +341,23 @@ class SwipePage: NSObject, SwipeElementDelegate {
                     if self.fRepeat {
                         self.playAudio()
                         offsetForNextTick = 0.0
+                    } else if self.hasRepeatElement() {
+                        offsetForNextTick = 0.0
+                        fElementRepeatNext = true
                     }
                 }
                 CATransaction.begin()
                 CATransaction.setDisableActions(true)
-                self.aniLayer?.timeOffset = CFTimeInterval(nextOffset)
+                if !fElementRepeatNext {
+                    self.aniLayer?.timeOffset = CFTimeInterval(nextOffset)
+                }
                 for element in self.elements {
                     element.setTimeOffsetTo(nextOffset, fAutoPlay: true)
                 }
                 CATransaction.commit()
             }
             if let value = offsetForNextTick {
-                self.timerTick(value)
+                self.timerTick(value, fElementRepeat: fElementRepeatNext)
             } else {
                 self.offsetPaused = self.fPausing ? offset : nil
                 self.cPlaying--
@@ -611,4 +617,12 @@ class SwipePage: NSObject, SwipeElementDelegate {
         return false
     }
     */
+    func hasRepeatElement() -> Bool {
+        for element in elements {
+            if element.isRepeatElement() {
+                return true
+            }
+        }
+        return false
+    }
 }
