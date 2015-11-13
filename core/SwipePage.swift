@@ -200,6 +200,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     
     func setTimeOffsetWhileDragging(offset:CGFloat) {
         if self.scroll {
+            fEntered = false // stops the element animation
             CATransaction.begin()
             CATransaction.setDisableActions(true)
             assert(self.viewAnimation != nil, "must have self.viewAnimation")
@@ -268,7 +269,9 @@ class SwipePage: NSObject, SwipeElementDelegate {
         fEntered = true
         accessCount++
         if fForward && self.autoplay || self.always {
-            autoPlay()
+            autoPlay(false)
+        } else if self.hasRepeatElement() {
+            autoPlay(true)
         }
         MyLog("SWPage  didEnter @\(index) \(fForward)", level: 2)
     }
@@ -301,24 +304,20 @@ class SwipePage: NSObject, SwipeElementDelegate {
             prepareUtterance() // recreate a new utterance to avoid reusing it
         }
         
-        self.autoPlay()
+        self.autoPlay(false)
     }
     
-    private func autoPlay() {
+    private func autoPlay(fElementRepeat:Bool) {
         fPausing = false
-        playAudio()
-        NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.shouldStartAutoPlay, object: self)
-        /*
-        for element in elements {
-            element.autoplay()
+        if !fElementRepeat {
+            playAudio()
+            NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.shouldStartAutoPlay, object: self)
         }
-        */
-        //NSLog("SWPage  autoPlay @\(index) with \(cPlaying)")
         assert(self.viewAnimation != nil, "must have self.viewAnimation")
         if let offset = self.offsetPaused {
-            timerTick(offset, fElementRepeat: false)
+            timerTick(offset, fElementRepeat: fElementRepeat)
         } else {
-            timerTick(0.0, fElementRepeat: false)
+            timerTick(0.0, fElementRepeat: fElementRepeat)
         }
         self.cDebug++
         self.cPlaying++
