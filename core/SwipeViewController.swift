@@ -266,11 +266,11 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             fAdvancing = target > self.book.pageIndex
             page.willEnter(fAdvancing)
         } else {
+            let page = self.book.currenPage
             let size = self.scrollView.frame.size
-            if self.book.horizontal && scrollView.contentOffset.x < -size.width/8.0
-              || !self.book.horizontal && scrollView.contentOffset.y < -size.height/8.0 {
+            if !page.isPlaying() && (self.book.horizontal && scrollView.contentOffset.x < -size.width/8.0
+              || !self.book.horizontal && scrollView.contentOffset.y < -size.height/8.0) {
                 MyLog("SWView  EndDragging underscrolling detected \(scrollView.contentOffset)", level:1)
-                let page = self.book.currenPage
                 page.willLeave(false)
                 page.willEnter(true)
                 page.didEnter(true)

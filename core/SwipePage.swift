@@ -268,7 +268,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     func didEnter(fForward:Bool) {
         fEntered = true
         accessCount++
-        if fForward && self.autoplay || self.always {
+        if fForward && self.autoplay || self.always || self.fRepeat {
             autoPlay(false)
         } else if self.hasRepeatElement() {
             autoPlay(true)
