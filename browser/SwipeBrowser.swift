@@ -196,7 +196,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             
         } catch let error as NSError {
             self.viewLoading?.alpha = 0.0
-            return processError("load Document Error:".localized + "\(error.localizedDescription).")
+            return processError("Load Document Error:".localized + "\(error.localizedDescription).")
         }
     }
     
@@ -260,7 +260,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     
     private func openData(dataRetrieved:NSData?, localResource:Bool) {
         guard let data = dataRetrieved else {
-            return processError("failed to open: no data".localized)
+            return processError("Failed to open: No data".localized)
         }
         do {
             guard let document = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? [String:AnyObject] else {
