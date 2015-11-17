@@ -66,9 +66,9 @@ class SwipeParser {
                 if results.count > 0 {
                     let hex = String(key.characters.dropFirst())
                     let cstr = hex.cStringUsingEncoding(NSASCIIStringEncoding)
-                    let v = strtol(cstr!, nil, 16)
+                    let v = strtoll(cstr!, nil, 16)
                     //NSLog("SwipeParser hex=\(hex), \(value)")
-                    var r = 0, g = 0, b = 0, a = 255
+                    var r = Int64(0), g = Int64(0), b = Int64(0), a = Int64(255)
                     switch(hex.characters.count) {
                     case 3:
                         r = v / 0x100 * 0x11
