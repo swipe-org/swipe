@@ -43,6 +43,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     private var fVisibleUI = true
     @IBOutlet var viewLoading:UIView?
     @IBOutlet var progress:UIProgressView?
+    @IBOutlet var labelLoading:UILabel?
     @IBOutlet var toolbar:UIView?
     @IBOutlet var bottombar:UIView?
     @IBOutlet var slider:UISlider!
@@ -180,11 +181,10 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             if let url = self.url where ignoreViewState == false {
                 state = defaults.objectForKey(url.absoluteString) as? [String:AnyObject]
             }
+            self.viewLoading?.alpha = 1.0
+            self.labelLoading?.text = "Loading Network Resources...".localized
             try documentViewer.loadDocument(document, size:self.view.frame.size, url: url, state:state) { (progress:Float, error:NSError?) -> (Void) in
                 self.progress?.progress = progress
-                if progress == 0 {
-                    self.viewLoading?.alpha = 1.0
-                }
                 if progress >= 1 {
                     UIView.animateWithDuration(0.2, animations: { () -> Void in
                         self.viewLoading?.alpha = 0.0
@@ -195,6 +195,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             }
             
         } catch let error as NSError {
+            self.viewLoading?.alpha = 0.0
             return processError("load Document Error:".localized + "\(error.localizedDescription).")
         }
     }

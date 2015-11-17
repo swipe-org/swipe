@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SwipeBrowser" customModule="swipe" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SwipeBrowser" customModule="canvas" customModuleProvider="target">
             <connections>
                 <outlet property="bottombar" destination="5Z7-9V-xkH" id="cUw-tH-7uu"/>
+                <outlet property="labelLoading" destination="mOv-2o-bgd" id="vFB-Dg-BFd"/>
                 <outlet property="labelTitle" destination="d7L-T1-VHa" id="zNW-97-kS2"/>
                 <outlet property="progress" destination="kad-kO-4T7" id="M2L-jF-GdO"/>
                 <outlet property="slider" destination="JvK-et-XQT" id="uEm-44-MYF"/>
