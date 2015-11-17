@@ -126,21 +126,8 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
     }
     
-    private func openDocumentViewer(document:[String:AnyObject]) {
-        var documentType = "net.swipe.swipe" // default
-        if let type = document["type"] as? String {
-            documentType = type
-        }
-        guard let type = g_typeMapping[documentType] else {
-            return processError("Unknown type:".localized + "\(g_typeMapping[documentType]).")
-        }
-        let vc = type()
-        guard let documentViewer = vc as? SwipeDocumentViewer else {
-            return processError("Programming Error: Not SwipeDocumentViewer.".localized)
-        }
-        self.documentViewer = documentViewer
+    private func loadDocument(documentViewer:SwipeDocumentViewer, vc:UIViewController, document:[String:AnyObject]) {
         do {
-            documentViewer.setDelegate(self)
             let defaults = NSUserDefaults.standardUserDefaults()
             var state:[String:AnyObject]? = nil
             if let url = self.url where ignoreViewState == false {
@@ -177,6 +164,23 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         } catch let error as NSError {
             return processError("load Document Error:".localized + "\(error.localizedDescription).")
         }
+    }
+    
+    private func openDocumentViewer(document:[String:AnyObject]) {
+        var documentType = "net.swipe.swipe" // default
+        if let type = document["type"] as? String {
+            documentType = type
+        }
+        guard let type = g_typeMapping[documentType] else {
+            return processError("Unknown type:".localized + "\(g_typeMapping[documentType]).")
+        }
+        let vc = type()
+        guard let documentViewer = vc as? SwipeDocumentViewer else {
+            return processError("Programming Error: Not SwipeDocumentViewer.".localized)
+        }
+        self.documentViewer = documentViewer
+        documentViewer.setDelegate(self)
+        loadDocument(documentViewer, vc:vc, document: document)
     }
     
     private func openDocumentWithODR(document:[String:AnyObject], localResource:Bool) {
