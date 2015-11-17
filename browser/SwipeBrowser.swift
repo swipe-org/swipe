@@ -41,8 +41,8 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 
 #if os(iOS)
     private var fVisibleUI = true
-    @IBOutlet var viewLoading:UIView!
-    @IBOutlet var progress:UIProgressView!
+    @IBOutlet var viewLoading:UIView?
+    @IBOutlet var progress:UIProgressView?
     @IBOutlet var toolbar:UIView?
     @IBOutlet var bottombar:UIView?
     @IBOutlet var slider:UISlider!
@@ -87,7 +87,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewLoading.alpha = 0
+        viewLoading?.alpha = 0
 
         if SwipeBrowser.stack.count == 0 {
             SwipeBrowser.stack.append(self) // special case for the first one
@@ -181,13 +181,13 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 state = defaults.objectForKey(url.absoluteString) as? [String:AnyObject]
             }
             try documentViewer.loadDocument(document, size:self.view.frame.size, url: url, state:state) { (progress:Float, error:NSError?) -> (Void) in
-                self.progress.progress = progress
+                self.progress?.progress = progress
                 if progress == 0 {
-                    self.viewLoading.alpha = 1.0
+                    self.viewLoading?.alpha = 1.0
                 }
                 if progress >= 1 {
                     UIView.animateWithDuration(0.2, animations: { () -> Void in
-                        self.viewLoading.alpha = 0.0
+                        self.viewLoading?.alpha = 0.0
                     }, completion: { (_:Bool) -> Void in
                         self.loadDocumentView(documentViewer, vc:vc, document: document)
                     })
