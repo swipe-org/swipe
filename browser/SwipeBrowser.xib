@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SwipeBrowser" customModule="sample" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SwipeBrowser" customModule="canvas" customModuleProvider="target">
             <connections>
                 <outlet property="bottombar" destination="5Z7-9V-xkH" id="cUw-tH-7uu"/>
                 <outlet property="labelTitle" destination="d7L-T1-VHa" id="zNW-97-kS2"/>
                 <outlet property="slider" destination="JvK-et-XQT" id="uEm-44-MYF"/>
                 <outlet property="toolbar" destination="eW2-r2-Dr0" id="Nyo-yZ-dtS"/>
                 <outlet property="view" destination="iN0-l3-epB" id="hXK-g6-GPb"/>
+                <outlet property="viewLoading" destination="tWL-fk-uyv" id="SIT-pE-MgQ"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -73,14 +75,40 @@
                         <constraint firstAttribute="height" constant="44" id="KYM-fJ-1De"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tWL-fk-uyv">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading Resources..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOv-2o-bgd">
+                            <rect key="frame" x="8" y="229" width="304" height="21"/>
+                            <animations/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="Vkz-kb-tHg"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <animations/>
+                    <color key="backgroundColor" white="0.0" alpha="0.79878048780487809" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="mOv-2o-bgd" firstAttribute="leading" secondItem="tWL-fk-uyv" secondAttribute="leading" constant="8" id="1Jq-LQ-JSo"/>
+                        <constraint firstItem="mOv-2o-bgd" firstAttribute="centerY" secondItem="tWL-fk-uyv" secondAttribute="centerY" id="4kh-cu-iIk"/>
+                        <constraint firstAttribute="trailing" secondItem="mOv-2o-bgd" secondAttribute="trailing" constant="8" id="RYU-AE-ar9"/>
+                    </constraints>
+                </view>
             </subviews>
             <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <color key="tintColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
             <gestureRecognizers/>
             <constraints>
+                <constraint firstItem="tWL-fk-uyv" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="4P1-vD-UBw"/>
                 <constraint firstAttribute="bottom" secondItem="5Z7-9V-xkH" secondAttribute="bottom" id="I7K-bO-bSo"/>
+                <constraint firstAttribute="bottom" secondItem="tWL-fk-uyv" secondAttribute="bottom" id="T63-8x-WZ2"/>
+                <constraint firstAttribute="trailing" secondItem="tWL-fk-uyv" secondAttribute="trailing" id="WuS-3i-jJP"/>
                 <constraint firstAttribute="trailing" secondItem="5Z7-9V-xkH" secondAttribute="trailing" id="ejx-Om-NgS"/>
+                <constraint firstItem="tWL-fk-uyv" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="hC8-jl-OPS"/>
                 <constraint firstAttribute="trailing" secondItem="eW2-r2-Dr0" secondAttribute="trailing" id="nh2-7R-9cy"/>
                 <constraint firstItem="5Z7-9V-xkH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="pLN-VK-hkT"/>
                 <constraint firstItem="eW2-r2-Dr0" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="pSZ-HT-LaL"/>

@@ -367,7 +367,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }
     
     // Returns the list of URLs of required resouces for this element (including children)
-    private lazy var resourceURLs:[NSURL:String] = {
+    lazy var resourceURLs:[NSURL:String] = {
         var urls = [NSURL:String]()
         let baseURL = self.delegate.baseURL()
         for key in ["audio"] {

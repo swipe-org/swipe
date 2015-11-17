@@ -45,6 +45,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     @IBOutlet var bottombar:UIView?
     @IBOutlet var slider:UISlider!
     @IBOutlet var labelTitle:UILabel?
+    @IBOutlet var viewLoading:UIView!
     private var landscapeMode = false
 #elseif os(tvOS)
     override weak var preferredFocusedView: UIView? { return controller?.view }
@@ -84,6 +85,8 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        viewLoading.alpha = 0
 
         if SwipeBrowser.stack.count == 0 {
             SwipeBrowser.stack.append(self) // special case for the first one
@@ -177,7 +180,11 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 state = defaults.objectForKey(url.absoluteString) as? [String:AnyObject]
             }
             try documentViewer.loadDocument(document, size:self.view.frame.size, url: url, state:state) { (progress:Double, error:NSError?) -> (Void) in
+                if progress == 0 {
+                    self.viewLoading.alpha = 1.0
+                }
                 if progress >= 1 {
+                    self.viewLoading.alpha = 0.0
                     self.loadDocumentView(documentViewer, vc:vc, document: document)
                 }
             }

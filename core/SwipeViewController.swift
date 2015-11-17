@@ -87,7 +87,20 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         if let pageIndex = state?["page"] as? Int where pageIndex < self.book.pages.count && book.viewstate {
             self.book.pageIndex = pageIndex
         }
-        callback(1.0, nil)
+        
+        var urlsAll = [NSURL:String]()
+        for page in self.book.pages {
+            let urls = page.resourceURLs
+            for (url, prefix) in urls {
+                urlsAll[url] = prefix
+            }
+        }
+        NSLog("SVC urlsAll = \(urlsAll)")
+        let prefetcher = SwipePrefetcher(urls: urlsAll)
+        callback(0, nil) // trigger the UI
+        prefetcher.start { (_:[NSURL], _:[NSError]) -> Void in
+            callback(1, nil)
+        }
     }
 
     // <SwipeDocumentViewer> method
