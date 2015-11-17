@@ -126,44 +126,34 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
     }
     
-    private func loadDocument(documentViewer:SwipeDocumentViewer, vc:UIViewController, document:[String:AnyObject]) {
-        do {
-            let defaults = NSUserDefaults.standardUserDefaults()
-            var state:[String:AnyObject]? = nil
-            if let url = self.url where ignoreViewState == false {
-                state = defaults.objectForKey(url.absoluteString) as? [String:AnyObject]
-            }
-            try documentViewer.loadDocument(document, size:self.view.frame.size, url: url, state:state)
+    private func loadDocumentView(documentViewer:SwipeDocumentViewer, vc:UIViewController, document:[String:AnyObject]) {
 #if os(iOS)
-            if let title = documentViewer.documentTitle() {
-                labelTitle?.text = title
-            } else {
-                labelTitle?.text = url?.lastPathComponent
-            }
-#endif
-            controller = vc
-            self.addChildViewController(vc)
-            vc.view.autoresizingMask = UIViewAutoresizing([.FlexibleWidth, .FlexibleHeight])
-#if os(OSX)
-            self.view.addSubview(vc.view, positioned: .Below, relativeTo: nil)
-#else
-            self.view.insertSubview(vc.view, atIndex: 0)
-#endif
-            var rcFrame = self.view.bounds
-#if os(iOS)
-            if documentViewer.hideUI() {
-                let tap = UITapGestureRecognizer(target: self, action: "tapped")
-                self.view.addGestureRecognizer(tap)
-                hideUI()
-            } else if let toolbar = self.toolbar, let bottombar = self.bottombar {
-                rcFrame.origin.y = toolbar.bounds.size.height
-                rcFrame.size.height -= rcFrame.origin.y + bottombar.bounds.size.height
-            }
-#endif
-            vc.view.frame = rcFrame
-        } catch let error as NSError {
-            return processError("load Document Error:".localized + "\(error.localizedDescription).")
+        if let title = documentViewer.documentTitle() {
+            labelTitle?.text = title
+        } else {
+            labelTitle?.text = url?.lastPathComponent
         }
+#endif
+        controller = vc
+        self.addChildViewController(vc)
+        vc.view.autoresizingMask = UIViewAutoresizing([.FlexibleWidth, .FlexibleHeight])
+#if os(OSX)
+        self.view.addSubview(vc.view, positioned: .Below, relativeTo: nil)
+#else
+        self.view.insertSubview(vc.view, atIndex: 0)
+#endif
+        var rcFrame = self.view.bounds
+#if os(iOS)
+        if documentViewer.hideUI() {
+            let tap = UITapGestureRecognizer(target: self, action: "tapped")
+            self.view.addGestureRecognizer(tap)
+            hideUI()
+        } else if let toolbar = self.toolbar, let bottombar = self.bottombar {
+            rcFrame.origin.y = toolbar.bounds.size.height
+            rcFrame.size.height -= rcFrame.origin.y + bottombar.bounds.size.height
+        }
+#endif
+        vc.view.frame = rcFrame
     }
     
     private func openDocumentViewer(document:[String:AnyObject]) {
@@ -180,7 +170,17 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
         self.documentViewer = documentViewer
         documentViewer.setDelegate(self)
-        loadDocument(documentViewer, vc:vc, document: document)
+        do {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            var state:[String:AnyObject]? = nil
+            if let url = self.url where ignoreViewState == false {
+                state = defaults.objectForKey(url.absoluteString) as? [String:AnyObject]
+            }
+            try documentViewer.loadDocument(document, size:self.view.frame.size, url: url, state:state)
+            loadDocumentView(documentViewer, vc:vc, document: document)
+        } catch let error as NSError {
+            return processError("load Document Error:".localized + "\(error.localizedDescription).")
+        }
     }
     
     private func openDocumentWithODR(document:[String:AnyObject], localResource:Bool) {
