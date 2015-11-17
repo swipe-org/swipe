@@ -176,8 +176,12 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             if let url = self.url where ignoreViewState == false {
                 state = defaults.objectForKey(url.absoluteString) as? [String:AnyObject]
             }
-            try documentViewer.loadDocument(document, size:self.view.frame.size, url: url, state:state)
-            loadDocumentView(documentViewer, vc:vc, document: document)
+            try documentViewer.loadDocument(document, size:self.view.frame.size, url: url, state:state) { (progress:Double, error:NSError?) -> (Void) in
+                if progress >= 1 {
+                    self.loadDocumentView(documentViewer, vc:vc, document: document)
+                }
+            }
+            
         } catch let error as NSError {
             return processError("load Document Error:".localized + "\(error.localizedDescription).")
         }
