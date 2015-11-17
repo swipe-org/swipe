@@ -18,7 +18,7 @@ protocol SwipeDocumentViewerDelegate: NSObjectProtocol {
 
 protocol SwipeDocumentViewer {
     func documentTitle() -> String?
-    func loadDocument(document:[String:AnyObject], size:CGSize, url:NSURL?, state:[String:AnyObject]?, callback:(Double, NSError?)->(Void)) throws
+    func loadDocument(document:[String:AnyObject], size:CGSize, url:NSURL?, state:[String:AnyObject]?, callback:(Float, NSError?)->(Void)) throws
     func hideUI() -> Bool
     func landscape() -> Bool
     func setDelegate(delegate:SwipeDocumentViewerDelegate)

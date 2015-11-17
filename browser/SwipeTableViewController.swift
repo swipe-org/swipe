@@ -54,7 +54,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }()
         
     // <SwipeDocumentViewer> method
-    func loadDocument(document:[String:AnyObject], size:CGSize, url:NSURL?, state:[String:AnyObject]?, callback:(Double, NSError?)->(Void)) throws {
+    func loadDocument(document:[String:AnyObject], size:CGSize, url:NSURL?, state:[String:AnyObject]?, callback:(Float, NSError?)->(Void)) throws {
         self.document = document
         self.url = url
         if let sections = document["sections"] as? [[String:AnyObject]] {

@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="bottombar" destination="5Z7-9V-xkH" id="cUw-tH-7uu"/>
                 <outlet property="labelTitle" destination="d7L-T1-VHa" id="zNW-97-kS2"/>
+                <outlet property="progress" destination="kad-kO-4T7" id="M2L-jF-GdO"/>
                 <outlet property="slider" destination="JvK-et-XQT" id="uEm-44-MYF"/>
                 <outlet property="toolbar" destination="eW2-r2-Dr0" id="Nyo-yZ-dtS"/>
                 <outlet property="view" destination="iN0-l3-epB" id="hXK-g6-GPb"/>
@@ -88,13 +89,22 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="kad-kO-4T7">
+                            <rect key="frame" x="10" y="274" width="300" height="2"/>
+                            <animations/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="300" id="qeB-5u-Ube"/>
+                            </constraints>
+                        </progressView>
                     </subviews>
                     <animations/>
                     <color key="backgroundColor" white="0.0" alpha="0.79878048780487809" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="mOv-2o-bgd" firstAttribute="leading" secondItem="tWL-fk-uyv" secondAttribute="leading" constant="8" id="1Jq-LQ-JSo"/>
+                        <constraint firstItem="kad-kO-4T7" firstAttribute="centerX" secondItem="tWL-fk-uyv" secondAttribute="centerX" id="2DB-ke-Gqa"/>
                         <constraint firstItem="mOv-2o-bgd" firstAttribute="centerY" secondItem="tWL-fk-uyv" secondAttribute="centerY" id="4kh-cu-iIk"/>
                         <constraint firstAttribute="trailing" secondItem="mOv-2o-bgd" secondAttribute="trailing" constant="8" id="RYU-AE-ar9"/>
+                        <constraint firstItem="kad-kO-4T7" firstAttribute="top" secondItem="mOv-2o-bgd" secondAttribute="bottom" constant="24" id="lon-I4-ohk"/>
                     </constraints>
                 </view>
             </subviews>

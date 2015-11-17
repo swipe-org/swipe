@@ -41,11 +41,12 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 
 #if os(iOS)
     private var fVisibleUI = true
+    @IBOutlet var viewLoading:UIView!
+    @IBOutlet var progress:UIProgressView!
     @IBOutlet var toolbar:UIView?
     @IBOutlet var bottombar:UIView?
     @IBOutlet var slider:UISlider!
     @IBOutlet var labelTitle:UILabel?
-    @IBOutlet var viewLoading:UIView!
     private var landscapeMode = false
 #elseif os(tvOS)
     override weak var preferredFocusedView: UIView? { return controller?.view }
@@ -179,13 +180,17 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             if let url = self.url where ignoreViewState == false {
                 state = defaults.objectForKey(url.absoluteString) as? [String:AnyObject]
             }
-            try documentViewer.loadDocument(document, size:self.view.frame.size, url: url, state:state) { (progress:Double, error:NSError?) -> (Void) in
+            try documentViewer.loadDocument(document, size:self.view.frame.size, url: url, state:state) { (progress:Float, error:NSError?) -> (Void) in
+                self.progress.progress = progress
                 if progress == 0 {
                     self.viewLoading.alpha = 1.0
                 }
                 if progress >= 1 {
-                    self.viewLoading.alpha = 0.0
-                    self.loadDocumentView(documentViewer, vc:vc, document: document)
+                    UIView.animateWithDuration(0.2, animations: { () -> Void in
+                        self.viewLoading.alpha = 0.0
+                    }, completion: { (_:Bool) -> Void in
+                        self.loadDocumentView(documentViewer, vc:vc, document: document)
+                    })
                 }
             }
             
