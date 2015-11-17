@@ -32,10 +32,10 @@ class SwipePrefetcher {
         self.urls = urls
     }
     
-    func start(callback:([NSURL], [NSError]) -> Void) {
+    func start(callback:(Bool, [NSURL], [NSError]) -> Void) {
         if fComplete {
             MyLog("SWPrefe already completed", level:1)
-            callback(self.urlsFailed, self.errors)
+            callback(true, self.urlsFailed, self.errors)
             return
         }
         
@@ -65,14 +65,14 @@ class SwipePrefetcher {
                     if (count == 0) {
                         self.fComplete = true
                         MyLog("SWPrefe completed \(self.urlsFetched.count)", level: 1)
-                        callback(self.urlsFailed, self.errors)
+                        callback(true, self.urlsFailed, self.errors)
                     }
                 })
             }
         }
         if count == 0 {
             self.fComplete = true
-            callback(urlsFailed, errors)
+            callback(true, urlsFailed, errors)
         }
     }
     

@@ -98,8 +98,10 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         NSLog("SVC urlsAll = \(urlsAll)")
         let prefetcher = SwipePrefetcher(urls: urlsAll)
         callback(0, nil) // trigger the UI
-        prefetcher.start { (_:[NSURL], _:[NSError]) -> Void in
-            callback(1, nil)
+        prefetcher.start { (completed:Bool, _:[NSURL], _:[NSError]) -> Void in
+            if completed {
+                callback(1, nil)
+            }
         }
     }
 

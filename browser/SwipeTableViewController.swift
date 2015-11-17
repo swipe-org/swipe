@@ -78,10 +78,12 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
             imageView.addSubview(effectView)
         }
 
-        self.prefetcher.start { (_:[NSURL], _:[NSError]) -> Void in
-            MyLog("SWTable prefetch complete", level:1)
-            self.prefetching = false
-            self.tableView.reloadData()
+        self.prefetcher.start { (completed:Bool, _:[NSURL], _:[NSError]) -> Void in
+            if completed {
+                MyLog("SWTable prefetch complete", level:1)
+                self.prefetching = false
+                self.tableView.reloadData()
+            }
         }
     }
 

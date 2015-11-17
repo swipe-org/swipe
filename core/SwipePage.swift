@@ -429,10 +429,12 @@ class SwipePage: NSObject, SwipeElementDelegate {
 #endif
         //viewAnimation.backgroundColor = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 0.2)
         
-        self.prefetcher.start { (_:[NSURL], _:[NSError]) -> Void in
-            if self.view != nil {
-                // NOTE: We are intentionally ignoring fetch errors (of network resources) here.
-                self.loadSubviews()
+        self.prefetcher.start { (completed:Bool, _:[NSURL], _:[NSError]) -> Void in
+            if completed {
+                if self.view != nil {
+                    // NOTE: We are intentionally ignoring fetch errors (of network resources) here.
+                    self.loadSubviews()
+                }
             }
         }
         return view
