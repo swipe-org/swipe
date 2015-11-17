@@ -27,6 +27,11 @@ class SwipePrefetcher {
     private var urlsFailed = [NSURL]()
     private var errors = [NSError]()
     private var fComplete = false
+    private var _progress = Float(0)
+    
+    var progress:Float {
+        return _progress
+    }
     
     init(urls:[NSURL:String]) {
         self.urls = urls
@@ -41,6 +46,7 @@ class SwipePrefetcher {
         
         let manager = SwipeAssetManager.sharedInstance()
         var count = 0
+        _progress = 0
         let fileManager = NSFileManager.defaultManager()
         for (url,prefix) in urls {
             if url.scheme == "file" {
@@ -64,14 +70,19 @@ class SwipePrefetcher {
                     count--
                     if (count == 0) {
                         self.fComplete = true
+                        self._progress = 1
                         MyLog("SWPrefe completed \(self.urlsFetched.count)", level: 1)
                         callback(true, self.urlsFailed, self.errors)
+                    } else {
+                        self._progress = Float(self.urls.count - count) / Float(self.urls.count)
+                        callback(false, self.urlsFailed, self.errors)
                     }
                 })
             }
         }
         if count == 0 {
             self.fComplete = true
+            self._progress = 1
             callback(true, urlsFailed, errors)
         }
     }
