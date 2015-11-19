@@ -95,7 +95,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
                 urlsAll[url] = prefix
             }
         }
-        NSLog("SVC urlsAll = \(urlsAll)")
+        //NSLog("SVC urlsAll = \(urlsAll)")
         let prefetcher = SwipePrefetcher(urls: urlsAll)
         prefetcher.start { (completed:Bool, _:[NSURL], _:[NSError]) -> Void in
             callback(prefetcher.progress, nil)
