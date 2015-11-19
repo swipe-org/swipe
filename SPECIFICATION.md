@@ -332,7 +332,7 @@ The following example shows how to use a named **Element** with child **Elements
 
 The **Transition Animation** specifies a set of animations to play right after or during the page transition (depending on the "transition" property of the page).
 
-The "to" property of each element specifies the animation to be performed on the element, by specifying a new value for animatable properties (such as "opacity", "rotate", "translate", "bc", "path"). 
+The "to" property of each element specifies the animation to be performed on the element, by specifying a new value for animatable properties (such as "opacity", "rotate", "translate", "bc", "path", "pos", "mode"). 
 
 The "timing" property specifies the timing of animation with two floating values, start and end (must be between 0.0 and 1.0). The default is [0.0, 1.0].
 

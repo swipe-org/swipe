@@ -814,6 +814,16 @@ class SwipeElement:NSObject {
                 ani.fillMode = kCAFillModeBoth
                 ani.calculationMode = kCAAnimationPaced
                 ani.rotationMode = kCAAnimationRotateAuto
+                if let mode = to["mode"] as? String {
+                    switch(mode) {
+                    case "auto":
+                        break
+                    case "reverse":
+                        ani.rotationMode = kCAAnimationRotateAutoReverse
+                    default: // or "none"
+                        ani.rotationMode = nil
+                    }
+                }
                 layer.addAnimation(ani, forKey: "position")
             }
 
