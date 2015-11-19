@@ -111,7 +111,12 @@ class SwipeParser {
                     }
                 }
             }
-            if !fSkipTranslate {
+            if fSkipTranslate {
+                if let b = base,
+                       translate = b["translate"] as? [CGFloat] where translate.count == 2{
+                    xf = CATransform3DTranslate(xf, translate[0] * scaleX, translate[1] * scaleY, 0)
+                }
+            } else {
                 if let translate = value["translate"] as? [CGFloat] {
                     if translate.count == 2 {
                         xf = CATransform3DTranslate(xf, translate[0] * scaleX, translate[1] * scaleY, 0)
