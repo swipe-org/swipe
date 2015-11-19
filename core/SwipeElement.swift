@@ -697,7 +697,7 @@ class SwipeElement:NSObject {
             }
         }
         
-        if let transform = SwipeParser.parseTransform(info, scaleX:scale.width, scaleY:scale.height, base: nil) {
+        if let transform = SwipeParser.parseTransform(info, scaleX:scale.width, scaleY:scale.height, base: nil, fSkipTranslate: false) {
             layer.transform = transform
         }
         layer.opacity = SwipeParser.parseFloat(info["opacity"])
@@ -712,7 +712,32 @@ class SwipeElement:NSObject {
                 start = 1e-10
                 duration = 1.0
             }
-            if let transform = SwipeParser.parseTransform(to, scaleX:scale.width, scaleY:scale.height, base:info) {
+            var fSkipTranslate = false
+            
+            if let path = parsePath(to["pos"], w: w0, h: h0, scale:scale) {
+                let pos = layer.position
+                var xform = CGAffineTransformMakeTranslation(pos.x, pos.y)
+                let ani = CAKeyframeAnimation(keyPath: "position")
+                ani.path = CGPathCreateCopyByTransformingPath(path, &xform)
+                ani.beginTime = start
+                ani.duration = duration
+                ani.fillMode = kCAFillModeBoth
+                ani.calculationMode = kCAAnimationPaced
+                if let mode = to["mode"] as? String {
+                    switch(mode) {
+                    case "auto":
+                        ani.rotationMode = kCAAnimationRotateAuto
+                    case "reverse":
+                        ani.rotationMode = kCAAnimationRotateAutoReverse
+                    default: // or "none"
+                        ani.rotationMode = nil
+                    }
+                }
+                layer.addAnimation(ani, forKey: "position")
+                fSkipTranslate = true
+            }
+
+            if let transform = SwipeParser.parseTransform(to, scaleX:scale.width, scaleY:scale.height, base:info, fSkipTranslate: fSkipTranslate) {
                 let ani = CABasicAnimation(keyPath: "transform")
                 ani.fromValue = NSValue(CATransform3D : layer.transform)
                 ani.toValue = NSValue(CATransform3D : transform)
@@ -802,28 +827,6 @@ class SwipeElement:NSObject {
                     ani.fillMode = kCAFillModeBoth
                     imageLayer.addAnimation(ani, forKey: "contents")
                 }
-            }
-
-            if let path = parsePath(to["pos"], w: w0, h: h0, scale:scale) {
-                let pos = layer.position
-                var xform = CGAffineTransformMakeTranslation(pos.x, pos.y)
-                let ani = CAKeyframeAnimation(keyPath: "position")
-                ani.path = CGPathCreateCopyByTransformingPath(path, &xform)
-                ani.beginTime = start
-                ani.duration = duration
-                ani.fillMode = kCAFillModeBoth
-                ani.calculationMode = kCAAnimationPaced
-                if let mode = to["mode"] as? String {
-                    switch(mode) {
-                    case "auto":
-                        ani.rotationMode = kCAAnimationRotateAuto
-                    case "reverse":
-                        ani.rotationMode = kCAAnimationRotateAutoReverse
-                    default: // or "none"
-                        ani.rotationMode = nil
-                    }
-                }
-                layer.addAnimation(ani, forKey: "position")
             }
 
             if let shapeLayer = self.shapeLayer {
