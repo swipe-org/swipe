@@ -813,11 +813,10 @@ class SwipeElement:NSObject {
                 ani.duration = duration
                 ani.fillMode = kCAFillModeBoth
                 ani.calculationMode = kCAAnimationPaced
-                ani.rotationMode = kCAAnimationRotateAuto
                 if let mode = to["mode"] as? String {
                     switch(mode) {
                     case "auto":
-                        break
+                        ani.rotationMode = kCAAnimationRotateAuto
                     case "reverse":
                         ani.rotationMode = kCAAnimationRotateAutoReverse
                     default: // or "none"
