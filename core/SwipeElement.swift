@@ -1068,7 +1068,12 @@ class SwipeElement:NSObject {
         }
         
         if let layer = spriteLayer, let _ = self.dir {
-            let step = Int(offset * self.repeatCount * self.slice.width) % Int(self.slice.width)
+            let step:Int
+            if offset == 1 && self.repeatCount == 1 {
+                step = Int(self.slice.width) - 1 // always end at the last one if repeatCount==1
+            } else {
+                step = Int(offset * self.repeatCount * self.slice.width) % Int(self.slice.width)
+            }
             if step != self.step /* || offset == 0.0 */ {
                 contentsRect.origin.x = CGFloat(step) / self.slice.width
                 contentsRect.origin.y = slot.y / self.slice.height
