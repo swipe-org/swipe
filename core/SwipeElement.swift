@@ -995,6 +995,24 @@ class SwipeElement:NSObject {
                     }
                 }
             case "sprite":
+                /*
+                let ani = CAKeyframeAnimation(keyPath: "contentsRect")
+                let rc0 = CGRectMake(0, slot.y/self.slice.height, 1.0/self.slice.width, 1.0/self.slice.height)
+                let values = Array(0..<Int(slice.width)).map({ (index:Int) -> NSValue in
+                    var rc = rc0
+                    rc.origin.x = CGFloat(index) / self.slice.width
+                    let value = NSValue(CGRect: rc)
+                    NSLog("SW value = \(value.CGRectValue())")
+                    return value
+                })
+                ani.values = values
+                ani.repeatCount = repeatCount
+                ani.beginTime = 1e-10
+                ani.duration = CFTimeInterval(1.0 / ani.repeatCount)
+                ani.fillMode = kCAFillModeBoth
+                ani.calculationMode = kCAAnimationDiscrete
+                layer.addAnimation(ani, forKey: "contentsRect")
+                */
                 self.dir = (1,0)
                 self.repeatCount = CGFloat(repeatCount)
             default:
