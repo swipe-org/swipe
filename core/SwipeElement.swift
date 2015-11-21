@@ -86,7 +86,7 @@ class SwipeElement:NSObject {
     private var contentsRect = CGRectMake(0.0, 0.0, 1.0, 1.0)
     private var step = -1 // invalid to start
     private var slot = CGPointMake(0.0, 0.0) // actually Ints
-    private var dir:(Int, Int)?
+    //private var dir:(Int, Int)?
     
 #if os(iOS)
     // HTML Specific
@@ -1004,26 +1004,26 @@ class SwipeElement:NSObject {
                     }
                 }
             case "sprite":
-                /*
-                let ani = CAKeyframeAnimation(keyPath: "contentsRect")
-                let rc0 = CGRectMake(0, slot.y/self.slice.height, 1.0/self.slice.width, 1.0/self.slice.height)
-                let values = Array(0..<Int(slice.width)).map({ (index:Int) -> NSValue in
-                    var rc = rc0
-                    rc.origin.x = CGFloat(index) / self.slice.width
-                    let value = NSValue(CGRect: rc)
-                    NSLog("SW value = \(value.CGRectValue())")
-                    return value
-                })
-                ani.values = values
-                ani.repeatCount = repeatCount
-                ani.beginTime = start
-                ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
-                ani.fillMode = kCAFillModeBoth
-                ani.calculationMode = kCAAnimationDiscrete
-                layer.addAnimation(ani, forKey: "contentsRect")
-                */
-                self.dir = (1,0)
-                self.repeatCount = CGFloat(repeatCount)
+                if let targetLayer = spriteLayer {
+                    let ani = CAKeyframeAnimation(keyPath: "contentsRect")
+                    let rc0 = CGRectMake(0, slot.y/self.slice.height, 1.0/self.slice.width, 1.0/self.slice.height)
+                    let values = Array(0..<Int(slice.width)).map({ (index:Int) -> NSValue in
+                        var rc = rc0
+                        rc.origin.x = CGFloat(index) / self.slice.width
+                        let value = NSValue(CGRect: rc)
+                        NSLog("SW value = \(value.CGRectValue())")
+                        return value
+                    })
+                    ani.values = values
+                    ani.repeatCount = repeatCount
+                    ani.beginTime = start
+                    ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
+                    ani.fillMode = kCAFillModeBoth
+                    ani.calculationMode = kCAAnimationDiscrete
+                    targetLayer.addAnimation(ani, forKey: "contentsRect")
+                }
+                //self.dir = (1,0)
+                //self.repeatCount = CGFloat(repeatCount)
             default:
                 break
             }
@@ -1094,6 +1094,8 @@ class SwipeElement:NSObject {
             return
         }
         
+        // This block of code was replaced by CAKeyFrameAnimation (sprite)
+        /*
         if let layer = spriteLayer, let _ = self.dir {
             let step:Int
             if offset == 1 && self.repeatCount == 1 {
@@ -1108,6 +1110,7 @@ class SwipeElement:NSObject {
                 self.step = step
             }
         }
+        */
         
         if let player = self.videoPlayer {
             if fAutoPlay {
