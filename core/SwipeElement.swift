@@ -908,6 +908,15 @@ class SwipeElement:NSObject {
         
         if let animation = info["loop"] as? [NSObject:AnyObject],
            let style = animation["style"] as? String {
+            let start, duration:Double
+            if let timing = animation["timing"] as? [Double]
+                where timing.count == 2 && timing[0] >= 0 && timing[0] <= timing[1] && timing[1] <= 1 {
+                start = timing[0] == 0 ? 1e-10 : timing[0]
+                duration = timing[1] - start
+            } else {
+                start = 1e-10
+                duration = 1.0
+            }
             let repeatCount = Float(valueFrom(animation, key: "count", defaultValue: 1))
         
             switch(style) {
@@ -920,8 +929,8 @@ class SwipeElement:NSObject {
                               NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeTranslation(-delta, 0.0, 0.0), layer.transform)),
                               NSValue(CATransform3D:layer.transform)]
                 ani.repeatCount = repeatCount
-                ani.beginTime = 1e-10
-                ani.duration = CFTimeInterval(1.0 / ani.repeatCount)
+                ani.beginTime = start
+                ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
                 ani.fillMode = kCAFillModeBoth
                 layer.addAnimation(ani, forKey: "transform")
             case "shift":
@@ -946,16 +955,16 @@ class SwipeElement:NSObject {
                 ani.values = [NSValue(CATransform3D:shiftLayer.transform),
                               NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeTranslation(shift.width, shift.height, 0.0), shiftLayer.transform))]
                 ani.repeatCount = repeatCount
-                ani.beginTime = 1e-10
-                ani.duration = CFTimeInterval(1.0 / ani.repeatCount)
+                ani.beginTime = start
+                ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
                 ani.fillMode = kCAFillModeBoth
                 shiftLayer.addAnimation(ani, forKey: "transform")
             case "blink":
                 let ani = CAKeyframeAnimation(keyPath: "opacity")
                 ani.values = [1.0, 0.0, 1.0]
                 ani.repeatCount = repeatCount
-                ani.beginTime = 1e-10
-                ani.duration = CFTimeInterval(1.0 / ani.repeatCount)
+                ani.beginTime = start
+                ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
                 ani.fillMode = kCAFillModeBoth
                 layer.addAnimation(ani, forKey: "opacity")
             case "wiggle":
@@ -967,8 +976,8 @@ class SwipeElement:NSObject {
                               NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(-delta, 0.0, 0.0, 1.0), layer.transform)),
                               NSValue(CATransform3D:layer.transform)]
                 ani.repeatCount = repeatCount
-                ani.beginTime = 1e-10
-                ani.duration = CFTimeInterval(1.0 / ani.repeatCount)
+                ani.beginTime = start
+                ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
                 ani.fillMode = kCAFillModeBoth
                 layer.addAnimation(ani, forKey: "transform")
             case "path":
@@ -988,8 +997,8 @@ class SwipeElement:NSObject {
                         let ani = CAKeyframeAnimation(keyPath: "path")
                         ani.values = values
                         ani.repeatCount = repeatCount
-                        ani.beginTime = 1e-10
-                        ani.duration = CFTimeInterval(1.0 / ani.repeatCount)
+                        ani.beginTime = start
+                        ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
                         ani.fillMode = kCAFillModeBoth
                         shapeLayer.addAnimation(ani, forKey: "path")
                     }
@@ -1007,8 +1016,8 @@ class SwipeElement:NSObject {
                 })
                 ani.values = values
                 ani.repeatCount = repeatCount
-                ani.beginTime = 1e-10
-                ani.duration = CFTimeInterval(1.0 / ani.repeatCount)
+                ani.beginTime = start
+                ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
                 ani.fillMode = kCAFillModeBoth
                 ani.calculationMode = kCAAnimationDiscrete
                 layer.addAnimation(ani, forKey: "contentsRect")
