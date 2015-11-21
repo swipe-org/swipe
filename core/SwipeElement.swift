@@ -1007,14 +1007,9 @@ class SwipeElement:NSObject {
                 if let targetLayer = spriteLayer {
                     let ani = CAKeyframeAnimation(keyPath: "contentsRect")
                     let rc0 = CGRectMake(0, slot.y/self.slice.height, 1.0/self.slice.width, 1.0/self.slice.height)
-                    let values = Array(0..<Int(slice.width)).map({ (index:Int) -> NSValue in
-                        var rc = rc0
-                        rc.origin.x = CGFloat(index) / self.slice.width
-                        let value = NSValue(CGRect: rc)
-                        NSLog("SW value = \(value.CGRectValue())")
-                        return value
-                    })
-                    ani.values = values
+                    ani.values = Array(0..<Int(slice.width)).map() { (index:Int) -> NSValue in
+                        NSValue(CGRect: CGRect(origin: CGPointMake(CGFloat(index) / self.slice.width, rc0.origin.y), size: rc0.size))
+                    }
                     ani.repeatCount = repeatCount
                     ani.beginTime = start
                     ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
