@@ -134,6 +134,7 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 - **speech** (SpeechInfo): Specifies the text-to-speech to be played in sync with the animation
 - **vibrate** (Bool): Specifies the vibration in sync with the animation, the default is false
 - **elements** ([Element+]): Collection of Elements
+- **eyePosition** (Float): Eye position (z-height) for the perspective
  
 ##4. Paging direction, inter-page transition and animation
 
@@ -237,7 +238,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **borderColor** (Color): Color of the border, animatable
 - **cornerRadius** (Float): Size of the corner radius, animatable
 - **opacity** (Float): Opacity of the element, between 0 to 1, animatable
-- **rotate** (Float): Rotation in degree around the anchor point, clockwise, defalut is 0, animatable
+- **rotate** (Float or Float[3]): Rotation in degree around the anchor point, clockwise, defalut is 0, animatable. 
 - **scale** (Float or [Float, Float]): Scaling factor around the anchor point, default is [1, 1], animatable
 - **translate** ([Float, Float]): Translation, default is [0, 0], animatable
 - **text** (String): Text to display
