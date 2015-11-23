@@ -415,10 +415,12 @@ class SwipePage: NSObject, SwipeElementDelegate {
         let aniLayer = viewAnimation.layer
 #endif
         self.aniLayer = aniLayer
+
+        let dimension = delegate.dimension(self)
         var transform = CATransform3DIdentity
-        transform.m34 = -1 / 333 // default eyePosition
+        transform.m34 = -1 / dimension.width // default eyePosition is canvas width
         if let eyePosition = pageInfo["eyePosition"] as? CGFloat {
-            transform.m34 = -1 / eyePosition
+            transform.m34 = -1 / (dimension.width * eyePosition)
         }
         aniLayer.sublayerTransform = transform
         
