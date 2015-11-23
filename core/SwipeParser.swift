@@ -130,9 +130,9 @@ class SwipeParser {
             }
             if let rots = value["rotate"] as? [CGFloat] where rots.count == 3 {
                 let m = CGFloat(M_PI / 180.0)
-                xf = CATransform3DRotate(xf, rots[0] * m, 0, 0, 1)
-                xf = CATransform3DRotate(xf, rots[1] * m, 1, 0, 0)
-                xf = CATransform3DRotate(xf, rots[2] * m, 0, 1, 0)
+                xf = CATransform3DRotate(xf, rots[0] * m, 1, 0, 0)
+                xf = CATransform3DRotate(xf, rots[1] * m, 0, 1, 0)
+                xf = CATransform3DRotate(xf, rots[2] * m, 0, 0, 1)
                 hasValue = true
             }
             if let scale = value["scale"] as? CGFloat {
