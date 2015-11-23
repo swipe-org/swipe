@@ -415,6 +415,10 @@ class SwipePage: NSObject, SwipeElementDelegate {
         let aniLayer = viewAnimation.layer
 #endif
         self.aniLayer = aniLayer
+        var transform = CATransform3DIdentity
+        transform.m34 = -0.003 // default perception
+        aniLayer.sublayerTransform = transform
+        
         view.addSubview(viewAnimation)
         
         //view.tag = 100 + index // for debugging only
