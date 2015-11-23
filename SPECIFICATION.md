@@ -134,7 +134,7 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 - **speech** (SpeechInfo): Specifies the text-to-speech to be played in sync with the animation
 - **vibrate** (Bool): Specifies the vibration in sync with the animation, the default is false
 - **elements** ([Element+]): Collection of Elements
-- **eyePosition** (Float): Eye position (z-height) for the perspective
+- **eyePosition** (Float): Eye position (z-height) for the perspective relative to width, default is 1.0
  
 ##4. Paging direction, inter-page transition and animation
 
