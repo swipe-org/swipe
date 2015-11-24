@@ -386,6 +386,7 @@ The **Loop Animation** must have a "style" property, and the value of this prope
 - *vibrate*: The **Element** vibrates left to right, where the "delta" property specifies the distance (the default is 10)
 - *blink*: The **Element** blinks changing its opacity from 1 to 0. 
 - *wiggle*: The **Element** rotates left and right, where the "delta" property specifies the angree in degree (the default is 15)
+- *spin*: The **Element** spins, where the "clockwise" property (boolean) specifies the direction, the default is true. 
 - *shift*: The **Element** shift to the specified direction where the "direction" property specifies the direction ("n", "s", "e" or "w", the default is "n"). Use it with the "tiling" property.
 - *path*: The **Element** performs path animation, where the "path" property specifies a collection of **Paths**. 
 - *sprite*: The **Element** performs a sprite animation. 

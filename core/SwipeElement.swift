@@ -140,6 +140,13 @@ class SwipeElement:NSObject {
         }
         return defaultValue
     }
+
+    private func booleanValueFrom(info:[NSObject:AnyObject], key:String, defaultValue:Bool) -> Bool {
+        if let value = info[key] as? Bool {
+            return value
+        }
+        return defaultValue
+    }
     
     func loadView(dimension:CGSize) -> UIView? {
         return self.loadViewInternal(dimension, screenDimention: dimension)
@@ -901,7 +908,7 @@ class SwipeElement:NSObject {
         }
         
         if let fRepeat = info["repeat"] as? Bool where fRepeat {
-            NSLog("SE detected an element with repeat")
+            //NSLog("SE detected an element with repeat")
             self.fRepeat = fRepeat
             layer.speed = 0 // Independently animate it
         }
@@ -967,6 +974,19 @@ class SwipeElement:NSObject {
                 ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
                 ani.fillMode = kCAFillModeBoth
                 layer.addAnimation(ani, forKey: "opacity")
+            case "spin":
+                let fClockwise = booleanValueFrom(animation, key: "clockwise", defaultValue: true)
+                let degree = (fClockwise ? 120 : -120) * CGFloat(M_PI / 180.0)
+                let ani = CAKeyframeAnimation(keyPath: "transform")
+                ani.values = [NSValue(CATransform3D:layer.transform),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(degree, 0.0, 0.0, 1.0), layer.transform)),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(degree * 2, 0.0, 0.0, 1.0), layer.transform)),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(degree * 3, 0.0, 0.0, 1.0), layer.transform))]
+                ani.repeatCount = repeatCount
+                ani.beginTime = start
+                ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
+                ani.fillMode = kCAFillModeBoth
+                layer.addAnimation(ani, forKey: "transform")
             case "wiggle":
                 let delta = valueFrom(animation, key: "delta", defaultValue: 15) * CGFloat(M_PI / 180.0)
                 let ani = CAKeyframeAnimation(keyPath: "transform")
