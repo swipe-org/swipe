@@ -66,7 +66,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
 #endif
         // Even though book is unwrapped, there is a rare case that book is nil 
         // (during the construction).
-        if self.book != nil {
+        if self.book != nil && self.book.pages.count > 0 {
             self.book.currenPage.willLeave(false)
             self.book.currenPage.didLeave(false)
             // PARANOIA
@@ -457,6 +457,11 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
     
     private func adjustIndex(newPageIndex:Int, fForced:Bool = false) -> Bool {
+        if self.book.pages.count == 0 {
+            print("SwipeVC ### No Pages")
+            return false
+        }
+        
         if newPageIndex == self.book.pageIndex && !fForced {
             return false
         }
