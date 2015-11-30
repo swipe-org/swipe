@@ -915,6 +915,22 @@ class SwipeElement:NSObject {
         
         if let animation = info["loop"] as? [NSObject:AnyObject],
            let style = animation["style"] as? String {
+            //
+            // Note: Use the inner layer (either image or shape) for the loop animation 
+            // to avoid any conflict with other transformation if it is available.
+            // In this case, the loop animation does not effect chold elements (because
+            // we use UIView hierarchy instead of CALayer hierarchy.
+            //
+            // It means the loop animation on non-image/non-shape element does not work well
+            // with other transformation.
+            //
+            var loopLayer = layer
+            if let l = imageLayer {
+                loopLayer = l
+            } else if let l = shapeLayer {
+                loopLayer = l
+            }
+            
             let start, duration:Double
             if let timing = animation["timing"] as? [Double]
                 where timing.count == 2 && timing[0] >= 0 && timing[0] <= timing[1] && timing[1] <= 1 {
@@ -930,16 +946,16 @@ class SwipeElement:NSObject {
             case "vibrate":
                 let delta = valueFrom(animation, key: "delta", defaultValue: 10.0)
                 let ani = CAKeyframeAnimation(keyPath: "transform")
-                ani.values = [NSValue(CATransform3D:layer.transform),
-                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeTranslation(delta, 0.0, 0.0), layer.transform)),
-                              NSValue(CATransform3D:layer.transform),
-                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeTranslation(-delta, 0.0, 0.0), layer.transform)),
-                              NSValue(CATransform3D:layer.transform)]
+                ani.values = [NSValue(CATransform3D:loopLayer.transform),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeTranslation(delta, 0.0, 0.0), loopLayer.transform)),
+                              NSValue(CATransform3D:loopLayer.transform),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeTranslation(-delta, 0.0, 0.0), loopLayer.transform)),
+                              NSValue(CATransform3D:loopLayer.transform)]
                 ani.repeatCount = repeatCount
                 ani.beginTime = start
                 ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
                 ani.fillMode = kCAFillModeBoth
-                layer.addAnimation(ani, forKey: "transform")
+                loopLayer.addAnimation(ani, forKey: "transform")
             case "shift":
                 let shiftLayer = (innerLayer == nil) ? layer : innerLayer!
                 let ani = CAKeyframeAnimation(keyPath: "transform")
@@ -973,33 +989,33 @@ class SwipeElement:NSObject {
                 ani.beginTime = start
                 ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
                 ani.fillMode = kCAFillModeBoth
-                layer.addAnimation(ani, forKey: "opacity")
+                loopLayer.addAnimation(ani, forKey: "opacity")
             case "spin":
                 let fClockwise = booleanValueFrom(animation, key: "clockwise", defaultValue: true)
                 let degree = (fClockwise ? 120 : -120) * CGFloat(M_PI / 180.0)
                 let ani = CAKeyframeAnimation(keyPath: "transform")
-                ani.values = [NSValue(CATransform3D:layer.transform),
-                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(degree, 0.0, 0.0, 1.0), layer.transform)),
-                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(degree * 2, 0.0, 0.0, 1.0), layer.transform)),
-                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(degree * 3, 0.0, 0.0, 1.0), layer.transform))]
+                ani.values = [NSValue(CATransform3D:loopLayer.transform),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(degree, 0.0, 0.0, 1.0), loopLayer.transform)),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(degree * 2, 0.0, 0.0, 1.0), loopLayer.transform)),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(degree * 3, 0.0, 0.0, 1.0), loopLayer.transform))]
                 ani.repeatCount = repeatCount
                 ani.beginTime = start
                 ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
                 ani.fillMode = kCAFillModeBoth
-                layer.addAnimation(ani, forKey: "transform")
+                loopLayer.addAnimation(ani, forKey: "transform")
             case "wiggle":
                 let delta = valueFrom(animation, key: "delta", defaultValue: 15) * CGFloat(M_PI / 180.0)
                 let ani = CAKeyframeAnimation(keyPath: "transform")
-                ani.values = [NSValue(CATransform3D:layer.transform),
-                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(delta, 0.0, 0.0, 1.0), layer.transform)),
-                              NSValue(CATransform3D:layer.transform),
-                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(-delta, 0.0, 0.0, 1.0), layer.transform)),
-                              NSValue(CATransform3D:layer.transform)]
+                ani.values = [NSValue(CATransform3D:loopLayer.transform),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(delta, 0.0, 0.0, 1.0), loopLayer.transform)),
+                              NSValue(CATransform3D:loopLayer.transform),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(-delta, 0.0, 0.0, 1.0), loopLayer.transform)),
+                              NSValue(CATransform3D:loopLayer.transform)]
                 ani.repeatCount = repeatCount
                 ani.beginTime = start
                 ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
                 ani.fillMode = kCAFillModeBoth
-                layer.addAnimation(ani, forKey: "transform")
+                loopLayer.addAnimation(ani, forKey: "transform")
             case "path":
                 if let shapeLayer = self.shapeLayer {
                     var values = [shapeLayer.path!]
