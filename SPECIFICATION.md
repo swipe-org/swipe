@@ -269,7 +269,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 
 Named **Elements** are a set of **Elements** defined in "elements" property of the **Document**. Any **Element** can inherit properties from one of those named **Elements** by specifying its name in the "element" property. 
 
-The sample below uses a named **Element**, "stroke" as a template for five different **Elements** in a page. 
+The sample below uses a named **Element**, "smile" as a template for five different **Elements** in a page. 
 
 ```
 {
@@ -283,11 +283,11 @@ The sample below uses a named **Element**, "stroke" as a template for five diffe
     "pages": [
         {
             "elements": [
-                { "smile":"stroke", "pos":["50%", 100] },
-                { "smile":"stroke", "pos":["50%", 200], "rotate":30 },
-                { "smile":"stroke", "pos":["50%", 300], "lineWidth":10 },
-                { "smile":"stroke", "pos":["50%", 400], "strokeColor":"#37F" },
-                { "smile":"stroke", "pos":["50%", 500], "scale":[2,1] },
+                { "element":"smile", "pos":["50%", 100] },
+                { "element":"smile", "pos":["50%", 200], "rotate":30 },
+                { "element":"smile", "pos":["50%", 300], "lineWidth":10 },
+                { "element":"smile", "pos":["50%", 400], "strokeColor":"#37F" },
+                { "element":"smile", "pos":["50%", 500], "scale":[2,1] },
             ],
         },
     ]
