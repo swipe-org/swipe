@@ -25,6 +25,7 @@ protocol SwipeDocumentViewer {
     func becomeZombie()
     func saveState() -> [String:AnyObject]?
     func languages() -> [[String:AnyObject]]?
+    func reloadWithLanguageId(langId:String)
 }
 
 enum SwipeError: ErrorType {

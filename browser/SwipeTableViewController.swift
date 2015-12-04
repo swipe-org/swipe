@@ -132,6 +132,11 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     func languages() -> [[String:AnyObject]]? {
         return nil
     }
+    
+    // <SwipeDocumentViewer> method
+    func reloadWithLanguageId(langID:String) {
+        // no operation for this case
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

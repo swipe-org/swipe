@@ -427,11 +427,12 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             alert.popoverPresentationController?.sourceRect = btnLanguage!.frame
             for language in languages {
                 guard let title = language["title"] as? String,
-                          id = language["id"] as? String else {
+                          langId = language["id"] as? String else {
                     continue
                 }
                 alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: { (_:UIAlertAction) -> Void in
-                    print("SwipeB language selected \(id)")
+                    print("SwipeB language selected \(langId)")
+                    self.documentViewer?.reloadWithLanguageId(langId)
                 }))
             }
             self.presentViewController(alert, animated: true, completion: nil)

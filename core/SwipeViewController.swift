@@ -131,6 +131,12 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     func languages() -> [[String:AnyObject]]? {
         return self.book.languages()
     }
+    
+    // <SwipeDocumentViewer> method
+    func reloadWithLanguageId(langId:String) {
+        self.book.langId = langId
+        self.adjustIndex(self.book.pageIndex, fForced: true)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
