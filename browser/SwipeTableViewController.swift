@@ -129,7 +129,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     // <SwipeDocumentViewer> method
-    func languages() -> [String:AnyObject]? {
+    func languages() -> [[String:AnyObject]]? {
         return nil
     }
 

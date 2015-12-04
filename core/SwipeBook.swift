@@ -41,10 +41,10 @@ class SwipeBook: NSObject, SwipePageDelegate {
     //
     // Lazy properties (Public)
     //
-    private lazy var langs:[String:AnyObject]? = {
-        return self.bookInfo["languages"] as? [String:AnyObject]
+    private lazy var langs:[[String:AnyObject]]? = {
+        return self.bookInfo["languages"] as? [[String:AnyObject]]
     }()
-    func languages() -> [String:AnyObject]? {
+    func languages() -> [[String:AnyObject]]? {
         return self.langs
     }
     

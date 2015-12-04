@@ -128,7 +128,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
 
     // <SwipeDocumentViewer> method
-    func languages() -> [String:AnyObject]? {
+    func languages() -> [[String:AnyObject]]? {
         return self.book.languages()
     }
 
