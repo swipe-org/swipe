@@ -36,7 +36,7 @@ protocol SwipeElementDelegate:NSObjectProtocol {
     func baseURL() -> NSURL?
     func map(url:NSURL) -> NSURL?
     func pageIndex() -> Int // for debugging
-}
+    func localizedStringForKey(key:String) -> String?}
 
 class SwipeElement:NSObject {
     // Debugging
@@ -574,7 +574,8 @@ class SwipeElement:NSObject {
 #endif
         }
         
-        if let text = info["text"] as? String {
+        //if let text = info["text"] as? String {
+        if let text = parseText(info) {
             let textLayer = CATextLayer()
             textLayer.string = text
             textLayer.alignmentMode = kCAAlignmentCenter
@@ -1213,6 +1214,21 @@ class SwipeElement:NSObject {
             }
         }
         return false
+    }
+
+    func parseText(info:[String:AnyObject]) -> String? {
+        guard let value = info["text"] else {
+            return nil
+        }
+        if let text = value as? String {
+            return text
+        }
+        if let ref = value as? [String:AnyObject],
+               key = ref["ref"] as? String,
+               text = delegate.localizedStringForKey(key) {
+            return text
+        }
+        return nil
     }
     
     /*

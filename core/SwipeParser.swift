@@ -300,4 +300,5 @@ class SwipeParser {
         }
         return shadow
     }
+    
 }

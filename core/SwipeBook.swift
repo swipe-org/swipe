@@ -25,6 +25,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
     // Public properties
     var viewSize:CGSize?
     var pageIndex = 0
+    var langId = "en"
 
     // Private properties
     private let bookInfo:[String:AnyObject]
@@ -247,6 +248,11 @@ class SwipeBook: NSObject, SwipePageDelegate {
             return voice
         }
         return [String:AnyObject]()
+    }
+
+    // <SwipePageDelegate> method
+    func languageIdentifier() -> String? {
+        return langId
     }
 
     func sourceCode() -> String {

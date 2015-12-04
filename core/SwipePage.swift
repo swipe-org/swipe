@@ -37,6 +37,7 @@ protocol SwipePageDelegate: NSObjectProtocol {
     func parseMarkdown(markdowns:[String]) -> NSAttributedString
     func baseURL() -> NSURL?
     func voice(k:String?) -> [String:AnyObject]
+    func languageIdentifier() -> String?
 }
 
 class SwipePage: NSObject, SwipeElementDelegate {
@@ -579,6 +580,17 @@ class SwipePage: NSObject, SwipeElementDelegate {
     // <SwipeElementDelegate> method
     func pageIndex() -> Int {
         return index
+    }
+
+    // <SwipeElementDelegate> method
+    func localizedStringForKey(key:String) -> String? {
+        if let strings = pageInfo["strings"] as? [String:AnyObject],
+               texts = strings[key] as? [String:AnyObject],
+               langId = delegate.languageIdentifier(),
+               text = texts[langId] as? String {
+            return text
+        }
+        return nil
     }
     
     private func didStartPlayingInternal() {
