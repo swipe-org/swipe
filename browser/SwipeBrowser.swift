@@ -48,6 +48,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     @IBOutlet var bottombar:UIView?
     @IBOutlet var slider:UISlider!
     @IBOutlet var labelTitle:UILabel?
+    @IBOutlet var btnLanguage:UIButton?
     private var landscapeMode = false
 #elseif os(tvOS)
     override weak var preferredFocusedView: UIView? { return controller?.view }
@@ -89,6 +90,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         super.viewDidLoad()
         
         viewLoading?.alpha = 0
+        btnLanguage?.enabled = false
 
         if SwipeBrowser.stack.count == 0 {
             SwipeBrowser.stack.append(self) // special case for the first one
@@ -139,6 +141,10 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             labelTitle?.text = url?.lastPathComponent
         }
 #endif
+        if let _ = documentViewer.languages() {
+            btnLanguage?.enabled = true
+        }
+
         controller = vc
         self.addChildViewController(vc)
         vc.view.autoresizingMask = UIViewAutoresizing([.FlexibleWidth, .FlexibleHeight])
@@ -412,5 +418,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 SwipeBrowser.stack.last!.browseTo(url)
             }
         }
+    }
+
+    @IBAction func language() {
+        print("SwipeB language")
     }
 }

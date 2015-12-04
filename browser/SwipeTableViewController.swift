@@ -128,6 +128,10 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
         return nil
     }
 
+    // <SwipeDocumentViewer> method
+    func languages() -> [String:AnyObject]? {
+        return nil
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

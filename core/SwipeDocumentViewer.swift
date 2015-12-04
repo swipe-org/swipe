@@ -24,6 +24,7 @@ protocol SwipeDocumentViewer {
     func setDelegate(delegate:SwipeDocumentViewerDelegate)
     func becomeZombie()
     func saveState() -> [String:AnyObject]?
+    func languages() -> [String:AnyObject]?
 }
 
 enum SwipeError: ErrorType {

@@ -127,6 +127,11 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         return ["page":self.book.pageIndex]
     }
 
+    // <SwipeDocumentViewer> method
+    func languages() -> [String:AnyObject]? {
+        return self.book.languages()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(self.scrollView)
