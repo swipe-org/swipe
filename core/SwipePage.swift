@@ -488,8 +488,8 @@ class SwipePage: NSObject, SwipeElementDelegate {
     private func prepareUtterance() {
 // REVIEW: Disabled for OSX for now
 #if !os(OSX)
-        if let speech = self.pageInfo["speech"] as? [NSObject:AnyObject],
-           let text = speech["text"] as? String {
+        if let speech = self.pageInfo["speech"] as? [String:AnyObject],
+           let text = parseText(speech, key: "text") {
             let voice = self.delegate.voice(speech["voice"] as? String)
             let utterance = AVSpeechUtterance(string: text)
             
@@ -588,6 +588,21 @@ class SwipePage: NSObject, SwipeElementDelegate {
                texts = strings[key] as? [String:AnyObject],
                langId = delegate.languageIdentifier(),
                text = texts[langId] as? String {
+            return text
+        }
+        return nil
+    }
+
+    func parseText(info:[String:AnyObject], key:String) -> String? {
+        guard let value = info[key] else {
+            return nil
+        }
+        if let text = value as? String {
+            return text
+        }
+        if let ref = value as? [String:AnyObject],
+               key = ref["ref"] as? String,
+               text = localizedStringForKey(key) {
             return text
         }
         return nil

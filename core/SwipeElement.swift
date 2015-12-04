@@ -575,7 +575,7 @@ class SwipeElement:NSObject {
         }
         
         //if let text = info["text"] as? String {
-        if let text = parseText(info) {
+        if let text = parseText(info, key:"text") {
             let textLayer = CATextLayer()
             textLayer.string = text
             textLayer.alignmentMode = kCAAlignmentCenter
@@ -1216,8 +1216,8 @@ class SwipeElement:NSObject {
         return false
     }
 
-    func parseText(info:[String:AnyObject]) -> String? {
-        guard let value = info["text"] else {
+    func parseText(info:[String:AnyObject], key:String) -> String? {
+        guard let value = info[key] else {
             return nil
         }
         if let text = value as? String {
