@@ -90,9 +90,14 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
                langId = language["id"] as? String {
             self.book.langId = langId
         }
-        
-        if let pageIndex = state?["page"] as? Int where pageIndex < self.book.pages.count && book.viewstate {
-            self.book.pageIndex = pageIndex
+
+        if book.viewstate {
+            if let pageIndex = state?["page"] as? Int where pageIndex < self.book.pages.count {
+                self.book.pageIndex = pageIndex
+            }
+            if let langId = state?["langId"] as? String {
+                self.book.langId = langId
+            }
         }
         
         var urlsAll = [NSURL:String]()
@@ -131,7 +136,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
 
     // <SwipeDocumentViewer> method
     func saveState() -> [String:AnyObject]? {
-        return ["page":self.book.pageIndex]
+        return ["page":self.book.pageIndex, "langId":self.book.langId]
     }
 
     // <SwipeDocumentViewer> method
