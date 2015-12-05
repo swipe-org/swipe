@@ -84,6 +84,13 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     // <SwipeDocumentViewer> method
     func loadDocument(document:[String:AnyObject], size:CGSize, url:NSURL?, state:[String:AnyObject]?, callback:(Float, NSError?)->(Void)) throws {
         self.book = SwipeBook(bookInfo: document, url: url)
+
+        if let languages = self.book.languages(),
+               language = languages.first,
+               langId = language["id"] as? String {
+            self.book.langId = langId
+        }
+        
         if let pageIndex = state?["page"] as? Int where pageIndex < self.book.pages.count && book.viewstate {
             self.book.pageIndex = pageIndex
         }

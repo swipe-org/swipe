@@ -25,7 +25,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
     // Public properties
     var viewSize:CGSize?
     var pageIndex = 0
-    var langId = "ja"
+    var langId = "en"
 
     // Private properties
     private let bookInfo:[String:AnyObject]
