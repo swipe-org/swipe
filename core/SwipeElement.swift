@@ -55,6 +55,7 @@ class SwipeElement:NSObject {
     private let scale:CGSize
     private var repeatCount = CGFloat(1.0)
     private let blackColor = UIColor.blackColor().CGColor
+    private let yellowColor = UIColor.yellowColor().CGColor
 #if os(OSX)
     private let contentScale = CGFloat(1.0) // REVIEW
 #else
@@ -596,7 +597,11 @@ class SwipeElement:NSObject {
                 }
                 return ret * self.scale.height
             }()
-            textLayer.foregroundColor = SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor)
+            textLayer.foregroundColor = SwipeParser.parseColor(self.info["textColor"], defaultColor: yellowColor)
+            textLayer.shadowColor = UIColor.blackColor().CGColor
+            textLayer.shadowOffset = CGSizeMake(1,1)
+            textLayer.shadowOpacity = 1
+            textLayer.shadowRadius = 4
             self.textLayer = textLayer
         }
         
