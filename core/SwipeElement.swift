@@ -576,15 +576,31 @@ class SwipeElement:NSObject {
         }
         
         //if let text = info["text"] as? String {
+        var fTextBottom = false
+        var fTextTop = false
         if let text = parseText(info, key:"text") {
             let textLayer = CATextLayer()
             textLayer.string = text
             textLayer.alignmentMode = kCAAlignmentCenter
-            if let value = info["textAlign"] as? String {
-                if value == "left" {
+            func processAlignment(alignment:String) {
+                switch(alignment) {
+                case "left":
                     textLayer.alignmentMode = kCAAlignmentLeft
-                } else if value == "right" {
+                case "right":
                     textLayer.alignmentMode = kCAAlignmentRight
+                case "top":
+                    fTextTop = true
+                case "bottom":
+                    fTextBottom = true
+                default:
+                    break
+                }
+            }
+            if let alignment = info["textAlign"] as? String {
+                processAlignment(alignment)
+            } else if let alignments = info["textAlign"] as? [String] {
+                for alignment in alignments {
+                    processAlignment(alignment)
                 }
             }
             textLayer.wrapped = true
@@ -623,6 +639,11 @@ class SwipeElement:NSObject {
                 }
                 label.numberOfLines = 999
                 let rc = label.textRectForBounds(CGRectMake(0, 0, rcText.size.width, 99999), limitedToNumberOfLines: 999)
+                if fTextTop {
+                    return 0
+                } else if fTextBottom {
+                    return rcText.size.height - rc.size.height
+                }
                 return (rcText.size.height - rc.size.height) / 2
             }()
             textLayer.frame = rcText
