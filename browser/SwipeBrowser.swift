@@ -433,6 +433,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: { (_:UIAlertAction) -> Void in
                     print("SwipeB language selected \(langId)")
                     self.documentViewer?.reloadWithLanguageId(langId)
+                    self.hideUI()
                 }))
             }
             self.presentViewController(alert, animated: true, completion: nil)
