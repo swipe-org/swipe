@@ -613,7 +613,7 @@ class SwipeElement:NSObject {
                 }
                 return ret * self.scale.height
             }()
-            textLayer.foregroundColor = SwipeParser.parseColor(self.info["textColor"], defaultColor: whiteColor)
+            textLayer.foregroundColor = SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor)
             if let shadowInfo = info["shadow"] as? [String:AnyObject] {
                 textLayer.shadowColor = SwipeParser.parseColor(shadowInfo["color"], defaultColor: blackColor)
                 textLayer.shadowOffset = SwipeParser.parseSize(shadowInfo["offset"], defalutValue: CGSizeMake(1, 1), scale:scale)
