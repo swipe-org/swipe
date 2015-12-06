@@ -507,12 +507,7 @@ class SwipeElement:NSObject {
             shapeLayer.strokeColor = SwipeParser.parseColor(info["strokeColor"], defaultColor: blackColor)
             shapeLayer.lineWidth = SwipeParser.parseCGFloat(info["lineWidth"]) * self.scale.width
             
-            if let shadowInfo = info["shadow"] as? [String:AnyObject] {
-                shapeLayer.shadowColor = SwipeParser.parseColor(shadowInfo["color"], defaultColor: blackColor)
-                shapeLayer.shadowOffset = SwipeParser.parseSize(shadowInfo["offset"], defalutValue: CGSizeMake(1, 1), scale:scale)
-                shapeLayer.shadowOpacity = SwipeParser.parseFloat(shadowInfo["opacity"], defalutValue:0.5)
-                shapeLayer.shadowRadius = SwipeParser.parseCGFloat(shadowInfo["radius"], defalutValue: 1.0) * self.scale.width
-            }
+            processShadow(info, layer: shapeLayer)
 
             shapeLayer.lineCap = "round"
             shapeLayer.strokeStart = SwipeParser.parseCGFloat(info["strokeStart"], defalutValue: 0.0)
@@ -552,12 +547,7 @@ class SwipeElement:NSObject {
             }
             
         } else {
-            if let shadowInfo = info["shadow"] as? [String:AnyObject] {
-                layer.shadowColor = SwipeParser.parseColor(shadowInfo["color"], defaultColor: blackColor)
-                layer.shadowOffset = SwipeParser.parseSize(shadowInfo["offset"], defalutValue: CGSizeMake(1, 1), scale:scale)
-                layer.shadowOpacity = SwipeParser.parseFloat(shadowInfo["opacity"], defalutValue:0.5)
-                layer.shadowRadius = SwipeParser.parseCGFloat(shadowInfo["radius"], defalutValue: 1.0) * self.scale.width
-            }
+            processShadow(info, layer: layer)
         }
         
         var mds = info["markdown"]
@@ -614,12 +604,7 @@ class SwipeElement:NSObject {
                 return ret * self.scale.height
             }()
             textLayer.foregroundColor = SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor)
-            if let shadowInfo = info["shadow"] as? [String:AnyObject] {
-                textLayer.shadowColor = SwipeParser.parseColor(shadowInfo["color"], defaultColor: blackColor)
-                textLayer.shadowOffset = SwipeParser.parseSize(shadowInfo["offset"], defalutValue: CGSizeMake(1, 1), scale:scale)
-                textLayer.shadowOpacity = SwipeParser.parseFloat(shadowInfo["opacity"], defalutValue:0.5)
-                textLayer.shadowRadius = SwipeParser.parseCGFloat(shadowInfo["radius"], defalutValue: 1.0) * self.scale.width
-            }
+            processShadow(info, layer: textLayer)
             self.textLayer = textLayer
         }
         
@@ -1257,6 +1242,15 @@ class SwipeElement:NSObject {
             return text
         }
         return nil
+    }
+    
+    private func processShadow(info:[String:AnyObject], layer:CALayer) {
+        if let shadowInfo = info["shadow"] as? [String:AnyObject] {
+            layer.shadowColor = SwipeParser.parseColor(shadowInfo["color"], defaultColor: blackColor)
+            layer.shadowOffset = SwipeParser.parseSize(shadowInfo["offset"], defalutValue: CGSizeMake(1, 1), scale:scale)
+            layer.shadowOpacity = SwipeParser.parseFloat(shadowInfo["opacity"], defalutValue:0.5)
+            layer.shadowRadius = SwipeParser.parseCGFloat(shadowInfo["radius"], defalutValue: 1.0) * self.scale.width
+        }
     }
     
     /*
