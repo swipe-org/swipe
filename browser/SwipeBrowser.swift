@@ -141,7 +141,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             labelTitle?.text = url?.lastPathComponent
         }
 #endif
-        if let _ = documentViewer.languages() {
+        if let languages = documentViewer.languages() where languages.count > 0 {
             btnLanguage?.enabled = true
         }
 
