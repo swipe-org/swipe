@@ -566,19 +566,23 @@ class SwipeElement:NSObject {
         }
         
         //if let text = info["text"] as? String {
-        var fTextBottom = false
-        var fTextTop = false
         if let text = parseText(info, key:"text") {
-            let textLayer = CATextLayer()
+            var fTextBottom = false
+            var fTextTop = false
+            //let textLayer = CATextLayer()
             //textLayer.string = text
+            var rcText = view.bounds
+            let label = UILabel(frame: rcText)
+            label.numberOfLines = 999
             var attr = [String:AnyObject]()
-            textLayer.alignmentMode = kCAAlignmentCenter
+
+            label.textAlignment = NSTextAlignment.Center
             func processAlignment(alignment:String) {
                 switch(alignment) {
                 case "left":
-                    textLayer.alignmentMode = kCAAlignmentLeft
+                    label.textAlignment = NSTextAlignment.Left
                 case "right":
-                    textLayer.alignmentMode = kCAAlignmentRight
+                    label.textAlignment = NSTextAlignment.Right
                 case "top":
                     fTextTop = true
                 case "bottom":
@@ -594,7 +598,7 @@ class SwipeElement:NSObject {
                     processAlignment(alignment)
                 }
             }
-            textLayer.wrapped = true
+            //textLayer.wrapped = true
             let fontSize:CGFloat = {
                 var ret = 20.0 / 320.0 * screenDimention.width // default
                 if let fontSize = self.info["fontSize"] as? CGFloat {
@@ -605,34 +609,16 @@ class SwipeElement:NSObject {
                 return round(ret * self.scale.height)
             }()
             attr[NSFontAttributeName] = UIFont(name: "Helvetica", size: fontSize)
-            //textLayer.foregroundColor = SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor)
             attr[NSForegroundColorAttributeName] = SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor)
-            processShadow(info, layer: textLayer)
-            textLayer.string = NSAttributedString(string: text, attributes: attr)
-            self.textLayer = textLayer
-        }
-        
-        if let textLayer = self.textLayer {
-#if !os(OSX) // REVIEW
-            textLayer.wrapped = true
-            textLayer.contentsScale = contentScale
-            var rcText = view.bounds
+            processShadow(info, layer: view.layer)
+
+            label.attributedText = NSAttributedString(string: text, attributes: attr)
             
-let label = UILabel()
             rcText.origin.y = {
-                if let text = textLayer.string as? String {
-                    label.text = text
-                    label.textAlignment = NSTextAlignment.Center
-                    label.font = UIFont(name: "Helvetica", size: textLayer.fontSize)
-                    //label.font = UIFont.systemFontOfSize(textLayer.fontSize)
-                } else if let attrText = textLayer.string as? NSAttributedString {
-                    label.attributedText = attrText
-                }
-                label.numberOfLines = 999
                 let rc = label.textRectForBounds(CGRectMake(0, 0, rcText.size.width, 99999), limitedToNumberOfLines: 999)
-var rcLabel = rc
-rcLabel.origin.y = rcText.size.height - rc.size.height
-label.frame = rcLabel
+                defer {
+                    rcText.size.height = rc.size.height
+                }
                 if fTextTop {
                     return 0
                 } else if fTextBottom {
@@ -640,11 +626,8 @@ label.frame = rcLabel
                 }
                 return (rcText.size.height - rc.size.height) / 2
             }()
-            textLayer.frame = rcText
-textLayer.backgroundColor = UIColor.yellowColor().CGColor
-            layer.addSublayer(textLayer)
-view.addSubview(label)
-#endif
+            label.frame = rcText
+            view.addSubview(label)
         }
         
         // http://stackoverflow.com/questions/9290972/is-it-possible-to-make-avurlasset-work-without-a-file-extension
