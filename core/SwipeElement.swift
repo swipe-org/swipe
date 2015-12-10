@@ -570,7 +570,8 @@ class SwipeElement:NSObject {
         var fTextTop = false
         if let text = parseText(info, key:"text") {
             let textLayer = CATextLayer()
-            textLayer.string = text
+            //textLayer.string = text
+            var attr = [String:AnyObject]()
             textLayer.alignmentMode = kCAAlignmentCenter
             func processAlignment(alignment:String) {
                 switch(alignment) {
@@ -594,17 +595,20 @@ class SwipeElement:NSObject {
                 }
             }
             textLayer.wrapped = true
-            textLayer.fontSize = {
+            let fontSize:CGFloat = {
                 var ret = 20.0 / 320.0 * screenDimention.width // default
                 if let fontSize = self.info["fontSize"] as? CGFloat {
                     ret = fontSize
                 } else if let fontSize = self.info["fontSize"] as? String {
                     ret = SwipeParser.parsePercent(fontSize, full: dimension.height, defaultValue: ret)
                 }
-                return ret * self.scale.height
+                return round(ret * self.scale.height)
             }()
-            textLayer.foregroundColor = SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor)
+            attr[NSFontAttributeName] = UIFont(name: "Helvetica", size: fontSize)
+            //textLayer.foregroundColor = SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor)
+            attr[NSForegroundColorAttributeName] = SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor)
             processShadow(info, layer: textLayer)
+            textLayer.string = NSAttributedString(string: text, attributes: attr)
             self.textLayer = textLayer
         }
         
@@ -614,16 +618,21 @@ class SwipeElement:NSObject {
             textLayer.contentsScale = contentScale
             var rcText = view.bounds
             
+let label = UILabel()
             rcText.origin.y = {
-                let label = UILabel()
                 if let text = textLayer.string as? String {
                     label.text = text
-                    label.font = UIFont.systemFontOfSize(textLayer.fontSize)
+                    label.textAlignment = NSTextAlignment.Center
+                    label.font = UIFont(name: "Helvetica", size: textLayer.fontSize)
+                    //label.font = UIFont.systemFontOfSize(textLayer.fontSize)
                 } else if let attrText = textLayer.string as? NSAttributedString {
                     label.attributedText = attrText
                 }
                 label.numberOfLines = 999
                 let rc = label.textRectForBounds(CGRectMake(0, 0, rcText.size.width, 99999), limitedToNumberOfLines: 999)
+var rcLabel = rc
+rcLabel.origin.y = rcText.size.height - rc.size.height
+label.frame = rcLabel
                 if fTextTop {
                     return 0
                 } else if fTextBottom {
@@ -632,7 +641,9 @@ class SwipeElement:NSObject {
                 return (rcText.size.height - rc.size.height) / 2
             }()
             textLayer.frame = rcText
+textLayer.backgroundColor = UIColor.yellowColor().CGColor
             layer.addSublayer(textLayer)
+view.addSubview(label)
 #endif
         }
         
