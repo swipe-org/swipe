@@ -606,7 +606,7 @@ class SwipeElement:NSObject {
 
             var attr = [String:AnyObject]()
             attr[NSFontAttributeName] = UIFont(name: "Helvetica", size: fontSize)
-            attr[NSForegroundColorAttributeName] = SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor)
+            attr[NSForegroundColorAttributeName] = UIColor(CGColor: SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor))
             processShadow(info, layer: view.layer)
 
             label.attributedText = NSAttributedString(string: text, attributes: attr)
