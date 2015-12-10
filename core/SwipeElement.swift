@@ -565,16 +565,12 @@ class SwipeElement:NSObject {
 #endif
         }
         
-        //if let text = info["text"] as? String {
         if let text = parseText(info, key:"text") {
             var fTextBottom = false
             var fTextTop = false
-            //let textLayer = CATextLayer()
-            //textLayer.string = text
             var rcText = view.bounds
             let label = UILabel(frame: rcText)
             label.numberOfLines = 999
-            var attr = [String:AnyObject]()
 
             label.textAlignment = NSTextAlignment.Center
             func processAlignment(alignment:String) {
@@ -598,7 +594,6 @@ class SwipeElement:NSObject {
                     processAlignment(alignment)
                 }
             }
-            //textLayer.wrapped = true
             let fontSize:CGFloat = {
                 var ret = 20.0 / 320.0 * screenDimention.width // default
                 if let fontSize = self.info["fontSize"] as? CGFloat {
@@ -608,24 +603,21 @@ class SwipeElement:NSObject {
                 }
                 return round(ret * self.scale.height)
             }()
+
+            var attr = [String:AnyObject]()
             attr[NSFontAttributeName] = UIFont(name: "Helvetica", size: fontSize)
             attr[NSForegroundColorAttributeName] = SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor)
             processShadow(info, layer: view.layer)
 
             label.attributedText = NSAttributedString(string: text, attributes: attr)
             
-            rcText.origin.y = {
-                let rc = label.textRectForBounds(CGRectMake(0, 0, rcText.size.width, 99999), limitedToNumberOfLines: 999)
-                defer {
-                    rcText.size.height = rc.size.height
-                }
-                if fTextTop {
-                    return 0
-                } else if fTextBottom {
-                    return rcText.size.height - rc.size.height
-                }
-                return (rcText.size.height - rc.size.height) / 2
-            }()
+            let rc = label.textRectForBounds(CGRectMake(0, 0, rcText.size.width, 99999), limitedToNumberOfLines: 999)
+            if fTextBottom {
+                rcText.origin.y = rcText.size.height - rc.size.height
+            } else if !fTextTop {
+                rcText.origin.y =  (rcText.size.height - rc.size.height) / 2
+            }
+            rcText.size.height = rc.size.height
             label.frame = rcText
             view.addSubview(label)
         }
