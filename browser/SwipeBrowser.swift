@@ -101,7 +101,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         slider.hidden = true
 #endif
 
-        if let url = self.url {
+        if let document = self.jsonDocument {
+            self.openDocument(document, localResource: false)
+        } else if let url = self.url {
             if url.scheme == "file" {
                 if let data = NSData(contentsOfURL: url) {
                     self.openData(data, localResource: true)
@@ -125,8 +127,6 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                     }
                 }
             }
-        } else if let document = self.jsonDocument {
-            self.openDocument(document, localResource: false)
         } else {
             MyLog("SWBrows nil URL")
             processError("No URL to load".localized)
