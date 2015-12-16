@@ -87,6 +87,7 @@ When the user opens this document with a Swipe viewer, the user will see only th
 
 ### Document Properties
 
+- **type** (String): This must be "net.swipe.swipe" for a Swipe document
 - **title** (String): Title of the document, optional
 - **bc** (Color): Background color, defalut is *darkGray*
 - **dimension** ([Int, Int]): Dimension of the document, default is [320, 568]
