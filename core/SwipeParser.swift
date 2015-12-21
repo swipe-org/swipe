@@ -125,8 +125,7 @@ class SwipeParser {
                 }
             }
             if let depth = value["depth"] as? CGFloat {
-                // use scaleX because scaleZ is not defined (and not worth defining it)
-                xf = CATransform3DTranslate(xf, 0, 0, depth * scaleX)
+                xf = CATransform3DTranslate(xf, 0, 0, depth)
                 hasValue = true
             }
             if let rot = value["rotate"] as? CGFloat {
