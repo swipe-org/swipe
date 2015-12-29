@@ -82,6 +82,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
 #if !os(OSX)
     private var utterance:AVSpeechUtterance?
 #endif
+    private var viewVideo:UIView? // Special layer to host auto-play video layers
     private var viewAnimation:UIView?
     private var aniLayer:CALayer?
     private var audioPlayer:AVAudioPlayer?
@@ -103,6 +104,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
             }
             elements.removeAll()
             self.view = nil
+            self.viewVideo = nil
             self.viewAnimation = nil
 #if !os(OSX)
             self.utterance = nil
@@ -205,6 +207,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
             CATransaction.begin()
             CATransaction.setDisableActions(true)
             assert(self.viewAnimation != nil, "must have self.viewAnimation")
+            assert(self.viewVideo != nil, "must have viewVideo")
             self.aniLayer?.timeOffset = CFTimeInterval(offset)
             for element in elements {
                 element.setTimeOffsetTo(offset)
@@ -315,6 +318,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
             NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.shouldStartAutoPlay, object: self)
         }
         assert(self.viewAnimation != nil, "must have self.viewAnimation")
+        assert(self.viewVideo != nil, "must have viewVideo")
         if let offset = self.offsetPaused {
             timerTick(offset, fElementRepeat: fElementRepeat)
         } else {
@@ -406,6 +410,8 @@ class SwipePage: NSObject, SwipeElementDelegate {
         let view = UIView(frame: CGRectMake(0.0, 0.0, 100.0, 100.0))
         view.clipsToBounds = true
         self.view = view
+        let viewVideo = UIView(frame: view.bounds)
+        self.viewVideo = viewVideo
         let viewAnimation = UIView(frame: view.bounds)
         self.viewAnimation = viewAnimation
 #if os(OSX)
@@ -424,7 +430,9 @@ class SwipePage: NSObject, SwipeElementDelegate {
             transform.m34 = -1 / (dimension.width * eyePosition)
         }
         aniLayer.sublayerTransform = transform
-        
+        viewVideo.layer.sublayerTransform = transform
+
+        view.addSubview(viewVideo)
         view.addSubview(viewAnimation)
         
         //view.tag = 100 + index // for debugging only
@@ -435,6 +443,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
 #if os(OSX)
         viewAnimation.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
 #else
+        viewVideo.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         viewAnimation.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
 #endif
         //viewAnimation.backgroundColor = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 0.2)
@@ -473,11 +482,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
                 if let subview = element.loadView(dimension) {
                     if self.autoplay && element.isVideoElement() {
                         // HACK: video element can not be played normally if it is added to the animation layer, which has the speed property zero.
-#if os(OSX)
-                        self.view!.addSubview(subview, positioned: NSWindowOrderingMode.Below, relativeTo: self.viewAnimation)
-#else
-                        self.view!.insertSubview(subview, belowSubview: self.viewAnimation!)
-#endif
+                        self.viewVideo!.addSubview(subview)
                     } else {
                         self.viewAnimation!.addSubview(subview)
                     }
