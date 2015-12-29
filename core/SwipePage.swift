@@ -472,6 +472,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
                 let element = SwipeElement(info: e, scale:scale, delegate:self)
                 if let subview = element.loadView(dimension) {
                     if self.autoplay && element.isVideoElement() {
+                        // HACK: video element can not be played normally if it is added to the animation layer, which has the speed property zero.
 #if os(OSX)
                         self.view!.addSubview(subview, positioned: NSWindowOrderingMode.Below, relativeTo: self.viewAnimation)
 #else
