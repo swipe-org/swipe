@@ -90,4 +90,20 @@ class SwipePrefetcher {
     func map(url:NSURL) -> NSURL? {
         return urlsFetched[url]
     }
+    
+    static func extensionForType(memeType:String) -> String {
+        let ext:String
+        if memeType == "video/quicktime" {
+            ext = ".mov"
+        } else if memeType == "video/mp4" {
+            ext = ".mp4"
+        } else {
+            ext = ""
+        }
+        return ext
+    }
+    
+    static func isMovie(mimeType:String) -> Bool {
+        return mimeType == "video/quicktime" || mimeType == "video/mp4"
+    }
 }
