@@ -691,7 +691,7 @@ class SwipeElement:NSObject {
             }
             notificationManager.addObserverForName(SwipePage.shouldStartAutoPlay, object: delegate, queue: NSOperationQueue.mainQueue()) {
                 [unowned self] (_:NSNotification!) -> Void in
-                if !self.fPlaying {
+                if !self.fPlaying && layer.opacity > 0 {
                     self.fPlaying = true
                     self.delegate.didStartPlaying(self)
                     MyLog("SWElem videoPlayer.state = \(videoPlayer.status.rawValue)", level: 1)
