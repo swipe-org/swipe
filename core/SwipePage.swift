@@ -399,7 +399,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         return SwipePrefetcher(urls:self.resourceURLs)
     }()
 
-    func loadView() -> UIView {
+    func loadView(callback:((Void)->(Void))?) -> UIView {
     
         MyLog("SWPage  loading @\(index)", level: 2)
         assert(self.view == nil, "loadView self.view must be nil")
@@ -444,6 +444,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
                 if self.view != nil {
                     // NOTE: We are intentionally ignoring fetch errors (of network resources) here.
                     self.loadSubviews()
+                    callback?()
                 }
             }
         }

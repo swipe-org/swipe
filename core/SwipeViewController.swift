@@ -180,7 +180,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
 
 #if os(tvOS)
-    // No need to give the focus to the scrollView because we handle the PanGesture at this view level.
+    // No need to give the focus to the scrollView becfause we handle the PanGesture at this view level.
     //override weak var preferredFocusedView: UIView? { return self.scrollView }
 #endif
 
@@ -220,7 +220,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         
         if scrollView.contentSize != size {
             scrollView.contentSize = size
-            adjustIndex(self.book.pageIndex, fForced: true)
+            adjustIndex(self.book.pageIndex, fForced: true, fDeferredEnter: true)
             let offset = self.book.horizontal ? CGPointMake((CGFloat(self.book.pageIndex)) * frame.size.width, 0) : CGPointMake(0, (CGFloat(self.book.pageIndex)) * frame.size.height)
             self.scrollView.contentOffset = offset
         }
@@ -479,7 +479,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         }
     }
     
-    private func adjustIndex(newPageIndex:Int, fForced:Bool = false) -> Bool {
+    private func adjustIndex(newPageIndex:Int, fForced:Bool = false, fDeferredEnter:Bool = false) -> Bool {
         if self.book.pages.count == 0 {
             print("SwipeVC ### No Pages")
             return false
@@ -501,16 +501,26 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             }
         }
         self.book.pageIndex = newPageIndex
-        self.preparePages()
-        
-        if fForced {
-            self.book.currenPage.willEnter(true)
+        self.preparePages { (index:Int) -> (Void) in
+            if fDeferredEnter && newPageIndex == index && newPageIndex == self.book.pageIndex {
+                print("SwipeVC index=\(index)")
+                if fForced {
+                    self.book.currenPage.willEnter(true)
+                }
+                self.book.currenPage.didEnter(self.fAdvancing || fForced)
+            }
         }
-        self.book.currenPage.didEnter(fAdvancing || fForced)
+        
+        if !fDeferredEnter {
+            if fForced {
+                self.book.currenPage.willEnter(true)
+            }
+            self.book.currenPage.didEnter(fAdvancing || fForced)
+        }
         return true
     }
 
-    private func preparePages() {
+    private func preparePages(callback:((Int)->(Void))?) {
         func preparePage(index:Int, frame:CGRect) {
             if index < 0 || index >= book.pages.count {
                 return
@@ -528,7 +538,9 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
                     scrollView.insertSubview(view, aboveSubview: aboveSubview)
                 }
             } else {
-                let view = page.loadView()
+                let view = page.loadView({ (Void) -> (Void) in
+                    callback?(index)
+                })
                 view.frame = frame
                 
                 if let aboveSubview = above {
