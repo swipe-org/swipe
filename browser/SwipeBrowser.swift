@@ -133,6 +133,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
     }
     
+    // NOTE: documentViewer and vc always points to the same UIController.
     private func loadDocumentView(documentViewer:SwipeDocumentViewer, vc:UIViewController, document:[String:AnyObject]) {
 #if os(iOS)
         if let title = documentViewer.documentTitle() {
