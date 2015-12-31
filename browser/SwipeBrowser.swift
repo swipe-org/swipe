@@ -286,6 +286,12 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         return true
     }
     
+    // NOTE: This function and supportedInterfaceOrientations will not be called on iPad
+    // as long as the app supports multitasking.
+    override func shouldAutorotate() -> Bool {
+        return true
+    }
+    
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         if let documentViewer = self.documentViewer where documentViewer.landscape() {
             return UIInterfaceOrientationMask.Landscape
@@ -295,14 +301,6 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             : UIInterfaceOrientationMask.Portrait
     }
 
-// LATER: Implement!
-/*
-    @IBAction func viewSource() {
-        let vc = SourceViewController(nibName: "SourceViewController", bundle: nil)
-        vc.book = self.book
-        self.presentViewController(vc, animated: true, completion: nil)
-    }
-*/
     @IBAction func tapped() {
         MyLog("SWBrows tapped", level: 1)
         if fVisibleUI {
