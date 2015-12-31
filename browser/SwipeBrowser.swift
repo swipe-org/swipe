@@ -102,7 +102,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 #endif
 
         if let document = self.jsonDocument {
-            self.openDocument(document, localResource: false)
+            self.openDocument(document, localResource: true)
         } else if let url = self.url {
             if url.scheme == "file" {
                 if let data = NSData(contentsOfURL: url) {
