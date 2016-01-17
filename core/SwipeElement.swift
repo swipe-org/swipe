@@ -17,6 +17,7 @@ import UIKit
 
 import AVFoundation
 import ImageIO
+import CoreText
 
 private func MyLog(text:String, level:Int = 0) {
     let s_verbosLevel = 0
@@ -1193,10 +1194,8 @@ class SwipeElement:NSObject {
     func addTextLayer(text:String, info:[String:AnyObject], dimension:CGSize, layer:CALayer) {
         var fTextBottom = false
         var fTextTop = false
-        var rcText = layer.bounds
         let textLayer = CATextLayer()
         textLayer.wrapped = true
-        textLayer.frame = rcText
 
         textLayer.alignmentMode = kCAAlignmentCenter
         func processAlignment(alignment:String) {
@@ -1235,18 +1234,21 @@ class SwipeElement:NSObject {
         attr[NSForegroundColorAttributeName] = UIColor(CGColor: SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor))
         processShadow(info, layer: layer)
 
-        textLayer.string = NSAttributedString(string: text, attributes: attr)
+        let attrString = NSAttributedString(string: text, attributes: attr)
+        textLayer.string = attrString
 
-        /*
-        let rc = label.textRectForBounds(CGRectMake(0, 0, rcText.size.width, 99999), limitedToNumberOfLines: 999)
-        if fTextBottom {
-            rcText.origin.y = rcText.size.height - rc.size.height
-        } else if !fTextTop {
-            rcText.origin.y =  (rcText.size.height - rc.size.height) / 2
-        }
-        rcText.size.height = rc.size.height
-        label.frame = rcText
-        */
+        textLayer.frame = {
+            var rcText = layer.bounds
+            let setter = CTFramesetterCreateWithAttributedString(attrString)
+            let suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(setter, CFRangeMake(0, attrString.length), nil, CGSizeMake(rcText.width, 99999), nil)
+            if fTextBottom {
+                rcText.origin.y = rcText.size.height - suggestedSize.height
+            } else if !fTextTop {
+                rcText.origin.y =  (rcText.size.height - suggestedSize.height) / 2
+            }
+            rcText.size.height = suggestedSize.height
+            return rcText
+        }()
         layer.addSublayer(textLayer)
     }
     
