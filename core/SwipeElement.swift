@@ -569,7 +569,7 @@ class SwipeElement:NSObject {
         }
         
         if let text = parseText(info, key:"text") {
-            self.addTextLayer(text, info: info, dimension:screenDimention, layer: layer)
+            SwipeElement.addTextLayer(text, scale:self.scale, info: info, dimension:screenDimention, layer: layer)
         }
         
         // http://stackoverflow.com/questions/9290972/is-it-possible-to-make-avurlasset-work-without-a-file-extension
@@ -1191,7 +1191,7 @@ class SwipeElement:NSObject {
         }
     }
     
-    func addTextLayer(text:String, info:[String:AnyObject], dimension:CGSize, layer:CALayer) {
+    static func addTextLayer(text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer) {
         var fTextBottom = false
         var fTextTop = false
 
@@ -1222,75 +1222,38 @@ class SwipeElement:NSObject {
         }
         let fontSize:CGFloat = {
             var ret = 20.0 / 480.0 * dimension.height // default
-            if let fontSize = self.info["fontSize"] as? CGFloat {
+            if let fontSize = info["fontSize"] as? CGFloat {
                 ret = fontSize
-            } else if let fontSize = self.info["fontSize"] as? String {
+            } else if let fontSize = info["fontSize"] as? String {
                 ret = SwipeParser.parsePercent(fontSize, full: dimension.height, defaultValue: ret)
             }
-            return round(ret * self.scale.height)
+            return round(ret * scale.height)
         }()
 
         let attr:[String:AnyObject] = [
             NSFontAttributeName:UIFont(name: "Helvetica", size: fontSize)!,
-            NSForegroundColorAttributeName:UIColor(CGColor: SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor)),
+            NSForegroundColorAttributeName:UIColor(CGColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor)),
             NSParagraphStyleAttributeName:paragraphStyle]
-        let attrString = NSAttributedString(string: text, attributes: attr)
+        let textStorage = NSTextStorage(string: text, attributes: attr)
 
         var rcText = layer.bounds
-        UIGraphicsBeginImageContext(rcText.size); defer {
+        UIGraphicsBeginImageContextWithOptions(rcText.size, false, 2); defer {
             UIGraphicsEndImageContext()
         }
         
-        let storage = NSTextStorage(attributedString: attrString)
         let manager = NSLayoutManager()
-        storage.addLayoutManager(manager)
+        textStorage.addLayoutManager(manager)
         let container = NSTextContainer(size: CGSizeMake(rcText.width, 99999))
         manager.addTextContainer(container)
         manager.ensureLayoutForTextContainer(container)
-        let box = manager.usedRectForTextContainer(container)
-        let suggestedSize = box.size
-        print("SwipeElement coreText=\(suggestedSize)")
+        let height = manager.usedRectForTextContainer(container).size.height
         if fTextBottom {
-            rcText.origin.y = rcText.size.height - suggestedSize.height
+            rcText.origin.y = rcText.size.height - height
         } else if !fTextTop {
-            rcText.origin.y =  (rcText.size.height - suggestedSize.height) / 2
+            rcText.origin.y =  (rcText.size.height - height) / 2
         }
-        attrString.drawInRect(rcText)
+        textStorage.drawInRect(rcText)
         layer.contents = UIGraphicsGetImageFromCurrentImageContext().CGImage
-        
-/*
-        let textLayer = CATextLayer()
-        textLayer.wrapped = true // HACK: why specifying the linebreakmode is not enough?
-        textLayer.string = attrString
-        processShadow(info, layer: layer)
-
-        textLayer.frame = {
-            var rcText = layer.bounds
-            let storage = NSTextStorage(attributedString: attrString)
-            let manager = NSLayoutManager()
-            storage.addLayoutManager(manager)
-            let container = NSTextContainer(size: CGSizeMake(rcText.width, 99999))
-            manager.addTextContainer(container)
-            manager.ensureLayoutForTextContainer(container)
-            let box = manager.usedRectForTextContainer(container)
-            /*
-            print("SwipeElement TextKit=\(box.size)")
-        
-            let setter = CTFramesetterCreateWithAttributedString(attrString)
-            let suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(setter, CFRangeMake(0, attrString.length), nil, CGSizeMake(rcText.width, 99999), nil)
-            */
-            let suggestedSize = box.size
-            print("SwipeElement coreText=\(suggestedSize)")
-            if fTextBottom {
-                rcText.origin.y = rcText.size.height - suggestedSize.height
-            } else if !fTextTop {
-                rcText.origin.y =  (rcText.size.height - suggestedSize.height) / 2
-            }
-            rcText.size.height = ceil(suggestedSize.height * 1.2) // HACK: work around
-            return rcText
-        }()
-        layer.addSublayer(textLayer)
-*/
     }
     
     /*
