@@ -1194,8 +1194,6 @@ class SwipeElement:NSObject {
     func addTextLayer(text:String, info:[String:AnyObject], dimension:CGSize, layer:CALayer) {
         var fTextBottom = false
         var fTextTop = false
-        let textLayer = CATextLayer()
-        textLayer.wrapped = true // HACK: why specifying the linebreakmode is not enough?
 
         let paragraphStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
         paragraphStyle.alignment = NSTextAlignment.Center
@@ -1237,8 +1235,33 @@ class SwipeElement:NSObject {
             NSForegroundColorAttributeName:UIColor(CGColor: SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor)),
             NSParagraphStyleAttributeName:paragraphStyle]
         let attrString = NSAttributedString(string: text, attributes: attr)
-        textLayer.string = attrString
+
+        var rcText = layer.bounds
+        UIGraphicsBeginImageContext(rcText.size); defer {
+            UIGraphicsEndImageContext()
+        }
         
+        let storage = NSTextStorage(attributedString: attrString)
+        let manager = NSLayoutManager()
+        storage.addLayoutManager(manager)
+        let container = NSTextContainer(size: CGSizeMake(rcText.width, 99999))
+        manager.addTextContainer(container)
+        manager.ensureLayoutForTextContainer(container)
+        let box = manager.usedRectForTextContainer(container)
+        let suggestedSize = box.size
+        print("SwipeElement coreText=\(suggestedSize)")
+        if fTextBottom {
+            rcText.origin.y = rcText.size.height - suggestedSize.height
+        } else if !fTextTop {
+            rcText.origin.y =  (rcText.size.height - suggestedSize.height) / 2
+        }
+        attrString.drawInRect(rcText)
+        layer.contents = UIGraphicsGetImageFromCurrentImageContext().CGImage
+        
+/*
+        let textLayer = CATextLayer()
+        textLayer.wrapped = true // HACK: why specifying the linebreakmode is not enough?
+        textLayer.string = attrString
         processShadow(info, layer: layer)
 
         textLayer.frame = {
@@ -1267,6 +1290,7 @@ class SwipeElement:NSObject {
             return rcText
         }()
         layer.addSublayer(textLayer)
+*/
     }
     
     /*
