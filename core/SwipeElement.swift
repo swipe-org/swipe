@@ -1243,24 +1243,27 @@ class SwipeElement:NSObject {
 
         textLayer.frame = {
             var rcText = layer.bounds
-            /*
             let storage = NSTextStorage(attributedString: attrString)
-            let container = NSTextContainer(size: CGSizeMake(rcText.width, 99999))
             let manager = NSLayoutManager()
-            manager.ensureLayoutForTextContainer(container)
             storage.addLayoutManager(manager)
+            let container = NSTextContainer(size: CGSizeMake(rcText.width, 99999))
+            manager.addTextContainer(container)
+            manager.ensureLayoutForTextContainer(container)
             let box = manager.usedRectForTextContainer(container)
-            print("SwipeElement box=\(box)")
-            */
+            /*
+            print("SwipeElement TextKit=\(box.size)")
         
             let setter = CTFramesetterCreateWithAttributedString(attrString)
             let suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(setter, CFRangeMake(0, attrString.length), nil, CGSizeMake(rcText.width, 99999), nil)
+            */
+            let suggestedSize = box.size
+            print("SwipeElement coreText=\(suggestedSize)")
             if fTextBottom {
                 rcText.origin.y = rcText.size.height - suggestedSize.height
             } else if !fTextTop {
                 rcText.origin.y =  (rcText.size.height - suggestedSize.height) / 2
             }
-            rcText.size.height = suggestedSize.height * 1.3 // HACK: work-around
+            rcText.size.height = ceil(suggestedSize.height * 1.2) // HACK: work around
             return rcText
         }()
         layer.addSublayer(textLayer)
