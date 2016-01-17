@@ -593,12 +593,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     func localizedStringForKey(key:String) -> String? {
         if let strings = pageInfo["strings"] as? [String:AnyObject],
                texts = strings[key] as? [String:AnyObject] {
-            if let langId = delegate.languageIdentifier(),
-                   text = texts[langId] as? String {
-                return text
-            } else if let text = texts["*"] as? String {
-                return text
-            }
+            return SwipeParser.localizedString(texts, langId: delegate.languageIdentifier())
         }
         return nil
     }

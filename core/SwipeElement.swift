@@ -1222,14 +1222,16 @@ class SwipeElement:NSObject {
         if let text = value as? String {
             return text
         }
-        if let ref = value as? [String:AnyObject],
-               key = ref["ref"] as? String,
+        guard let params = value as? [String:AnyObject] else {
+            return nil
+        }
+        if let key = params["ref"] as? String,
                text = delegate.localizedStringForKey(key) {
             return text
         }
         return nil
     }
-    
+
     private func processShadow(info:[String:AnyObject], layer:CALayer) {
         if let shadowInfo = info["shadow"] as? [String:AnyObject] {
             layer.shadowColor = SwipeParser.parseColor(shadowInfo["color"], defaultColor: blackColor)

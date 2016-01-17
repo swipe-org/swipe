@@ -304,5 +304,14 @@ class SwipeParser {
         }
         return shadow
     }
-    
+
+    static func localizedString(params:[String:AnyObject], langId:String?) -> String? {
+        if let key = langId,
+               text = params[key] as? String {
+            return text
+        } else if let text = params["*"] as? String {
+            return text
+        }
+        return nil
+    }
 }
