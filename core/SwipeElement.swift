@@ -36,7 +36,9 @@ protocol SwipeElementDelegate:NSObjectProtocol {
     func baseURL() -> NSURL?
     func map(url:NSURL) -> NSURL?
     func pageIndex() -> Int // for debugging
-    func localizedStringForKey(key:String) -> String?}
+    func localizedStringForKey(key:String) -> String?
+    func languageIdentifier() -> String?
+}
 
 class SwipeElement:NSObject {
     // Debugging
@@ -1229,7 +1231,7 @@ class SwipeElement:NSObject {
                text = delegate.localizedStringForKey(key) {
             return text
         }
-        return nil
+        return SwipeParser.localizedString(params, langId: delegate.languageIdentifier())
     }
 
     private func processShadow(info:[String:AnyObject], layer:CALayer) {

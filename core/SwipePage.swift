@@ -598,6 +598,11 @@ class SwipePage: NSObject, SwipeElementDelegate {
         return nil
     }
 
+    // <SwipeElementDelegate> method
+    func languageIdentifier() -> String? {
+        return delegate.languageIdentifier()
+    }
+
     func parseText(info:[String:AnyObject], key:String) -> String? {
         guard let value = info[key] else {
             return nil
