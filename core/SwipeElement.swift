@@ -568,60 +568,7 @@ class SwipeElement:NSObject {
         }
         
         if let text = parseText(info, key:"text") {
-            var fTextBottom = false
-            var fTextTop = false
-            var rcText = view.bounds
-            let label = UILabel(frame: rcText)
-            label.numberOfLines = 999
-
-            label.textAlignment = NSTextAlignment.Center
-            func processAlignment(alignment:String) {
-                switch(alignment) {
-                case "left":
-                    label.textAlignment = NSTextAlignment.Left
-                case "right":
-                    label.textAlignment = NSTextAlignment.Right
-                case "top":
-                    fTextTop = true
-                case "bottom":
-                    fTextBottom = true
-                default:
-                    break
-                }
-            }
-            if let alignment = info["textAlign"] as? String {
-                processAlignment(alignment)
-            } else if let alignments = info["textAlign"] as? [String] {
-                for alignment in alignments {
-                    processAlignment(alignment)
-                }
-            }
-            let fontSize:CGFloat = {
-                var ret = 20.0 / 320.0 * screenDimention.width // default
-                if let fontSize = self.info["fontSize"] as? CGFloat {
-                    ret = fontSize
-                } else if let fontSize = self.info["fontSize"] as? String {
-                    ret = SwipeParser.parsePercent(fontSize, full: dimension.height, defaultValue: ret)
-                }
-                return round(ret * self.scale.height)
-            }()
-
-            var attr = [String:AnyObject]()
-            attr[NSFontAttributeName] = UIFont(name: "Helvetica", size: fontSize)
-            attr[NSForegroundColorAttributeName] = UIColor(CGColor: SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor))
-            processShadow(info, layer: view.layer)
-
-            label.attributedText = NSAttributedString(string: text, attributes: attr)
-            
-            let rc = label.textRectForBounds(CGRectMake(0, 0, rcText.size.width, 99999), limitedToNumberOfLines: 999)
-            if fTextBottom {
-                rcText.origin.y = rcText.size.height - rc.size.height
-            } else if !fTextTop {
-                rcText.origin.y =  (rcText.size.height - rc.size.height) / 2
-            }
-            rcText.size.height = rc.size.height
-            label.frame = rcText
-            view.addSubview(label)
+            self.addTextLayer(text, info: info, dimension:screenDimention, view: view)
         }
         
         // http://stackoverflow.com/questions/9290972/is-it-possible-to-make-avurlasset-work-without-a-file-extension
@@ -1241,6 +1188,63 @@ class SwipeElement:NSObject {
             layer.shadowOpacity = SwipeParser.parseFloat(shadowInfo["opacity"], defalutValue:0.5)
             layer.shadowRadius = SwipeParser.parseCGFloat(shadowInfo["radius"], defalutValue: 1.0) * self.scale.width
         }
+    }
+    
+    func addTextLayer(text:String, info:[String:AnyObject], dimension:CGSize, view:UIView) {
+        var fTextBottom = false
+        var fTextTop = false
+        var rcText = view.bounds
+        let label = UILabel(frame: rcText)
+        label.numberOfLines = 999
+
+        label.textAlignment = NSTextAlignment.Center
+        func processAlignment(alignment:String) {
+            switch(alignment) {
+            case "left":
+                label.textAlignment = NSTextAlignment.Left
+            case "right":
+                label.textAlignment = NSTextAlignment.Right
+            case "top":
+                fTextTop = true
+            case "bottom":
+                fTextBottom = true
+            default:
+                break
+            }
+        }
+        if let alignment = info["textAlign"] as? String {
+            processAlignment(alignment)
+        } else if let alignments = info["textAlign"] as? [String] {
+            for alignment in alignments {
+                processAlignment(alignment)
+            }
+        }
+        let fontSize:CGFloat = {
+            var ret = 20.0 / 480.0 * dimension.height // default
+            if let fontSize = self.info["fontSize"] as? CGFloat {
+                ret = fontSize
+            } else if let fontSize = self.info["fontSize"] as? String {
+                ret = SwipeParser.parsePercent(fontSize, full: dimension.height, defaultValue: ret)
+            }
+            return round(ret * self.scale.height)
+        }()
+
+        var attr = [String:AnyObject]()
+        attr[NSFontAttributeName] = UIFont(name: "Helvetica", size: fontSize)
+        attr[NSForegroundColorAttributeName] = UIColor(CGColor: SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor))
+        processShadow(info, layer: view.layer)
+
+        label.attributedText = NSAttributedString(string: text, attributes: attr)
+        
+        let rc = label.textRectForBounds(CGRectMake(0, 0, rcText.size.width, 99999), limitedToNumberOfLines: 999)
+        if fTextBottom {
+            rcText.origin.y = rcText.size.height - rc.size.height
+        } else if !fTextTop {
+            rcText.origin.y =  (rcText.size.height - rc.size.height) / 2
+        }
+        rcText.size.height = rc.size.height
+        label.frame = rcText
+        view.addSubview(label)
     }
     
     /*
