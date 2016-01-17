@@ -1195,15 +1195,18 @@ class SwipeElement:NSObject {
         var fTextBottom = false
         var fTextTop = false
         let textLayer = CATextLayer()
-        textLayer.wrapped = true
+        textLayer.wrapped = true // HACK: why specifying the linebreakmode is not enough?
 
-        textLayer.alignmentMode = kCAAlignmentCenter
+        let paragraphStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        paragraphStyle.alignment = NSTextAlignment.Center
+        paragraphStyle.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        
         func processAlignment(alignment:String) {
             switch(alignment) {
             case "left":
-                textLayer.alignmentMode = kCAAlignmentLeft
+                paragraphStyle.alignment = NSTextAlignment.Left
             case "right":
-                textLayer.alignmentMode = kCAAlignmentRight
+                paragraphStyle.alignment = NSTextAlignment.Right
             case "top":
                 fTextTop = true
             case "bottom":
@@ -1229,16 +1232,27 @@ class SwipeElement:NSObject {
             return round(ret * self.scale.height)
         }()
 
-        var attr = [String:AnyObject]()
-        attr[NSFontAttributeName] = UIFont(name: "Helvetica", size: fontSize)
-        attr[NSForegroundColorAttributeName] = UIColor(CGColor: SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor))
-        processShadow(info, layer: layer)
-
+        let attr:[String:AnyObject] = [
+            NSFontAttributeName:UIFont(name: "Helvetica", size: fontSize)!,
+            NSForegroundColorAttributeName:UIColor(CGColor: SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor)),
+            NSParagraphStyleAttributeName:paragraphStyle]
         let attrString = NSAttributedString(string: text, attributes: attr)
         textLayer.string = attrString
+        
+        processShadow(info, layer: layer)
 
         textLayer.frame = {
             var rcText = layer.bounds
+            /*
+            let storage = NSTextStorage(attributedString: attrString)
+            let container = NSTextContainer(size: CGSizeMake(rcText.width, 99999))
+            let manager = NSLayoutManager()
+            manager.ensureLayoutForTextContainer(container)
+            storage.addLayoutManager(manager)
+            let box = manager.usedRectForTextContainer(container)
+            print("SwipeElement box=\(box)")
+            */
+        
             let setter = CTFramesetterCreateWithAttributedString(attrString)
             let suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(setter, CFRangeMake(0, attrString.length), nil, CGSizeMake(rcText.width, 99999), nil)
             if fTextBottom {
@@ -1246,7 +1260,7 @@ class SwipeElement:NSObject {
             } else if !fTextTop {
                 rcText.origin.y =  (rcText.size.height - suggestedSize.height) / 2
             }
-            rcText.size.height = suggestedSize.height
+            rcText.size.height = suggestedSize.height * 1.3 // HACK: work-around
             return rcText
         }()
         layer.addSublayer(textLayer)
