@@ -568,7 +568,7 @@ class SwipeElement:NSObject {
         }
         
         if let text = parseText(info, key:"text") {
-            self.addTextLayer(text, info: info, dimension:screenDimention, view: view)
+            self.addTextLayer(text, info: info, dimension:screenDimention, layer: layer)
         }
         
         // http://stackoverflow.com/questions/9290972/is-it-possible-to-make-avurlasset-work-without-a-file-extension
@@ -1190,20 +1190,21 @@ class SwipeElement:NSObject {
         }
     }
     
-    func addTextLayer(text:String, info:[String:AnyObject], dimension:CGSize, view:UIView) {
+    func addTextLayer(text:String, info:[String:AnyObject], dimension:CGSize, layer:CALayer) {
         var fTextBottom = false
         var fTextTop = false
-        var rcText = view.bounds
-        let label = UILabel(frame: rcText)
-        label.numberOfLines = 999
+        var rcText = layer.bounds
+        let textLayer = CATextLayer()
+        textLayer.wrapped = true
+        textLayer.frame = rcText
 
-        label.textAlignment = NSTextAlignment.Center
+        textLayer.alignmentMode = kCAAlignmentCenter
         func processAlignment(alignment:String) {
             switch(alignment) {
             case "left":
-                label.textAlignment = NSTextAlignment.Left
+                textLayer.alignmentMode = kCAAlignmentLeft
             case "right":
-                label.textAlignment = NSTextAlignment.Right
+                textLayer.alignmentMode = kCAAlignmentRight
             case "top":
                 fTextTop = true
             case "bottom":
@@ -1232,10 +1233,11 @@ class SwipeElement:NSObject {
         var attr = [String:AnyObject]()
         attr[NSFontAttributeName] = UIFont(name: "Helvetica", size: fontSize)
         attr[NSForegroundColorAttributeName] = UIColor(CGColor: SwipeParser.parseColor(self.info["textColor"], defaultColor: blackColor))
-        processShadow(info, layer: view.layer)
+        processShadow(info, layer: layer)
 
-        label.attributedText = NSAttributedString(string: text, attributes: attr)
-        
+        textLayer.string = NSAttributedString(string: text, attributes: attr)
+
+        /*
         let rc = label.textRectForBounds(CGRectMake(0, 0, rcText.size.width, 99999), limitedToNumberOfLines: 999)
         if fTextBottom {
             rcText.origin.y = rcText.size.height - rc.size.height
@@ -1244,7 +1246,8 @@ class SwipeElement:NSObject {
         }
         rcText.size.height = rc.size.height
         label.frame = rcText
-        view.addSubview(label)
+        */
+        layer.addSublayer(textLayer)
     }
     
     /*
