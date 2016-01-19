@@ -1205,6 +1205,8 @@ class SwipeElement:NSObject {
                 paragraphStyle.alignment = NSTextAlignment.Left
             case "right":
                 paragraphStyle.alignment = NSTextAlignment.Right
+            case "justified":
+                paragraphStyle.alignment = NSTextAlignment.Justified
             case "top":
                 fTextTop = true
             case "bottom":
