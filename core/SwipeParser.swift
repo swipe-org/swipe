@@ -99,7 +99,27 @@ class SwipeParser {
         return UIColor.greenColor().CGColor
     }
     
-    static func parseTransform(param:[String:AnyObject]?, scaleX:CGFloat, scaleY:CGFloat, base:[String:AnyObject]?, fSkipTranslate:Bool) -> CATransform3D? {
+    static func transformedPath(path:CGPath, param:[String:AnyObject]?, size:CGSize) -> CGPath? {
+        if let value = param {
+            var scale:CGSize?
+            if let s = value["scale"] as? CGFloat {
+                scale = CGSizeMake(s, s)
+            }
+            if let scales = value["scale"] as? [CGFloat] where scales.count == 2 {
+                scale = CGSizeMake(scales[0], scales[1])
+            }
+            
+            if let s = scale {
+                var xf = CGAffineTransformMakeTranslation(size.width / 2, size.height / 2)
+                xf = CGAffineTransformScale(xf, s.width, s.height)
+                xf = CGAffineTransformTranslate(xf, -size.width / 2, -size.height / 2)
+                return CGPathCreateCopyByTransformingPath(path, &xf)!
+            }
+        }
+        return nil
+    }
+    
+    static func parseTransform(param:[String:AnyObject]?, scaleX:CGFloat, scaleY:CGFloat, base:[String:AnyObject]?, fSkipTranslate:Bool, fSkipScale:Bool) -> CATransform3D? {
         if let p = param {
             var value = p
             var xf = CATransform3DIdentity
@@ -139,15 +159,18 @@ class SwipeParser {
                 xf = CATransform3DRotate(xf, rots[2] * m, 0, 0, 1)
                 hasValue = true
             }
-            if let scale = value["scale"] as? CGFloat {
-                xf = CATransform3DScale(xf, scale, scale, 1.0)
-                hasValue = true
-            }
-            if let scales = value["scale"] as? [CGFloat] {
-                if scales.count == 2 {
-                    xf = CATransform3DScale(xf, scales[0], scales[1], 1.0)
+            if !fSkipScale {
+                if let scale = value["scale"] as? CGFloat {
+                    xf = CATransform3DScale(xf, scale, scale, 1.0)
+                    hasValue = true
                 }
-                hasValue = true
+                // LATER: Use "where"
+                if let scales = value["scale"] as? [CGFloat] {
+                    if scales.count == 2 {
+                        xf = CATransform3DScale(xf, scales[0], scales[1], 1.0)
+                    }
+                    hasValue = true
+                }
             }
             return hasValue ? xf : nil
         }

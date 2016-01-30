@@ -505,7 +505,11 @@ class SwipeElement:NSObject {
         if let path = pathSrc {
             let shapeLayer = CAShapeLayer()
             shapeLayer.contentsScale = contentScale
-            shapeLayer.path = path
+            if let xpath = SwipeParser.transformedPath(path, param: info, size:frame.size) {
+                shapeLayer.path = xpath
+            } else {
+                shapeLayer.path = path
+            }
             shapeLayer.fillColor = SwipeParser.parseColor(info["fillColor"])
             shapeLayer.strokeColor = SwipeParser.parseColor(info["strokeColor"], defaultColor: blackColor)
             shapeLayer.lineWidth = SwipeParser.parseCGFloat(info["lineWidth"]) * self.scale.width
@@ -654,7 +658,7 @@ class SwipeElement:NSObject {
             }
         }
         
-        if let transform = SwipeParser.parseTransform(info, scaleX:scale.width, scaleY:scale.height, base: nil, fSkipTranslate: false) {
+        if let transform = SwipeParser.parseTransform(info, scaleX:scale.width, scaleY:scale.height, base: nil, fSkipTranslate: false, fSkipScale: self.shapeLayer != nil) {
             layer.transform = transform
         }
         layer.opacity = SwipeParser.parseFloat(info["opacity"])
@@ -694,7 +698,7 @@ class SwipeElement:NSObject {
                 fSkipTranslate = true
             }
 
-            if let transform = SwipeParser.parseTransform(to, scaleX:scale.width, scaleY:scale.height, base:info, fSkipTranslate: fSkipTranslate) {
+            if let transform = SwipeParser.parseTransform(to, scaleX:scale.width, scaleY:scale.height, base:info, fSkipTranslate: fSkipTranslate, fSkipScale: self.shapeLayer != nil) {
                 let ani = CABasicAnimation(keyPath: "transform")
                 ani.fromValue = NSValue(CATransform3D : layer.transform)
                 ani.toValue = NSValue(CATransform3D : transform)
@@ -801,6 +805,14 @@ class SwipeElement:NSObject {
                     ani.fillMode = kCAFillModeBoth
                     shapeLayer.addAnimation(ani, forKey: "path")
                 } else if let path = parsePath(to["path"], w: w0, h: h0, scale:scale) {
+                    let ani = CABasicAnimation(keyPath: "path")
+                    ani.fromValue = shapeLayer.path
+                    ani.toValue = path
+                    ani.beginTime = start
+                    ani.duration = duration
+                    ani.fillMode = kCAFillModeBoth
+                    shapeLayer.addAnimation(ani, forKey: "path")
+                } else if let path = SwipeParser.transformedPath(pathSrc!, param: to, size:frame.size) {
                     let ani = CABasicAnimation(keyPath: "path")
                     ani.fromValue = shapeLayer.path
                     ani.toValue = path
