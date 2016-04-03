@@ -157,7 +157,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         var rcFrame = self.view.bounds
 #if os(iOS)
         if documentViewer.hideUI() {
-            let tap = UITapGestureRecognizer(target: self, action: "tapped")
+            let tap = UITapGestureRecognizer(target: self, action: #selector(SwipeBrowser.tapped))
             self.view.addGestureRecognizer(tap)
             hideUI()
         } else if let toolbar = self.toolbar, let bottombar = self.bottombar {

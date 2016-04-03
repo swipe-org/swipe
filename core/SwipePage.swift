@@ -92,7 +92,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         self.delegate = delegate
         self.scene = delegate.sceneWith(pageInfo["scene"] as? String)
         self.pageInfo = SwipeParser.inheritProperties(pageInfo, baseObject: scene?.sceneInfo)
-        SwipePage.objectCount++
+        SwipePage.objectCount += 1
     }
 
     func unloadView() {
@@ -118,7 +118,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         if self.autoplay {
             NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.shouldPauseAutoPlay, object: self)
         }
-        SwipePage.objectCount--
+        SwipePage.objectCount -= 1
     }
 
     static func checkMemoryLeak() {
@@ -271,7 +271,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
 
     func didEnter(fForward:Bool) {
         fEntered = true
-        accessCount++
+        accessCount += 1
         if fForward && self.autoplay || self.always || self.fRepeat {
             autoPlay(false)
         } else if self.hasRepeatElement() {
@@ -324,8 +324,8 @@ class SwipePage: NSObject, SwipeElementDelegate {
         } else {
             timerTick(0.0, fElementRepeat: fElementRepeat)
         }
-        self.cDebug++
-        self.cPlaying++
+        self.cDebug += 1
+        self.cPlaying += 1
         self.didStartPlayingInternal()
     }
     
@@ -364,8 +364,8 @@ class SwipePage: NSObject, SwipeElementDelegate {
                 self.timerTick(value, fElementRepeat: fElementRepeatNext)
             } else {
                 self.offsetPaused = self.fPausing ? offset : nil
-                self.cPlaying--
-                self.cDebug--
+                self.cPlaying -= 1
+                self.cDebug -= 1
                 self.didFinishPlayingInternal()
             }
         })
@@ -574,7 +574,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     // <SwipeElementDelegate> method
     func didFinishPlaying(element:SwipeElement, completed:Bool) {
         if completed {
-            completionCount++
+            completionCount += 1
         }
         didFinishPlayingInternal()
     }
@@ -619,7 +619,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }
     
     private func didStartPlayingInternal() {
-        cPlaying++
+        cPlaying += 1
         if cPlaying==1 {
             //NSLog("SWPage  didStartPlaying @\(index)")
             NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.didStartPlaying, object: self)
@@ -628,7 +628,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     
     private func didFinishPlayingInternal() {
         assert(cPlaying > 0, "didFinishPlaying going negative! @\(index)")
-        cPlaying--
+        cPlaying -= 1
         if cPlaying == 0 {
             NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.didFinishPlaying, object: self)
         }

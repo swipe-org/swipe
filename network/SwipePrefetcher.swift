@@ -58,7 +58,7 @@ class SwipePrefetcher {
                     MyLog("SWPrefe onDemand resource at \(urlsFetched[url]) instead of \(url)", level:1)
                 }
             } else {
-                count++
+                count += 1
                 urlsFetching.append(url)
                 manager.loadAsset(url, prefix: prefix, bypassCache:false, callback: { (urlLocal:NSURL?, error:NSError!) -> Void in
                     if let urlL = urlLocal {
@@ -67,7 +67,7 @@ class SwipePrefetcher {
                         self.urlsFailed.append(url)
                         self.errors.append(error)
                     }
-                    count--
+                    count -= 1
                     if (count == 0) {
                         self.fComplete = true
                         self._progress = 1

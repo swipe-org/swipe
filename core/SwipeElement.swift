@@ -109,7 +109,7 @@ class SwipeElement:NSObject {
         super.init()
         self.setTimeOffsetTo(0.0)
         
-        SwipeElement.objectCount++
+        SwipeElement.objectCount += 1
         MyLog("SWElem init \(pageIndex) \(scale.width)", level:1)
     }
     
@@ -124,7 +124,7 @@ class SwipeElement:NSObject {
 */
 #endif
     
-        SwipeElement.objectCount--
+        SwipeElement.objectCount -= 1
         MyLog("SWElem deinit \(pageIndex) \(scale.width)", level: 1)
         if (SwipeElement.objectCount == 0) {
             MyLog("SWElem zero object!", level:1)
@@ -336,9 +336,9 @@ class SwipeElement:NSObject {
 #if os(iOS) // tvOS has some focus issue with UIButton, figure out OSX later
             let btn = UIButton(type: UIButtonType.Custom)
             btn.frame = view.bounds
-            btn.addTarget(self, action: "buttonPressed", forControlEvents: UIControlEvents.TouchUpInside)
-            btn.addTarget(self, action: "touchDown", forControlEvents: UIControlEvents.TouchDown)
-            btn.addTarget(self, action: "touchUpOutside", forControlEvents: UIControlEvents.TouchUpOutside)
+            btn.addTarget(self, action: #selector(SwipeElement.buttonPressed), forControlEvents: UIControlEvents.TouchUpInside)
+            btn.addTarget(self, action: #selector(SwipeElement.touchDown), forControlEvents: UIControlEvents.TouchDown)
+            btn.addTarget(self, action: #selector(SwipeElement.touchUpOutside), forControlEvents: UIControlEvents.TouchUpOutside)
             view.addSubview(btn)
             self.btn = btn
 #endif
@@ -1118,10 +1118,10 @@ class SwipeElement:NSObject {
             let tolerance = CMTimeMake(10, 600) // 1/60sec
             if player.status == AVPlayerStatus.ReadyToPlay {
                 self.fSeeking = true
-                SwipeElement.objectCount-- // to avoid false memory leak detection
+                SwipeElement.objectCount -= 1 // to avoid false memory leak detection
                 player.seekToTime(time, toleranceBefore: tolerance, toleranceAfter: tolerance) { (_:Bool) -> Void in
                     assert(NSThread.currentThread() == NSThread.mainThread(), "thread error")
-                    SwipeElement.objectCount++
+                    SwipeElement.objectCount += 1
                     self.fSeeking = false
                     if let pendingOffset = self.pendingOffset {
                         self.pendingOffset = nil
