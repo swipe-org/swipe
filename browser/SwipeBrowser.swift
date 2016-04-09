@@ -41,18 +41,19 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 
 #if os(iOS)
     private var fVisibleUI = true
-    @IBOutlet var viewLoading:UIView?
-    @IBOutlet var progress:UIProgressView?
-    @IBOutlet var labelLoading:UILabel?
     @IBOutlet var toolbar:UIView?
     @IBOutlet var bottombar:UIView?
     @IBOutlet var slider:UISlider!
     @IBOutlet var labelTitle:UILabel?
-    @IBOutlet var btnLanguage:UIButton?
     private var landscapeMode = false
 #elseif os(tvOS)
     override weak var preferredFocusedView: UIView? { return controller?.view }
 #endif
+    @IBOutlet var viewLoading:UIView?
+    @IBOutlet var progress:UIProgressView?
+    @IBOutlet var labelLoading:UILabel?
+    @IBOutlet var btnLanguage:UIButton?
+
     private var resourceRequest:NSBundleResourceRequest?
     var url:NSURL? = NSBundle.mainBundle().URLForResource("index.swipe", withExtension: nil)
     var jsonDocument:[String:AnyObject]?
@@ -61,11 +62,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     var ignoreViewState = false
 
     func browseTo(url:NSURL) {
-#if os(iOS)
         let browser = SwipeBrowser(nibName: "SwipeBrowser", bundle: nil)
-#else
-        let browser = SwipeBrowser()
-#endif
         browser.url = url // 
         //MyLog("SWBrows url \(browser.url!)")
 
@@ -432,7 +429,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: { (_:UIAlertAction) -> Void in
                     //print("SwipeB language selected \(langId)")
                     self.documentViewer?.reloadWithLanguageId(langId)
+#if os(iOS)
                     self.hideUI()
+#endif
                 }))
             }
             self.presentViewController(alert, animated: true, completion: nil)

@@ -165,6 +165,7 @@
 		74F1794D1BD8552700126B49 /* speech.png in Resources */ = {isa = PBXBuildFile; fileRef = 74F1794B1BD8552700126B49 /* speech.png */; };
 		74F1794F1BD8553F00126B49 /* text.png in Resources */ = {isa = PBXBuildFile; fileRef = 74F1794E1BD8553F00126B49 /* text.png */; };
 		74F179501BD8553F00126B49 /* text.png in Resources */ = {isa = PBXBuildFile; fileRef = 74F1794E1BD8553F00126B49 /* text.png */; };
+		980482031CB8B51C0068F18C /* SwipeBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 980482021CB8B51C0068F18C /* SwipeBrowser.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -259,6 +260,7 @@
 		74F179471BD8550800126B49 /* movie.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = movie.png; sourceTree = "<group>"; };
 		74F1794B1BD8552700126B49 /* speech.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speech.png; sourceTree = "<group>"; };
 		74F1794E1BD8553F00126B49 /* text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text.png; sourceTree = "<group>"; };
+		980482021CB8B51C0068F18C /* SwipeBrowser.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwipeBrowser.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -291,6 +293,7 @@
 		740FD4851BE2D7A700C2D91D /* tvos */ = {
 			isa = PBXGroup;
 			children = (
+				980482021CB8B51C0068F18C /* SwipeBrowser.xib */,
 				740FD4861BE2D7A700C2D91D /* SwipeTableViewController.xib */,
 			);
 			path = tvos;
@@ -690,6 +693,7 @@
 				74F179501BD8553F00126B49 /* text.png in Resources */,
 				74DD7FAC1BDD3E770042BB9D /* nasa013.jpg in Resources */,
 				74DD7FE31BDFE33F0042BB9D /* chara_walk.png in Resources */,
+				980482031CB8B51C0068F18C /* SwipeBrowser.xib in Resources */,
 				740FD4881BE2D7A700C2D91D /* SwipeTableViewController.xib in Resources */,
 				74DD7F9A1BDD3E770042BB9D /* nasa004.jpg in Resources */,
 				74DD7FA01BDD3E770042BB9D /* nasa007.jpg in Resources */,
