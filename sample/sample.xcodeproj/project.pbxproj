@@ -282,6 +282,7 @@
 		740FD4821BE2D5A000C2D91D /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				74EA71CF1BD04F22006808EA /* SwipeBrowser.xib */,
 				740FD4831BE2D5B800C2D91D /* SwipeTableViewController.xib */,
 			);
 			path = ios;
@@ -408,7 +409,6 @@
 			isa = PBXGroup;
 			children = (
 				74EA71CE1BD04F22006808EA /* SwipeBrowser.swift */,
-				74EA71CF1BD04F22006808EA /* SwipeBrowser.xib */,
 				74EA71D01BD04F22006808EA /* SwipeTableViewController.swift */,
 				740FD4851BE2D7A700C2D91D /* tvos */,
 				740FD4821BE2D5A000C2D91D /* ios */,
