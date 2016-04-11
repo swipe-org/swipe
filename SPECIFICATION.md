@@ -65,7 +65,7 @@ Swipe is NOT
 
 A **Document** is a UTF8 JSON file, which consists of a collection of **Pages**. The order of **Pages** in the collection is significant, and they will be presented to the user in the specified order. 
 
-Here is a sample **Document** which concists of two pages:
+Here is a sample **Document** which consists of two pages:
 
 ```
 {
