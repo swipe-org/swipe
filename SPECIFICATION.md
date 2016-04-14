@@ -93,7 +93,7 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **dimension** ([Int, Int]): Dimension of the document, default is [320, 568]
 - **paging** (String): Paging direction, *vertical* (default), or *leftToRight*
 - **orientation** (String): Document orientation, *portrait* (default) or *landscape*
-- **scene** ({Name:Scene}): Named **Scenes** dictionary
+- **scenes** ({Name:Scene}): Named **Scenes** dictionary
 - **elements** ({Name:Element}): Named **Elements** dictionary
 - **paths** ({Name:Path}): Named **Paths** dictionary
 - **markdown** ({Name:Style}): Named **Markdown** style
