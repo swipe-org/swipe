@@ -4,7 +4,7 @@
     "scenes":{
         "*":{
             "bc":"#333",
-            "play":"always",
+            "animation":"always",
         },
     },
     "pages":[
