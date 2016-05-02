@@ -126,7 +126,7 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 - **bc** (Color): Background color, the default is *white*
 - **fpt** (Int): Frame per second, the default is 60
 - **transition** (String): Inter-page transition style, *scroll* (default), *fadeIn* or *replace*
-- **animation** (String): Animation control, *auto* (default), *pause*, *always* or *scroll*
+- **play** (String): Play(animation) control, *auto* (default), *pause*, *always* or *scroll*
 - **duration** (Float): Duration of the animation in seconds, the default is 0.2 seconds
 - **repeat** (Boolean): Repeat rule of the animation, default is *false*
 - **rewind** (Boolean): Rewind rule of the animation when the user leaves the page, defaul is *false*
@@ -142,7 +142,7 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 
 The paging direction is defined by the "paging" property of the **Document**. It must be either *vertical*, *leftToRight* or *rightToLeft*, and the default is *vertical*.
 
-The inter-page transition is defined by the "transition" property of the preceding **Page**. It should be either *scroll*, *fadeIn* or *replace*. The default is *scroll* unless the "animation" property is *scroll*. If the "animation" property is *scroll*, the default is *replace*.
+The inter-page transition is defined by the "transition" property of the preceding **Page**. It should be either *scroll*, *fadeIn* or *replace*. The default is *scroll* unless the "play" property is *scroll*. If the "play" property is *scroll*, the default is *replace*.
 
 ### Values for the "transition" property
 
@@ -150,7 +150,7 @@ The inter-page transition is defined by the "transition" property of the precedi
 - *fadeIn*: The preceding **Page** will fade-in while the user drags it in.
 - *replace*: The preceding **Page** will replace when the user start dragging.
 
-The "animation" property defines the timing of animation defined on the **Page**, and it must be either *auto*, *pause*, *always* or *scroll*. If "auto" is specified, the animation will start automatically after the completion of the forward paging action. If "always" is specified, the animation will start after the completion of the backward paging action as well. If *scroll* is specified, the animation will be played while the user is scrolling the page. 
+The "play" property defines the timing of play/animation defined on the **Page**, and it must be either *auto*, *pause*, *always* or *scroll*. If "auto" is specified, the animation will start automatically after the completion of the forward paging action. If "always" is specified, the animation will start after the completion of the backward paging action as well. If *scroll* is specified, the animation will be played while the user is scrolling the page. 
 
 ### Values for the "animation" property
 
