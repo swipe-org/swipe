@@ -89,7 +89,7 @@ When the user opens this document with a Swipe viewer, the user will see only th
 
 - **type** (String): This must be "net.swipe.swipe" for a Swipe document
 - **title** (String): Title of the document, optional
-- **bc** (Color): Background color, defalut is *darkGray*
+- **bc** (Color): Background color, default is *darkGray*
 - **dimension** ([Int, Int]): Dimension of the document, default is [320, 568]
 - **paging** (String): Paging direction, *vertical* (default), or *leftToRight*
 - **orientation** (String): Document orientation, *portrait* (default) or *landscape*
@@ -240,7 +240,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **borderColor** (Color): Color of the border, animatable
 - **cornerRadius** (Float): Size of the corner radius, animatable
 - **opacity** (Float): Opacity of the element, between 0 to 1, animatable
-- **rotate** (Float or Float[3]): Rotation in degree around the anchor point, clockwise, defalut is 0, animatable. 
+- **rotate** (Float or Float[3]): Rotation in degree around the anchor point, clockwise, default is 0, animatable. 
 - **scale** (Float or [Float, Float]): Scaling factor around the anchor point, default is [1, 1], animatable
 - **translate** ([Float, Float]): Translation, default is [0, 0], animatable
 - **text** (String, [langId:String] or ["ref":StringId]): Text to display
