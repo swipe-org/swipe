@@ -142,13 +142,13 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 
 The paging direction is defined by the "paging" property of the **Document**. It must be either *vertical*, *leftToRight* or *rightToLeft*, and the default is *vertical*.
 
-The inter-page transition is defined by the "transition" property of the proceding **Page**. It should be either *scroll*, *fadeIn* or *replace*. The default is *scroll* unless the "play" property is *scroll*. If the "play" property is *scroll*, the default is *replace*.
+The inter-page transition is defined by the "transition" property of the preceding **Page**. It should be either *scroll*, *fadeIn* or *replace*. The default is *scroll* unless the "play" property is *scroll*. If the "play" property is *scroll*, the default is *replace*.
 
 ### Values for the "transition" property
 
 - *scroll*: regular scrolling behavior (default)
-- *fadeIn*: The proceding **Page** will fade-in while the user drags it in.
-- *replace*: The proceding **Page** will replace when the user start dragging.
+- *fadeIn*: The preceding **Page** will fade-in while the user drags it in.
+- *replace*: The preceding **Page** will replace when the user start dragging.
 
 The "play" property defines the timing of play/animation defined on the **Page**, and it must be either *auto*, *pause*, *always* or *scroll*. If "auto" is specified, the animation will start automatically after the completion of the forward paging action. If "always" is specified, the animation will start after the completion of the backward paging action as well. If *scroll* is specified, the animation will be played while the user is scrolling the page. 
 
