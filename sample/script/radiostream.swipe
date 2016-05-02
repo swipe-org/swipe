@@ -3,7 +3,7 @@
     "orientation":"landscape",
     "scenes":{
         "*":{
-            "play":"always",
+            "animation":"always",
         },
     },
     "pages":[
