@@ -152,7 +152,7 @@ The inter-page transition is defined by the "transition" property of the precedi
 
 The "play" property defines the timing of play/animation defined on the **Page**, and it must be either *auto*, *pause*, *always* or *scroll*. If "auto" is specified, the animation will start automatically after the completion of the forward paging action. If "always" is specified, the animation will start after the completion of the backward paging action as well. If *scroll* is specified, the animation will be played while the user is scrolling the page. 
 
-### Values for the "animation" property
+### Values for the "play" property
 
 - *auto*: The animation on the **page** will be played after forward scrolling to this page (default)
 - *pause*: The animation on the **Page** will not automatically start
@@ -357,9 +357,9 @@ Following example animates the text "I'm animatable!" down when the second page 
     ]
 }
 ```
-If the "animation" property of the page is "auto" (which is default) like the sample above, the animation happens after the page scrolling, and the duration of the animation is determined by the "duration" property of the page (the default is 0.2 seconds). 
+If the "play" property of the page is "auto" (which is default) like the sample above, the animation happens after the page scrolling, and the duration of the animation is determined by the "duration" property of the page (the default is 0.2 seconds). 
 
-If the "animation" property of the page is "scroll" like the example below, the animation takes place while the user swipes the previous page up to see this page, and the "duration" property of the page will be ignored (since the user's swipe action determines the duration). 
+If the "play" property of the page is "scroll" like the example below, the animation takes place while the user swipes the previous page up to see this page, and the "duration" property of the page will be ignored (since the user's swipe action determines the duration). 
 
 ```
 {
@@ -370,7 +370,7 @@ If the "animation" property of the page is "scroll" like the example below, the 
             ]
         },
         {
-            "animation":"scroll",
+            "play":"scroll",
             "elements": [
                 { "text":"Hello World!", "to":{ "translate":[0, 200] } }
             ]
