@@ -60,6 +60,8 @@ Swipe is NOT
 - **Percent**: "NN%" relative to the parent
 - **Path**: SVG-style Path String
 - **URL**: relative or absolute URL
+- **StringId**: Regular string used as an identifier
+- **LangId**: Language identifier, such as "*", "en", "ja", "de", etc., where "*" represents the default
 
 ##2. Document
 
@@ -412,3 +414,54 @@ Following example wiggles the text "I'm wiggling!" three times when the second p
 }
 ```
 
+##9. Multilingual Strings
+
+The "strings" property of the page specifies strings in multiple languages.  The format is:
+
+```
+	"strings": {StringId: {LangId:String, ...}}
+```
+
+"text" elements on the page can specify the string via the "ref" property which has the format:
+```
+	"text":{"ref":StringId}
+```
+
+Following example displayes "good day" and "good evening" unless the locale is "de"; then "Guten Tag" and "guten Abend" are displayed. 
+
+```
+{
+    "pages":[
+        {
+            "strings": { 
+            	"good day": {"*":"good day", "de": "Guten Tag"},
+            	"good evening": {"*":"good evening", "de": "guten Abend"},
+            },
+            	
+            "elements":[
+                { "text":{"ref":"good day"}, "h":"20%", "pos":["50%", "12%"]},
+                { "text":{"ref":"good evening"}, "h":"20%", "pos":["50%", "34%"]},
+            ],
+        }
+    ]
+}
+```
+
+Alternatively, the "text" element can directly specify the strings for each language directly using the following format:
+```
+	"text":{ LangId:String, ...}
+```
+
+Following example displays "good morning" and "good afternoon" unless the locale is "de"; then "guten Morgen" and "guten Nachmittag" are displayed. 
+```
+{
+    "pages":[
+        {
+            "elements":[
+                { "text":{"*":"good morning", "de": "guten Morgen"}, "h":"20%", "pos":["50%", "12%"]},
+                { "text":{"*":"good afternoon", "de": "guten Nachmittag"}, "h":"20%", "pos":["50%", "34%"]},
+            ]
+        }
+    ]
+}
+```
