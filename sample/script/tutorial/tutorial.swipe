@@ -397,7 +397,7 @@
                     "{",
                     "  \"pages\": [",
                     "    {",
-                    "      \"animation\":\"scroll\",",
+                    "      \"play\":\"scroll\",",
                     "      \"elements\": [",
                     "        { \"img\":\"shuttle.png\",",
                     "          \"to\":{\"pos\":",
@@ -417,14 +417,14 @@
         },
         {
             "scene":"demo",
-            "animation":"scroll",
+            "play":"scroll",
             "elements":[
                 { "element":"code", "markdown":[
                     "```",
                     "{",
                     "  \"pages\": [",
                     "    {",
-                    "      \"animation\":\"scroll\",",
+                    "      \"play\":\"scroll\",",
                     "      \"elements\": [",
                     "        { \"img\":\"shuttle.png\",",
                     "          \"to\":{\"pos\":",
@@ -446,7 +446,7 @@
 
         {
             "scene":"demo",
-            "animation":"pause",
+            "play":"pause",
             "rewind":true,
             "elements":[
                 { "element":"code", "markdown":[
@@ -454,7 +454,7 @@
                     "{",
                     "  \"pages\": [",
                     "    {",
-                    "      \"animation\":\"scroll\",",
+                    "      \"play\":\"scroll\",",
                     "      \"elements\": [",
                     "        { \"path\":\"M 0,0 C 500,0 0,800 500,500\",",
                     "          \"to\":{",
@@ -478,14 +478,14 @@
         },
         {
             "scene":"demo",
-            "animation":"scroll",
+            "play":"scroll",
             "elements":[
                 { "element":"code", "markdown":[
                     "```",
                     "{",
                     "  \"pages\": [",
                     "    {",
-                    "      \"animation\":\"scroll\",",
+                    "      \"play\":\"scroll\",",
                     "      \"elements\": [",
                     "        { \"path\":\"M 0,0 C 500,0 0,800 500,500\",",
                     "          \"to\":{",
@@ -517,7 +517,7 @@
                     "{",
                     "  \"pages\": [",
                     "    {",
-                    "      \"animation\":\"scroll\",",
+                    "      \"play\":\"scroll\",",
                     "      \"elements\": [",
                     "        { \"w\":192,\"h\":288,\"sprite\":\"chara_walk.png\",",
                     "          \"slice\":[14,4], \"slot\":[0,2],",
@@ -539,14 +539,14 @@
         },
         {
             "scene":"demo",
-            "animation":"scroll",
+            "play":"scroll",
             "elements":[
                 { "element":"code", "markdown":[
                     "```",
                     "{",
                     "  \"pages\": [",
                     "    {",
-                    "      \"animation\":\"scroll\",",
+                    "      \"play\":\"scroll\",",
                     "      \"elements\": [",
                     "        { \"w\":192,\"h\":288,\"sprite\":\"chara_walk.png\",",
                     "          \"slice\":[14,4], \"slot\":[0,2],",
@@ -570,7 +570,7 @@
         },
         {
             "scene":"demo",
-            "animation":"pause",
+            "play":"pause",
             "rewind":true,
             "elements":[
                 { "element":"code", "markdown":[
@@ -578,7 +578,7 @@
                     "{",
                     "  \"pages\": [",
                     "    {",
-                    "      \"animation\":\"scroll\",",
+                    "      \"play\":\"scroll\",",
                     "      \"elements\": [",
                     "        { \"gif\":\"epsilon.gif\", \"w\":\"100%\", \"y\":\"40%\" }",
                     "      ]",
@@ -596,14 +596,14 @@
         },
         {
             "scene":"demo",
-            "animation":"scroll",
+            "play":"scroll",
             "elements":[
                 { "element":"code", "markdown":[
                     "```",
                     "{",
                     "  \"pages\": [",
                     "    {",
-                    "      \"animation\":\"scroll\",",
+                    "      \"play\":\"scroll\",",
                     "      \"elements\": [",
                     "        { \"gif\":\"epsilon.gif\", \"w\":\"100%\", \"y\":\"40%\" }",
                     "      ]",
@@ -621,7 +621,7 @@
         },
         {
             "scene":"demo",
-            "animation":"pause",
+            "play":"pause",
             "rewind":true,
             "elements":[
                 { "element":"code", "markdown":[
@@ -629,7 +629,7 @@
                     "{",
                     "  \"pages\": [",
                     "    {",
-                    "      \"animation\":\"scroll\",",
+                    "      \"play\":\"scroll\",",
                     "      \"elements\": [",
                     "        { \"video\":\"izumi_06.mov\",",
                     "          \"w\":\"100%\", \"y\":\"center\" }",
@@ -648,14 +648,14 @@
         },
         {
             "scene":"demo",
-            "animation":"scroll",
+            "play":"scroll",
             "elements":[
                 { "element":"code", "markdown":[
                     "```",
                     "{",
                     "  \"pages\": [",
                     "    {",
-                    "      \"animation\":\"scroll\",",
+                    "      \"play\":\"scroll\",",
                     "      \"elements\": [",
                     "        { \"video\":\"izumi_06.mov\",",
                     "          \"w\":\"100%\", \"y\":\"center\" }",
