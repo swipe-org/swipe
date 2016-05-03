@@ -10,7 +10,7 @@ This specification describes the current snapshot of the Swipe 0.1, which is sti
 
 ##1. Introduction
 
-Swipe is a domain-specific, declarative language for non-developers (such as designers, animators, illustrators, musicians, videographers and comic writers) to create media-rich documents (books and presentations) that contains photos, videos, vector graphics, animations, voices, musics and sound effects, which will be consumed on touch-enabled devices (such as smartphones, tablets and touch-enabled set-top-boxes). 
+Swipe is a domain-specific, declarative language for non-developers (such as designers, animators, illustrators, musicians, videographers and comic writers) to create media-rich documents (books and presentations) that contains photos, videos, vector graphics, animations, voices, music and sound effects, which will be consumed on touch-enabled devices (such as smartphones, tablets and touch-enabled set-top-boxes). 
 
 Since the introduction of iPhone, the capability of those mobile devices advanced significantly with faster CPU/GPU, a large amount memory and various sensors, but taking a full advantage of those capability is not easy.
 
@@ -89,7 +89,7 @@ When the user opens this document with a Swipe viewer, the user will see only th
 
 - **type** (String): This must be "net.swipe.swipe" for a Swipe document
 - **title** (String): Title of the document, optional
-- **bc** (Color): Background color, defalut is *darkGray*
+- **bc** (Color): Background color, default is *darkGray*
 - **dimension** ([Int, Int]): Dimension of the document, default is [320, 568]
 - **paging** (String): Paging direction, *vertical* (default), or *leftToRight*
 - **orientation** (String): Document orientation, *portrait* (default) or *landscape*
@@ -99,8 +99,8 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **markdown** ({Name:Style}): Named **Markdown** style
 - **voices** ({Name:VoiceInfo}): Named **Voice** style
 - **pages** ([Page,...]): Collection of **Pages** 
-- **resources** ([String,...]):Resource keys for on-demand resources
-- **viewstate** (Bool):Indicate if we need to save&restore view state. The default is true. 
+- **resources** ([String,...]): Resource keys for on-demand resources
+- **viewstate** (Bool): Indicate if we need to save&restore view state. The default is true. 
 
 ##3. Page
 
@@ -129,7 +129,7 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 - **animation** (String): Animation control, *auto* (default), *pause*, *always* or *scroll*
 - **duration** (Float): Duration of the animation in seconds, the default is 0.2 seconds
 - **repeat** (Boolean): Repeat rule of the animation, default is *false*
-- **rewind** (Boolean): Rewind rule of the animation when the user leaves the page, defaul is *false*
+- **rewind** (Boolean): Rewind rule of the animation when the user leaves the page, default is *false*
 - **scene** (String): Name of the scene, default is *
 - **audio** (URL): Specifies the sound effect to be played in sync with the animation
 - **speech** (SpeechInfo): Specifies the text-to-speech to be played in sync with the animation
@@ -240,7 +240,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **borderColor** (Color): Color of the border, animatable
 - **cornerRadius** (Float): Size of the corner radius, animatable
 - **opacity** (Float): Opacity of the element, between 0 to 1, animatable
-- **rotate** (Float or Float[3]): Rotation in degree around the anchor point, clockwise, defalut is 0, animatable. 
+- **rotate** (Float or Float[3]): Rotation in degree around the anchor point, clockwise, default is 0, animatable. 
 - **scale** (Float or [Float, Float]): Scaling factor around the anchor point, default is [1, 1], animatable
 - **translate** ([Float, Float]): Translation, default is [0, 0], animatable
 - **text** (String, [langId:String] or ["ref":StringId]): Text to display
