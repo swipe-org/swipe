@@ -103,7 +103,7 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **pages** ([Page,...]): Collection of **Pages** 
 - **resources** ([String,...]): Resource keys for on-demand resources
 - **viewstate** (Bool): Indicate if we need to save&restore view state. The default is true. 
-- **languages** ({"id":LangId, "title":String},...): Languages to display in the "Lang." button in the Swipe viewer.
+- **languages** ({"id":LangId, "title":String},...): Languages to display via the "Lang." button in the Swipe viewer.
 
 
 ##3. Page
