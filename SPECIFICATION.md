@@ -103,6 +103,8 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **pages** ([Page,...]): Collection of **Pages** 
 - **resources** ([String,...]): Resource keys for on-demand resources
 - **viewstate** (Bool): Indicate if we need to save&restore view state. The default is true. 
+- **languages** ({"id":LangId, "title":String},...): Languages to display in the "Lang." button in the Swipe viewer.
+
 
 ##3. Page
 
@@ -464,4 +466,29 @@ Following example displays "good morning" and "good afternoon" unless the locale
         }
     ]
 }
+```
+
+To enable language selection in the Swipe viewer via the "Lang." button, use the **Document** property **languages** to list the available using the following format:
+
+```
+	"languages":[{"id":LangId, "title":String},...]
+```
+
+Example:
+```
+{ 
+    "languages":[
+        {"id": "en", "title": "English"},
+        {"id": "de", "title": "German"},
+    ],
+    "pages":[
+        {
+            "elements":[
+                { "text":{"*":"good morning", "de": "guten Morgen"}, "h":"20%", "pos":["50%", "12%"]},
+                { "text":{"*":"good afternoon", "de": "guten Nachmittag"}, "h":"20%", "pos":["50%", "34%"]},
+            ],
+        }
+    ]
+}
+
 ```
