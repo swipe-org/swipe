@@ -168,6 +168,7 @@
 		980482031CB8B51C0068F18C /* SwipeBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 980482021CB8B51C0068F18C /* SwipeBrowser.xib */; };
 		9871A4E91CC51C88006DE5C6 /* loop_animation.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 9871A4E81CC51C88006DE5C6 /* loop_animation.swipe */; };
 		9871A4EA1CC51C88006DE5C6 /* loop_animation.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 9871A4E81CC51C88006DE5C6 /* loop_animation.swipe */; };
+		98C363301CD97B60005E7071 /* multilingual_strings.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 98C3632F1CD97B60005E7071 /* multilingual_strings.swipe */; };
 		98FF4D2B1CBE857800BD9DA8 /* details_index.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 98FF4D2A1CBE857800BD9DA8 /* details_index.swipe */; };
 		98FF4D2D1CBE85CD00BD9DA8 /* transition_animation.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 98FF4D2C1CBE85CD00BD9DA8 /* transition_animation.swipe */; };
 		98FF4D2E1CBE85D700BD9DA8 /* details_index.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 98FF4D2A1CBE857800BD9DA8 /* details_index.swipe */; };
@@ -268,6 +269,7 @@
 		74F1794E1BD8553F00126B49 /* text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text.png; sourceTree = "<group>"; };
 		980482021CB8B51C0068F18C /* SwipeBrowser.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwipeBrowser.xib; sourceTree = "<group>"; };
 		9871A4E81CC51C88006DE5C6 /* loop_animation.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = loop_animation.swipe; sourceTree = "<group>"; };
+		98C3632F1CD97B60005E7071 /* multilingual_strings.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = multilingual_strings.swipe; sourceTree = "<group>"; };
 		98FF4D2A1CBE857800BD9DA8 /* details_index.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = details_index.swipe; sourceTree = "<group>"; };
 		98FF4D2C1CBE85CD00BD9DA8 /* transition_animation.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = transition_animation.swipe; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -511,6 +513,7 @@
 				98FF4D2A1CBE857800BD9DA8 /* details_index.swipe */,
 				98FF4D2C1CBE85CD00BD9DA8 /* transition_animation.swipe */,
 				9871A4E81CC51C88006DE5C6 /* loop_animation.swipe */,
+				98C3632F1CD97B60005E7071 /* multilingual_strings.swipe */,
 			);
 			path = details;
 			sourceTree = "<group>";
@@ -664,6 +667,7 @@
 				74EA71801BD047F0006808EA /* Main.storyboard in Resources */,
 				74DD7FD81BDFCC880042BB9D /* radio.png in Resources */,
 				74DD7F951BDD3E770042BB9D /* nasa002.jpg in Resources */,
+				98C363301CD97B60005E7071 /* multilingual_strings.swipe in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
