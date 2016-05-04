@@ -61,7 +61,7 @@ Swipe is NOT
 - **Path**: SVG-style Path String
 - **URL**: relative or absolute URL
 - **StringId**: Regular string used as an identifier
-- **LangId**: Language identifier, such as "*", "en", "ja", "de", etc., where "*" represents the default
+- **LangId**: Language identifier, such as "\*", "en", "ja", "de", etc., where "\*" represents the default
 
 ##2. Document
 
