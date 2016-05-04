@@ -468,7 +468,7 @@ Following example displays "good morning" and "good afternoon" unless the locale
 }
 ```
 
-To enable language selection in the Swipe viewer via the "Lang." button, use the **Document** property **languages** to list the available using the following format:
+To enable language selection in the Swipe viewer via the "Lang." button, use the **Document** property **languages** to list the available languages using the following format:
 
 ```
 	"languages":[{"id":LangId, "title":String},...]
