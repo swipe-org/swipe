@@ -18,13 +18,13 @@ While the "native programming" (such as in Objective-C, Swift, Java, and etc.) g
 
 Using a "cross-platform development environment", such as Unity, Coco3D, Corona and Flash has some advantages over native programming, but it still requires a "procedural programming", which only skilled developers are able to do. 
 
-Building interactive applications on top of HTML browsers became possible because of HTML5, but it still has many issues. Providing a good user experience is very difficult (this is why Facebook gave up this approach), and the development cost is as expensive as native or cross-platform development, requireing skilled developers.
+Building interactive applications on top of HTML browsers became possible because of HTML5, but it still has many issues. Providing a good user experience is very difficult (this is why Facebook gave up this approach), and the development cost is as expensive as native or cross-platform development, requiring skilled developers.
 
 People often debate over those three approaches, but they often overlook one important disadvantage of those three approaches. All those approaches require "procedural programming", which can be done only by skilled developers and are very expensive, error-prone and time-consuming. 
 
 This disadvantage makes it very difficult for those creative people to make quick prototypes and experimental works, just like an artist makes sketches with pencils and erasers. It is economically impossible for individual creators to create interactive, media-rich books and publish them. 
 
-Swipe was born to fill this gap. It allows non-developers to create interactive and media-rich documents without any help from developers. The declarative nature of Swipe language (and the lack of "procedual programming environment") makes very easy to learn, write and read. It also makes it easy to auto-generate documents (from data) and create authoring environments. 
+Swipe was born to fill this gap. It allows non-developers to create interactive and media-rich documents without any help from developers. The declarative nature of Swipe language (and the lack of "procedural programming environment") makes very easy to learn, write and read. It also makes it easy to auto-generate documents (from data) and create authoring environments. 
 
 ### Scope
 
@@ -56,7 +56,7 @@ Swipe is NOT
 ### Data Types
 
 - **String**: Regular string
-- **Color**: One of RBG(A) styles ("#RRGGBB", "#RGB", "#RRGGBBAA", "#RGBA") or, one of standard color names ("red", "black", "blue", "white", "green", "yellow", "purple", "gray", "darkGray", "lightGray", "brown", "orange", "cyan", "maganta")
+- **Color**: One of RBG(A) styles ("#RRGGBB", "#RGB", "#RRGGBBAA", "#RGBA") or, one of standard color names ("red", "black", "blue", "white", "green", "yellow", "purple", "gray", "darkGray", "lightGray", "brown", "orange", "cyan", "magenta")
 - **Percent**: "NN%" relative to the parent
 - **Path**: SVG-style Path String
 - **URL**: relative or absolute URL
@@ -165,13 +165,13 @@ The "play" property defines the timing of play/animation defined on the **Page**
 
 ##5. Scene
 
-A Scene defines a set of properties and **Elements** to be shared among multile **Pages**. It also defines a background music to be played when one of those **Pages** is active.
+A Scene defines a set of properties and **Elements** to be shared among multiple **Pages**. It also defines a background music to be played when one of those **Pages** is active.
 
-A **Page** is always associated with a Scene, either explicity with the "scene" property or implicitly with the default scene with name "*". 
+A **Page** is always associated with a Scene, either explicitly with the "scene" property or implicitly with the default scene with name "*". 
 
 The **Page** inherits all the properties from the associated **scene**, including **Elements**. When the same property is specified both in the **Page** and the **Scene**, the value specified in the **Page** will be used. The only exception to this rule is **Elements**, which will be deep-merged (deep-inheritance). **Elements** with the *id* property will be merged, and other **Elements** will be appended (**Elements** defined in the **Scene** are always placed below **Elements** specified in the page).
 
-Here is a **Document** with two **Pages**, where the first **Page** is associated with the default **Scene**, and the second **Page** is associated with the "alternative" **Scene**. Because each **Scene** specifies the backgroud color, those **Pages** inherite those background colors.   
+Here is a **Document** with two **Pages**, where the first **Page** is associated with the default **Scene**, and the second **Page** is associated with the "alternative" **Scene**. Because each **Scene** specifies the background color, those **Pages** inherit those background colors.   
 
 ```
 {
@@ -234,7 +234,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **element** (String): the name of the named **Element** to inherit properties from
 - **x** (Float or Percent): x-position of the left-top corner of element, default is 0
 - **y** (Float or Percent): y-position of the left-top corner of the element, default is 0
-- **pos** ([Float/Percent, Float/Percent]): alternative way to specificy the position by the location of the anchor point
+- **pos** ([Float/Percent, Float/Percent]): alternative way to specify the position by the location of the anchor point
 - **anchor** ([Float/Percent, Float/Percent]): anchor point, default is ["50%", "50%"]
 - **w** (Float, Percent or "fill"): width of the element, default is "100%".
 - **h** (Float, Percent or "fill"): height of the element, default is "100%"
@@ -255,7 +255,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **mask** (URL): Image mask (PNG with the alpha channel)
 - **sprite** (URL): Sprite to display
   - **slice** ([Int, Int]): Dimension of the sprite
-  - **slot** ([Int, Int]): Slot to diplay, animatable
+  - **slot** ([Int, Int]): Slot to display, animatable
 - **path** (Path): Path to display (SVG style), animatable
   - **lineWidth** (Float): Width of stroke, default is 0
   - **strokeColor** (Color): Color of the stroke, default is black, animatable
@@ -391,7 +391,7 @@ The **Loop Animation** must have a "style" property, and the value of this prope
 
 - *vibrate*: The **Element** vibrates left to right, where the "delta" property specifies the distance (the default is 10)
 - *blink*: The **Element** blinks changing its opacity from 1 to 0. 
-- *wiggle*: The **Element** rotates left and right, where the "delta" property specifies the angree in degree (the default is 15)
+- *wiggle*: The **Element** rotates left and right, where the "delta" property specifies the angle in degree (the default is 15)
 - *spin*: The **Element** spins, where the "clockwise" property (boolean) specifies the direction, the default is true. 
 - *shift*: The **Element** shift to the specified direction where the "direction" property specifies the direction ("n", "s", "e" or "w", the default is "s"). Use it with the "tiling" property.
 - *path*: The **Element** performs path animation, where the "path" property specifies a collection of **Paths**. 
@@ -429,7 +429,7 @@ The "strings" property of the page specifies strings in multiple languages.  The
 	"text":{"ref":StringId}
 ```
 
-Following example displayes "good day" and "good evening" unless the locale is "de"; then "Guten Tag" and "guten Abend" are displayed. 
+Following example displays "good day" and "good evening" unless the locale is "de"; then "Guten Tag" and "guten Abend" are displayed. 
 
 ```
 {

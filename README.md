@@ -6,15 +6,15 @@ Swipe is a **domain-specific, declarative language** for non-developers (such as
 
 ##What is Swipe Engine?
 
-Swipe Engine is the **viewer** of documents described in Swipe. Since it supports hyperlinking and allows you to browse from one Swipe document to another, you could even call it a **domain-specific browser**. At this moment (October 2015), Swipe Engine is avalable for **iOS and tvOS**, but will be ported to other platforms such as Android, Windows and even HTML5 (and we are looking for volunteers to do so). 
+Swipe Engine is the **viewer** of documents described in Swipe. Since it supports hyperlinking and allows you to browse from one Swipe document to another, you could even call it a **domain-specific browser**. At this moment (October 2015), Swipe Engine is available for **iOS and tvOS**, but will be ported to other platforms such as Android, Windows and even HTML5 (and we are looking for volunteers to do so). 
 
 ##Why do we need Swipe?
 
 Because existing platforms (such as HTML5, ePub, Flash and iBooks) require some form of programming to create media-rich/animated documents, which is expensive and error-prone. 
 
 * HTML used be a simple declarative language, but became a full-blown programming environment with DOM and JavaScript. 
-* Flash used be a great animation tool for esigners, but became a full-blown programming environment with the introduction of ActionScript. 
-* ePub does not directly support animations, and the author needs to embed some JavaScript code to enable animations, which may or may not work depending on the eBook paltform. 
+* Flash used be a great animation tool for designers, but became a full-blown programming environment with the introduction of ActionScript. 
+* ePub does not directly support animations, and the author needs to embed some JavaScript code to enable animations, which may or may not work depending on the eBook platform. 
 
 That's why I came to the conclusion that it's time to design a new platform, which is powerful enough to describe media-rich documents that allow us to take full advantage of modern devices, but is also **strictly declarative** (no API, no script), easy to read, easy to write and easy to auto-generate. 
 
@@ -24,7 +24,7 @@ Because I want to make it an industry standard so that everybody can benefit fro
 
 ##Is it really free?
 
-Yes, I still maintain the copyright, but it's **absolutely free**. You can use it for non-commercial and commercial applications, modify it as needed, port it to other platforms (I'd really apprecaite if you open source it as well), re-distribute it with your applications, as long as you explicitly mention that your application uses Swipe and recognize me (Satoshi Nakajima) as the copyright holder.
+Yes, I still maintain the copyright, but it's **absolutely free**. You can use it for non-commercial and commercial applications, modify it as needed, port it to other platforms (I'd really appreciate if you open source it as well), re-distribute it with your applications, as long as you explicitly mention that your application uses Swipe and recognize me (Satoshi Nakajima) as the copyright holder.
 
 ##Target Applications
 
@@ -41,13 +41,13 @@ Yes, I still maintain the copyright, but it's **absolutely free**. You can use i
 * Animators
 * Comic Writers
 * Musicians/Artists
-* Videographers/Photographors
+* Videographers/Photographers
 * Teachers/Educators
 * Weekend Programmers
 
 ##Design Principles
 
-* Optmized for touch-enabled devices
+* Optimized for touch-enabled devices
 * 100% declarative (no programming)
 * Rich & interactive animations
 * Re-invent the video experience
