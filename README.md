@@ -1,5 +1,7 @@
 #Swipe & Swipe Engine
 
+[![Build Status](https://travis-ci.org/swipe-org/swipe.svg?branch=master)](https://travis-ci.org/swipe-org/swipe)
+
 ##What is Swipe?
 
 Swipe is a **domain-specific, declarative language** for non-developers (such as designers, animators, illustrators, musicians, videographers and comic writers) to create **media-rich/animated documents** that contain photos, videos, images, vector graphics, animations, voices, musics and sound effects, which will be consumed on touch-enabled devices such as smartphones, tablets and touch-enabled set-top-boxes (such as **iPhone and Apple TV**). 
