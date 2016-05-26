@@ -101,7 +101,7 @@ class SwipeElement:NSObject {
     private lazy var notificationManager = SNNotificationManager()
 
     init(info:[String:AnyObject], scale:CGSize, delegate:SwipeElementDelegate) {
-        let elementInfo = SwipeParser.inheritProperties(info, baseObject: delegate.prototypeWith(info["element"] as? String))
+        let elementInfo = SwipeParser.inheritProperties(info, baseObject: delegate.prototypeWith(info["template"] as? String))
         self.info = elementInfo
         self.scale = scale
         self.delegate = delegate
