@@ -1,5 +1,5 @@
 //
-//  SwipeScene.swift
+//  SwipePageTemplate.swift
 //  Swipe
 //
 //  Created by satoshi on 9/8/15.
@@ -22,8 +22,8 @@ private func MyLog(text:String, level:Int = 0) {
     }
 }
 
-class SwipeScene: NSObject, AVAudioPlayerDelegate {
-    let sceneInfo:[String:AnyObject]
+class SwipePageTemplate: NSObject, AVAudioPlayerDelegate {
+    let pageTemplateInfo:[String:AnyObject]
     private let baseURL:NSURL?
     private let name:String
     private var bgmPlayer:AVAudioPlayer?
@@ -31,7 +31,7 @@ class SwipeScene: NSObject, AVAudioPlayerDelegate {
 
     lazy var resourceURLs:[NSURL:String] = {
         var urls = [NSURL:String]()
-        if let value = self.sceneInfo["bgm"] as? String,
+        if let value = self.pageTemplateInfo["bgm"] as? String,
                url = NSURL.url(value, baseURL: self.baseURL) {
             urls[url] = ""
         }
@@ -41,19 +41,19 @@ class SwipeScene: NSObject, AVAudioPlayerDelegate {
     init(name:String, info:[String:AnyObject], baseURL:NSURL?) {
         self.baseURL = baseURL
         self.name = name
-        self.sceneInfo = info
+        self.pageTemplateInfo = info
     }
     
-    // This function is called when a page associated with this scene is activated (entered)
-    //  AND the previous page is NOT associated with this scene object.
+    // This function is called when a page associated with this pageTemplate is activated (entered)
+    //  AND the previous page is NOT associated with this pageTemplate object.
     func didEnter(prefetcher:SwipePrefetcher) {
         assert(fDebugEntered == false, "re-entering")
         fDebugEntered = true
         
-        if let value = self.sceneInfo["bgm"] as? String,
+        if let value = self.pageTemplateInfo["bgm"] as? String,
                urlRaw = NSURL.url(value, baseURL: baseURL),
                url = prefetcher.map(urlRaw) {
-            MyLog("SWScene didEnter with bgm=\(value)", level:1)
+            MyLog("SWPageTemplate didEnter with bgm=\(value)", level:1)
             SwipeAssetManager.sharedInstance().loadAsset(url, prefix: "", bypassCache:false, callback: { (urlLocal:NSURL?, _:NSError!) -> Void in
                 if self.fDebugEntered,
                    let urlL = urlLocal,
@@ -64,12 +64,12 @@ class SwipeScene: NSObject, AVAudioPlayerDelegate {
                 }
             })
         } else {
-            //NSLog("SWScene didEnter failed to create URL")
+            //NSLog("SWPageTemplate didEnter failed to create URL")
         }
     }
 
-    // This function is called when a page associated with this scene is deactivated (leaved)
-    //  AND the subsequent page is not associated with this scene object.
+    // This function is called when a page associated with this pageTemplate is deactivated (leaved)
+    //  AND the subsequent page is not associated with this pageTemplate object.
     func didLeave() {
         assert(fDebugEntered == true, "leaving without entering")
         fDebugEntered = false

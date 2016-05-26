@@ -95,8 +95,9 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **dimension** ([Int, Int]): Dimension of the document, default is [320, 568]
 - **paging** (String): Paging direction, *vertical* (default), or *leftToRight*
 - **orientation** (String): Document orientation, *portrait* (default) or *landscape*
-- **scenes** ({Name:Scene}): Named **Scenes** dictionary
-- **elements** ({Name:Element}): Named **Elements** dictionary
+- **templates** ({"elements":ElementTemplates, "pages":PageTemplates})
+ - **pages** ({Name:PageTemplate}): **PageTemplate** dictionary
+ - **elements** ({Name:ElementTemplate}):	 **ElementTemplate** dictionary
 - **paths** ({Name:Path}): Named **Paths** dictionary
 - **markdown** ({Name:Style}): Named **Markdown** style
 - **voices** ({Name:VoiceInfo}): Named **Voice** style
@@ -134,7 +135,7 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 - **duration** (Float): Duration of the animation in seconds, the default is 0.2 seconds
 - **repeat** (Boolean): Repeat rule of the animation, default is *false*
 - **rewind** (Boolean): Rewind rule of the animation when the user leaves the page, default is *false*
-- **scene** (String): Name of the scene, default is *
+- **template** (String): Name of the *PageTemplate*, default is "\*"
 - **audio** (URL): Specifies the sound effect to be played in sync with the animation
 - **speech** (SpeechInfo): Specifies the text-to-speech to be played in sync with the animation
 - **vibrate** (Bool): Specifies the vibration in sync with the animation, the default is false
@@ -163,21 +164,23 @@ The "play" property defines the timing of play/animation defined on the **Page**
 - *always*: The animation on the **Page** will be played after scrolling to this page
 - *scroll*: The animation on the **Page** will be performed while the user scrolls the page
 
-##5. Scene
+##5. Page Template
 
-A Scene defines a set of properties and **Elements** to be shared among multiple **Pages**. It also defines a background music to be played when one of those **Pages** is active.
+A **PageTemplate** defines a set of properties and **Elements** to be shared among multiple **Pages**. It also defines a background music to be played when one of those **Pages** is active.
 
-A **Page** is always associated with a Scene, either explicitly with the "scene" property or implicitly with the default scene with name "*". 
+A **Page** is always associated with a **PageTemplate**, either explicitly with the "template" property or implicitly with the default **PageTemplate** with name "*".
 
-The **Page** inherits all the properties from the associated **scene**, including **Elements**. When the same property is specified both in the **Page** and the **Scene**, the value specified in the **Page** will be used. The only exception to this rule is **Elements**, which will be deep-merged (deep-inheritance). **Elements** with the *id* property will be merged, and other **Elements** will be appended (**Elements** defined in the **Scene** are always placed below **Elements** specified in the page).
+The **Page** inherits all the properties from the associated **PageTemplate**, including **Elements**. When the same property is specified both in the **Page** and the **PageTemplate**, the value specified in the **Page** will be used. The only exception to this rule is **Elements**, which will be deep-merged (deep-inheritance). **Elements** with the *id* property will be merged, and other **Elements** will be appended (**Elements** defined in the **PageTemplate** are always placed below **Elements** specified in the page).
 
-Here is a **Document** with two **Pages**, where the first **Page** is associated with the default **Scene**, and the second **Page** is associated with the "alternative" **Scene**. Because each **Scene** specifies the background color, those **Pages** inherit those background colors.   
+Here is a **Document** with two **Pages**, where the first **Page** is associated with the default **PageTemplate**, and the second **Page** is associated with the "alternative" **PageTemplate**. Because each **PageTemplate** specifies the background color, those **Pages** inherit those background colors.   
 
 ```
 {
-    "scenes": {
-        "*": { "bc":"blue" },
-        "alternative": { "bc":"green" },
+    "templates": {
+        "pages": {
+            "*": { "bc":"blue" },
+            "alternative": { "bc":"green" },
+        }
     },
     "pages": [
         {
@@ -186,7 +189,7 @@ Here is a **Document** with two **Pages**, where the first **Page** is associate
             ]
         },
         {
-            "scene":"alternative",
+            "template":"alternative",
             "elements": [
                 { "text":"Good Bye!" }
             ]
@@ -195,16 +198,18 @@ Here is a **Document** with two **Pages**, where the first **Page** is associate
 }
 ```
 
-The following example uses the "id" to identify a particular **Element** in the **Scene** and modify its "textColor" property. 
+The following example uses the "id" to identify a particular **Element** in the **PageTemplate** and modify its "textColor" property.
 
 ```
 {
-    "scenes": {
-        "*": {
-            "elements": [
-                { "id":"hello", "text":"Hello World" },
-            ]
-        },
+    "templates": {
+        "pages": {
+            "*": {
+                "elements": [
+                    { "id":"hello", "text":"Hello World" },
+                ]
+            }
+        }
     },
     "pages": [
         {
@@ -221,8 +226,8 @@ The following example uses the "id" to identify a particular **Element** in the 
 }
 ```
 
-### Scene specific properties 
-- bgm (URL): Specifies the background music to play. 
+### PageTemplate specific properties
+- bgm (URL): Specifies the background music to play.
 
 ##6. Element
 
@@ -230,8 +235,8 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 
 ### Element properties
 
-- **id** (String): the element identifier to identify an element in the associated **Scene**
-- **element** (String): the name of the named **Element** to inherit properties from
+- **id** (String): the element identifier in the associated **ElementTemplate** at the same nesting level
+- **template** (String): the name of the **ElementTemplate** to inherit properties from
 - **x** (Float or Percent): x-position of the left-top corner of element, default is 0
 - **y** (Float or Percent): y-position of the left-top corner of the element, default is 0
 - **pos** ([Float/Percent, Float/Percent]): alternative way to specify the position by the location of the anchor point
@@ -272,60 +277,64 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **action** (String): Specifies the Action
 - **repeat** (Bool): Repeat rule for the element. The default is false.
 
-### Named Element
+### Element Template
 
-Named **Elements** are a set of **Elements** defined in "elements" property of the **Document**. Any **Element** can inherit properties from one of those named **Elements** by specifying its name in the "element" property. 
+**ElementTemplates** are a set of **Elements** defined in "elements" property of the **Document**. Any **Element** can inherit properties from one of those **ElementTemplates** by specifying its name in the "template" property.
 
-The sample below uses a named **Element**, "smile" as a template for five different **Elements** in a page. 
+The sample below uses a **ElementTemplate**, "smile" as a template for five different **Elements** in a page.
 
 ```
 {
-    "elements": {
-        "smile": {
-            "lineWidth":3,
-            "path":"M0,0 C10,50 90,50 100,0",
-            "strokeColor":"red",
-        },
+    "templates": {
+        "elements": {
+            "smile": {
+                "lineWidth":3,
+                "path":"M0,0 C10,50 90,50 100,0",
+                "strokeColor":"red",
+            }
+        }
     },
     "pages": [
         {
             "elements": [
-                { "element":"smile", "pos":["50%", 100] },
-                { "element":"smile", "pos":["50%", 200], "rotate":30 },
-                { "element":"smile", "pos":["50%", 300], "lineWidth":10 },
-                { "element":"smile", "pos":["50%", 400], "strokeColor":"#37F" },
-                { "element":"smile", "pos":["50%", 500], "scale":[2,1] },
+                { "template":"smile", "pos":["50%", 100] },
+                { "template":"smile", "pos":["50%", 200], "rotate":30 },
+                { "template":"smile", "pos":["50%", 300], "lineWidth":10 },
+                { "template":"smile", "pos":["50%", 400], "strokeColor":"#37F" },
+                { "template":"smile", "pos":["50%", 500], "scale":[2,1] },
             ],
         },
     ]
 }
 ```
 
-Just like a regular **Element**, named **Element** may have child **Elements**, and they will be deep-merged just like **Elements** in **Scene**. 
+Just like a regular **Element**, **ElementTemplate** may have child **Elements**, and they will be deep-merged just like **Elements** in **PageTemplate**.
 
-The following example shows how to use a named **Element** with child **Elements**, and override their properties using the "id" property. 
+The following example shows how to use a **ElementTemplate** with child **Elements**, and override their properties using the "id" property.
 
 ```
 {
-    "elements": {
-        "helloWorld": {
+  "templates": {
+      "elements": {
+          "helloWorld": {
             "w":160, "h":100,
             "elements":[
                 { "id":"hello", "text":"Hello", "textAlign":"left" },
                 { "id":"world", "text":"World", "textAlign":"left", "x":80 },
             ],
         },
+      }
     },
     "pages": [
         {
             "elements": [
-                { "element":"helloWorld", "pos":[160, 100] },
-                { "element":"helloWorld", "pos":[160, 200],
+                { "template":"helloWorld", "pos":[160, 100] },
+                { "template":"helloWorld", "pos":[160, 200],
                   "elements":[
                     { "id":"hello", "textColor":"red", },
                     { "id":"world", "textColor":"blue", },
                   ]},
-                { "element":"helloWorld", "pos":[160, 300],
+                { "template":"helloWorld", "pos":[160, 300],
                   "elements":[
                     { "id":"world", "text":"Swipe!" },
                   ]},
