@@ -14,20 +14,22 @@
             "```":{ "color":"#808", "prefix":"| " },
         },
     },
-    "elements":{
-        "slide": { "x":"10%", "y":"10%", "w":"80%", "h":"80%", "bc":"#ffc" },
+    "templates": {
+        "elements":{
+            "slide": { "x":"10%", "y":"10%", "w":"80%", "h":"80%", "bc":"#ffc" },
+        },
     },
     "pages":[
         {
             "elements":[
-                { "element":"slide","markdown":[
+                { "template":"slide","markdown":[
                     "# スマートフォンの時代に相応しい『漫画・アニメ体験』と、その実現に必要なマークアップ言語の提案",
                 ]},
             ],
         },
         {
             "elements":[
-                { "element":"slide", "markdown":[
+                { "template":"slide", "markdown":[
                     "#5 Keywords",
                     "- Comic (Manga)",
                     "- Multi-media eBook",
@@ -40,7 +42,7 @@
         },
         {
             "elements":[
-                { "element":"slide", "markdown":[
+                { "template":"slide", "markdown":[
                     "# Hello World",
                     "## Hello World",
                     "### Hello World",
@@ -55,7 +57,7 @@
         },
         {
             "elements":[
-                { "element":"slide", "markdown":[
+                { "template":"slide", "markdown":[
                     "Hello World",
                     "Hello World",
                     "```",
@@ -72,7 +74,7 @@
         },
         {
             "elements":[
-                { "element":"slide", "text":"Hello World" },
+                { "template":"slide", "text":"Hello World" },
             ],
         },
     ],

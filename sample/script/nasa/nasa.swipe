@@ -4,14 +4,16 @@
     "orientation":"landscape",
     "viewstate":false,
     "resources":["nasa", "bgm"],
-    "scenes":{
-        "descent": { "duration":5.0, "bgm":"TheDescent.mp3" },
-        "agenda": { "duration":5.0, "bgm":"HiddenAgenda.mp3" },
-        "monkey": { "duration":5.0, "bgm":"MonkeysSpinningMonkeys.mp3" },
-    },
-    "elements":{
-        "caption": { "y":"top", "h":"5%" },
-        "full": { "x":"center", "y":"bottom", "w":"fill", "to":{ "scale":1.1 } },
+    "templates": {
+        "pages":{
+            "descent": { "duration":5.0, "bgm":"TheDescent.mp3" },
+            "agenda": { "duration":5.0, "bgm":"HiddenAgenda.mp3" },
+            "monkey": { "duration":5.0, "bgm":"MonkeysSpinningMonkeys.mp3" },
+        },
+        "elements":{
+            "caption": { "y":"top", "h":"5%" },
+            "full": { "x":"center", "y":"bottom", "w":"fill", "to":{ "scale":1.1 } },
+        },
     },
     "markdown":{
         "shadow":{ "color":"#000", "offset":[-2,2] },
@@ -22,84 +24,84 @@
     },
     "pages":[
         {
-            "scene":"descent",
+            "template":"descent",
             "elements":[
-                { "element":"full", "img":"nasa001.jpg" },
-                { "element":"caption", "markdown":"+ The Decent by Kevin MacLeod"},
+                { "template":"full", "img":"nasa001.jpg" },
+                { "template":"caption", "markdown":"+ The Decent by Kevin MacLeod"},
             ]
         },
         {
-            "scene":"descent",
+            "template":"descent",
             "elements":[
-                { "element":"full", "img":"nasa002.jpg"},
+                { "template":"full", "img":"nasa002.jpg"},
             ]
         },
         {
-            "scene":"descent",
+            "template":"descent",
             "elements":[
-                { "element":"full", "img":"nasa003.jpg" },
+                { "template":"full", "img":"nasa003.jpg" },
             ]
         },
         {
-            "scene":"descent",
+            "template":"descent",
             "elements":[
-                { "element":"full", "img":"nasa004.jpg" },
+                { "template":"full", "img":"nasa004.jpg" },
             ]
         },
         {
-            "scene":"agenda",
+            "template":"agenda",
             "elements":[
-                { "element":"full", "img":"nasa005.jpg" },
-                { "element":"caption", "markdown":"+ Hidden Agenda by Kevin MacLeod"},
+                { "template":"full", "img":"nasa005.jpg" },
+                { "template":"caption", "markdown":"+ Hidden Agenda by Kevin MacLeod"},
             ]
         },
         {
-            "scene":"agenda",
+            "template":"agenda",
             "elements":[
-                { "element":"full", "img":"nasa006.jpg" },
+                { "template":"full", "img":"nasa006.jpg" },
             ]
         },
         {
-            "scene":"agenda",
+            "template":"agenda",
             "elements":[
-                { "element":"full", "img":"nasa007.jpg" },
+                { "template":"full", "img":"nasa007.jpg" },
             ]
         },
         {
-            "scene":"agenda",
+            "template":"agenda",
             "elements":[
-                { "element":"full", "img":"nasa008.jpg" },
+                { "template":"full", "img":"nasa008.jpg" },
             ]
         },
         {
-            "scene":"agenda",
+            "template":"agenda",
             "elements":[
-                { "element":"full", "img":"nasa009.jpg" },
+                { "template":"full", "img":"nasa009.jpg" },
             ]
         },
         {
-            "scene":"monkey",
+            "template":"monkey",
             "elements":[
-                { "element":"full", "img":"nasa010.jpg" },
-                { "element":"caption", "markdown":"+ Monkeys Spinning Monkeys by Kevin MacLeod"},
+                { "template":"full", "img":"nasa010.jpg" },
+                { "template":"caption", "markdown":"+ Monkeys Spinning Monkeys by Kevin MacLeod"},
             ]
         },
         {
-            "scene":"monkey",
+            "template":"monkey",
             "elements":[
-                { "element":"full", "img":"nasa011.jpg" },
+                { "template":"full", "img":"nasa011.jpg" },
             ]
         },
         {
-            "scene":"monkey",
+            "template":"monkey",
             "elements":[
-                { "element":"full", "img":"nasa012.jpg" },
+                { "template":"full", "img":"nasa012.jpg" },
             ]
         },
         {
-            "scene":"monkey",
+            "template":"monkey",
             "elements":[
-                { "element":"full", "img":"nasa013.jpg" },
+                { "template":"full", "img":"nasa013.jpg" },
             ]
         },
     ]
