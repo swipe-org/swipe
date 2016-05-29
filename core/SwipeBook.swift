@@ -48,6 +48,13 @@ class SwipeBook: NSObject, SwipePageDelegate {
         return self.langs
     }
     
+    private (set) lazy var version:String? = {
+        if let version = self.bookInfo["version"] as? String {
+            return version
+        }
+        return nil
+    }()
+    
     lazy var title:String? = {
         if let title = self.bookInfo["title"] as? String {
             return title
