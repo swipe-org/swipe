@@ -164,6 +164,7 @@
 		74F1794F1BD8553F00126B49 /* text.png in Resources */ = {isa = PBXBuildFile; fileRef = 74F1794E1BD8553F00126B49 /* text.png */; };
 		74F179501BD8553F00126B49 /* text.png in Resources */ = {isa = PBXBuildFile; fileRef = 74F1794E1BD8553F00126B49 /* text.png */; };
 		980482031CB8B51C0068F18C /* SwipeBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 980482021CB8B51C0068F18C /* SwipeBrowser.xib */; };
+		C14FC7061CFCA8D800556476 /* SwipePageTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170B70F1CF78C04005956A8 /* SwipePageTemplate.swift */; };
 		C170B7101CF78C04005956A8 /* SwipePageTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170B70F1CF78C04005956A8 /* SwipePageTemplate.swift */; };
 /* End PBXBuildFile section */
 
@@ -750,6 +751,7 @@
 				74EA71E41BD0B0EE006808EA /* AppDelegate.swift in Sources */,
 				74EA71F51BD0B156006808EA /* SwipeConnection.swift in Sources */,
 				74EA71F31BD0B156006808EA /* SNNotificationManager.swift in Sources */,
+				C14FC7061CFCA8D800556476 /* SwipePageTemplate.swift in Sources */,
 				74EA72031BD0B15C006808EA /* SwipeExtensions.swift in Sources */,
 				74EA71F81BD0B15C006808EA /* SwipeDocumentViewer.swift in Sources */,
 				74EA71F91BD0B15C006808EA /* SwipeViewController.swift in Sources */,
