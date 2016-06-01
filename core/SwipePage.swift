@@ -673,4 +673,4 @@ class SwipePage: NSObject, SwipeElementDelegate {
         }
         return false
     }
-            }
+}
