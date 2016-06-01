@@ -101,7 +101,14 @@ class SwipeElement:NSObject {
     private lazy var notificationManager = SNNotificationManager()
 
     init(info:[String:AnyObject], scale:CGSize, delegate:SwipeElementDelegate) {
-        let elementInfo = SwipeParser.inheritProperties(info, baseObject: delegate.prototypeWith(info["template"] as? String))
+        var template = info["template"] as? String
+        if template == nil {
+            template = info["element"] as? String
+            if template != nil {
+                MyLog("SwElement DEPRECATED element; use 'template'")
+            }
+        }
+        let elementInfo = SwipeParser.inheritProperties(info, baseObject: delegate.prototypeWith(template))
         self.info = elementInfo
         self.scale = scale
         self.delegate = delegate

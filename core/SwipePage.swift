@@ -91,6 +91,12 @@ class SwipePage: NSObject, SwipeElementDelegate {
         self.index = index
         self.delegate = delegate
         self.pageTemplate = delegate.pageTemplateWith(pageInfo["template"] as? String)
+        if self.pageTemplate == nil {
+            self.pageTemplate = delegate.pageTemplateWith(pageInfo["scene"] as? String)
+            if self.pageTemplate != nil {
+                MyLog("SwPage DEPRECATED 'scene'; use 'template'")
+            }
+        }
         self.pageInfo = SwipeParser.inheritProperties(pageInfo, baseObject: pageTemplate?.pageTemplateInfo)
         super.init()
         SwipePage.objectCount += 1
@@ -673,4 +679,4 @@ class SwipePage: NSObject, SwipeElementDelegate {
         }
         return false
     }
-            }
+}
