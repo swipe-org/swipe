@@ -315,16 +315,16 @@ The following example shows how to use a **ElementTemplate** with child **Elemen
 
 ```
 {
-  "templates": {
-      "elements": {
-          "helloWorld": {
-            "w":160, "h":100,
-            "elements":[
-                { "id":"hello", "text":"Hello", "textAlign":"left" },
-                { "id":"world", "text":"World", "textAlign":"left", "x":80 },
-            ],
-        },
-      }
+    "templates": {
+        "elements": {
+            "helloWorld": {
+                "w":160, "h":100,
+                "elements":[
+                    { "id":"hello", "text":"Hello", "textAlign":"left" },
+                    { "id":"world", "text":"World", "textAlign":"left", "x":80 },
+                ],
+            },
+        }
     },
     "pages": [
         {
