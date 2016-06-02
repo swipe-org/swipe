@@ -27,7 +27,7 @@ protocol SwipePageDelegate: NSObjectProtocol {
     func dimension(page:SwipePage) -> CGSize
     func scale(page:SwipePage) -> CGSize
     func prototypeWith(name:String?) -> [String:AnyObject]?
-    func sceneWith(name:String?) -> SwipeScene?
+    func pageTemplateWith(name:String?) -> SwipePageTemplate?
     func pathWith(name:String?) -> AnyObject?
 #if !os(OSX) // REVIEW
     func speak(utterance:AVSpeechUtterance)
@@ -53,7 +53,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
 
     // Public properties
     let index:Int
-    var scene:SwipeScene?
+    var pageTemplate:SwipePageTemplate?
     var view:UIView?
     weak var delegate:SwipePageDelegate!
     
@@ -90,8 +90,15 @@ class SwipePage: NSObject, SwipeElementDelegate {
     init(index:Int, pageInfo:[String:AnyObject], delegate:SwipePageDelegate) {
         self.index = index
         self.delegate = delegate
-        self.scene = delegate.sceneWith(pageInfo["scene"] as? String)
-        self.pageInfo = SwipeParser.inheritProperties(pageInfo, baseObject: scene?.sceneInfo)
+        self.pageTemplate = delegate.pageTemplateWith(pageInfo["template"] as? String)
+        if self.pageTemplate == nil {
+            self.pageTemplate = delegate.pageTemplateWith(pageInfo["scene"] as? String)
+            if self.pageTemplate != nil {
+                MyLog("SwPage DEPRECATED 'scene'; use 'template'")
+            }
+        }
+        self.pageInfo = SwipeParser.inheritProperties(pageInfo, baseObject: pageTemplate?.pageTemplateInfo)
+        super.init()
         SwipePage.objectCount += 1
     }
 
@@ -390,8 +397,8 @@ class SwipePage: NSObject, SwipeElementDelegate {
                 }
             }
         }
-        if let scene = self.scene {
-            for (url, prefix) in scene.resourceURLs {
+        if let pageTemplate = self.pageTemplate {
+            for (url, prefix) in pageTemplate.resourceURLs {
                 urls[url] = prefix
             }
         }

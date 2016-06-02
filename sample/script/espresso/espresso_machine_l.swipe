@@ -4,17 +4,19 @@
     "dimension":[640.0, 0.0],
     "orientation":"landscape",
     "resources":["es1"],
-    "scenes":{
-        "*":{
-            "bc":"#333",
+    "templates": {
+        "pages":{
+            "*":{
+                "bc":"#333",
+            },
         },
-    },
-    "elements":{
-        "full": { "w":"fill", "h":"fill" },
-        "caption" : { "y":"bottom", "h":100, "x":"5%", "w":"90%" },
-        "play" : { "x":"center", "y":"center", "w":80, "h":80, "text":"▶︎", "fontSize":40.0, "textColor":"#fffe",
-                    "borderWidth":3.0, "borderColor":"#fffe",
-                    "bc":"#000a", "cornerRadius":40, "action":"play" },
+        "elements":{
+            "full": { "w":"fill", "h":"fill" },
+            "caption" : { "y":"bottom", "h":100, "x":"5%", "w":"90%" },
+            "play" : { "x":"center", "y":"center", "w":80, "h":80, "text":"▶︎", "fontSize":40.0, "textColor":"#fffe",
+                        "borderWidth":3.0, "borderColor":"#fffe",
+                        "bc":"#000a", "cornerRadius":40, "action":"play" },
+        },
     },
     "markdown":{
         "shadow":{ "color":"black", "offset":[2,2], "blurRadius":2 },
@@ -26,95 +28,95 @@
     "pages":[
         {
             "elements":[
-                { "element":"full", "img":"IMG_8152.JPG" },
-                { "element":"caption", "markdown":["# Breville BES870XL","# Quick Start Guide"] },
+                { "template":"full", "img":"IMG_8152.JPG" },
+                { "template":"caption", "markdown":["# Breville BES870XL","# Quick Start Guide"] },
             ]
         },
         {
             "elements":[
-                { "element":"full", "video":"IMG_8153.m4v" },
-                { "element":"caption", "markdown":"## 1. Attach the filter basket to the portafilter." },
-                { "element":"play" },
+                { "template":"full", "video":"IMG_8153.m4v" },
+                { "template":"caption", "markdown":"## 1. Attach the filter basket to the portafilter." },
+                { "template":"play" },
             ]
         },
         {
             "elements":[
-                { "element":"full", "video":"IMG_8154.m4v" },
-                { "element":"caption", "markdown":"## 2. Set the filter below the grinder, and tap the handle once." },
-                { "element":"play" },
+                { "template":"full", "video":"IMG_8154.m4v" },
+                { "template":"caption", "markdown":"## 2. Set the filter below the grinder, and tap the handle once." },
+                { "template":"play" },
             ]
         },
         {
             "elements":[
-                { "element":"full", "img":"IMG_8155.JPG" },
-                { "element":"caption", "markdown":"## 3. It is normal for the portafilter to appear overfilled." }
+                { "template":"full", "img":"IMG_8155.JPG" },
+                { "template":"caption", "markdown":"## 3. It is normal for the portafilter to appear overfilled." }
             ]
         },
         {
             "elements":[
-                { "element":"full", "img":"IMG_8156.JPG" },
-                { "element":"caption", "markdown":"## 4. Tamp the gound coffee down firmly using 30-40lbs of pressure." }
+                { "template":"full", "img":"IMG_8156.JPG" },
+                { "template":"caption", "markdown":"## 4. Tamp the gound coffee down firmly using 30-40lbs of pressure." }
             ]
         },
         {
             "elements":[
-                { "element":"full", "video":"IMG_8159.m4v" },
-                { "element":"caption", "markdown":"## 5. Insert the Portafilter underneath the group head, and rotate the handle towards the center." },
-                { "element":"play" },
+                { "template":"full", "video":"IMG_8159.m4v" },
+                { "template":"caption", "markdown":"## 5. Insert the Portafilter underneath the group head, and rotate the handle towards the center." },
+                { "template":"play" },
             ]
         },
         {
             "elements":[
-                { "element":"full", "video":"IMG_8160.m4v" },
-                { "element":"caption", "markdown":"## 6. Press the 1 CPU button once to extract a single shot of expresso at the preset volume." },
-                { "element":"play" },
+                { "template":"full", "video":"IMG_8160.m4v" },
+                { "template":"caption", "markdown":"## 6. Press the 1 CPU button once to extract a single shot of expresso at the preset volume." },
+                { "template":"play" },
             ]
         },
         {
             "elements":[
-                { "element":"full", "img":"IMG_8161.JPG" },
-                { "element":"caption", "markdown":"## 7. The espresso will start flow after 4-7 seconds and should be the consistency of driping honey." }
+                { "template":"full", "img":"IMG_8161.JPG" },
+                { "template":"caption", "markdown":"## 7. The espresso will start flow after 4-7 seconds and should be the consistency of driping honey." }
             ]
         },
         {
             "elements":[
-                { "element":"full", "img":"IMG_8162.JPG" },
-                { "element":"caption", "markdown":"## 8. Fill the jug with milk just below the \"V\" at the bottom of the spout." },
+                { "template":"full", "img":"IMG_8162.JPG" },
+                { "template":"caption", "markdown":"## 8. Fill the jug with milk just below the \"V\" at the bottom of the spout." },
             ]
         },
         {
             "elements":[
-                { "element":"full", "video":"IMG_8163.m4v" },
-                { "element":"caption", "markdown":"## 9. Set the STEAM/HOT WATER dial to the STEAM position." },
-                { "element":"play" },
+                { "template":"full", "video":"IMG_8163.m4v" },
+                { "template":"caption", "markdown":"## 9. Set the STEAM/HOT WATER dial to the STEAM position." },
+                { "template":"play" },
             ]
         },
         {
             "elements":[
-                { "element":"full", "video":"IMG_8171.m4v" },
-                { "element":"caption", "markdown":"## 10. With the milk spinning, slowly lower the jug to introduce air into the milk." },
-                { "element":"play" },
+                { "template":"full", "video":"IMG_8171.m4v" },
+                { "template":"caption", "markdown":"## 10. With the milk spinning, slowly lower the jug to introduce air into the milk." },
+                { "template":"play" },
             ]
         },
         {
             "elements":[
-                { "element":"full", "video":"IMG_8166.m4v" },
-                { "element":"caption", "markdown":"## 11. Tap the jug on the table to collapse large bubbles." },
-                { "element":"play" },
+                { "template":"full", "video":"IMG_8166.m4v" },
+                { "template":"caption", "markdown":"## 11. Tap the jug on the table to collapse large bubbles." },
+                { "template":"play" },
             ]
         },
         {
             "elements":[
-                { "element":"full", "video":"IMG_8167.m4v" },
-                { "element":"caption", "markdown":"## 12. Pour milk directly into the expresso." },
-                { "element":"play" },
+                { "template":"full", "video":"IMG_8167.m4v" },
+                { "template":"caption", "markdown":"## 12. Pour milk directly into the expresso." },
+                { "template":"play" },
             ]
         },
         {
             "duration":5.0,
             "elements":[
-                { "element":"full", "img":"IMG_8168.JPG", "to":{ "scale":1.2 } },
-                { "element":"caption", "markdown":"# Enjoy your late!" }
+                { "template":"full", "img":"IMG_8168.JPG", "to":{ "scale":1.2 } },
+                { "template":"caption", "markdown":"# Enjoy your late!" }
             ]
         },
     ]

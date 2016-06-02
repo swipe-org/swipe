@@ -30,7 +30,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
     // Private properties
     private let bookInfo:[String:AnyObject]
     private let url:NSURL?
-    private var sceneActive:SwipeScene?
+    private var pageTemplateActive:SwipePageTemplate?
 
     //
     // Calculated properties (Public)
@@ -98,18 +98,35 @@ class SwipeBook: NSObject, SwipePageDelegate {
     //
     // Lazy properties (Private)
     //
-    private lazy var namedElements:[NSObject:AnyObject] = {
-        if let elements = self.bookInfo["elements"] as? [NSObject:AnyObject] {
+    private lazy var templates:[String:AnyObject] = {
+        if let templates = self.bookInfo["templates"] as? [String:AnyObject] {
+            return templates
+        }
+        return [String:AnyObject]()
+    }()
+    
+    private lazy var templateElements:[String:AnyObject] = {
+        if let elements = self.templates["elements"] as? [String:AnyObject] {
             return elements
         }
-        return [NSObject:AnyObject]()
+        else if let elements = self.bookInfo["elements"] as? [String:AnyObject] {
+            NSLog("DEPRECATED named elements; use 'templates'")
+            return elements
+        }
+        return [String:AnyObject]()
     }()
 
-    private lazy var scenes:[String:SwipeScene] = {
-        var ret = [String:SwipeScene]()
-        if let scenes = self.bookInfo["scenes"] as? [String:[String:AnyObject]] {
-            for (key, info) in scenes {
-                ret[key] = SwipeScene(name:key, info: info, baseURL:self.url)
+    private lazy var templatePages:[String:SwipePageTemplate] = {
+        var ret = [String:SwipePageTemplate]()
+        if let pages = self.templates["pages"] as? [String:[String:AnyObject]] {
+            for (key, info) in pages {
+                ret[key] = SwipePageTemplate(name:key, info: info, baseURL:self.url)
+            }
+        }
+        else if let pageTemplates = self.bookInfo["scenes"] as? [String:[String:AnyObject]] {
+            NSLog("DEPRECATED scenes; use 'templates'")
+            for (key, info) in pageTemplates {
+                ret[key] = SwipePageTemplate(name:key, info: info, baseURL:self.url)
             }
         }
         return ret
@@ -210,16 +227,16 @@ class SwipeBook: NSObject, SwipePageDelegate {
     // <SwipePageDelegate> method
     func prototypeWith(name:String?) -> [String:AnyObject]? {
         if let key = name,
-           let value = self.namedElements[key] as? [String:AnyObject] {
+           let value = self.templateElements[key] as? [String:AnyObject] {
             return value
         }
         return nil
     }
     
     // <SwipePageDelegate> method
-    func sceneWith(name:String?) -> SwipeScene? {
+    func pageTemplateWith(name:String?) -> SwipePageTemplate? {
         let key = (name == nil) ? "*" : name!
-        if let value = self.scenes[key] {
+        if let value = self.templatePages[key] {
             return value
         }
         return nil
@@ -278,15 +295,15 @@ class SwipeBook: NSObject, SwipePageDelegate {
     }
     
     func setActivePage(page:SwipePage) {
-        if self.sceneActive != page.scene {
-            MyLog("SwipeBook setActive \(self.sceneActive), \(page.scene)", level:1)
-            if let scene = self.sceneActive {
-                scene.didLeave()
+        if self.pageTemplateActive != page.pageTemplate {
+            MyLog("SwipeBook setActive \(self.pageTemplateActive), \(page.pageTemplate)", level:1)
+            if let pageTemplate = self.pageTemplateActive {
+                pageTemplate.didLeave()
             }
-            if let scene = page.scene {
-                scene.didEnter(page.prefetcher)
+            if let pageTemplate = page.pageTemplate {
+                pageTemplate.didEnter(page.prefetcher)
             }
-            self.sceneActive = page.scene
+            self.pageTemplateActive = page.pageTemplate
         }
     }
 

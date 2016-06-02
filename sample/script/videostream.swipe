@@ -1,11 +1,13 @@
 {
     "title": "Video Stream Test",
     "orientation":"landscape",
-    "scenes":{
-        "*":{
-            "bc":"#333",
-            "play":"always",
-        },
+    "templates": {
+      "pages":{
+          "*":{
+              "bc":"#333",
+              "play":"always",
+          },
+      },
     },
     "pages":[
         {
