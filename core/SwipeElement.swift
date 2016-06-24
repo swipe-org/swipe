@@ -163,7 +163,7 @@ class SwipeElement:NSObject {
         return self.loadViewInternal(dimension, screenDimention: dimension)
     }
     
-    // Returns the list of URLs of required resouces for this element (including children)
+    // Returns the list of URLs of required resources for this element (including children)
     lazy var resourceURLs:[NSURL:String] = {
         var urls = [NSURL:String]()
         let baseURL = self.delegate.baseURL()
