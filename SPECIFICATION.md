@@ -256,6 +256,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **text** (String, [langId:String] or ["ref":StringId]): Text to display
   - **textAlign** (String): Text alignment, *center* (default), *left* or *right*
   - **fontSize** (Float or Percent): Font size
+  - **fontName** (String or [String]): Font name or names (the first name existing in the system is used)
   - **textColor** (Color): Color of the text, animatable
 - **img** (URL): Image to display, animatable
 - **mask** (URL): Image mask (PNG with the alpha channel)

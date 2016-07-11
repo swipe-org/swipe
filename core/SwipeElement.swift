@@ -163,7 +163,7 @@ class SwipeElement:NSObject {
         return self.loadViewInternal(dimension, screenDimention: dimension)
     }
     
-    // Returns the list of URLs of required resouces for this element (including children)
+    // Returns the list of URLs of required resources for this element (including children)
     lazy var resourceURLs:[NSURL:String] = {
         var urls = [NSURL:String]()
         let baseURL = self.delegate.baseURL()
@@ -1241,18 +1241,23 @@ class SwipeElement:NSObject {
                 processAlignment(alignment)
             }
         }
-        let fontSize:CGFloat = {
-            var ret = 20.0 / 480.0 * dimension.height // default
-            if let fontSize = info["fontSize"] as? CGFloat {
-                ret = fontSize
-            } else if let fontSize = info["fontSize"] as? String {
-                ret = SwipeParser.parsePercent(fontSize, full: dimension.height, defaultValue: ret)
+        let fontSize: CGFloat = {
+            let defaultSize = 20.0 / 480.0 * dimension.height
+            let size = SwipeParser.parseFontSize(info, full: dimension.height, defaultValue: defaultSize, markdown: false)
+            return round(size * scale.height)
+        }()
+        let fontNames = SwipeParser.parseFontName(info, markdown: false)
+        let font: UIFont = {
+            for fontName in fontNames {
+                if let font = UIFont(name: fontName, size: fontSize) {
+                    return font
+                }
             }
-            return round(ret * scale.height)
+            return UIFont(name: "Helvetica", size: fontSize)!
         }()
 
         let attr:[String:AnyObject] = [
-            NSFontAttributeName:UIFont(name: "Helvetica", size: fontSize)!,
+            NSFontAttributeName:font,
             NSForegroundColorAttributeName:UIColor(CGColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor)),
             NSParagraphStyleAttributeName:paragraphStyle]
         let textStorage = NSTextStorage(string: text, attributes: attr)

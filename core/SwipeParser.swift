@@ -295,27 +295,38 @@ class SwipeParser {
     }
     
     static func parseFont(value:AnyObject?, scale:CGSize, full:CGFloat) -> UIFont {
-        var fontSize = CGFloat(20)
-        var fontNames = [String]()
-        if let info = value as? [String:AnyObject] {
-            if let sizeValue = info["size"] as? CGFloat {
-                fontSize = sizeValue
-            } else if let percent = info["size"] as? String {
-                fontSize = SwipeParser.parsePercent(percent, full: full, defaultValue: 20)
-            }
-            
-            if let name = info["name"] as? String {
-                fontNames = [name]
-            } else if let names = info["name"] as? [String] {
-                fontNames = names
-            }
-        }
+        let fontSize = parseFontSize(value, full: full, defaultValue: 20, markdown: true)
+        let fontNames = parseFontName(value, markdown: true)
         for name in fontNames {
             if let font = UIFont(name: name, size: fontSize * scale.height) {
                 return font
             }
         }
         return UIFont.systemFontOfSize(fontSize * scale.height)
+    }
+    
+    static func parseFontSize(value:AnyObject?, full:CGFloat, defaultValue:CGFloat, markdown:Bool) -> CGFloat {
+        let key = markdown ? "size" : "fontSize"
+        if let info = value as? [String:AnyObject] {
+            if let sizeValue = info[key] as? CGFloat {
+                return sizeValue
+            } else if let percent = info[key] as? String {
+                return SwipeParser.parsePercent(percent, full: full, defaultValue: defaultValue)
+            }
+        }
+        return defaultValue
+    }
+    
+    static func parseFontName(value:AnyObject?, markdown:Bool) -> [String] {
+        let key = markdown ? "name" : "fontName"
+        if let info = value as? [String:AnyObject] {
+            if let name = info[key] as? String {
+                return [name]
+            } else if let names = info[key] as? [String] {
+                return names
+            }
+        }
+        return []
     }
     
     static func parseShadow(value:AnyObject?, scale:CGSize) -> NSShadow {
