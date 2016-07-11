@@ -1292,6 +1292,7 @@ class SwipeElement:NSObject {
         // http://stackoverflow.com/questions/35823281/catextlayer-is-ignoring-nsmutableparagraphstyle/38213192
         // Therefore, we need to explicitly set those attributes to the CATextLayer.
         let textLayer = CATextLayer()
+        textLayer.contentsScale = UIScreen.mainScreen().scale
         textLayer.wrapped = true
         textLayer.alignmentMode = alignmentMode
         textLayer.string = attrString
