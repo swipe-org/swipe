@@ -1211,7 +1211,7 @@ class SwipeElement:NSObject {
         }
     }
     
-    static func processTextInfo(info:[String:AnyObject], dimension:CGSize, scale:CGSize) -> ([String:AnyObject], String, Bool, Bool) {
+    static func processTextInfo(info:[String:AnyObject], dimension:CGSize, scale:CGSize) -> ([String:AnyObject], String, Bool, Bool, CTFontRef, CGFloat) {
         var fTextBottom = false
         var fTextTop = false
         let paragraphStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
@@ -1252,19 +1252,18 @@ class SwipeElement:NSObject {
             return round(size * scale.height)
         }()
         let fontNames = SwipeParser.parseFontName(info, markdown: false)
-        let font: UIFont = {
+        func foo() -> CTFontRef {
             for fontName in fontNames {
-                if let font = UIFont(name: fontName, size: fontSize) {
-                    return font
-                }
+                return CTFontCreateWithName(fontName, fontSize, nil)
             }
-            return UIFont(name: "Helvetica", size: fontSize)!
-        }()
+            return CTFontCreateWithName("Helvetica", fontSize, nil)
+        }
+        let font:CTFontRef = foo()
         let attr:[String:AnyObject] = [
             NSFontAttributeName:font,
-            NSForegroundColorAttributeName:UIColor(CGColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor)),
+            //NSForegroundColorAttributeName:UIColor(CGColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor)),
             NSParagraphStyleAttributeName:paragraphStyle]
-        return (attr, alignmentMode, fTextTop, fTextBottom)
+        return (attr, alignmentMode, fTextTop, fTextBottom, font, fontSize)
     }
     
     static func processTextStorage(text:String, attr:[String:AnyObject], fTextBottom:Bool, fTextTop:Bool, rcBound:CGRect) -> CGRect {
@@ -1285,17 +1284,18 @@ class SwipeElement:NSObject {
     }
 
     static func addTextLayer(text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer) -> CATextLayer {
-        let (attr, alignmentMode, fTextBottom, fTextTop) = SwipeElement.processTextInfo(info, dimension: dimension, scale: scale)
-        let attrString = NSAttributedString(string: text, attributes: attr)
+        let (attr, alignmentMode, fTextBottom, fTextTop, font, fontSize) = SwipeElement.processTextInfo(info, dimension: dimension, scale: scale)
 
-        // HACK: CATextLayer does not use the paragraph info in NSAttributedString. 
+        // HACK: CATextLayer does not use the paragraph style in NSAttributedString.
         // http://stackoverflow.com/questions/35823281/catextlayer-is-ignoring-nsmutableparagraphstyle/38213192
         // Therefore, we need to explicitly set those attributes to the CATextLayer.
         let textLayer = CATextLayer()
-        textLayer.contentsScale = UIScreen.mainScreen().scale
-        textLayer.wrapped = true
-        textLayer.alignmentMode = alignmentMode
-        textLayer.string = attrString
+        textLayer.wrapped = true // HACK
+        textLayer.alignmentMode = alignmentMode // HACK
+        textLayer.foregroundColor = SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor) // animatable
+        textLayer.font = font
+        textLayer.fontSize = fontSize // animatable
+        textLayer.string = text // NOTE: This is no longer the attributed string (so that we can animate)
         
         SwipeElement.processShadow(info, scale:scale, layer: layer)
 
