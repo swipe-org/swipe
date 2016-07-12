@@ -159,9 +159,9 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         // Since the paging is not enabled on tvOS, we handle PanGesture directly at this view instead.
         // scrollView.panGestureRecognizer.allowedTouchTypes = [UITouchType.Indirect.rawValue, UITouchType.Direct.rawValue]
         //scrollView.panGestureRecognizer.enabled = false
-        let pan = UIPanGestureRecognizer(target: self, action: "handlePan:")
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(SwipeViewController.handlePan(_:)))
         self.view.addGestureRecognizer(pan)
-        let tap = UITapGestureRecognizer(target: self, action: "handlePlayButton:")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(SwipeViewController.handlePlayButton(_:)))
         tap.allowedPressTypes = [UIPressType.PlayPause.rawValue]
         self.view.addGestureRecognizer(tap)
 #endif
