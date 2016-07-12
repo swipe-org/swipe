@@ -1252,13 +1252,13 @@ class SwipeElement:NSObject {
             return round(size * scale.height)
         }()
         let fontNames = SwipeParser.parseFontName(info, markdown: false)
-        func foo() -> CTFontRef {
+        func createFont() -> CTFontRef {
             for fontName in fontNames {
                 return CTFontCreateWithName(fontName, fontSize, nil)
             }
             return CTFontCreateWithName("Helvetica", fontSize, nil)
         }
-        let font:CTFontRef = foo()
+        let font:CTFontRef = createFont()
         let attr:[String:AnyObject] = [
             NSFontAttributeName:font,
             //NSForegroundColorAttributeName:UIColor(CGColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor)),
@@ -1286,24 +1286,20 @@ class SwipeElement:NSObject {
     static func addTextLayer(text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer) -> CATextLayer {
         let (attr, alignmentMode, fTextBottom, fTextTop, font, fontSize) = SwipeElement.processTextInfo(info, dimension: dimension, scale: scale)
 
-        // HACK: CATextLayer does not use the paragraph style in NSAttributedString.
-        // http://stackoverflow.com/questions/35823281/catextlayer-is-ignoring-nsmutableparagraphstyle/38213192
-        // Therefore, we need to explicitly set those attributes to the CATextLayer.
+        // NOTE: CATextLayer does not use the paragraph style in NSAttributedString (*).
+        // In addition, we can't use NSAttributedString if we want to animate something,
+        // such as foregroundColor and fontSize (**).
         let textLayer = CATextLayer()
-        textLayer.wrapped = true // HACK
-        textLayer.alignmentMode = alignmentMode // HACK
-        textLayer.foregroundColor = SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor) // animatable
+        textLayer.wrapped = true // *
+        textLayer.alignmentMode = alignmentMode // *
+        textLayer.foregroundColor = SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor) // animatable **
+        textLayer.fontSize = fontSize // animatable **
         textLayer.font = font
-        textLayer.fontSize = fontSize // animatable
-        textLayer.string = text // NOTE: This is no longer the attributed string (so that we can animate)
+        textLayer.string = text // NOTE: This is no longer an attributed string
         
         SwipeElement.processShadow(info, scale:scale, layer: layer)
 
-        textLayer.frame = {
-            var rcText = SwipeElement.processTextStorage(text, attr: attr, fTextBottom: fTextBottom, fTextTop: fTextTop, rcBound: layer.bounds)
-            rcText.size.height = ceil(rcText.size.height * 1.2) // HACK: work around
-            return rcText
-        }()
+        textLayer.frame = SwipeElement.processTextStorage(text, attr: attr, fTextBottom: fTextBottom, fTextTop: fTextTop, rcBound: layer.bounds)
         layer.addSublayer(textLayer)
         return textLayer
     }
