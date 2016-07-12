@@ -1290,6 +1290,7 @@ class SwipeElement:NSObject {
         // In addition, we can't use NSAttributedString if we want to animate something,
         // such as foregroundColor and fontSize (**).
         let textLayer = CATextLayer()
+        textLayer.contentsScale = UIScreen.mainScreen().scale
         textLayer.wrapped = true // *
         textLayer.alignmentMode = alignmentMode // *
         textLayer.foregroundColor = SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor) // animatable **
