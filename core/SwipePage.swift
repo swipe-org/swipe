@@ -182,7 +182,8 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }()
 
     private lazy var autoAdvance:Bool = {
-        return self.pageInfo["autoAdvance"] as? Bool ?? false
+        // autoAdvance is only valid in fixed mode (where play=="scroll")
+        return self.fixed && self.pageInfo["autoAdvance"] as? Bool ?? false
     }()
 
     private lazy var vibrate:Bool = {
@@ -287,7 +288,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         fEntered = true
         accessCount += 1
         if fForward && self.autoplay || self.always || self.fRepeat || autoAdvancing {
-            autoPlay(false)
+            autoPlay(false, autoAdvancing: autoAdvancing)
         } else if self.hasRepeatElement() {
             autoPlay(true)
         } else if fForward && self.autoAdvance {
@@ -327,7 +328,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         self.autoPlay(false)
     }
     
-    private func autoPlay(fElementRepeat:Bool) {
+    private func autoPlay(fElementRepeat:Bool, autoAdvancing:Bool = false) {
         fPausing = false
         if !fElementRepeat {
             playAudio()
@@ -336,16 +337,16 @@ class SwipePage: NSObject, SwipeElementDelegate {
         assert(self.viewAnimation != nil, "must have self.viewAnimation")
         assert(self.viewVideo != nil, "must have viewVideo")
         if let offset = self.offsetPaused {
-            timerTick(offset, fElementRepeat: fElementRepeat)
+            timerTick(offset, fElementRepeat: fElementRepeat, autoAdvancing: autoAdvancing)
         } else {
-            timerTick(0.0, fElementRepeat: fElementRepeat)
+            timerTick(0.0, fElementRepeat: fElementRepeat, autoAdvancing: autoAdvancing)
         }
         self.cDebug += 1
         self.cPlaying += 1
         self.didStartPlayingInternal()
     }
     
-    private func timerTick(offset:CGFloat, fElementRepeat:Bool) {
+    private func timerTick(offset:CGFloat, fElementRepeat:Bool, autoAdvancing:Bool) {
         var fElementRepeatNext = fElementRepeat
         // NOTE: We don't want to add [unowned self] because the timer will fire anyway. 
         // During the shutdown sequence, the loop will stop when didLeave was called. 
@@ -378,12 +379,16 @@ class SwipePage: NSObject, SwipeElementDelegate {
                 CATransaction.commit()
             }
             if let value = offsetForNextTick {
-                self.timerTick(value, fElementRepeat: fElementRepeatNext)
+                self.timerTick(value, fElementRepeat: fElementRepeatNext, autoAdvancing: autoAdvancing)
             } else {
                 self.offsetPaused = self.fPausing ? offset : nil
                 self.cPlaying -= 1
                 self.cDebug -= 1
                 self.didFinishPlayingInternal()
+                
+                if autoAdvancing && self.autoAdvance {
+                    self.delegate.autoAdvance()
+                }
             }
         })
     }

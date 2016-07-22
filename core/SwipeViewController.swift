@@ -576,11 +576,13 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             if self.book.pageIndex + 1 < self.book.pages.count {
                 CATransaction.begin()
                 CATransaction.setDisableActions(true)
-                let page = self.book.pages[self.book.pageIndex + 1]
-                page.willEnter(true, autoAdvancing: true)
-                page.view?.alpha = 1.0
+                let pagePrev = self.book.pages[self.book.pageIndex]
+                let pageNext = self.book.pages[self.book.pageIndex + 1]
+                pageNext.willEnter(true, autoAdvancing: true)
                 self.adjustIndex(self.book.pageIndex + 1, fForced: false, fDeferredEnter: false, fAutoAdvance: true)
-                page.setTimeOffsetWhileDragging(0.0, autoAdvancing: true) // we need to unwind to play this page
+                pageNext.setTimeOffsetWhileDragging(0.0, autoAdvancing: true) // we need to unwind to play this page
+                pageNext.view?.alpha = 1.0
+                pageNext.view?.frame = pagePrev.view!.frame
                 CATransaction.commit()
             }
         }
