@@ -213,9 +213,9 @@ class SwipePage: NSObject, SwipeElementDelegate {
         return false
     }()
     
-    func setTimeOffsetWhileDragging(offset:CGFloat, fAutoAdvance:Bool = false) {
+    func setTimeOffsetWhileDragging(offset:CGFloat, autoAdvancing:Bool = false) {
         if self.scroll {
-            if !fAutoAdvance {
+            if !autoAdvancing {
                 fEntered = false // stops the element animation
             }
             CATransaction.begin()
@@ -258,9 +258,9 @@ class SwipePage: NSObject, SwipeElementDelegate {
         MyLog("SWPage  didLeave @\(index) \(fGoingBack)", level: 2)
     }
     
-    func willEnter(fForward:Bool, fAutoAdvance:Bool = false) {
+    func willEnter(fForward:Bool, autoAdvancing:Bool = false) {
         MyLog("SWPage  willEnter @\(index) \(fForward)", level: 2)
-        if self.autoplay && fForward || self.always || fAutoAdvance {
+        if self.autoplay && fForward || self.always || autoAdvancing {
             prepareToPlay()
         }
         if fForward && self.scroll {
@@ -283,17 +283,17 @@ class SwipePage: NSObject, SwipeElementDelegate {
 #endif
     }
 
-    func didEnter(fForward:Bool, fAutoAdvance:Bool = false) {
+    func didEnter(fForward:Bool, autoAdvancing:Bool = false) {
         fEntered = true
         accessCount += 1
-        if fForward && self.autoplay || self.always || self.fRepeat || fAutoAdvance {
+        if fForward && self.autoplay || self.always || self.fRepeat || autoAdvancing {
             autoPlay(false)
         } else if self.hasRepeatElement() {
             autoPlay(true)
         } else if fForward && self.autoAdvance {
             self.delegate.autoAdvance()
         }
-        MyLog("SWPage  didEnter @\(index) \(fForward) \(fAutoAdvance)", level: 2)
+        MyLog("SWPage  didEnter @\(index) \(fForward) \(autoAdvancing)", level: 2)
     }
     
     func prepare() {

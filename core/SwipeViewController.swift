@@ -516,7 +516,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             if fForced {
                 self.book.currenPage.willEnter(true)
             }
-            self.book.currenPage.didEnter(fAdvancing || fForced, fAutoAdvance: fAutoAdvance)
+            self.book.currenPage.didEnter(fAdvancing || fForced, autoAdvancing: fAutoAdvance)
         }
         return true
     }
@@ -577,10 +577,10 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
                 CATransaction.begin()
                 CATransaction.setDisableActions(true)
                 let page = self.book.pages[self.book.pageIndex + 1]
-                page.willEnter(true, fAutoAdvance: true)
+                page.willEnter(true, autoAdvancing: true)
                 page.view?.alpha = 1.0
                 self.adjustIndex(self.book.pageIndex + 1, fForced: false, fDeferredEnter: false, fAutoAdvance: true)
-                page.setTimeOffsetWhileDragging(0.0, fAutoAdvance: true) // we need to unwind to play this page
+                page.setTimeOffsetWhileDragging(0.0, autoAdvancing: true) // we need to unwind to play this page
                 CATransaction.commit()
             }
         }
