@@ -15,10 +15,14 @@ import UIKit
 import AVFoundation
 
 private func MyLog(text:String, level:Int = 0) {
-    let s_verbosLevel = 0
+    let s_verbosLevel = 1
     if level <= s_verbosLevel {
         NSLog(text)
     }
+}
+
+protocol SwipeBookDelegate: NSObjectProtocol {
+    func autoAdvance()
 }
 
 class SwipeBook: NSObject, SwipePageDelegate {
@@ -26,6 +30,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
     var viewSize:CGSize?
     var pageIndex = 0
     var langId = "en"
+    weak var delegate:SwipeBookDelegate?
 
     // Private properties
     private let bookInfo:[String:AnyObject]
@@ -284,6 +289,11 @@ class SwipeBook: NSObject, SwipePageDelegate {
     // <SwipePageDelegate> method
     func languageIdentifier() -> String? {
         return langId
+    }
+    
+    func autoAdvance() {
+        MyLog("SwipeBook autoAdvance", level:1)
+        self.delegate?.autoAdvance()
     }
 
     func sourceCode() -> String {

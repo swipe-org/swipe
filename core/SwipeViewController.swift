@@ -23,8 +23,8 @@ private func MyLog(text:String, level:Int = 0) {
     }
 }
 
-class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocumentViewer {
-    var book:SwipeBook!
+class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocumentViewer, SwipeBookDelegate {
+    private var book:SwipeBook!
     weak var delegate:SwipeDocumentViewerDelegate?
     private var fAdvancing = true
     private let notificationManager = SNNotificationManager()
@@ -84,6 +84,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     // <SwipeDocumentViewer> method
     func loadDocument(document:[String:AnyObject], size:CGSize, url:NSURL?, state:[String:AnyObject]?, callback:(Float, NSError?)->(Void)) throws {
         self.book = SwipeBook(bookInfo: document, url: url)
+        self.book.delegate = self
 
         if let languages = self.book.languages(),
                language = languages.first,
@@ -327,7 +328,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
         let index = self.scrollIndex
         self.scrollingCount -= 1
-        MyLog("SWView didEndScrolling \(index), \(scrollingTarget), c=\(scrollingCount)", level: 1)
+        MyLog("SWView didEndScrolling \(index), \(scrollingTarget), c=\(scrollingCount), \(fAdvancing)", level: 1)
         if self.scrollingCount > 0 {
             return
         }
@@ -479,7 +480,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         }
     }
     
-    private func adjustIndex(newPageIndex:Int, fForced:Bool = false, fDeferredEnter:Bool = false) -> Bool {
+    private func adjustIndex(newPageIndex:Int, fForced:Bool = false, fDeferredEnter:Bool = false, fAutoAdvance:Bool = false) -> Bool {
         if self.book.pages.count == 0 {
             print("SwipeVC ### No Pages")
             return false
@@ -503,7 +504,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         self.book.pageIndex = newPageIndex
         self.preparePages { (index:Int) -> (Void) in
             if fDeferredEnter && newPageIndex == index && newPageIndex == self.book.pageIndex {
-                print("SwipeVC index=\(index)")
+                //print("SwipeVC index=\(index)")
                 if fForced {
                     self.book.currenPage.willEnter(true)
                 }
@@ -515,7 +516,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             if fForced {
                 self.book.currenPage.willEnter(true)
             }
-            self.book.currenPage.didEnter(fAdvancing || fForced)
+            self.book.currenPage.didEnter(fAdvancing || fForced, fAutoAdvance: fAutoAdvance)
         }
         return true
     }
@@ -568,4 +569,20 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         
     }
     
+    // <SwipeBookDelegate> method
+    func autoAdvance() {
+        dispatch_async(dispatch_get_main_queue()) {
+            MyLog("SWView autoAdvance", level:0)
+            if self.book.pageIndex + 1 < self.book.pages.count {
+                CATransaction.begin()
+                CATransaction.setDisableActions(true)
+                let page = self.book.pages[self.book.pageIndex + 1]
+                page.willEnter(true, fAutoAdvance: true)
+                page.view?.alpha = 1.0
+                self.adjustIndex(self.book.pageIndex + 1, fForced: false, fDeferredEnter: false, fAutoAdvance: true)
+                page.setTimeOffsetWhileDragging(0.0, fAutoAdvance: true) // we need to unwind to play this page
+                CATransaction.commit()
+            }
+        }
+    }
 }

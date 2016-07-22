@@ -17,7 +17,7 @@ import MediaPlayer
 
 
 private func MyLog(text:String, level:Int = 0) {
-    let s_verbosLevel = 0
+    let s_verbosLevel = 2
     if level <= s_verbosLevel {
         NSLog(text)
     }
@@ -38,6 +38,7 @@ protocol SwipePageDelegate: NSObjectProtocol {
     func baseURL() -> NSURL?
     func voice(k:String?) -> [String:AnyObject]
     func languageIdentifier() -> String?
+    func autoAdvance()
 }
 
 class SwipePage: NSObject, SwipeElementDelegate {
@@ -180,6 +181,10 @@ class SwipePage: NSObject, SwipeElementDelegate {
         return self.animation == "scroll"
     }()
 
+    private lazy var autoAdvance:Bool = {
+        return self.pageInfo["autoAdvance"] as? Bool ?? false
+    }()
+
     private lazy var vibrate:Bool = {
         if let value = self.pageInfo["vibrate"] as? Bool {
             return value
@@ -208,9 +213,11 @@ class SwipePage: NSObject, SwipeElementDelegate {
         return false
     }()
     
-    func setTimeOffsetWhileDragging(offset:CGFloat) {
+    func setTimeOffsetWhileDragging(offset:CGFloat, fAutoAdvance:Bool = false) {
         if self.scroll {
-            fEntered = false // stops the element animation
+            if !fAutoAdvance {
+                fEntered = false // stops the element animation
+            }
             CATransaction.begin()
             CATransaction.setDisableActions(true)
             assert(self.viewAnimation != nil, "must have self.viewAnimation")
@@ -251,9 +258,9 @@ class SwipePage: NSObject, SwipeElementDelegate {
         MyLog("SWPage  didLeave @\(index) \(fGoingBack)", level: 2)
     }
     
-    func willEnter(fForward:Bool) {
+    func willEnter(fForward:Bool, fAutoAdvance:Bool = false) {
         MyLog("SWPage  willEnter @\(index) \(fForward)", level: 2)
-        if self.autoplay && fForward || self.always {
+        if self.autoplay && fForward || self.always || fAutoAdvance {
             prepareToPlay()
         }
         if fForward && self.scroll {
@@ -276,15 +283,17 @@ class SwipePage: NSObject, SwipeElementDelegate {
 #endif
     }
 
-    func didEnter(fForward:Bool) {
+    func didEnter(fForward:Bool, fAutoAdvance:Bool = false) {
         fEntered = true
         accessCount += 1
-        if fForward && self.autoplay || self.always || self.fRepeat {
+        if fForward && self.autoplay || self.always || self.fRepeat || fAutoAdvance {
             autoPlay(false)
         } else if self.hasRepeatElement() {
             autoPlay(true)
+        } else if fForward && self.autoAdvance {
+            self.delegate.autoAdvance()
         }
-        MyLog("SWPage  didEnter @\(index) \(fForward)", level: 2)
+        MyLog("SWPage  didEnter @\(index) \(fForward) \(fAutoAdvance)", level: 2)
     }
     
     func prepare() {
@@ -357,6 +366,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
                         fElementRepeatNext = true
                     }
                 }
+                //print("tick", nextOffset)
                 CATransaction.begin()
                 CATransaction.setDisableActions(true)
                 if !fElementRepeatNext {
