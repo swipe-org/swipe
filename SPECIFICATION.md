@@ -258,6 +258,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
   - **fontSize** (Float or Percent): Font size
   - **fontName** (String or [String]): Font name or names (the first name existing in the system is used)
   - **textColor** (Color): Color of the text, animatable
+- **markdown** (String or [String]): Markdown to display
 - **img** (URL): Image to display, animatable
 - **mask** (URL): Image mask (PNG with the alpha channel)
 - **sprite** (URL): Sprite to display
