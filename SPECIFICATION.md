@@ -133,6 +133,7 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 - **fpt** (Int): Frame per second, the default is 60
 - **transition** (String): Inter-page transition style, *scroll* (default), *fadeIn* or *replace*
 - **play** (String): Play(animation) control, *auto* (default), *pause*, *always* or *scroll*
+- **autoAdvance** (Bool): Indicates if it should transition to the following page automatically. It's valid only when the play mode is *scroll*. 
 - **duration** (Float): Duration of the animation in seconds, the default is 0.2 seconds
 - **repeat** (Boolean): Repeat rule of the animation, default is *false*
 - **rewind** (Boolean): Rewind rule of the animation when the user leaves the page, default is *false*
