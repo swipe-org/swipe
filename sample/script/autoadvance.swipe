@@ -80,7 +80,7 @@
             ],
         },
         {
-            "play":"scroll",
+            "play":"pause",
             "autoAdvance":true,
             "elements":[
                 { "template":"box", "x":600, "y":600, "to":{ "translate":[100,0] } },

@@ -184,7 +184,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
 
     private lazy var autoAdvance:Bool = {
         // autoAdvance is only valid in fixed mode (where play=="scroll")
-        return self.fixed && self.pageInfo["autoAdvance"] as? Bool ?? false
+        return !self.autoplay && self.pageInfo["autoAdvance"] as? Bool ?? false
     }()
 
     private lazy var vibrate:Bool = {
