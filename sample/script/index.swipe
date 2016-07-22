@@ -4,6 +4,7 @@
     "items":[
         { "url":"swipe.swipe", "title":"Swipe Overview", "icon":"Icon-180.png" },
         { "url":"tutorial.swipe", "title":"Swipe Tutorial", "icon":"Icon-180.png" },
+        { "url":"autoadvance.swipe", "title":"Auto Advance", "icon":"Icon-180.png" },
         { "url":"videostream.swipe", "title":"Streaming Video", "icon":"movie.png" },
         { "url":"radiostream.swipe", "title":"Internet Radio Stations", "icon":"radio.png" },
         { "url":"markdown.swipe", "title":"Rich Text", "icon":"text.png" },

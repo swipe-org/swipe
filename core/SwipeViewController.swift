@@ -27,6 +27,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     private var book:SwipeBook!
     weak var delegate:SwipeDocumentViewerDelegate?
     private var fAdvancing = true
+    private var fIgnoreScrolling = false
     private let notificationManager = SNNotificationManager()
 #if os(tvOS)
     // scrollingTarget has an index to the target page during the scrolling animation
@@ -243,6 +244,9 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
+        if fIgnoreScrolling {
+            return
+        }
         let pos = self.scrollPos
         let index = Int(pos)
         if index >= 0 {
@@ -586,5 +590,21 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
                 CATransaction.commit()
             }
         }
+    }
+
+    // <SwipeBookDelegate> method
+    func adjustScrollPosition() {
+        // We need to adjust the contentOffset appropriately (so that subsequent manual scrolling works)
+        let frame = self.scrollView.frame
+        let offset = self.book.horizontal ? CGPointMake((CGFloat(self.book.pageIndex)) * frame.size.width, 0) : CGPointMake(0, (CGFloat(self.book.pageIndex)) * frame.size.height)
+        fIgnoreScrolling = true
+        self.scrollView.contentOffset = offset
+        fIgnoreScrolling = false
+        let page = self.book.pages[self.book.pageIndex]
+        if var frame = page.view?.frame {
+            frame.origin = offset
+            page.view!.frame = frame
+        }
+        
     }
 }

@@ -1,0 +1,104 @@
+{
+    "title": "Auto Advance",
+    "dimension":[1080,1080],
+    "viewstate":false,
+    "templates": {
+        "elements":{
+            "box": { "w":200, "h":200, "bc":"#33f" },
+        },
+    },
+    "pages":[
+        {
+            "elements":[
+                { "template":"box", "x":100, "y":100 },
+            ],
+        },
+        {
+            "play":"scroll",
+            "elements":[
+                { "template":"box", "x":100, "y":100, "to":{ "translate":[100,0] } },
+            ],
+        },
+        {
+            "play":"scroll",
+            "autoAdvance":true,
+            "elements":[
+                { "template":"box", "x":200, "y":100, "to":{ "translate":[0,100] } },
+            ],
+        },
+        {
+            "play":"scroll",
+            "elements":[
+                { "template":"box", "x":200, "y":200, "to":{ "translate":[100,0] } },
+            ],
+        },
+        {
+            "play":"scroll",
+            "autoAdvance":true,
+            "elements":[
+                { "template":"box", "x":300, "y":200, "to":{ "translate":[0,100] } },
+            ],
+        },
+        {
+            "play":"scroll",
+            "autoAdvance":true,
+            "elements":[
+                { "template":"box", "x":300, "y":300, "to":{ "translate":[100,0] } },
+            ],
+        },
+        {
+            "play":"scroll",
+            "elements":[
+                { "template":"box", "x":400, "y":300, "to":{ "translate":[0,100] } },
+            ],
+        },
+        {
+            "play":"scroll",
+            "autoAdvance":true,
+            "elements":[
+                { "template":"box", "x":400, "y":400, "to":{ "translate":[100,0] } },
+            ],
+        },
+        {
+            "play":"scroll",
+            "autoAdvance":true,
+            "elements":[
+                { "template":"box", "x":500, "y":400, "to":{ "translate":[0,100] } },
+            ],
+        },
+        {
+            "play":"scroll",
+            "autoAdvance":true,
+            "elements":[
+                { "template":"box", "x":500, "y":500, "to":{ "translate":[100,0] } },
+            ],
+        },
+        {
+            "play":"scroll",
+            "elements":[
+                { "template":"box", "x":600, "y":500, "to":{ "translate":[0,100] } },
+            ],
+        },
+        {
+            "play":"scroll",
+            "autoAdvance":true,
+            "elements":[
+                { "template":"box", "x":600, "y":600, "to":{ "translate":[100,0] } },
+            ],
+        },
+        {
+            "play":"scroll",
+            "autoAdvance":true,
+            "elements":[
+                { "template":"box", "x":700, "y":600, "to":{ "translate":[0,100] } },
+            ],
+        },
+        {
+            "play":"scroll",
+            "autoAdvance":true,
+            "elements":[
+                { "template":"box", "x":700, "y":700, "to":{ "translate":[-600,0], "bc":"#f33" } },
+            ],
+        },
+    ]
+}

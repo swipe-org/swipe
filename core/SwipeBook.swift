@@ -23,6 +23,7 @@ private func MyLog(text:String, level:Int = 0) {
 
 protocol SwipeBookDelegate: NSObjectProtocol {
     func autoAdvance()
+    func adjustScrollPosition()
 }
 
 class SwipeBook: NSObject, SwipePageDelegate {
@@ -294,6 +295,10 @@ class SwipeBook: NSObject, SwipePageDelegate {
     func autoAdvance() {
         MyLog("SwipeBook autoAdvance", level:1)
         self.delegate?.autoAdvance()
+    }
+    
+    func adjustScrollPosition() {
+        self.delegate?.adjustScrollPosition()
     }
 
     func sourceCode() -> String {

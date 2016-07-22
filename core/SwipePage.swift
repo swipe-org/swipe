@@ -39,6 +39,7 @@ protocol SwipePageDelegate: NSObjectProtocol {
     func voice(k:String?) -> [String:AnyObject]
     func languageIdentifier() -> String?
     func autoAdvance()
+    func adjustScrollPosition()
 }
 
 class SwipePage: NSObject, SwipeElementDelegate {
@@ -386,8 +387,13 @@ class SwipePage: NSObject, SwipeElementDelegate {
                 self.cDebug -= 1
                 self.didFinishPlayingInternal()
                 
-                if autoAdvancing && self.autoAdvance {
-                    self.delegate.autoAdvance()
+                if autoAdvancing {
+#if !os(tvOS)
+                    self.delegate.adjustScrollPosition()
+#endif
+                    if self.autoAdvance {
+                        self.delegate.autoAdvance()
+                    }
                 }
             }
         })
