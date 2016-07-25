@@ -115,12 +115,12 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 }
             } else {
                 let manager = SwipeAssetManager.sharedInstance()
-                manager.loadAsset(url, prefix: "", bypassCache:true) { (urlLocal:URL?,  error:NSError!) -> Void in
+                manager.loadAsset(url, prefix: "", bypassCache:true) { (urlLocal:URL?,  error:NSError?) -> Void in
                     if let urlL = urlLocal where error == nil,
                        let data = try? Data(contentsOf: urlL) {
                         self.openData(data, localResource: false)
                     } else {
-                        self.processError(error.localizedDescription)
+                        self.processError(error?.localizedDescription ?? "")
                     }
                 }
             }
