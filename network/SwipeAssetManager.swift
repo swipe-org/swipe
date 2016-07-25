@@ -64,7 +64,7 @@ class SwipeAssetManager {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         let filename = "asset004.sqlite"
 #if os(tvOS)
-        let url = self.applicationCachesDirectory.URLByAppendingPathComponent(filename)
+        let url = try! self.applicationCachesDirectory.appendingPathComponent(filename)
 #else
         let url = try! self.applicationLibraryDirectory.appendingPathComponent(filename)
 #endif

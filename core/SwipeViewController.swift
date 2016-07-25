@@ -159,10 +159,10 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         // Since the paging is not enabled on tvOS, we handle PanGesture directly at this view instead.
         // scrollView.panGestureRecognizer.allowedTouchTypes = [UITouchType.Indirect.rawValue, UITouchType.Direct.rawValue]
         //scrollView.panGestureRecognizer.enabled = false
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(SwipeViewController.handlePan(_:)))
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(SwipeViewController.handlePan(recognizer:)))
         self.view.addGestureRecognizer(pan)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(SwipeViewController.handlePlayButton(_:)))
-        tap.allowedPressTypes = [UIPressType.PlayPause.rawValue]
+        let tap = UITapGestureRecognizer(target: self, action: #selector(SwipeViewController.handlePlayButton(recognizer:)))
+        tap.allowedPressTypes = [UIPressType.playPause.rawValue]
         self.view.addGestureRecognizer(tap)
 #endif
     
@@ -385,7 +385,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             MyLog("SWView handlePan normal \(self.book.pageIndex) [\(recognizer.state.rawValue)]", level:2)
         }
 
-        let offset = self.book.horizontal ? CGPointMake((CGFloat(self.book.pageIndex) + ratio) * size.width, 0) : CGPointMake(0, (CGFloat(self.book.pageIndex) + ratio) * size.height)
+        let offset = self.book.horizontal ? CGPoint(x: (CGFloat(self.book.pageIndex) + ratio) * size.width, y: 0) : CGPoint(x: 0, y: (CGFloat(self.book.pageIndex) + ratio) * size.height)
         //MyLog("SwiftVC handlePan: \(recognizer.state.rawValue), \(ratio)")
         switch(recognizer.state) {
         case .began:
@@ -415,7 +415,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             }
             target = min(max(target, 0), self.book.pages.count - 1)
 
-            let offsetAligned = self.book.horizontal ? CGPointMake(size.width * CGFloat(target), 0) : CGPointMake(0, size.height * CGFloat(target))
+            let offsetAligned = self.book.horizontal ? CGPoint(x: size.width * CGFloat(target), y: 0) : CGPoint(x: 0, y: size.height * CGFloat(target))
             if target != self.book.pageIndex {
                 // Paging was initiated by the swiping (forward or backward)
                 self.book.currenPage.willLeave(fAdvancing)
