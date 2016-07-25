@@ -18,8 +18,8 @@ class SNNotificationManager {
         clear()
     }
     
-    func addObserverForName(_ name: String?, object obj: AnyObject?, queue: OperationQueue?, usingBlock block: (Notification!) -> Void) {
-        let observer = NotificationCenter.default.addObserver(forName: name.map { NSNotification.Name(rawValue: $0) }, object: obj, queue: queue, using: block)
+    func addObserverForName(_ name: NotificationNameConvertible?, object obj: AnyObject?, queue: OperationQueue?, usingBlock block: (Notification!) -> Void) {
+        let observer = NotificationCenter.default.addObserver(forName: name?.notificationName, object: obj, queue: queue, using: block)
         observers.append(observer)
     }
     
@@ -27,5 +27,21 @@ class SNNotificationManager {
         for observer in observers {
             NotificationCenter.default.removeObserver(observer)
         }
+    }
+}
+
+protocol NotificationNameConvertible {
+    var notificationName: Notification.Name { get }
+}
+
+extension String: NotificationNameConvertible {
+    var notificationName: Notification.Name {
+        return Notification.Name(rawValue: self)
+    }
+}
+
+extension Notification.Name: NotificationNameConvertible {
+    var notificationName: Notification.Name {
+        return self
     }
 }
