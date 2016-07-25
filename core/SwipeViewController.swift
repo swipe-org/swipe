@@ -16,7 +16,7 @@ import UIKit
 
 import AVFoundation
 
-private func MyLog(text:String, level:Int = 0) {
+private func MyLog(_ text:String, level:Int = 0) {
     let s_verbosLevel = 0
     if level <= s_verbosLevel {
         NSLog(text)
@@ -38,7 +38,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     lazy var scrollView:UIScrollView = {
         let scrollView = UIScrollView()
 #if os(iOS)
-        scrollView.pagingEnabled = true // paging is not available for tvOS
+        scrollView.isPagingEnabled = true // paging is not available for tvOS
 #endif
         scrollView.delegate = self
         return scrollView
@@ -55,7 +55,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         return Int(self.scrollPos + 0.5)
     }
     
-    private func pagePosition(offset:CGPoint) -> CGFloat {
+    private func pagePosition(_ offset:CGPoint) -> CGFloat {
         let size = self.scrollView.frame.size
         return self.book.horizontal ? offset.x / size.width : offset.y / size.height
     }
@@ -82,7 +82,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
 
     // <SwipeDocumentViewer> method
-    func loadDocument(document:[String:AnyObject], size:CGSize, url:NSURL?, state:[String:AnyObject]?, callback:(Float, NSError?)->(Void)) throws {
+    func loadDocument(_ document:[String:AnyObject], size:CGSize, url:URL?, state:[String:AnyObject]?, callback:(Float, NSError?)->(Void)) throws {
         self.book = SwipeBook(bookInfo: document, url: url)
 
         if let languages = self.book.languages(),
@@ -100,22 +100,22 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             }
         }
         
-        var urlsAll = [NSURL:String]()
+        var urlsAll = [URL:String]()
         for page in self.book.pages {
             let urls = page.resourceURLs
             for (url, prefix) in urls {
-                urlsAll[url] = prefix
+                urlsAll[url as URL] = prefix
             }
         }
         //NSLog("SVC urlsAll = \(urlsAll)")
         let prefetcher = SwipePrefetcher(urls: urlsAll)
-        prefetcher.start { (completed:Bool, _:[NSURL], _:[NSError]) -> Void in
+        prefetcher.start { (completed:Bool, _:[URL], _:[NSError]) -> Void in
             callback(prefetcher.progress, nil)
         }
     }
 
     // <SwipeDocumentViewer> method
-    func setDelegate(delegate:SwipeDocumentViewerDelegate) {
+    func setDelegate(_ delegate:SwipeDocumentViewerDelegate) {
         self.delegate = delegate
     }
 
@@ -145,7 +145,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
     
     // <SwipeDocumentViewer> method
-    func reloadWithLanguageId(langId:String) {
+    func reloadWithLanguageId(_ langId:String) {
         self.book.langId = langId
         self.adjustIndex(self.book.pageIndex, fForced: true)
     }
@@ -166,14 +166,14 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         self.view.addGestureRecognizer(tap)
 #endif
     
-        notificationManager.addObserverForName(UIApplicationDidBecomeActiveNotification, object: nil, queue: NSOperationQueue.mainQueue()) {
-            [unowned self] (_:NSNotification!) -> Void in
+        notificationManager.addObserverForName(NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: OperationQueue.main) {
+            [unowned self] (_:Notification!) -> Void in
             MyLog("SWView DidBecomeActive")
             // iOS & tvOS removes all the animations associated with CALayers when the app becomes the background mode. 
             // Therefore, we need to recreate all the pages. 
             //
             // Without this delay, the manual animation won't work after putting the app in the background once.
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(300 * NSEC_PER_MSEC)), dispatch_get_main_queue()) {
+            DispatchQueue.main.after(when: DispatchTime.now() + Double(Int64(300 * NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)) {
                 self.adjustIndex(self.book.pageIndex, fForced: true)
             }
         }
@@ -221,7 +221,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         if scrollView.contentSize != size {
             scrollView.contentSize = size
             adjustIndex(self.book.pageIndex, fForced: true, fDeferredEnter: true)
-            let offset = self.book.horizontal ? CGPointMake((CGFloat(self.book.pageIndex)) * frame.size.width, 0) : CGPointMake(0, (CGFloat(self.book.pageIndex)) * frame.size.height)
+            let offset = self.book.horizontal ? CGPoint(x: (CGFloat(self.book.pageIndex)) * frame.size.width, y: 0) : CGPoint(x: 0, y: (CGFloat(self.book.pageIndex)) * frame.size.height)
             self.scrollView.contentOffset = offset
         }
     }
@@ -241,7 +241,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         return "\(tags)"
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let pos = self.scrollPos
         let index = Int(pos)
         if index >= 0 {
@@ -282,7 +282,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
 
 #if os(iOS)
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         let _:CGFloat, index:Int = self.scrollIndex
         //MyLog("SwipeVCWillBeginDragging, \(self.book.pageIndex) to \(index)")
         if self.adjustIndex(index) {
@@ -290,8 +290,8 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         }
     }
     
-    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let pt = targetContentOffset.memory
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let pt = targetContentOffset.pointee
         let target = Int(pagePosition(pt) + 0.5)
         if target != self.book.pageIndex {
             // Forward paging was just initiated by the user's dragging
@@ -314,7 +314,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         }
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let index = self.scrollIndex
         
         if !self.adjustIndex(index) {
@@ -472,14 +472,14 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
 #endif
     
-    private func removeViewAtIndex(index:Int) {
+    private func removeViewAtIndex(_ index:Int) {
         if index >= 0 && index < book.pages.count {
             let page = book.pages[index]
             page.unloadView()
         }
     }
     
-    private func adjustIndex(newPageIndex:Int, fForced:Bool = false, fDeferredEnter:Bool = false) -> Bool {
+    private func adjustIndex(_ newPageIndex:Int, fForced:Bool = false, fDeferredEnter:Bool = false) -> Bool {
         if self.book.pages.count == 0 {
             print("SwipeVC ### No Pages")
             return false
@@ -520,8 +520,8 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         return true
     }
 
-    private func preparePages(callback:((Int)->(Void))?) {
-        func preparePage(index:Int, frame:CGRect) {
+    private func preparePages(_ callback:((Int)->(Void))?) {
+        func preparePage(_ index:Int, frame:CGRect) {
             if index < 0 || index >= book.pages.count {
                 return
             }
@@ -553,11 +553,11 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         }
     
         var rc = scrollView.bounds
-        let d = book.horizontal ? CGPointMake(rc.size.width, 0.0) : CGPointMake(0.0, rc.size.height)
-        rc.origin = CGPointMake(d.x * CGFloat(self.book.pageIndex), d.y * CGFloat(self.book.pageIndex))
+        let d = book.horizontal ? CGPoint(x: rc.size.width, y: 0.0) : CGPoint(x: 0.0, y: rc.size.height)
+        rc.origin = CGPoint(x: d.x * CGFloat(self.book.pageIndex), y: d.y * CGFloat(self.book.pageIndex))
         
         for i in -2...2 {
-            preparePage(self.book.pageIndex + i, frame: CGRectOffset(rc, CGFloat(i) * d.x, CGFloat(i) * d.y))
+            preparePage(self.book.pageIndex + i, frame: rc.offsetBy(dx: CGFloat(i) * d.x, dy: CGFloat(i) * d.y))
         }
 
         //MyLog("SWView tags=\(tags), \(pageIndex)")

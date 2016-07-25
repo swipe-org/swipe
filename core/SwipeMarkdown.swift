@@ -20,11 +20,11 @@ class SwipeMarkdown {
     private let scale:CGSize
     private var shadow:NSShadow?
 
-    func attributesWith(fontSize:CGFloat, paragraphSpacing:CGFloat, fontName:String? = nil) -> [String:AnyObject] {
+    func attributesWith(_ fontSize:CGFloat, paragraphSpacing:CGFloat, fontName:String? = nil) -> [String:AnyObject] {
         let style = NSMutableParagraphStyle()
-        style.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        style.lineBreakMode = NSLineBreakMode.byWordWrapping
         style.paragraphSpacing = paragraphSpacing * scale.height
-        var font = UIFont.systemFontOfSize(fontSize * scale.height)
+        var font = UIFont.systemFont(ofSize: fontSize * scale.height)
         if let name = fontName,
            let namedFont = UIFont(name: name, size: fontSize * scale.height) {
             font = namedFont
@@ -78,7 +78,7 @@ class SwipeMarkdown {
                         switch(keyAttr) {
                         case "color":
                             // the value MUST be UIColor or NSColor, not CGColor
-                            attrCopy[NSForegroundColorAttributeName] = UIColor(CGColor:SwipeParser.parseColor(attrValue))
+                            attrCopy[NSForegroundColorAttributeName] = UIColor(cgColor:SwipeParser.parseColor(attrValue))
                         case "font":
                             attrCopy[NSFontAttributeName] = SwipeParser.parseFont(attrValue, scale:scale, full:dimension.height)
                         case "prefix":
@@ -89,11 +89,11 @@ class SwipeMarkdown {
                             if let alignment = attrValue as? String {
                                 switch(alignment) {
                                 case "center":
-                                    styleCopy.alignment = .Center
+                                    styleCopy.alignment = .center
                                 case "right":
-                                    styleCopy.alignment = .Right
+                                    styleCopy.alignment = .right
                                 case "left":
-                                    styleCopy.alignment = .Left
+                                    styleCopy.alignment = .left
                                 default:
                                     break
                                 }
@@ -115,10 +115,10 @@ class SwipeMarkdown {
         }
     }
 
-    func parse(markdowns:[String]) -> NSAttributedString {
+    func parse(_ markdowns:[String]) -> AttributedString {
         let strs = NSMutableAttributedString()
         var fCode = false
-        for (index, markdown) in markdowns.enumerate() {
+        for (index, markdown) in markdowns.enumerated() {
             var (key, body):(String?, String) = {
                 if markdown == "```" {
                     fCode = !fCode
@@ -127,9 +127,9 @@ class SwipeMarkdown {
                     return ("```", markdown)
                 } else {
                     for prefix in attrs.keys {
-                        let result = markdown.commonPrefixWithString(prefix + " ", options: NSStringCompareOptions.LiteralSearch)
+                        let result = markdown.commonPrefix(with: prefix + " ", options: NSString.CompareOptions.literal)
                         if result == prefix + " " {
-                            return (prefix, markdown.substringFromIndex(markdown.startIndex.advancedBy(prefix.characters.count + 1)))
+                            return (prefix, markdown.substring(from: markdown.characters.index(markdown.startIndex, offsetBy: prefix.characters.count + 1)))
                         }
                     }
                 }
@@ -141,7 +141,7 @@ class SwipeMarkdown {
                     body = prefix + body
                 }
                 body += ((index < markdowns.count - 1) ? "\n" : "")
-                strs.appendAttributedString(NSMutableAttributedString(string: body, attributes: attrs[keyPrefix]))
+                strs.append(NSMutableAttributedString(string: body, attributes: attrs[keyPrefix]))
             }
         }
         //NSLog("Markdown:parse \(strs)")

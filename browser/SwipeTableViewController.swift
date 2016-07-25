@@ -12,7 +12,7 @@ import Cocoa
 import UIKit
 #endif
 
-private func MyLog(text:String, level:Int = 0) {
+private func MyLog(_ text:String, level:Int = 0) {
     let s_verbosLevel = 0
     if level <= s_verbosLevel {
         NSLog(text)
@@ -26,22 +26,22 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     private var document:[String:AnyObject]?
     private var sections = [[String:AnyObject]]()
     //private var items = [[String:AnyObject]]()
-    private var url:NSURL?
+    private var url:URL?
     private weak var delegate:SwipeDocumentViewerDelegate?
     private var prefetching = true
     @IBOutlet private var tableView:UITableView!
     @IBOutlet private var imageView:UIImageView?
 
     // Returns the list of URLs of required resouces for this element (including children)
-    private lazy var resourceURLs:[NSURL:String] = {
-        var urls = [NSURL:String]()
+    private lazy var resourceURLs:[URL:String] = {
+        var urls = [URL:String]()
         for section in self.sections {
             guard let items = section["items"] as? [[String:AnyObject]] else {
                 continue
             }
             for item in items {
                 if let icon = item["icon"] as? String,
-                       url = NSURL.url(icon, baseURL: self.url) {
+                       url = URL.url(icon, baseURL: self.url) {
                     urls[url] = "" // no prefix
                 }
             }
@@ -54,7 +54,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }()
         
     // <SwipeDocumentViewer> method
-    func loadDocument(document:[String:AnyObject], size:CGSize, url:NSURL?, state:[String:AnyObject]?, callback:(Float, NSError?)->(Void)) throws {
+    func loadDocument(_ document:[String:AnyObject], size:CGSize, url:URL?, state:[String:AnyObject]?, callback:(Float, NSError?)->(Void)) throws {
         self.document = document
         self.url = url
         if let sections = document["sections"] as? [[String:AnyObject]] {
@@ -63,7 +63,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
             let section = [ "items":items ]
             sections.append(section)
         } else {
-            throw SwipeError.InvalidDocument
+            throw SwipeError.invalidDocument
         }
         callback(1.0, nil)
     }
@@ -72,13 +72,13 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
         super.viewDidLoad()
 
         if let imageView = self.imageView {
-            let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+            let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
             effectView.frame = imageView.frame
-            effectView.autoresizingMask = UIViewAutoresizing([.FlexibleWidth, .FlexibleHeight])
+            effectView.autoresizingMask = UIViewAutoresizing([.flexibleWidth, .flexibleHeight])
             imageView.addSubview(effectView)
         }
 
-        self.prefetcher.start { (completed:Bool, _:[NSURL], _:[NSError]) -> Void in
+        self.prefetcher.start { (completed:Bool, _:[URL], _:[NSError]) -> Void in
             if completed {
                 MyLog("SWTable prefetch complete", level:1)
                 self.prefetching = false
@@ -104,7 +104,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     // <SwipeDocumentViewer> method
-    func setDelegate(delegate:SwipeDocumentViewerDelegate) {
+    func setDelegate(_ delegate:SwipeDocumentViewerDelegate) {
         self.delegate = delegate
     }
     
@@ -134,7 +134,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     // <SwipeDocumentViewer> method
-    func reloadWithLanguageId(langID:String) {
+    func reloadWithLanguageId(_ langID:String) {
         // no operation for this case
     }
 
@@ -145,12 +145,12 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
 
     // MARK: - Table view data source
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return prefetching ? 0 : self.sections.count
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         let section = self.sections[section]
         guard let items = section["items"] as? [[String:AnyObject]] else {
@@ -159,22 +159,22 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
         return items.count
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "foo")
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "foo")
 
         // Configure the cell...
-        let section = self.sections[indexPath.section]
+        let section = self.sections[(indexPath as NSIndexPath).section]
         guard let items = section["items"] as? [[String:AnyObject]] else {
             return cell
         }
-        let item = items[indexPath.row]
+        let item = items[(indexPath as NSIndexPath).row]
         if let title = item["title"] as? String {
             cell.textLabel!.text = title
         } else if let url = item["url"] as? String {
             cell.textLabel!.text = url
         }
         if let icon = item["icon"] as? String,
-               url = NSURL.url(icon, baseURL: self.url),
+               url = URL.url(icon, baseURL: self.url),
                urlLocal = self.prefetcher.map(url),
                path = urlLocal.path,
                image = UIImage(contentsOfFile: path) {
@@ -183,19 +183,19 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let section = self.sections[indexPath.section]
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let section = self.sections[(indexPath as NSIndexPath).section]
         guard let items = section["items"] as? [[String:AnyObject]] else {
             return
         }
-        let item = items[indexPath.row]
+        let item = items[(indexPath as NSIndexPath).row]
         if let urlString = item["url"] as? String,
-           let url = NSURL.url(urlString, baseURL: self.url) {
+           let url = URL.url(urlString, baseURL: self.url) {
             self.delegate?.browseTo(url)
         }
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let section = self.sections[section]
         return section["title"] as? String
     }
