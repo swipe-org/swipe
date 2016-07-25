@@ -17,7 +17,7 @@ extension String {
 extension URL {
     static func url(_ urlString:String, baseURL:URL?) -> URL? {
         let url = URL(string: urlString, relativeTo: baseURL!)
-        if let scheme = url?.scheme where scheme.characters.count > 0 {
+        if let scheme = url?.scheme, scheme.characters.count > 0 {
             return url
         }
     

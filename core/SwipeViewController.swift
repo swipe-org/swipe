@@ -92,7 +92,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         }
 
         if book.viewstate {
-            if let pageIndex = state?["page"] as? Int where pageIndex < self.book.pages.count {
+            if let pageIndex = state?["page"] as? Int, pageIndex < self.book.pages.count {
                 self.book.pageIndex = pageIndex
             }
             if let langId = state?["langId"] as? String {

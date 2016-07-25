@@ -116,7 +116,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             } else {
                 let manager = SwipeAssetManager.sharedInstance()
                 manager.loadAsset(url, prefix: "", bypassCache:true) { (urlLocal:URL?,  error:NSError?) -> Void in
-                    if let urlL = urlLocal where error == nil,
+                    if let urlL = urlLocal, error == nil,
                        let data = try? Data(contentsOf: urlL) {
                         self.openData(data, localResource: false)
                     } else {
@@ -139,7 +139,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             labelTitle?.text = url?.lastPathComponent
         }
 #endif
-        if let languages = documentViewer.languages() where languages.count > 0 {
+        if let languages = documentViewer.languages(), languages.count > 0 {
             btnLanguage?.isEnabled = true
         }
 
@@ -182,7 +182,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         do {
             let defaults = UserDefaults.standard
             var state:[String:AnyObject]? = nil
-            if let url = self.url where ignoreViewState == false {
+            if let url = self.url, ignoreViewState == false {
                 state = defaults.object(forKey: url.absoluteString!) as? [String:AnyObject]
             }
             self.viewLoading?.alpha = 1.0
@@ -205,7 +205,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     }
     
     private func openDocumentWithODR(_ document:[String:AnyObject], localResource:Bool) {
-            if let tags = document["resources"] as? [String] where localResource {
+            if let tags = document["resources"] as? [String], localResource {
                 //NSLog("tags = \(tags)")
                 let request = BundleResourceRequest(tags: Set<String>(tags))
                 self.resourceRequest = request
@@ -240,7 +240,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     private func openDocument(_ document:[String:AnyObject], localResource:Bool) {
         var deferred = false
 #if os(iOS)
-        if let orientation = document["orientation"] as? String where orientation == "landscape" {
+        if let orientation = document["orientation"] as? String, orientation == "landscape" {
             self.landscapeMode = true
             if !localResource {
                 // HACK ALERT: If the resource is remote and the orientation is landscape, it is too late to specify
@@ -290,7 +290,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     }
     
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        if let documentViewer = self.documentViewer where documentViewer.landscape() {
+        if let documentViewer = self.documentViewer, documentViewer.landscape() {
             return UIInterfaceOrientationMask.landscape
         }
         return landscapeMode ?

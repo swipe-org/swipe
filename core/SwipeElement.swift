@@ -170,7 +170,7 @@ class SwipeElement:NSObject {
         for (key, prefix) in ["img":"", "mask":"", "video":".mov", "sprite":""] {
             if let src = self.info[key] as? String,
                    url = URL.url(src, baseURL: baseURL) {
-                if let fStream = self.info["stream"] as? Bool where fStream == true {
+                if let fStream = self.info["stream"] as? Bool, fStream == true {
                     MyLog("SWElem no need to cache streaming video \(url)", level: 2)
                 } else {
                     urls[url] = prefix
@@ -326,13 +326,13 @@ class SwipeElement:NSObject {
 #endif
         self.layer = layer
         
-        if let values = info["anchor"] as? [AnyObject] where values.count == 2 && w0 > 0 && h0 > 0,
+        if let values = info["anchor"] as? [AnyObject], values.count == 2 && w0 > 0 && h0 > 0,
            let posx = SwipeParser.parsePercentAny(values[0], full: w0, defaultValue: 0),
            let posy = SwipeParser.parsePercentAny(values[1], full: h0, defaultValue: 0) {
             layer.anchorPoint = CGPoint(x: posx / w0, y: posy / h0)
         }
         
-        if let values = info["pos"] as? [AnyObject] where values.count == 2,
+        if let values = info["pos"] as? [AnyObject], values.count == 2,
            let posx = SwipeParser.parsePercentAny(values[0], full: dimension.width, defaultValue: 0),
            let posy = SwipeParser.parsePercentAny(values[1], full: dimension.height, defaultValue: 0) {
             layer.position = CGPoint(x: posx * scale.width, y: posy * scale.height)
@@ -381,7 +381,7 @@ class SwipeElement:NSObject {
             imageLayer.contentsGravity = kCAGravityResizeAspectFill
             imageLayer.masksToBounds = true
             layer.addSublayer(imageLayer)
-            if let tiling = info["tiling"] as? Bool where tiling {
+            if let tiling = info["tiling"] as? Bool, tiling {
                 let hostLayer = CALayer()
                 innerLayer = hostLayer
                 //rc.origin = CGPointZero
@@ -461,12 +461,12 @@ class SwipeElement:NSObject {
            let slice = info["slice"] as? [Int] {
             //view.clipsToBounds = true
             layer.masksToBounds = true
-            if let values = self.info["slot"] as? [Int] where values.count == 2 {
+            if let values = self.info["slot"] as? [Int], values.count == 2 {
                 slot = CGPoint(x: CGFloat(values[0]), y: CGFloat(values[1]))
             }
             if let url = URL.url(src, baseURL: baseURL),
                    urlLocal = self.delegate.map(url),
-                   imageSource = CGImageSourceCreateWithURL(urlLocal, nil) where CGImageSourceGetCount(imageSource) > 0,
+                   imageSource = CGImageSourceCreateWithURL(urlLocal, nil), CGImageSourceGetCount(imageSource) > 0,
                let image = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
                 let imageLayer = CALayer()
                 imageLayer.contentsScale = contentScale
@@ -528,7 +528,7 @@ class SwipeElement:NSObject {
             shapeLayer.strokeEnd = SwipeParser.parseCGFloat(info["strokeEnd"], defalutValue: 1.0)
             layer.addSublayer(shapeLayer)
             self.shapeLayer = shapeLayer
-            if let tiling = info["tiling"] as? Bool where tiling {
+            if let tiling = info["tiling"] as? Bool, tiling {
                 let hostLayer = CALayer()
                 innerLayer = hostLayer
                 let rc = view.bounds
@@ -673,8 +673,8 @@ class SwipeElement:NSObject {
         
         if let to = info["to"] as? [String:AnyObject] {
             let start, duration:Double
-            if let timing = to["timing"] as? [Double]
-                where timing.count == 2 && timing[0] >= 0 && timing[0] <= timing[1] && timing[1] <= 1 {
+            if let timing = to["timing"] as? [Double],
+                timing.count == 2 && timing[0] >= 0 && timing[0] <= timing[1] && timing[1] <= 1 {
                 start = timing[0] == 0 ? 1e-10 : timing[0]
                 duration = timing[1] - start
             } else {
@@ -877,7 +877,7 @@ class SwipeElement:NSObject {
             }
         }
         
-        if let fRepeat = info["repeat"] as? Bool where fRepeat {
+        if let fRepeat = info["repeat"] as? Bool, fRepeat {
             //NSLog("SE detected an element with repeat")
             self.fRepeat = fRepeat
             layer.speed = 0 // Independently animate it
@@ -902,8 +902,8 @@ class SwipeElement:NSObject {
             }
             
             let start, duration:Double
-            if let timing = animation["timing"] as? [Double]
-                where timing.count == 2 && timing[0] >= 0 && timing[0] <= timing[1] && timing[1] <= 1 {
+            if let timing = animation["timing"] as? [Double],
+                timing.count == 2 && timing[0] >= 0 && timing[0] <= timing[1] && timing[1] <= 1 {
                 start = timing[0] == 0 ? 1e-10 : timing[0]
                 duration = timing[1] - start
             } else {
@@ -1053,7 +1053,7 @@ class SwipeElement:NSObject {
 
     private func parsePath(_ shape:AnyObject?, w:CGFloat, h:CGFloat, scale:CGSize) -> CGPath? {
         var shape0: AnyObject? = shape
-        if let refs = shape as? [NSObject:AnyObject], key = refs["ref"] as? String {
+        if let refs = shape as? [NSObject:AnyObject], let key = refs["ref"] as? String {
             shape0 = delegate.pathWith(key)
         }
         return SwipePath.parse(shape0, w: w, h: h, scale: scale)
@@ -1082,7 +1082,7 @@ class SwipeElement:NSObject {
             return
         }
         
-        if let layer = self.layer where layer.speed == 0 {
+        if let layer = self.layer, layer.speed == 0 {
             // independently animated
             layer.timeOffset = CFTimeInterval(offset)
         }

@@ -105,7 +105,7 @@ class SwipeParser {
             if let s = value["scale"] as? CGFloat {
                 scale = CGSize(width: s, height: s)
             }
-            if let scales = value["scale"] as? [CGFloat] where scales.count == 2 {
+            if let scales = value["scale"] as? [CGFloat], scales.count == 2 {
                 scale = CGSize(width: scales[0], height: scales[1])
             }
             
@@ -126,14 +126,14 @@ class SwipeParser {
             var hasValue = false
             if let b = base {
                 for key in ["translate", "rotate", "scale"] {
-                    if let v = b[key] where value[key]==nil {
+                    if let v = b[key], value[key]==nil {
                         value[key] = v
                     }
                 }
             }
             if fSkipTranslate {
                 if let b = base,
-                       translate = b["translate"] as? [CGFloat] where translate.count == 2{
+                       translate = b["translate"] as? [CGFloat], translate.count == 2{
                     xf = CATransform3DTranslate(xf, translate[0] * scaleX, translate[1] * scaleY, 0)
                 }
             } else {
@@ -152,7 +152,7 @@ class SwipeParser {
                 xf = CATransform3DRotate(xf, rot * CGFloat(M_PI / 180.0), 0, 0, 1)
                 hasValue = true
             }
-            if let rots = value["rotate"] as? [CGFloat] where rots.count == 3 {
+            if let rots = value["rotate"] as? [CGFloat], rots.count == 3 {
                 let m = CGFloat(M_PI / 180.0)
                 xf = CATransform3DRotate(xf, rots[0] * m, 1, 0, 0)
                 xf = CATransform3DRotate(xf, rots[1] * m, 0, 1, 0)
@@ -178,7 +178,7 @@ class SwipeParser {
     }
 
     static func parseSize(_ param:AnyObject?, defalutValue:CGSize = CGSize(width: 0.0, height: 0.0), scale:CGSize) -> CGSize {
-        if let values = param as? [CGFloat] where values.count == 2 {
+        if let values = param as? [CGFloat], values.count == 2 {
             return CGSize(width: values[0] * scale.width, height: values[1] * scale.height)
         }
         return CGSize(width: defalutValue.width * scale.width, height: defalutValue.height * scale.height)
