@@ -169,7 +169,7 @@ class SwipeElement:NSObject {
         let baseURL = self.delegate.baseURL()
         for (key, prefix) in ["img":"", "mask":"", "video":".mov", "sprite":""] {
             if let src = self.info[key] as? String,
-                   url = URL.url(src, baseURL: baseURL) {
+                let url = URL.url(src, baseURL: baseURL) {
                 if let fStream = self.info["stream"] as? Bool, fStream == true {
                     MyLog("SWElem no need to cache streaming video \(url)", level: 2)
                 } else {
@@ -227,8 +227,8 @@ class SwipeElement:NSObject {
         if let src = info["img"] as? String {
             //imageSrc = SwipeParser.imageSourceWith(src)
             if let url = URL.url(src, baseURL: baseURL),
-                   urlLocal = self.delegate.map(url),
-                   imageS = CGImageSourceCreateWithURL(urlLocal, nil) {
+                let urlLocal = self.delegate.map(url),
+                let imageS = CGImageSourceCreateWithURL(urlLocal, nil) {
                 imageSrc = imageS
                 if CGImageSourceGetCount(imageS) > 0 {
                     imageRef = CGImageSourceCreateImageAtIndex(imageS, 0, nil)
@@ -240,8 +240,8 @@ class SwipeElement:NSObject {
         if let src = info["mask"] as? String {
             //maskSrc = SwipeParser.imageWith(src)
             if let url = URL.url(src, baseURL: baseURL),
-                   urlLocal = self.delegate.map(url),
-                   image = CGImageSourceCreateWithURL(urlLocal, nil) {
+                let urlLocal = self.delegate.map(url),
+                let image = CGImageSourceCreateWithURL(urlLocal, nil) {
                 if CGImageSourceGetCount(image) > 0 {
                     maskSrc = CGImageSourceCreateImageAtIndex(image, 0, nil)
                 }
@@ -465,9 +465,9 @@ class SwipeElement:NSObject {
                 slot = CGPoint(x: CGFloat(values[0]), y: CGFloat(values[1]))
             }
             if let url = URL.url(src, baseURL: baseURL),
-                   urlLocal = self.delegate.map(url),
-                   imageSource = CGImageSourceCreateWithURL(urlLocal, nil), CGImageSourceGetCount(imageSource) > 0,
-               let image = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
+                let urlLocal = self.delegate.map(url),
+                let imageSource = CGImageSourceCreateWithURL(urlLocal, nil), CGImageSourceGetCount(imageSource) > 0,
+                let image = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
                 let imageLayer = CALayer()
                 imageLayer.contentsScale = contentScale
                 imageLayer.frame = view.bounds
@@ -778,8 +778,8 @@ class SwipeElement:NSObject {
                 var images = [CGImage]()
                 for src in srcs {
                     if let url = URL.url(src, baseURL: baseURL),
-                           urlLocal = self.delegate.map(url),
-                           image = CGImageSourceCreateWithURL(urlLocal, nil) {
+                        let urlLocal = self.delegate.map(url),
+                        let image = CGImageSourceCreateWithURL(urlLocal, nil) {
                         if CGImageSourceGetCount(image) > 0 {
                             images.append(CGImageSourceCreateImageAtIndex(image, 0, nil)!)
                         }
@@ -1196,7 +1196,7 @@ class SwipeElement:NSObject {
             return nil
         }
         if let key = params["ref"] as? String,
-               text = delegate.localizedStringForKey(key) {
+            let text = delegate.localizedStringForKey(key) {
             return text
         }
         return SwipeParser.localizedString(params, langId: delegate.languageIdentifier())

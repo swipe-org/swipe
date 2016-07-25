@@ -384,7 +384,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         let baseURL = self.delegate.baseURL()
         for key in ["audio"] {
             if let src = self.pageInfo[key] as? String,
-                   url = URL.url(src, baseURL: baseURL) {
+                let url = URL.url(src, baseURL: baseURL) {
                 urls[url] = ""
             }
         }
@@ -471,8 +471,8 @@ class SwipePage: NSObject, SwipeElementDelegate {
         let scale = delegate.scale(self)
         let dimension = delegate.dimension(self)
         if let value = self.pageInfo["audio"] as? String,
-               url = URL.url(value, baseURL: self.delegate.baseURL()),
-               urlLocal = self.prefetcher.map(url) {
+            let url = URL.url(value, baseURL: self.delegate.baseURL()),
+            let urlLocal = self.prefetcher.map(url) {
             do {
                 audioPlayer = try AVAudioPlayer(contentsOf: urlLocal)
                 audioPlayer?.prepareToPlay()
@@ -599,7 +599,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     // <SwipeElementDelegate> method
     func localizedStringForKey(_ key:String) -> String? {
         if let strings = pageInfo["strings"] as? [String:AnyObject],
-               texts = strings[key] as? [String:AnyObject] {
+            let texts = strings[key] as? [String:AnyObject] {
             return SwipeParser.localizedString(texts, langId: delegate.languageIdentifier())
         }
         return nil
@@ -618,8 +618,8 @@ class SwipePage: NSObject, SwipeElementDelegate {
             return text
         }
         if let ref = value as? [String:AnyObject],
-               key = ref["ref"] as? String,
-               text = localizedStringForKey(key) {
+            let key = ref["ref"] as? String,
+            let text = localizedStringForKey(key) {
             return text
         }
         return nil

@@ -107,7 +107,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 } else {
                     // On-demand resource support
                     if let urlLocal = Bundle.main.urlForResource(url.lastPathComponent, withExtension: nil),
-                           data = try? Data(contentsOf: urlLocal) {
+                        let data = try? Data(contentsOf: urlLocal) {
                         self.openData(data, localResource: true)
                     } else {
                         self.processError("Missing resource:".localized + "\(url)")
@@ -355,8 +355,8 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         super.viewDidDisappear(animated)
         if self.isBeingDismissed() {
             if let documentViewer = self.documentViewer,
-                   state = documentViewer.saveState(),
-                   url = self.url {
+                let state = documentViewer.saveState(),
+                let url = self.url {
                 MyLog("SWBrows state=\(state)", level:1)
                 let defaults = UserDefaults.standard
                 defaults.set(state, forKey: url.absoluteString!)
@@ -423,7 +423,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             alert.popoverPresentationController?.sourceRect = btnLanguage!.frame
             for language in languages {
                 guard let title = language["title"] as? String,
-                          langId = language["id"] as? String else {
+                    let langId = language["id"] as? String else {
                     continue
                 }
                 alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.default, handler: { (_:UIAlertAction) -> Void in

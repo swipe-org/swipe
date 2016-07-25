@@ -133,7 +133,7 @@ class SwipeParser {
             }
             if fSkipTranslate {
                 if let b = base,
-                       translate = b["translate"] as? [CGFloat], translate.count == 2{
+                    let translate = b["translate"] as? [CGFloat], translate.count == 2{
                     xf = CATransform3DTranslate(xf, translate[0] * scaleX, translate[1] * scaleY, 0)
                 }
             } else {
@@ -341,7 +341,7 @@ class SwipeParser {
 
     static func localizedString(_ params:[String:AnyObject], langId:String?) -> String? {
         if let key = langId,
-               text = params[key] as? String {
+            let text = params[key] as? String {
             return text
         } else if let text = params["*"] as? String {
             return text

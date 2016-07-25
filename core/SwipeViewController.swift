@@ -86,8 +86,8 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         self.book = SwipeBook(bookInfo: document, url: url)
 
         if let languages = self.book.languages(),
-               language = languages.first,
-               langId = language["id"] as? String {
+            let language = languages.first,
+            let langId = language["id"] as? String {
             self.book.langId = langId
         }
 

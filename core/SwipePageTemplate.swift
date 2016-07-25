@@ -32,7 +32,7 @@ class SwipePageTemplate: NSObject, AVAudioPlayerDelegate {
     lazy var resourceURLs:[URL:String] = {
         var urls = [URL:String]()
         if let value = self.pageTemplateInfo["bgm"] as? String,
-               url = URL.url(value, baseURL: self.baseURL) {
+            let url = URL.url(value, baseURL: self.baseURL) {
             urls[url] = ""
         }
         return urls
@@ -51,13 +51,13 @@ class SwipePageTemplate: NSObject, AVAudioPlayerDelegate {
         fDebugEntered = true
         
         if let value = self.pageTemplateInfo["bgm"] as? String,
-               urlRaw = URL.url(value, baseURL: baseURL),
-               url = prefetcher.map(urlRaw) {
+            let urlRaw = URL.url(value, baseURL: baseURL),
+            let url = prefetcher.map(urlRaw) {
             MyLog("SWPageTemplate didEnter with bgm=\(value)", level:1)
             SwipeAssetManager.sharedInstance().loadAsset(url, prefix: "", bypassCache:false, callback: { (urlLocal:URL?, _) -> Void in
                 if self.fDebugEntered,
-                   let urlL = urlLocal,
-                       player = try? AVAudioPlayer(contentsOf: urlL) {
+                    let urlL = urlLocal,
+                    let player = try? AVAudioPlayer(contentsOf: urlL) {
                     player.delegate = self
                     player.play()
                     self.bgmPlayer = player
