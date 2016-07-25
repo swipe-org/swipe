@@ -370,8 +370,8 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
 
     func handlePan(recognizer:UIPanGestureRecognizer) {
-        let translation = recognizer.translationInView(self.view)
-        let velocity = recognizer.velocityInView(self.view)
+        let translation = recognizer.translation(in: self.view)
+        let velocity = recognizer.velocity(in: self.view)
         let size = self.scrollView.frame.size
         var ratio = self.book.horizontal ? -translation.x / size.width : -translation.y / size.height
         ratio = min(max(ratio, -0.99), 0.99)
@@ -388,9 +388,9 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         let offset = self.book.horizontal ? CGPointMake((CGFloat(self.book.pageIndex) + ratio) * size.width, 0) : CGPointMake(0, (CGFloat(self.book.pageIndex) + ratio) * size.height)
         //MyLog("SwiftVC handlePan: \(recognizer.state.rawValue), \(ratio)")
         switch(recognizer.state) {
-        case .Began:
+        case .began:
             break
-        case .Ended:
+        case .ended:
             //MyLog("SwiftVC handlePan: \(recognizer.velocityInView(self.view))")
             scrollView.contentOffset = offset
             var target = self.scrollIndex
@@ -440,11 +440,11 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             MyLog("SWView scrollling to \(offsetAligned)", level:1)
             scrollView.setContentOffset(offsetAligned, animated: true)
             break
-        case .Changed:
+        case .changed:
             MyLog("SWView scrolls to \(offset)", level:1)
             scrollView.contentOffset = offset
             break
-        case .Cancelled:
+        case .cancelled:
             break
         default:
             break

@@ -554,6 +554,7 @@
 					};
 					74EA71E01BD0B0EE006808EA = {
 						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -914,6 +915,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = swipe.swipe.sampletv;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -929,6 +931,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = swipe.swipe.sampletv;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
