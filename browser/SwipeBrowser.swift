@@ -363,7 +363,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 defaults.synchronize()
             }
         
-            SwipeBrowser.stack.popLast()
+            _ = SwipeBrowser.stack.popLast()
             MyLog("SWBrows pop \(SwipeBrowser.stack.count)", level:1)
             if SwipeBrowser.stack.count == 1 {
                 // Wait long enough (200ms > 1/30fps) and check the memory leak. 

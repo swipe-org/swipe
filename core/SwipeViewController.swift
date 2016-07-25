@@ -479,7 +479,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         }
     }
     
-    private func adjustIndex(_ newPageIndex:Int, fForced:Bool = false, fDeferredEnter:Bool = false) -> Bool {
+    @discardableResult private func adjustIndex(_ newPageIndex:Int, fForced:Bool = false, fDeferredEnter:Bool = false) -> Bool {
         if self.book.pages.count == 0 {
             print("SwipeVC ### No Pages")
             return false
