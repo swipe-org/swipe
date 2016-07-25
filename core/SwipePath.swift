@@ -31,18 +31,18 @@ class SwipePath {
                 var prevIndex = string.startIndex // for performance
                 var prevOffset = 0
                 for match in matches {
-                    var start = prevIndex.advance(by: match.range.location - prevOffset)
-                    let cmd = string[start..<start.advance(by: 1)]
-                    start = start.advance(by: 1)
-                    let end = start.advance(by: match.range.length-1)
+                    var start = string.index(prevIndex, offsetBy: match.range.location - prevOffset)
+                    let cmd = string[start..<string.index(start, offsetBy: 1)]
+                    start = string.index(start, offsetBy: 1)
+                    let end = string.index(start, offsetBy: match.range.length-1)
                     prevIndex = end
                     prevOffset = match.range.location + match.range.length
                     
                     let params = string[start..<end]
                     let nums = SwipePath.regexNUM.matches(in: params, options: [], range: NSMakeRange(0, params.characters.count))
                     let p = nums.map({ (num) -> CGFloat in
-                        let start = params.characters.index(params.startIndex, offsetBy: num.range.location)
-                        let end = start.advance(by: num.range.length)
+                        let start = params.index(params.startIndex, offsetBy: num.range.location)
+                        let end = params.index(start, offsetBy: num.range.length)
                         return CGFloat((params[start..<end] as NSString).floatValue)
                     })
                     //NSLog("SwipeElement \(cmd) \(p) #\(p.count)")
