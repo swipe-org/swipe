@@ -122,7 +122,7 @@ class SwipeAssetManager {
         //MyLog("SNAsset loadAsset url = \(url)")
         //MyLog("SNAsset context = \(managedObjectContext)")
         
-        let request = NSFetchRequest(entityName: "Asset")
+        let request = NSFetchRequest<NSManagedObject>(entityName: "Asset")
         request.predicate = Predicate(format: "url == %@", url.path!)
         do {
             let results = try managedObjectContext.fetch(request)
@@ -135,7 +135,7 @@ class SwipeAssetManager {
                 entity.setValue(uuid, forKey: "uuid")
                 entity.setValue(url.path, forKey: "url")
             } else {
-                entity = results[0] as! NSManagedObject
+                entity = results[0]
                 uuid = entity.value(forKey: "uuid") as! String
                 //MyLog("SNAsset found entity=\(uuid)")
             }
@@ -178,24 +178,23 @@ class SwipeAssetManager {
     func reduce(_ limit:Int, amount:Int) {
         DispatchQueue.global( attributes: DispatchQueue.GlobalAttributes.qosDefault).async { () -> Void in
             let fm = FileManager.default
-            let request = NSFetchRequest(entityName: "Asset")
+            let request = NSFetchRequest<NSManagedObject>(entityName: "Asset")
             request.sortDescriptors = [SortDescriptor(key: "lastModified", ascending: true)]
             request.fetchLimit = limit + amount // Number of items to fetch extra, to limit the nubmer of entities to delete for each reduce
             do {
-                if let entities = try self.managedObjectContext.fetch(request) as? [NSManagedObject] {
-                    if entities.count > limit {
-                        for i in 0..<(entities.count-limit) {
-                            let entity = entities[i]
-                            if let date = entity.value(forKey: "lastModified") as? Date, let uuid = entity.value(forKey: "uuid") as? String {
-                                MyLog("SNAsset reducing date=\(date), \(uuid)")
-                                let urlLocal = try! self.urlFolder.appendingPathComponent(uuid)
-                                do {
-                                    try fm.removeItem(at: urlLocal)
-                                } catch {
-                                    MyLog("SWAsset reduce fail to remove (totally fine)")
-                                }
-                                self.managedObjectContext.delete(entity)
+                let entities = try self.managedObjectContext.fetch(request)
+                if entities.count > limit {
+                    for i in 0..<(entities.count-limit) {
+                        let entity = entities[i]
+                        if let date = entity.value(forKey: "lastModified") as? Date, let uuid = entity.value(forKey: "uuid") as? String {
+                            MyLog("SNAsset reducing date=\(date), \(uuid)")
+                            let urlLocal = try! self.urlFolder.appendingPathComponent(uuid)
+                            do {
+                                try fm.removeItem(at: urlLocal)
+                            } catch {
+                                MyLog("SWAsset reduce fail to remove (totally fine)")
                             }
+                            self.managedObjectContext.delete(entity)
                         }
                     }
                 }
@@ -221,15 +220,14 @@ class SwipeAssetManager {
             MyLog("SWAsset flush contentsOfDir failed (somethign is wrong)")
         }
 
-        let request = NSFetchRequest(entityName: "Asset")
+        let request = NSFetchRequest<NSManagedObject>(entityName: "Asset")
         do {
-            if let entities = try managedObjectContext.fetch(request) as? [NSManagedObject] {
-                MyLog("SNAsset flush count=\(entities.count)", level:1)
-                for entity in entities {
-                    managedObjectContext.delete(entity)
-                }
-                saveContext()
+            let entities = try managedObjectContext.fetch(request)
+            MyLog("SNAsset flush count=\(entities.count)", level:1)
+            for entity in entities {
+                managedObjectContext.delete(entity)
             }
+            saveContext()
         } catch {
             MyLog("SWAsset flush fetch failed (something is wrong)")
         }
