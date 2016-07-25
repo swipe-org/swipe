@@ -41,7 +41,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
             }
             for item in items {
                 if let icon = item["icon"] as? String,
-                       url = URL.url(icon, baseURL: self.url) {
+                    let url = URL.url(icon, baseURL: self.url) {
                     urls[url] = "" // no prefix
                 }
             }
@@ -174,10 +174,10 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
             cell.textLabel!.text = url
         }
         if let icon = item["icon"] as? String,
-               url = URL.url(icon, baseURL: self.url),
-               urlLocal = self.prefetcher.map(url),
-               path = urlLocal.path,
-               image = UIImage(contentsOfFile: path) {
+            let url = URL.url(icon, baseURL: self.url),
+            let urlLocal = self.prefetcher.map(url),
+            let path = urlLocal.path,
+            let image = UIImage(contentsOfFile: path) {
             cell.imageView?.image = image
         }
         return cell

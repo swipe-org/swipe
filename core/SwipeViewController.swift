@@ -324,7 +324,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
     
 #elseif os(tvOS)
-    func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         let index = self.scrollIndex
         self.scrollingCount -= 1
         MyLog("SWView didEndScrolling \(index), \(scrollingTarget), c=\(scrollingCount)", level: 1)
@@ -451,22 +451,22 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         }
     }
     
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         MyLog("SWView  scrollViewWillBeginDragging was called")
     }
-    func scrollViewDidEndDragging(scrollView: UIScrollView,
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView,
                         willDecelerate decelerate: Bool) {
         MyLog("SWView  scrollViewDidEndDragging was called")
     }
-    func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         MyLog("SWView  scrollViewWillBeginDecelerating was called")
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         MyLog("SWView  scrollViewDidEndDecelerating was called")
     }
     
-    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         MyLog("SWView  scrollViewShouldScrollToTop was called")
         return true
     }
