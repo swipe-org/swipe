@@ -13,21 +13,21 @@ import UIKit
 #endif
 
 protocol SwipeDocumentViewerDelegate: NSObjectProtocol {
-    func browseTo(url:NSURL)
+    func browseTo(_ url:URL)
 }
 
 protocol SwipeDocumentViewer {
     func documentTitle() -> String?
-    func loadDocument(document:[String:AnyObject], size:CGSize, url:NSURL?, state:[String:AnyObject]?, callback:(Float, NSError?)->(Void)) throws
+    func loadDocument(_ document:[String:AnyObject], size:CGSize, url:URL?, state:[String:AnyObject]?, callback:(Float, NSError?)->(Void)) throws
     func hideUI() -> Bool
     func landscape() -> Bool
-    func setDelegate(delegate:SwipeDocumentViewerDelegate)
+    func setDelegate(_ delegate:SwipeDocumentViewerDelegate)
     func becomeZombie()
     func saveState() -> [String:AnyObject]?
     func languages() -> [[String:AnyObject]]?
-    func reloadWithLanguageId(langId:String)
+    func reloadWithLanguageId(_ langId:String)
 }
 
-enum SwipeError: ErrorType {
-    case InvalidDocument
+enum SwipeError: ErrorProtocol {
+    case invalidDocument
 }
