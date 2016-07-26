@@ -62,6 +62,7 @@
         {
             "play":"scroll",
             "autoAdvance":true,
+            "duration":0.1,
             "elements":[
                 { "template":"box", "x":500, "y":400, "to":{ "translate":[0,100] } },
             ],
@@ -69,18 +70,20 @@
         {
             "play":"scroll",
             "autoAdvance":true,
+            "duration":0.1,
             "elements":[
                 { "template":"box", "x":500, "y":500, "to":{ "translate":[100,0] } },
             ],
         },
         {
             "play":"scroll",
+            "duration":0.1,
             "elements":[
                 { "template":"box", "x":600, "y":500, "to":{ "translate":[0,100] } },
             ],
         },
         {
-            "play":"pause",
+            "play":"scroll",
             "autoAdvance":true,
             "elements":[
                 { "template":"box", "x":600, "y":600, "to":{ "translate":[100,0] } },
@@ -95,7 +98,6 @@
         },
         {
             "play":"scroll",
-            "autoAdvance":true,
             "elements":[
                 { "template":"box", "x":700, "y":700, "to":{ "translate":[-600,0], "bc":"#f33" } },
             ],
