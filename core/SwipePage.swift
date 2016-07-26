@@ -17,7 +17,7 @@ import MediaPlayer
 
 
 private func MyLog(text:String, level:Int = 0) {
-    let s_verbosLevel = 2
+    let s_verbosLevel = 0
     if level <= s_verbosLevel {
         NSLog(text)
     }

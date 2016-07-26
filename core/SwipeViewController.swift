@@ -576,7 +576,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     // <SwipeBookDelegate> method
     func autoAdvance() {
         dispatch_async(dispatch_get_main_queue()) {
-            MyLog("SWView autoAdvance", level:0)
+            MyLog("SWView autoAdvance", level:1)
             if self.book.pageIndex + 1 < self.book.pages.count {
                 CATransaction.begin()
                 CATransaction.setDisableActions(true)
