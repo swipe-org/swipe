@@ -173,7 +173,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             // Therefore, we need to recreate all the pages. 
             //
             // Without this delay, the manual animation won't work after putting the app in the background once.
-            DispatchQueue.main.after(when: DispatchTime.now() + Double(Int64(300 * NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)) {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(300 * NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)) {
                 self.adjustIndex(self.book.pageIndex, fForced: true)
             }
         }

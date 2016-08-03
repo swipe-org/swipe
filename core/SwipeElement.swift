@@ -57,12 +57,12 @@ class SwipeElement:NSObject {
     private let info:[String:AnyObject]
     private let scale:CGSize
     private var repeatCount = CGFloat(1.0)
-    private let blackColor = UIColor.black().cgColor
-    private let whiteColor = UIColor.white().cgColor
+    private let blackColor = UIColor.black.cgColor
+    private let whiteColor = UIColor.white.cgColor
 #if os(OSX)
     private let contentScale = CGFloat(1.0) // REVIEW
 #else
-    private let contentScale = UIScreen.main().scale
+    private let contentScale = UIScreen.main.scale
 #endif
     private var fRepeat = false
     
@@ -1204,7 +1204,7 @@ class SwipeElement:NSObject {
 
     static func processShadow(_ info:[String:AnyObject], scale:CGSize, layer:CALayer) {
         if let shadowInfo = info["shadow"] as? [String:AnyObject] {
-            layer.shadowColor = SwipeParser.parseColor(shadowInfo["color"], defaultColor: UIColor.black().cgColor)
+            layer.shadowColor = SwipeParser.parseColor(shadowInfo["color"], defaultColor: UIColor.black.cgColor)
             layer.shadowOffset = SwipeParser.parseSize(shadowInfo["offset"], defalutValue: CGSize(width: 1, height: 1), scale:scale)
             layer.shadowOpacity = SwipeParser.parseFloat(shadowInfo["opacity"], defalutValue:0.5)
             layer.shadowRadius = SwipeParser.parseCGFloat(shadowInfo["radius"], defalutValue: 1.0) * scale.width
@@ -1214,7 +1214,7 @@ class SwipeElement:NSObject {
     static func processTextInfo(_ info:[String:AnyObject], dimension:CGSize, scale:CGSize) -> ([String:AnyObject], String, Bool, Bool, CTFont, CGFloat) {
         var fTextBottom = false
         var fTextTop = false
-        let paragraphStyle = NSParagraphStyle.default().mutableCopy() as! NSMutableParagraphStyle
+        let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         paragraphStyle.alignment = NSTextAlignment.center
         paragraphStyle.lineBreakMode = NSLineBreakMode.byWordWrapping
         var alignmentMode = kCAAlignmentCenter
@@ -1291,11 +1291,11 @@ class SwipeElement:NSObject {
         // such as foregroundColor and fontSize (**).
         let textLayer = CATextLayer()
 #if !os(OSX)
-        textLayer.contentsScale = UIScreen.main().scale
+        textLayer.contentsScale = UIScreen.main.scale
 #endif
         textLayer.isWrapped = true // *
         textLayer.alignmentMode = alignmentMode // *
-        textLayer.foregroundColor = SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.black().cgColor) // animatable **
+        textLayer.foregroundColor = SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.black.cgColor) // animatable **
         textLayer.fontSize = fontSize // animatable **
         textLayer.font = font
         textLayer.string = text // NOTE: This is no longer an attributed string

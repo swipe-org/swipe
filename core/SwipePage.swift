@@ -140,7 +140,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         if let value: AnyObject = self.pageInfo["bc"] {
             return SwipeParser.parseColor(value)
         }
-        return UIColor.white().cgColor
+        return UIColor.white.cgColor
     }()
 
     private lazy var transition:String = {
@@ -340,7 +340,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         var fElementRepeatNext = fElementRepeat
         // NOTE: We don't want to add [unowned self] because the timer will fire anyway. 
         // During the shutdown sequence, the loop will stop when didLeave was called. 
-        DispatchQueue.main.after(when: DispatchTime.now() + Double(Int64(1000 * NSEC_PER_MSEC / UInt64(self.fps))) / Double(NSEC_PER_SEC), execute: {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(1000 * NSEC_PER_MSEC / UInt64(self.fps))) / Double(NSEC_PER_SEC), execute: {
             () -> Void in
             var offsetForNextTick:CGFloat?
             if self.fEntered && !self.fPausing {

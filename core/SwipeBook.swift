@@ -150,11 +150,11 @@ class SwipeBook: NSObject, SwipePageDelegate {
         if let value = self.bookInfo["bc"] as? String {
             return SwipeParser.parseColor(value)
         }
-        return UIColor.black().cgColor
+        return UIColor.black.cgColor
     }()
     
     lazy var dimension:CGSize = {
-        let size = UIScreen.main().bounds.size
+        let size = UIScreen.main.bounds.size
         if let dimension = self.bookInfo["dimension"] as? [CGFloat] {
             if dimension.count == 2 {
                 if dimension[0] == 0.0 {

@@ -28,6 +28,6 @@ protocol SwipeDocumentViewer {
     func reloadWithLanguageId(_ langId:String)
 }
 
-enum SwipeError: ErrorProtocol {
+enum SwipeError: Swift.Error {
     case invalidDocument
 }

@@ -20,25 +20,25 @@ import ImageIO
 class SwipeParser {
     //let color = NSRegularExpression(pattern: "#[0-9A-F]6", options: NSRegularExpressionOptions.CaseInsensitive, error: nil)
     static let colorMap = [
-        "red":UIColor.red(),
-        "black":UIColor.black(),
-        "blue":UIColor.blue(),
-        "white":UIColor.white(),
-        "green":UIColor.green(),
-        "yellow":UIColor.yellow(),
-        "purple":UIColor.purple(),
-        "gray":UIColor.gray(),
-        "darkGray":UIColor.darkGray(),
-        "lightGray":UIColor.lightGray(),
-        "brown":UIColor.brown(),
-        "orange":UIColor.orange(),
-        "cyan":UIColor.cyan(),
-        "magenta":UIColor.magenta()
+        "red":UIColor.red,
+        "black":UIColor.black,
+        "blue":UIColor.blue,
+        "white":UIColor.white,
+        "green":UIColor.green,
+        "yellow":UIColor.yellow,
+        "purple":UIColor.purple,
+        "gray":UIColor.gray,
+        "darkGray":UIColor.darkGray,
+        "lightGray":UIColor.lightGray,
+        "brown":UIColor.brown,
+        "orange":UIColor.orange,
+        "cyan":UIColor.cyan,
+        "magenta":UIColor.magenta
     ]
     
     static let regexColor = try! RegularExpression(pattern: "^#[A-F0-9]*$", options: RegularExpression.Options.caseInsensitive)
 
-    static func parseColor(_ value:AnyObject?, defaultColor:CGColor = UIColor.clear().cgColor) -> CGColor {
+    static func parseColor(_ value:AnyObject?, defaultColor:CGColor = UIColor.clear.cgColor) -> CGColor {
         if value == nil {
             return defaultColor
         }
@@ -93,10 +93,10 @@ class SwipeParser {
                     }
                     return UIColor(red: CGFloat(r)/255, green: CGFloat(g%256)/255, blue: CGFloat(b%256)/255, alpha: CGFloat(a%256)/255).cgColor
                 }
-                return UIColor.red().cgColor
+                return UIColor.red.cgColor
             }
         }
-        return UIColor.green().cgColor
+        return UIColor.green.cgColor
     }
     
     static func transformedPath(_ path:CGPath, param:[String:AnyObject]?, size:CGSize) -> CGPath? {
@@ -111,8 +111,8 @@ class SwipeParser {
             
             if let s = scale {
                 var xf = CGAffineTransform(translationX: size.width / 2, y: size.height / 2)
-                xf = xf.scaleBy(x: s.width, y: s.height)
-                xf = xf.translateBy(x: -size.width / 2, y: -size.height / 2)
+                xf = xf.scaledBy(x: s.width, y: s.height)
+                xf = xf.translatedBy(x: -size.width / 2, y: -size.height / 2)
                 return path.copy(using: &xf)!
             }
         }
@@ -334,7 +334,7 @@ class SwipeParser {
         if let info = value as? [String:AnyObject] {
             shadow.shadowOffset = SwipeParser.parseSize(info["offset"], defalutValue: CGSize(width: 1.0, height: 1.0), scale:scale)
             shadow.shadowBlurRadius = SwipeParser.parseCGFloat(info["radius"], defalutValue: 2) * scale.width
-            shadow.shadowColor = UIColor(cgColor: SwipeParser.parseColor(info["color"], defaultColor: UIColor.black().cgColor))
+            shadow.shadowColor = UIColor(cgColor: SwipeParser.parseColor(info["color"], defaultColor: UIColor.black.cgColor))
         }
         return shadow
     }
