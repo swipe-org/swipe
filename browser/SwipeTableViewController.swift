@@ -176,8 +176,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
         if let icon = item["icon"] as? String,
             let url = URL.url(icon, baseURL: self.url),
             let urlLocal = self.prefetcher.map(url),
-            let path = urlLocal.path,
-            let image = UIImage(contentsOfFile: path) {
+            let image = UIImage(contentsOfFile: urlLocal.path) {
             cell.imageView?.image = image
         }
         return cell

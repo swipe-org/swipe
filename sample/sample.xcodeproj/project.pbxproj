@@ -166,6 +166,8 @@
 		980482031CB8B51C0068F18C /* SwipeBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 980482021CB8B51C0068F18C /* SwipeBrowser.xib */; };
 		C14FC7061CFCA8D800556476 /* SwipePageTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170B70F1CF78C04005956A8 /* SwipePageTemplate.swift */; };
 		C170B7101CF78C04005956A8 /* SwipePageTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170B70F1CF78C04005956A8 /* SwipePageTemplate.swift */; };
+		F3441B741D5195960028BE56 /* TypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3441B731D5195960028BE56 /* TypeAlias.swift */; };
+		F3441B751D519B1F0028BE56 /* TypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3441B731D5195960028BE56 /* TypeAlias.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -261,6 +263,7 @@
 		74F1794E1BD8553F00126B49 /* text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text.png; sourceTree = "<group>"; };
 		980482021CB8B51C0068F18C /* SwipeBrowser.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwipeBrowser.xib; sourceTree = "<group>"; };
 		C170B70F1CF78C04005956A8 /* SwipePageTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipePageTemplate.swift; sourceTree = "<group>"; };
+		F3441B731D5195960028BE56 /* TypeAlias.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeAlias.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -423,6 +426,7 @@
 		74EA71901BD04D86006808EA /* core */ = {
 			isa = PBXGroup;
 			children = (
+				F3441B731D5195960028BE56 /* TypeAlias.swift */,
 				C170B70F1CF78C04005956A8 /* SwipePageTemplate.swift */,
 				74EA71A71BD04DA7006808EA /* SwipeDocumentViewer.swift */,
 				74EA71A81BD04DA7006808EA /* SwipeViewController.swift */,
@@ -545,7 +549,7 @@
 					tutorial,
 				);
 				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Satoshi Nakajima";
 				TargetAttributes = {
 					74EA71761BD047F0006808EA = {
@@ -734,6 +738,7 @@
 				74EA71CC1BD04EAD006808EA /* SwipePrefetcher.swift in Sources */,
 				74EA71B31BD04DA7006808EA /* SwipeViewController.swift in Sources */,
 				74EA71CB1BD04EAD006808EA /* SwipeConnection.swift in Sources */,
+				F3441B741D5195960028BE56 /* TypeAlias.swift in Sources */,
 				74EA71B71BD04DA7006808EA /* SwipePath.swift in Sources */,
 				74EA71B91BD04DA7006808EA /* SwipeMarkdown.swift in Sources */,
 				74EA71C91BD04EAD006808EA /* SNNotificationManager.swift in Sources */,
@@ -760,6 +765,7 @@
 				74EA71FB1BD0B15C006808EA /* SwipePage.swift in Sources */,
 				74EA71FF1BD0B15C006808EA /* SwipeMarkdown.swift in Sources */,
 				74EA71F21BD0B14C006808EA /* SwipeTableViewController.swift in Sources */,
+				F3441B751D519B1F0028BE56 /* TypeAlias.swift in Sources */,
 				74EA71FC1BD0B15C006808EA /* SwipeElement.swift in Sources */,
 				74EA71F01BD0B14C006808EA /* SwipeBrowser.swift in Sources */,
 				74EA71FE1BD0B15C006808EA /* SwipeSynthesizer.swift in Sources */,
@@ -811,8 +817,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -855,8 +863,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -900,6 +910,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = swipe.swipe.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -931,6 +942,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = swipe.swipe.sampletv;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;

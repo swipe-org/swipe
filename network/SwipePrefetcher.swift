@@ -50,11 +50,11 @@ class SwipePrefetcher {
         let fileManager = FileManager.default
         for (url,prefix) in urls {
             if url.scheme == "file" {
-                if fileManager.fileExists(atPath: url.path!) {
+                if fileManager.fileExists(atPath: url.path) {
                     urlsFetched[url] = url
                 } else {
                     // On-demand resource support
-                    urlsFetched[url] = Bundle.main.urlForResource(url.lastPathComponent, withExtension: nil)
+                    urlsFetched[url] = Bundle.main.url(forResource: url.lastPathComponent, withExtension: nil)
                     MyLog("SWPrefe onDemand resource at \(urlsFetched[url]) instead of \(url)", level:1)
                 }
             } else {

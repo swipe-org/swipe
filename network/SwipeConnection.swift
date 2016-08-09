@@ -36,7 +36,7 @@ class SwipeConnection: NSObject {
         //connection.start()
         let session = SwipeConnection.session
         let start = Date()
-        let task = session.downloadTask(with: url) { (urlTemp:URL?, res:URLResponse?, error:NSError?) -> Void in
+        let task = session.downloadTask(with: url) { (urlTemp:URL?, res:URLResponse?, error:Swift.Error?) -> Void in
             assert(Thread.current == Thread.main, "thread error")
             let duration = Date().timeIntervalSince(start)
             if let urlT = urlTemp {
@@ -44,7 +44,7 @@ class SwipeConnection: NSObject {
                     if httpRes.statusCode == 200 {
                         let fm = FileManager.default
                         do {
-                            let attr = try fm.attributesOfItem(atPath: urlT.path!)
+                            let attr = try fm.attributesOfItem(atPath: urlT.path)
                             if let size = attr[FileAttributeKey.size] as? Int {
                                 connection.fileSize = size
                                 SwipeAssetManager.sharedInstance().wasFileLoaded(connection)
@@ -52,9 +52,9 @@ class SwipeConnection: NSObject {
                         } catch {
                             MyLog("SWConn  failed to get attributes (but ignored)")
                         }
-                        MyLog("SWConn  loaded \(url.lastPathComponent!) in \(duration)s (\(connection.fileSize))", level:1)
+                        MyLog("SWConn  loaded \(url.lastPathComponent) in \(duration)s (\(connection.fileSize))", level:1)
                         do {
-                            if fm.fileExists(atPath: urlLocal.path!) {
+                            if fm.fileExists(atPath: urlLocal.path) {
                                 try fm.removeItem(at: urlLocal)
                             }
                             try fm.copyItem(at: urlT, to: urlLocal)
@@ -63,7 +63,7 @@ class SwipeConnection: NSObject {
                             return
                         }
                     } else {
-                        MyLog("SWConn  HTTP error (\(url.lastPathComponent!), \(httpRes.statusCode))")
+                        MyLog("SWConn  HTTP error (\(url.lastPathComponent), \(httpRes.statusCode))")
                         connection.callbackAll(NSError(domain: NSURLErrorDomain, code: httpRes.statusCode, userInfo: nil))
                         return
                     }
@@ -71,7 +71,7 @@ class SwipeConnection: NSObject {
                     MyLog("SWConn  no HTTPURLResponse, something is wrong!")
                 }
             } else {
-                MyLog("SWConn  network error (\(url.lastPathComponent!), \(error))")
+                MyLog("SWConn  network error (\(url.lastPathComponent), \(error))")
             }
             connection.callbackAll(error)
         }

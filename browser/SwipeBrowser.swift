@@ -55,7 +55,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     @IBOutlet var btnLanguage:UIButton?
 
     private var resourceRequest:BundleResourceRequest?
-    var url:URL? = Bundle.main.urlForResource("index.swipe", withExtension: nil)
+    var url:URL? = Bundle.main.url(forResource: "index.swipe", withExtension: nil)
     var jsonDocument:[String:AnyObject]?
     var controller:UIViewController?
     var documentViewer:SwipeDocumentViewer?
@@ -106,7 +106,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                     self.openData(data, localResource: true)
                 } else {
                     // On-demand resource support
-                    if let urlLocal = Bundle.main.urlForResource(url.lastPathComponent, withExtension: nil),
+                    if let urlLocal = Bundle.main.url(forResource: url.lastPathComponent, withExtension: nil),
                         let data = try? Data(contentsOf: urlLocal) {
                         self.openData(data, localResource: true)
                     } else {
@@ -183,7 +183,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             let defaults = UserDefaults.standard
             var state:[String:AnyObject]? = nil
             if let url = self.url, ignoreViewState == false {
-                state = defaults.object(forKey: url.absoluteString!) as? [String:AnyObject]
+                state = defaults.object(forKey: url.absoluteString) as? [String:AnyObject]
             }
             self.viewLoading?.alpha = 1.0
             self.labelLoading?.text = "Loading Network Resources...".localized
@@ -217,7 +217,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                         } else {
                             let alert = UIAlertController(title: "Swipe", message: "Loading Resources...".localized, preferredStyle: UIAlertControllerStyle.alert)
                             self.present(alert, animated: true) { () -> Void in
-                                request.beginAccessingResources() { (error:NSError?) -> Void in
+                                request.beginAccessingResources() { (error:Swift.Error?) -> Void in
                                     DispatchQueue.main.async {
                                         self.dismiss(animated: false, completion: nil)
                                         if let e = error {
@@ -279,17 +279,17 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     }
     
 #if os(iOS)
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden: Bool {
         return true
     }
     
     // NOTE: This function and supportedInterfaceOrientations will not be called on iPad
     // as long as the app supports multitasking.
-    override func shouldAutorotate() -> Bool {
+    override var shouldAutorotate: Bool {
         return true
     }
     
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if let documentViewer = self.documentViewer, documentViewer.landscape() {
             return UIInterfaceOrientationMask.landscape
         }
@@ -353,13 +353,13 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if self.isBeingDismissed() {
+        if self.isBeingDismissed {
             if let documentViewer = self.documentViewer,
                 let state = documentViewer.saveState(),
                 let url = self.url {
                 MyLog("SWBrows state=\(state)", level:1)
                 let defaults = UserDefaults.standard
-                defaults.set(state, forKey: url.absoluteString!)
+                defaults.set(state, forKey: url.absoluteString)
                 defaults.synchronize()
             }
         
@@ -368,7 +368,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             if SwipeBrowser.stack.count == 1 {
                 // Wait long enough (200ms > 1/30fps) and check the memory leak. 
                 // This gives the timerTick() in SwipePage to complete the shutdown sequence
-                DispatchQueue.main.after(when: DispatchTime.now() + Double(Int64(200 * NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)) { () -> Void in
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(200 * NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)) { () -> Void in
                     SwipePage.checkMemoryLeak()
                     SwipeElement.checkMemoryLeak()
                 }

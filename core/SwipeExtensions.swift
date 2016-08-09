@@ -23,11 +23,11 @@ extension URL {
     
         var components = urlString.components(separatedBy: "/")
         if components.count == 1 {
-            return Bundle.main.urlForResource(urlString, withExtension: nil)
+            return Bundle.main.url(forResource: urlString, withExtension: nil)
         }
         let filename = components.last
         components.removeLast()
         let dir = components.joined(separator: "/")
-        return Bundle.main.urlForResource(filename, withExtension: nil, subdirectory: dir)
+        return Bundle.main.url(forResource: filename, withExtension: nil, subdirectory: dir)
     }
 }

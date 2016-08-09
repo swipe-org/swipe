@@ -30,24 +30,24 @@ class SwipeAssetManager {
     }
 
     lazy var applicationCachesDirectory: URL = {
-        let urls = FileManager.default.urlsForDirectory(.cachesDirectory, inDomains: .userDomainMask)
+        let urls = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
         return urls[urls.count-1]
     }()
 
     lazy var applicationDocumentsDirectory: URL = {
-        let urls = FileManager.default.urlsForDirectory(.documentDirectory, inDomains: .userDomainMask)
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return urls[urls.count-1]
     }()
 
     lazy var applicationLibraryDirectory: URL = {
-        let urls = FileManager.default.urlsForDirectory(.libraryDirectory, inDomains: .userDomainMask)
+        let urls = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)
         return urls[urls.count-1]
     }()
 
     lazy var urlFolder:URL = {
-        let urlFolder = try! self.applicationCachesDirectory.appendingPathComponent("cache.swipe.net")
+        let urlFolder = self.applicationCachesDirectory.appendingPathComponent("cache.swipe.net")
         let fm = FileManager.default
-        if !fm.fileExists(atPath: urlFolder.path!) {
+        if !fm.fileExists(atPath: urlFolder.path) {
             try! fm.createDirectory(at: urlFolder, withIntermediateDirectories: false, attributes: nil)
             try! (urlFolder as NSURL).setResourceValue(true, forKey:URLResourceKey.isExcludedFromBackupKey)
         }
@@ -55,7 +55,7 @@ class SwipeAssetManager {
     }()
     
     lazy var managedObjectModel: NSManagedObjectModel = {
-        let modelURL = Bundle.main.urlForResource("asset", withExtension: "momd")!
+        let modelURL = Bundle.main.url(forResource: "asset", withExtension: "momd")!
         //let modelURL = NSBundle.mainBundle().URLForResource("snasset", withExtension: "momd")!
         return NSManagedObjectModel(contentsOf: modelURL)!
     }()
@@ -64,9 +64,9 @@ class SwipeAssetManager {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         let filename = "asset004.sqlite"
 #if os(tvOS)
-        let url = try! self.applicationCachesDirectory.appendingPathComponent(filename)
+        let url = self.applicationCachesDirectory.appendingPathComponent(filename)
 #else
-        let url = try! self.applicationLibraryDirectory.appendingPathComponent(filename)
+        let url = self.applicationLibraryDirectory.appendingPathComponent(filename)
 #endif
         var failureReason = "There was an error creating or loading the application's saved data."
         do {
@@ -113,7 +113,7 @@ class SwipeAssetManager {
         assert(Thread.current == Thread.main, "thread error")
         
         if url.scheme == "file" {
-            MyLog("SWAsset loadAsset with file: \(url.lastPathComponent!)", level:1)
+            MyLog("SWAsset loadAsset with file: \(url.lastPathComponent)", level:1)
             DispatchQueue.main.async(execute: { () -> Void in
                 callback?(url, nil)
             })
@@ -123,7 +123,7 @@ class SwipeAssetManager {
         //MyLog("SNAsset context = \(managedObjectContext)")
         
         let request = NSFetchRequest<NSManagedObject>(entityName: "Asset")
-        request.predicate = Predicate(format: "url == %@", url.path!)
+        request.predicate = Predicate(format: "url == %@", url.path)
         do {
             let results = try managedObjectContext.fetch(request)
             //MyLog("SNAsset count = \(results.count)")
@@ -142,18 +142,18 @@ class SwipeAssetManager {
             entity.setValue(Date(), forKey: "lastModified")
             saveContext()
             
-            let urlLocal = try! urlFolder.appendingPathComponent(uuid)
+            let urlLocal = urlFolder.appendingPathComponent(uuid)
             let fm = FileManager.default
             let loaded = entity.value(forKey: "loaded") as? Bool
             let fileSize = entity.value(forKey: "size") as? Int
-            if !bypassCache && loaded == true && fm.fileExists(atPath: urlLocal.path!) {
-                MyLog("SWAsset reuse \(url.lastPathComponent!), \(fileSize)", level:1)
+            if !bypassCache && loaded == true && fm.fileExists(atPath: urlLocal.path) {
+                MyLog("SWAsset reuse \(url.lastPathComponent), \(fileSize)", level:1)
                 // We should call it asynchronously, which the caller expects.
                 DispatchQueue.main.async(execute: { () -> Void in
                     callback?(urlLocal, nil)
                 })
             } else {
-                MyLog("SWAsset loading \(url.lastPathComponent!)", level:1)
+                MyLog("SWAsset loading \(url.lastPathComponent)", level:1)
                 let connection = SwipeConnection.connection(url, urlLocal:urlLocal, entity:entity)
                 connection.load { (error: NSError!) -> Void in
                     if error == nil {
@@ -176,7 +176,7 @@ class SwipeAssetManager {
     }
 
     func reduce(_ limit:Int, amount:Int) {
-        DispatchQueue.global( attributes: DispatchQueue.GlobalAttributes.qosDefault).async { () -> Void in
+        DispatchQueue.global(qos: .default).async { () -> Void in
             let fm = FileManager.default
             let request = NSFetchRequest<NSManagedObject>(entityName: "Asset")
             request.sortDescriptors = [SortDescriptor(key: "lastModified", ascending: true)]
@@ -188,7 +188,7 @@ class SwipeAssetManager {
                         let entity = entities[i]
                         if let date = entity.value(forKey: "lastModified") as? Date, let uuid = entity.value(forKey: "uuid") as? String {
                             MyLog("SNAsset reducing date=\(date), \(uuid)")
-                            let urlLocal = try! self.urlFolder.appendingPathComponent(uuid)
+                            let urlLocal = self.urlFolder.appendingPathComponent(uuid)
                             do {
                                 try fm.removeItem(at: urlLocal)
                             } catch {
@@ -209,7 +209,7 @@ class SwipeAssetManager {
         do {
             let urls = try fm.contentsOfDirectory(at: urlFolder, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions())
             for url in urls {
-                MyLog("SNAsset deleting url=\(url.lastPathComponent!)", level: 1)
+                MyLog("SNAsset deleting url=\(url.lastPathComponent)", level: 1)
                 do {
                     try fm.removeItem(at: url)
                 } catch {
