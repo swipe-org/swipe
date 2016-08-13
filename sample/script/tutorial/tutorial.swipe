@@ -146,15 +146,17 @@
         },
         {
             "template":"demo",
+            "duration":1.0,
             "elements":[
                 { "template":"code", "markdown":[
                     "```",
                     "{",
                     "  \"pages\": [",
                     "    {",
+                    "      \"duration\":1.0,",
                     "      \"elements\": [",
                     "        { \"text\":\"Hello World\",",
-                    "          \"loop\":{ \"style\":\"wiggle\", \"repeat\":3 } },",
+                    "          \"loop\":{ \"style\":\"wiggle\", \"count\":10 } },",
                     "      ]",
                     "    },",
                     "  ]",
@@ -162,7 +164,7 @@
                     "```",
                 ]},
                 { "template":"demo", "text":"Hello World",
-                  "loop":{ "style":"wiggle", "repeat":3 } },
+                  "loop":{ "style":"wiggle", "count":10 } },
             ]
         },
         {
