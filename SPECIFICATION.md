@@ -408,6 +408,8 @@ The **Loop Animation** must have a "style" property, and the value of this prope
 - *shift*: The **Element** shift to the specified direction where the "direction" property specifies the direction ("n", "s", "e" or "w", the default is "s"). Use it with the "tiling" property.
 - *path*: The **Element** performs path animation, where the "path" property specifies a collection of **Paths**. 
 - *sprite*: The **Element** performs a sprite animation. 
+
+The "timing" property of a loop animation specifies the timing of animation with two floating values, start and end (must be between 0.0 and 1.0). The default is [0.0, 1.0].
  
 Following example wiggles the text "I'm wiggling!" three times when the second page appears on the screen. 
 

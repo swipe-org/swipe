@@ -162,7 +162,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
             return value
         }
         if let value = self.pageInfo["animation"] as? String {
-            NSLog("SWPage  #### animation instead of play ####")
+            NSLog("SWPage DEPRECATED 'animation'; use 'play'")
             return value
         }
         return "auto" // default
