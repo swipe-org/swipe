@@ -279,6 +279,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **tiling** (Bool): Specifies the tiling (to be used with *shift* loop animation)
 - **action** (String): Specifies the Action
 - **repeat** (Bool): Repeat rule for the element. The default is false.
+- **shadow** (shadow properties): Specifies the shadow properties, *color*(Color, default is black), *offset*([Float, Float], default is [1,1]), *opacity*(Float, default is 0.5) and *radius*(Float, default is 1.0). 
 
 ### Element Template
 
