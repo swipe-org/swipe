@@ -41,7 +41,7 @@ protocol SwipeElementDelegate:NSObjectProtocol {
     func languageIdentifier() -> String?
 }
 
-class SwipeElement:NSObject {
+class SwipeElement: SwipeView {
     // Debugging
     static var objectCount = 0
     private let pageIndex:Int
@@ -50,12 +50,10 @@ class SwipeElement:NSObject {
     weak var delegate:SwipeElementDelegate!
     var action:String?
 
-    private var view:UIView?
     private var layer:CALayer?
-    private var elements = [SwipeElement]()
     private var btn:UIButton?
-    private let info:[String:AnyObject]
     private let scale:CGSize
+    private var screenDimension = CGSize(width: 0, height: 0)
     private var repeatCount = CGFloat(1.0)
     private let blackColor = UIColor.blackColor().CGColor
     private let whiteColor = UIColor.whiteColor().CGColor
@@ -65,6 +63,7 @@ class SwipeElement:NSObject {
     private let contentScale = UIScreen.mainScreen().scale
 #endif
     private var fRepeat = false
+    private var helper: SwipeView?  // Example: SwipeList
     
     // Image Element Specific
     private var imageLayer:CALayer?
@@ -100,7 +99,7 @@ class SwipeElement:NSObject {
     // Lazy properties
     private lazy var notificationManager = SNNotificationManager()
 
-    init(info:[String:AnyObject], scale:CGSize, delegate:SwipeElementDelegate) {
+    init(info:[String:AnyObject], scale:CGSize, parent:SwipeNode, delegate:SwipeElementDelegate) {
         var template = info["template"] as? String
         if template == nil {
             template = info["element"] as? String
@@ -108,12 +107,11 @@ class SwipeElement:NSObject {
                 MyLog("SwElement DEPRECATED element; use 'template'")
             }
         }
-        let elementInfo = SwipeParser.inheritProperties(info, baseObject: delegate.prototypeWith(template))
-        self.info = elementInfo
         self.scale = scale
         self.delegate = delegate
         self.pageIndex = delegate.pageIndex() // only for debugging
-        super.init()
+        let elementInfo = SwipeParser.inheritProperties(info, baseObject: delegate.prototypeWith(template))
+        super.init(parent: parent, info: elementInfo)
         self.setTimeOffsetTo(0.0)
         
         SwipeElement.objectCount += 1
@@ -145,14 +143,14 @@ class SwipeElement:NSObject {
         }
     }
     
-    private func valueFrom(info:[NSObject:AnyObject], key:String, defaultValue:CGFloat) -> CGFloat {
+    private func valueFrom(info:[String:AnyObject], key:String, defaultValue:CGFloat) -> CGFloat {
         if let value = info[key] as? CGFloat {
             return value
         }
         return defaultValue
     }
 
-    private func booleanValueFrom(info:[NSObject:AnyObject], key:String, defaultValue:Bool) -> Bool {
+    private func booleanValueFrom(info:[String:AnyObject], key:String, defaultValue:Bool) -> Bool {
         if let value = info[key] as? Bool {
             return value
         }
@@ -160,7 +158,7 @@ class SwipeElement:NSObject {
     }
     
     func loadView(dimension:CGSize) -> UIView? {
-        return self.loadViewInternal(dimension, screenDimention: dimension)
+        return self.loadViewInternal(dimension, screenDimension: dimension)
     }
     
     // Returns the list of URLs of required resources for this element (including children)
@@ -180,7 +178,7 @@ class SwipeElement:NSObject {
         if let elementsInfo = self.info["elements"] as? [[String:AnyObject]] {
             let scaleDummy = CGSizeMake(1.0, 1.0)
             for e in elementsInfo {
-                let element = SwipeElement(info: e, scale:scaleDummy, delegate:self.delegate!)
+                let element = SwipeElement(info: e, scale:scaleDummy, parent:self, delegate:self.delegate!)
                 for (url, prefix) in element.resourceURLs {
                     urls[url] = prefix
                 }
@@ -189,7 +187,8 @@ class SwipeElement:NSObject {
         return urls
     }()
     
-    private func loadViewInternal(dimension:CGSize, screenDimention:CGSize) -> UIView? {
+    func loadViewInternal(dimension:CGSize, screenDimension:CGSize) -> UIView? {
+        self.screenDimension = screenDimension
         let baseURL = delegate.baseURL()
         var x = CGFloat(0.0)
         var y = CGFloat(0.0)
@@ -235,8 +234,8 @@ class SwipeElement:NSObject {
                 } else {
                     imageSrc = nil
                 }
+                }
             }
-        }
         if let src = info["mask"] as? String {
             //maskSrc = SwipeParser.imageWith(src)
             if let url = NSURL.url(src, baseURL: baseURL),
@@ -365,6 +364,12 @@ class SwipeElement:NSObject {
                     //})
                 }
             }
+        } else if let eventsInfo = info["events"] as? [String:AnyObject] {
+            eventHandler.parse(eventsInfo)
+        }
+
+        if let enabled = info["enabled"] as? Bool {
+            self.fEnabled = enabled
         }
         
         if let value = info["clip"] as? Bool {
@@ -579,9 +584,10 @@ class SwipeElement:NSObject {
 #endif
         }
         
-        if let text = parseText(info, key:"text") {
-            textLayer = SwipeElement.addTextLayer(text, scale:scale, info: info, dimension: screenDimention, layer: layer)
-            //SwipeElement.addTextLayer(text, scale:self.scale, info: info, dimension:screenDimention, layer: layer)
+        if let text = parseText(self, info: info, key:"text") {
+            if self.helper == nil || !self.helper!.setText(text, scale:self.scale, info: info, dimension:screenDimension, layer: layer) {
+                self.textLayer = SwipeElement.addTextLayer(text, scale:scale, info: info, dimension: screenDimension, layer: layer)
+            }
         }
         
         // http://stackoverflow.com/questions/9290972/is-it-possible-to-make-avurlasset-work-without-a-file-extension
@@ -883,7 +889,7 @@ class SwipeElement:NSObject {
             layer.speed = 0 // Independently animate it
         }
         
-        if let animation = info["loop"] as? [NSObject:AnyObject],
+        if let animation = info["loop"] as? [String:AnyObject],
            let style = animation["style"] as? String {
             //
             // Note: Use the inner layer (either image or shape) for the loop animation 
@@ -1033,15 +1039,21 @@ class SwipeElement:NSObject {
         // Nested Elements
         if let elementsInfo = info["elements"] as? [[String:AnyObject]] {
             for e in elementsInfo {
-                let element = SwipeElement(info: e, scale:scale, delegate:self.delegate!)
-                if let subview = element.loadViewInternal(CGSizeMake(w0, h0), screenDimention: screenDimention) {
+                let element = SwipeElement(info: e, scale:scale, parent:self, delegate:self.delegate!)
+                if let subview = element.loadViewInternal(CGSizeMake(w0, h0), screenDimension: screenDimension) {
                     view.addSubview(subview)
-                    elements.append(element)
+                    children.append(element)
                 }
             }
         }
-
+        
         self.view = view
+        setupGestureRecognizers()
+        
+        if let actions = eventHandler.actionsFor("load") {
+            execute(self, actions: actions)
+        }
+        
         return view
     }
 
@@ -1053,7 +1065,7 @@ class SwipeElement:NSObject {
 
     private func parsePath(shape:AnyObject?, w:CGFloat, h:CGFloat, scale:CGSize) -> CGPathRef? {
         var shape0: AnyObject? = shape
-        if let refs = shape as? [NSObject:AnyObject], key = refs["ref"] as? String {
+        if let refs = shape as? [String:AnyObject], key = refs["ref"] as? String {
             shape0 = delegate.pathWith(key)
         }
         return SwipePath.parse(shape0, w: w, h: h, scale: scale)
@@ -1087,8 +1099,10 @@ class SwipeElement:NSObject {
             layer.timeOffset = CFTimeInterval(offset)
         }
         
-        for element in elements {
-            element.setTimeOffsetTo(offset, fAutoPlay: fAutoPlay, fElementRepeat: fElementRepeat)
+        for c in children {
+            if let element = c as? SwipeElement {
+                element.setTimeOffsetTo(offset, fAutoPlay: fAutoPlay, fElementRepeat: fElementRepeat)
+            }
         }
         
         if fElementRepeat && !self.fRepeat {
@@ -1165,9 +1179,11 @@ class SwipeElement:NSObject {
         if self.videoPlayer != nil {
             return true
         }
-        for element in elements {
-            if element.isVideoElement() {
-                return true
+        for c in children {
+            if let element = c as? SwipeElement {
+                if element.isVideoElement() {
+                    return true
+                }
             }
         }
         return false
@@ -1177,15 +1193,17 @@ class SwipeElement:NSObject {
         if fRepeat {
             return true
         }
-        for element in elements {
-            if element.isRepeatElement() {
-                return true
+        for c in children {
+            if let element = c as? SwipeElement {
+                if element.isRepeatElement() {
+                    return true
+                }
             }
         }
         return false
     }
 
-    func parseText(info:[String:AnyObject], key:String) -> String? {
+    func parseText(originator: SwipeNode, info:[String:AnyObject], key:String) -> String? {
         guard let value = info[key] else {
             return nil
         }
@@ -1307,6 +1325,20 @@ class SwipeElement:NSObject {
         return textLayer
     }
     
+    static func updateTextLayer(textLayer:CATextLayer, text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer) {
+        let (attr, alignmentMode, fTextBottom, fTextTop, font, fontSize) = SwipeElement.processTextInfo(info, dimension: dimension, scale: scale)
+        
+        textLayer.alignmentMode = alignmentMode // *
+        textLayer.foregroundColor = SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor) // animatable **
+        textLayer.fontSize = fontSize // animatable **
+        textLayer.font = font
+        textLayer.string = text // NOTE: This is no longer an attributed string
+        
+        SwipeElement.processShadow(info, scale:scale, layer: layer)
+        
+        textLayer.frame = SwipeElement.processTextStorage(text, attr: attr, fTextBottom: fTextBottom, fTextTop: fTextTop, rcBound: layer.bounds)
+    }
+    
     /*
     func isPlaying() -> Bool {
         if self.fPlaying {
@@ -1320,4 +1352,684 @@ class SwipeElement:NSObject {
         return false
     }
     */
-}
+    
+    // SwipeView
+    
+    override func isFirstResponder() -> Bool {
+        if let v = self.view {
+            if v.isFirstResponder() {
+                return true
+            }
+            
+            if helper != nil {
+                return helper!.isFirstResponder()
+            }
+        }
+        
+        return super.isFirstResponder()
+    }
+    
+    // SwipeNode
+    
+    override func getPropertyValue(originator: SwipeNode, property: String) -> AnyObject? {
+        if let val = helper?.getPropertyValue(originator, property: property) {
+            return val
+        }
+        
+        switch (property) {
+        case "text":
+            if let string = self.textLayer?.string as? String {
+                return string
+            } else {
+                MyLog("SWElem textLayer.string is not a String!")
+                return nil
+            }
+        case "text.length":
+            if let string = self.textLayer?.string as? String {
+                return string.characters.count
+            } else {
+                MyLog("SWElem textLayer.string is not a String!")
+                return nil
+            }
+        case "enabled":
+            return self.fEnabled
+        default:
+            return super.getPropertyValue(originator, property: property)
+        }
+    }
+    
+    override func getPropertiesValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+        if let val = self.helper?.getPropertiesValue(originator, info: info) {
+            return val
+        }
+
+        let key = info.keys.first!
+        
+        if let val = info[key] as? String {
+            return getPropertyValue(originator, property: val)
+        } else {
+            return nil
+        }
+    }
+    
+    override func getValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+        var name = "*"
+        if let val = info["id"] as? String {
+            name = val
+        }
+        
+        var up = true
+        if let val = info["search"] as? String {
+            up = val != "children"
+        }
+        
+        if (name == "*" || self.name.caseInsensitiveCompare(name) == .OrderedSame) {
+            if let attribute = info["property"] as? String {
+                return getPropertyValue(originator, property: attribute)
+            } else if let attributeInfo = info["property"] as? [String:AnyObject] {
+                return getPropertiesValue(originator, info: attributeInfo)
+            }
+        }
+
+        var node: SwipeNode? = self
+        
+        if up {
+            while node?.parent != nil {
+                if let viewNode = node?.parent as? SwipeView {
+                    for c in viewNode.children {
+                        if let e = c as? SwipeElement {
+                            if name == "*" || e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                                if let attribute = info["property"] as? String {
+                                    return e.getPropertyValue(originator, property: attribute)
+                                } else if let attributeInfo = info["property"] as? [String:AnyObject] {
+                                    return e.getPropertiesValue(originator, info: attributeInfo)
+                                }
+                            }
+                        }
+                    }
+                    
+                    node = node?.parent
+                } else {
+                    return nil
+                }
+            }
+        } else {
+            for c in children {
+                if let e = c as? SwipeElement {
+                    return e.getValue(originator, info: info)
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    func setupAnimations(layer: CALayer, info: [String:AnyObject]) {
+        let dimension = self.screenDimension
+        let baseURL = self.delegate.baseURL()
+        var x = layer.frame.origin.x
+        var y = layer.frame.origin.y
+        var w0 = layer.frame.size.width
+        var h0 = layer.frame.size.height
+        
+        let fScaleToFill = info["w"] as? String == "fill" || info["h"] as? String == "fill"
+        if !fScaleToFill {
+            if let value = info["w"] as? CGFloat {
+                w0 = value
+            } else if let value = info["w"] as? String {
+                w0 = SwipeParser.parsePercent(value, full: dimension.width, defaultValue: dimension.width)
+            }
+            if let value = info["h"] as? CGFloat {
+                h0 = value
+            } else if let value = info["h"] as? String {
+                h0 = SwipeParser.parsePercent(value, full: dimension.height, defaultValue: dimension.height)
+            }
+        }
+        
+        if let value = info["x"] as? CGFloat {
+            x = value
+        } else if let value = info["x"] as? String {
+            if value == "right" {
+                x = dimension.width - w0
+            } else if value == "left" {
+                x = 0
+            } else if value == "center" {
+                x = (dimension.width - w0) / 2.0
+            } else {
+                x = SwipeParser.parsePercent(value, full: dimension.width, defaultValue: 0)
+            }
+        }
+        if let value = info["y"] as? CGFloat {
+            y = value
+        } else if let value = info["y"] as? String {
+            if value == "bottom" {
+                y = dimension.height - h0
+            } else if value == "top" {
+                y = 0
+            } else if value == "center" {
+                y = (dimension.height - h0) / 2.0
+            } else {
+                y = SwipeParser.parsePercent(value, full: dimension.height, defaultValue: 0)
+            }
+        }
+        //NSLog("SWEleme \(x),\(y),\(w0),\(h0),\(sizeContents),\(dimension),\(scale)")
+        
+        x *= self.scale.width
+        y *= self.scale.height
+        let w = w0 * self.scale.width
+        let h = h0 * self.scale.height
+        let frame = CGRectMake(x, y, w, h)
+        layer.frame = frame
+        
+        let start, duration:Double
+        if let timing = info["timing"] as? [Double]
+            where timing.count == 2 && timing[0] >= 0 && timing[0] <= timing[1] && timing[1] <= 1 {
+            start = timing[0] == 0 ? 1e-10 : timing[0]
+            duration = timing[1] - start
+        } else {
+            start = 1e-10
+            duration = 1.0
+        }
+        
+        if let durationSec = info["duration"] as? Double {
+            CATransaction.setAnimationDuration(durationSec)
+        }
+        
+        var fSkipTranslate = false
+        
+        if let path = self.parsePath(info["pos"], w: w0, h: h0, scale:self.scale) {
+            let pos = layer.position
+            var xform = CGAffineTransformMakeTranslation(pos.x, pos.y)
+            let ani = CAKeyframeAnimation(keyPath: "position")
+            ani.path = CGPathCreateCopyByTransformingPath(path, &xform)
+            ani.beginTime = start
+            ani.duration = duration
+            ani.fillMode = kCAFillModeBoth
+            ani.calculationMode = kCAAnimationPaced
+            if let mode = info["mode"] as? String {
+                switch(mode) {
+                case "auto":
+                    ani.rotationMode = kCAAnimationRotateAuto
+                case "reverse":
+                    ani.rotationMode = kCAAnimationRotateAutoReverse
+                default: // or "none"
+                    ani.rotationMode = nil
+                }
+            }
+            layer.addAnimation(ani, forKey: "position")
+            fSkipTranslate = true
+        }
+        
+        if let transform = SwipeParser.parseTransform(info, scaleX:self.scale.width, scaleY:self.scale.height, base:info, fSkipTranslate: fSkipTranslate, fSkipScale: self.shapeLayer != nil) {
+            let ani = CABasicAnimation(keyPath: "transform")
+            ani.fromValue = NSValue(CATransform3D : layer.transform)
+            ani.toValue = NSValue(CATransform3D : transform)
+            ani.fillMode = kCAFillModeBoth
+            ani.beginTime = start
+            ani.duration = duration
+            layer.addAnimation(ani, forKey: "transform")
+        }
+        
+        if let opacity = info["opacity"] as? Float {
+            let ani = CABasicAnimation(keyPath: "opacity")
+            ani.fromValue = layer.opacity
+            layer.opacity = opacity
+            ani.toValue = layer.opacity
+            //ani.fillMode = kCAFillModeBoth
+            //ani.beginTime = start
+            //ani.duration = duration
+            layer.addAnimation(ani, forKey: "opacity")
+        }
+        
+        if let backgroundColor:AnyObject = info["bc"] {
+            let ani = CABasicAnimation(keyPath: "backgroundColor")
+            ani.fromValue = layer.backgroundColor
+            layer.backgroundColor = SwipeParser.parseColor(backgroundColor)
+            ani.toValue = layer.backgroundColor
+            //ani.fillMode = kCAFillModeBoth
+            //ani.beginTime = start
+            //ani.duration = duration
+            layer.addAnimation(ani, forKey: "backgroundColor")
+        }
+        if let borderColor:AnyObject = info["borderColor"] {
+            let ani = CABasicAnimation(keyPath: "borderColor")
+            ani.fromValue = layer.borderColor
+            layer.borderColor = SwipeParser.parseColor(borderColor)
+            ani.toValue = layer.borderColor
+            //ani.fillMode = kCAFillModeBoth
+            //ani.beginTime = start
+            //ani.duration = duration
+            layer.addAnimation(ani, forKey: "borderColor")
+        }
+        if let borderWidth = info["borderWidth"] as? CGFloat {
+            let ani = CABasicAnimation(keyPath: "borderWidth")
+            ani.fromValue = layer.borderWidth
+            ani.toValue = borderWidth * scale.width
+            //ani.fillMode = kCAFillModeBoth
+            //ani.beginTime = start
+            //ani.duration = duration
+            layer.addAnimation(ani, forKey: "borderWidth")
+        }
+        if let borderWidth = info["cornerRadius"] as? CGFloat {
+            let ani = CABasicAnimation(keyPath: "cornerRadius")
+            ani.fromValue = layer.cornerRadius
+            ani.toValue = borderWidth * scale.width
+            ani.fillMode = kCAFillModeBoth
+            ani.beginTime = start
+            ani.duration = duration
+            layer.addAnimation(ani, forKey: "cornerRadius")
+        }
+        
+        if let textLayer = self.textLayer {
+            if let textColor:AnyObject = info["textColor"] {
+                let ani = CABasicAnimation(keyPath: "foregroundColor")
+                ani.fromValue = textLayer.foregroundColor
+                textLayer.foregroundColor = SwipeParser.parseColor(textColor)
+                ani.toValue = textLayer.foregroundColor
+                //ani.beginTime = start
+                //ani.duration = duration
+                //ani.fillMode = kCAFillModeBoth
+                textLayer.addAnimation(ani, forKey: "foregroundColor")
+            }
+        }
+        
+        if let srcs = info["img"] as? [String] {
+            var images = [CGImage]()
+            for src in srcs {
+                if let url = NSURL.url(src, baseURL: baseURL),
+                    urlLocal = self.delegate.map(url),
+                    image = CGImageSourceCreateWithURL(urlLocal, nil) {
+                    if CGImageSourceGetCount(image) > 0 {
+                        images.append(CGImageSourceCreateImageAtIndex(image, 0, nil)!)
+                    }
+                }
+            }
+            if let imageLayer = self.imageLayer {
+                let ani = CAKeyframeAnimation(keyPath: "contents")
+                ani.values = images
+                ani.beginTime = start
+                ani.duration = duration
+                ani.fillMode = kCAFillModeBoth
+                imageLayer.addAnimation(ani, forKey: "contents")
+            }
+        }
+        
+        if let shapeLayer = self.shapeLayer {
+            if let params = info["path"] as? [AnyObject] {
+                var values = [shapeLayer.path!]
+                for param in params {
+                    if let path = self.parsePath(param, w: w0, h: h0, scale:self.scale) {
+                        values.append(path)
+                    }
+                }
+                let ani = CAKeyframeAnimation(keyPath: "path")
+                ani.values = values
+                ani.beginTime = start
+                ani.duration = duration
+                ani.fillMode = kCAFillModeBoth
+                shapeLayer.addAnimation(ani, forKey: "path")
+            } else if let path = self.parsePath(info["path"], w: w0, h: h0, scale:self.scale) {
+                let ani = CABasicAnimation(keyPath: "path")
+                ani.fromValue = shapeLayer.path
+                ani.toValue = path
+                ani.beginTime = start
+                ani.duration = duration
+                ani.fillMode = kCAFillModeBoth
+                shapeLayer.addAnimation(ani, forKey: "path")
+            } /*else if let path = SwipeParser.transformedPath(pathSrc!, param: info, size:frame.size) {
+                let ani = CABasicAnimation(keyPath: "path")
+                ani.fromValue = shapeLayer.path
+                ani.toValue = path
+                ani.beginTime = start
+                ani.duration = duration
+                ani.fillMode = kCAFillModeBoth
+                shapeLayer.addAnimation(ani, forKey: "path")
+            } */
+            if let fillColor:AnyObject = info["fillColor"] {
+                let ani = CABasicAnimation(keyPath: "fillColor")
+                ani.fromValue = shapeLayer.fillColor
+                ani.toValue = SwipeParser.parseColor(fillColor)
+                ani.beginTime = start
+                ani.duration = duration
+                ani.fillMode = kCAFillModeBoth
+                shapeLayer.addAnimation(ani, forKey: "fillColor")
+            }
+            if let strokeColor:AnyObject = info["strokeColor"] {
+                let ani = CABasicAnimation(keyPath: "strokeColor")
+                ani.fromValue = shapeLayer.strokeColor
+                ani.toValue = SwipeParser.parseColor(strokeColor)
+                ani.beginTime = start
+                ani.duration = duration
+                ani.fillMode = kCAFillModeBoth
+                shapeLayer.addAnimation(ani, forKey: "strokeColor")
+            }
+            if let lineWidth = info["lineWidth"] as? CGFloat {
+                let ani = CABasicAnimation(keyPath: "lineWidth")
+                ani.fromValue = shapeLayer.lineWidth
+                ani.toValue = lineWidth * self.scale.width
+                ani.beginTime = start
+                ani.duration = duration
+                ani.fillMode = kCAFillModeBoth
+                shapeLayer.addAnimation(ani, forKey: "lineWidth")
+            }
+            if let strokeStart = info["strokeStart"] as? CGFloat {
+                let ani = CABasicAnimation(keyPath: "strokeStart")
+                ani.fromValue = shapeLayer.strokeStart
+                ani.toValue = strokeStart
+                ani.beginTime = start
+                ani.duration = duration
+                ani.fillMode = kCAFillModeBoth
+                shapeLayer.addAnimation(ani, forKey: "strokeStart")
+            }
+            if let strokeEnd = info["strokeEnd"] as? CGFloat {
+                let ani = CABasicAnimation(keyPath: "strokeEnd")
+                ani.fromValue = shapeLayer.strokeEnd
+                ani.toValue = strokeEnd
+                ani.beginTime = start
+                ani.duration = duration
+                ani.fillMode = kCAFillModeBoth
+                shapeLayer.addAnimation(ani, forKey: "strokeEnd")
+            }
+        }
+    
+        if let animation = info["loop"] as? [String:AnyObject],
+            let style = animation["style"] as? String {
+            //
+            // Note: Use the inner layer (either image or shape) for the loop animation
+            // to avoid any conflict with other transformation if it is available.
+            // In this case, the loop animation does not effect child elements (because
+            // we use UIView hierarchy instead of CALayer hierarchy.
+            //
+            // It means the loop animation on non-image/non-shape element does not work well
+            // with other transformation.
+            //
+            var loopLayer = layer
+            if let l = self.imageLayer {
+                loopLayer = l
+            } else if let l = self.shapeLayer {
+                loopLayer = l
+            }
+            
+            let start, duration:Double
+            if let timing = animation["timing"] as? [Double]
+                where timing.count == 2 && timing[0] >= 0 && timing[0] <= timing[1] && timing[1] <= 1 {
+                start = timing[0] == 0 ? 1e-10 : timing[0]
+                duration = timing[1] - start
+            } else {
+                start = 1e-10
+                duration = 1.0
+            }
+            let repeatCount = Float(self.valueFrom(animation, key: "count", defaultValue: 1))
+            
+            switch(style) {
+            case "vibrate":
+                let delta = self.valueFrom(animation, key: "delta", defaultValue: 10.0)
+                let ani = CAKeyframeAnimation(keyPath: "transform")
+                ani.values = [NSValue(CATransform3D:loopLayer.transform),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeTranslation(delta, 0.0, 0.0), loopLayer.transform)),
+                              NSValue(CATransform3D:loopLayer.transform),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeTranslation(-delta, 0.0, 0.0), loopLayer.transform)),
+                              NSValue(CATransform3D:loopLayer.transform)]
+                ani.repeatCount = repeatCount
+                ani.beginTime = start
+                ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
+                ani.fillMode = kCAFillModeBoth
+                loopLayer.addAnimation(ani, forKey: "transform")
+            case "shift":
+                var innerLayer:CALayer? // TBD ???
+                let shiftLayer = (innerLayer == nil) ? layer : innerLayer!
+                let ani = CAKeyframeAnimation(keyPath: "transform")
+                let shift:CGSize = {
+                    if let dir = animation["direction"] as? String {
+                        switch(dir) {
+                        case "n":
+                            return CGSizeMake(0, -h)
+                        case "e":
+                            return CGSizeMake(w, 0)
+                        case "w":
+                            return CGSizeMake(-w, 0)
+                        default:
+                            return CGSizeMake(0, h)
+                        }
+                    } else {
+                        return CGSizeMake(0, h)
+                    }
+                }()
+                ani.values = [NSValue(CATransform3D:shiftLayer.transform),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeTranslation(shift.width, shift.height, 0.0), shiftLayer.transform))]
+                ani.repeatCount = repeatCount
+                ani.beginTime = start
+                ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
+                ani.fillMode = kCAFillModeBoth
+                shiftLayer.addAnimation(ani, forKey: "transform")
+            case "blink":
+                let ani = CAKeyframeAnimation(keyPath: "opacity")
+                ani.values = [1.0, 0.0, 1.0]
+                ani.repeatCount = repeatCount
+                ani.beginTime = start
+                ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
+                ani.fillMode = kCAFillModeBoth
+                loopLayer.addAnimation(ani, forKey: "opacity")
+            case "spin":
+                let fClockwise = self.booleanValueFrom(animation, key: "clockwise", defaultValue: true)
+                let degree = (fClockwise ? 120 : -120) * CGFloat(M_PI / 180.0)
+                let ani = CAKeyframeAnimation(keyPath: "transform")
+                ani.values = [NSValue(CATransform3D:loopLayer.transform),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(degree, 0.0, 0.0, 1.0), loopLayer.transform)),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(degree * 2, 0.0, 0.0, 1.0), loopLayer.transform)),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(degree * 3, 0.0, 0.0, 1.0), loopLayer.transform))]
+                ani.repeatCount = repeatCount
+                ani.beginTime = start
+                ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
+                ani.fillMode = kCAFillModeBoth
+                loopLayer.addAnimation(ani, forKey: "transform")
+            case "wiggle":
+                let delta = self.valueFrom(animation, key: "delta", defaultValue: 15) * CGFloat(M_PI / 180.0)
+                let ani = CAKeyframeAnimation(keyPath: "transform")
+                ani.values = [NSValue(CATransform3D:loopLayer.transform),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(delta, 0.0, 0.0, 1.0), loopLayer.transform)),
+                              NSValue(CATransform3D:loopLayer.transform),
+                              NSValue(CATransform3D:CATransform3DConcat(CATransform3DMakeRotation(-delta, 0.0, 0.0, 1.0), loopLayer.transform)),
+                              NSValue(CATransform3D:loopLayer.transform)]
+                ani.repeatCount = repeatCount
+                ani.beginTime = start
+                ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
+                ani.fillMode = kCAFillModeBoth
+                loopLayer.addAnimation(ani, forKey: "transform")
+            case "path":
+                if let shapeLayer = self.shapeLayer {
+                    var values = [shapeLayer.path!]
+                    if let params = animation["path"] as? [AnyObject] {
+                        for param in params {
+                            if let path = self.parsePath(param, w: w0, h: h0, scale:self.scale) {
+                                values.append(path)
+                            }
+                        }
+                    } else if let path = self.parsePath(animation["path"], w: w0, h: h0, scale:self.scale) {
+                        values.append(path)
+                    }
+                    if values.count >= 2 {
+                        values.append(shapeLayer.path!)
+                        let ani = CAKeyframeAnimation(keyPath: "path")
+                        ani.values = values
+                        ani.repeatCount = repeatCount
+                        ani.beginTime = start
+                        ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
+                        ani.fillMode = kCAFillModeBoth
+                        shapeLayer.addAnimation(ani, forKey: "path")
+                    }
+                }
+            case "sprite":
+                if let targetLayer = self.spriteLayer {
+                    let ani = CAKeyframeAnimation(keyPath: "contentsRect")
+                    let rc0 = CGRectMake(0, self.slot.y/self.slice.height, 1.0/self.slice.width, 1.0/self.slice.height)
+                    ani.values = Array(0..<Int(self.slice.width)).map() { (index:Int) -> NSValue in
+                        NSValue(CGRect: CGRect(origin: CGPointMake(CGFloat(index) / self.slice.width, rc0.origin.y), size: rc0.size))
+                    }
+                    ani.repeatCount = repeatCount
+                    ani.beginTime = start
+                    ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
+                    ani.fillMode = kCAFillModeBoth
+                    ani.calculationMode = kCAAnimationDiscrete
+                    targetLayer.addAnimation(ani, forKey: "contentsRect")
+                }
+                //self.dir = (1,0)
+            //self.repeatCount = CGFloat(repeatCount)
+            default:
+                break
+            }
+        }
+    }
+    
+    func update(originator: SwipeNode, info: [String:AnyObject]) {
+        for key in info.keys {
+            self.info[key] = info[key]
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.layer?.removeAllAnimations()
+            self.textLayer?.removeAllAnimations()
+            
+            UIView.animateWithDuration(0.25, animations: {
+                CATransaction.begin()
+                CATransaction.setDisableActions(true)
+                CATransaction.setCompletionBlock({
+                    if let eventsInfo = self.info["events"] as? [String:AnyObject] {
+                        let eventHandler = SwipeEventHandler()
+                        eventHandler.parse(eventsInfo)
+                        if let actions = eventHandler.actionsFor("completion") {
+                            originator.execute(self, actions:actions)
+                        }
+                    }
+                })
+                
+                if let text = self.parseText(originator, info: self.info, key:"text") {
+
+                        if self.textLayer == nil {
+                            self.textLayer = SwipeElement.addTextLayer(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: self.layer!)
+                        } else {
+                            SwipeElement.updateTextLayer(self.textLayer!, text: text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: self.layer!)
+                        }
+                    }
+                
+                if let text = self.textLayer?.string as? String where self.info["textAlign"] != nil || self.info["textColor"] != nil || self.info["fontName"] != nil || self.info["fontSize"] != nil {
+                    SwipeElement.updateTextLayer(self.textLayer!, text: text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: self.layer!)
+                }
+                
+                self.setupAnimations(self.layer!, info: self.info)
+                CATransaction.commit()
+                
+                }, completion: { (done: Bool) in
+                    //print("uiview done: \(done)")
+            })
+
+            var enabledVal: AnyObject?
+            var enabled = false
+            
+            if let enabledInfo = self.info["enabled"] as? [String:AnyObject], valOfInfo = enabledInfo["valueOf"] as? [String:AnyObject] {
+                enabledVal = originator.getValue(originator, info:valOfInfo)
+            } else {
+                enabledVal = self.info["enabled"]
+            }
+            
+            if let enabledInt = enabledVal as? Int {
+                enabled = (enabledInt > 0)
+            } else if let enabledBool = enabledVal as? Bool {
+                enabled = enabledBool
+            }
+            
+            if enabledVal != nil && self.fEnabled != enabled {
+                self.fEnabled = enabled
+                if enabled {
+                    self.execute(self, actions: self.eventHandler.actionsFor("enabled"))
+                } else {
+                    self.execute(self, actions: self.eventHandler.actionsFor("disabled"))
+                }
+            }
+        })
+    }
+    
+    override func updateElement(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject]) -> Bool {
+        if (name == "*" || self.name.caseInsensitiveCompare(name) == .OrderedSame) {
+            // Update self
+            update(originator, info: info)
+            return true
+        }
+        
+        // Find named element in parent hierarchy and update
+        var node: SwipeNode? = self
+        
+        if up {
+            while node?.parent != nil {
+                if let viewNode = node?.parent as? SwipeView {
+                    for c in viewNode.children {
+                        if let e = c as? SwipeElement {
+                            if e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                                e.update(originator, info: info)
+                                return true
+                            }
+                        }
+                    }
+                    
+                    node = node?.parent
+                } else {
+                    return false
+                }
+            }
+        } else {
+            for c in children {
+                if let e = c as? SwipeElement {
+                    if e.updateElement(originator, name:name, up:up, info:info) {
+                        return true
+                    }
+                }
+            }
+        }
+        
+        return false
+    }
+    
+    override func appendList(originator: SwipeNode, info: [String:AnyObject]) {
+        self.helper?.appendList(originator, info: info)
+    }
+
+    override func appendList(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject])  -> Bool {
+        if (name == "*" || self.name.caseInsensitiveCompare(name) == .OrderedSame) {
+            // Update self
+            appendList(originator, info: info)
+            return true
+        }
+        
+        // Find named element in parent hierarchy and update
+        var node: SwipeNode? = self
+        
+        if up {
+            while node?.parent != nil {
+                if let viewNode = node?.parent as? SwipeView {
+                    for c in viewNode.children {
+                        if let e = c as? SwipeElement {
+                            if e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                                e.appendList(originator, info: info)
+                                return true
+                            }
+                        }
+                    }
+                    
+                    node = node?.parent
+                } else {
+                    return false
+                }
+            }
+        } else {
+            for c in children {
+                if let e = c as? SwipeElement {
+                    if e.appendList(originator, name:name, up:up, info:info) {
+                        return true
+                    }
+                }
+            }
+        }
+        
+        return false
+    }
+        }

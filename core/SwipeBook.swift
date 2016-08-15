@@ -21,11 +21,16 @@ private func MyLog(text:String, level:Int = 0) {
     }
 }
 
+protocol SwipeBookDelegate: NSObjectProtocol {
+    func tapped()
+}
+
 class SwipeBook: NSObject, SwipePageDelegate {
     // Public properties
     var viewSize:CGSize?
     var pageIndex = 0
     var langId = "en"
+    weak var delegate:SwipeBookDelegate!
 
     // Private properties
     private let bookInfo:[String:AnyObject]
@@ -88,7 +93,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
         var pages = [SwipePage]()
         if let pageInfos = self.bookInfo["pages"] as? [[String:AnyObject]] {
             for (index, pageInfo) in pageInfos.enumerate() {
-                let page = SwipePage(index:index, pageInfo: pageInfo, delegate: self)
+                let page = SwipePage(index:index, info: pageInfo, delegate: self)
                 pages.append(page)
             }
         }
@@ -205,9 +210,10 @@ class SwipeBook: NSObject, SwipePageDelegate {
     }
     */
 
-    init?(bookInfo:[String:AnyObject], url:NSURL?) {
+    init?(bookInfo:[String:AnyObject], url:NSURL?, delegate:SwipeBookDelegate) {
         self.url = url
         self.bookInfo = bookInfo
+        self.delegate = delegate
     }
     
     deinit {
@@ -249,6 +255,11 @@ class SwipeBook: NSObject, SwipePageDelegate {
             return value
         }
         return nil
+    }
+    
+    // <SwipePageDelegate> method
+    func tapped() {
+        delegate.tapped()
     }
 
 #if !os(OSX) // REVIEW

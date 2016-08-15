@@ -1,0 +1,28 @@
+{
+  "pages": [
+    { "elements":[ {"text":"first page"}]},
+    {
+      "play":"never",
+      "elements": [
+        { "id":"caption", "text":"sample", "textColor":"#fff", "h":30, "y":40 },
+        {
+          "text":"opacity 0.4", "h":30, "y":90, "bc":"#fdd",
+          "events": {
+            "tapped": {
+              "actions":[{ "update":{ "id":"caption", "text":"opacity 0.4", "textColor":"#f00", "bc":"#0f0", "h":30, "opacity":0.4, "duration":1 }}]
+            }
+          }
+        },
+        {
+          "text":"opacity 0.8", "h":30, "y":130, "bc":"#dfd",
+          "events": {
+            "tapped": {
+              "actions":[{ "update":{ "id":"caption", "text":"opacity 0.8", "textColor":"#0f0", "bc":"#f00", "h":50, "opacity":0.8, "duration":5 }}]
+            }
+          }
+        }
+      ]
+    },
+    { "elements":[ {"text":"last page", "to":{"opacity":0.5, "textColor":"#f0f"}}]}
+  ]
+}
