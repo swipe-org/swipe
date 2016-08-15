@@ -102,7 +102,7 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **paths** ({Name:Path}): Named **Paths** dictionary
 - **markdown** ({Name:Style}): Named **Markdown** style
 - **voices** ({Name:VoiceInfo}): Named **Voice** style
-- **pages** ([Page,...]): Collection of **Pages** 
+- **pages** ([Page,...]): Collection of **Pages**
 - **resources** ([String,...]): Resource keys for on-demand resources
 - **viewstate** (Bool): Indicate if we need to save&restore view state. The default is true. 
 - **languages** ({"id":LangId, "title":String},...): Languages to display via the "Lang." button in the Swipe viewer.
@@ -171,6 +171,7 @@ The "play" property defines the timing of play/animation defined on the **Page**
 - *pause*: The animation on the **Page** will not automatically start
 - *always*: The animation on the **Page** will be played after scrolling to this page
 - *scroll*: The animation on the **Page** will be performed while the user scrolls the page
+- *never*: Page animations are disabled for the **Page**.  Used when a page contains Actions that perform animations
 
 ## 5. Page Template
 
@@ -524,73 +525,7 @@ The example below updates the **element**'s **text** property to "tapped" when t
   }
 ```
 
-## 10. Accessing Property Values
-
-JSON property values can be referenced using **valueOf**.
-
-### Syntax
-```
-  "valueOf:{"id":ElementId, "property":String}"
-```
-
-**id** optionally specifies the **element**, **params** item, or **list** item to reference.  If **id** is not specified, then the enclosing **element** is referenced.
-
-**property** specifies the name of the property to be referenced.
-
-The type of the result matches the type of the referenced property.
-
-Currently supported **element** Properties:
-- **text**
-- **text.length**
-- **enabled**
-
-Currently supported non-**element**s:
-- **params**
-- **data**
-- **list** **items**
-
-### Examples
-
-The example below displays 2 buttons ("one" and "two") and a text element with **id** of "echo".  When either button is tapped, the action updates "echo"'s **text** property with the button's **text** property using **valueOf**.
-
-```
-{
-  "templates":{
-    "elements": {
-      "button":{
-        "x":"10%", "w":"80%", "h":30, "bc":"#efe",
-        "events":{
-          "tapped":{ "actions":[ { "update":{ "id":"echo", "text":{"valueOf":{ "property":"text"} }}} ]}
-        }
-      }
-    }
-  },
-  "pages":[
-    {
-      "play":"never",
-      "elements":[
-        { "template":"button", "text":"one", "y":50 },
-        { "template":"button", "text":"two", "y":82 },
-        { "id":"echo", "x":"10%", "y":114, "w":"80%", "h":30, "bc":"#eee" }
-      ]
-    }
-  ]
-}
-```
-
-The following sets the **element** property **text** to the value of the corresponding **list** **item**'s **data**.  See the **list** examples later in this document for more context and details.  Using programming language syntax, this is equivalent to:
-- *list[current].element.text = aList[current].data.person.id.first*
-
-```
-{
-	"templates":{
-		"elements":{
-			"item":{	"bc":"#eef", "text":{"valueOf":{"id":"aList", "property":{"items":{"data":{"person":{"id":"first"}}}}}}}
-		}
-	}
-```
-
-## 15. Multilingual Strings
+## 10. Multilingual Strings
 
 The "strings" property of the page specifies strings in multiple languages.  The format is:
 
