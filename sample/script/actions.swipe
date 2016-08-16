@@ -1,7 +1,6 @@
 {
 	"pages": [
 		{
-			"//": "Tap on element updates element",
 			"play":"never",
 			"elements": [
 				{

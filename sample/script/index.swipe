@@ -11,7 +11,6 @@
         { "url":"nasa.swipe", "title":"NASA HQ Images", "icon":"nasa.png" },
         { "url":"espresso_machine_l.swipe", "title":"Espresso Machine", "icon":"espresso.png" },
         { "url":"actions.swipe", "title":"Events & Actions", "icon":"Icon-180.png" },
-        { "url":"update.swipe", "title":"Update", "icon":"Icon-180.png" },
         { "url":"http://www.swipe.net/index.swipe", "title":"More ...", "icon":"more.png" },
         { "url":"http://www.swipe.net/index2.swipe", "title":"More 2...", "icon":"more.png" },
     ]
