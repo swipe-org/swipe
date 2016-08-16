@@ -8,16 +8,10 @@ import Foundation
 
 class SwipeNode: NSObject {
     var children = [SwipeNode]()
-    weak var parent:SwipeNode?
+    private(set) weak var parent:SwipeNode?
     let eventHandler = SwipeEventHandler()
-    var session: NSURLSession?
 
-    override init() {
-        self.parent = nil
-        super.init()
-    }
-    
-    init(parent: SwipeNode) {
+    init(parent: SwipeNode? = nil) {
         self.parent = parent
         super.init()
     }

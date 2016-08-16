@@ -64,13 +64,13 @@ class SwipeView: SwipeNode {
     }()
     
     func endEditing() {
-        if view != nil {
-        let ended = view!.endEditing(true)
-        if !ended {
-            if let p = self.parent as? SwipeView {
-                p.endEditing()
+        if let view = self.view {
+            let ended = view.endEditing(true)
+            if !ended {
+                if let p = self.parent as? SwipeView {
+                    p.endEditing()
+                }
             }
-        }
         }
     }
     
@@ -155,9 +155,9 @@ class SwipeView: SwipeNode {
         
         for c in self.children {
             if let e = c as? SwipeElement {
-            if let fr = e.findFirstResponder() {
-                return fr
-            }
+                if let fr = e.findFirstResponder() {
+                    return fr
+                }
             }
         }
         
