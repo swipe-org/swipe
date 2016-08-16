@@ -437,4 +437,8 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             self.presentViewController(alert, animated: true, completion: nil)
         }
     }
+    
+    // <SwipeDocumentViewerDelegate> method
+    func tapped() {
+    }
 }
