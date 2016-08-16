@@ -14,71 +14,21 @@
 						"tapped": {
 							"actions": [
 								{
-									"update": {"text":"tapped"}
-								},
-							]
-						}
-					}
-				}
-			]
-		},
-		{
-			"//": "Tap on element updates other element",
-			"play":"never",
-			"elements": [
-				{
-					"text": "tap me",
-					"pos": ["50%", "33%"],
-					"w":"90%",
-					"h":"10%",
-					"bc":"#fdd",
-					"events": {
-						"tapped": {
-							"actions": [
-								{
-									"update": {"id":"other", "text":"tapped"}
-								},
-							]
-						}
-					}
-				},
-				{
-					"id":"other",
-					"text": "hello",
-					"pos": ["50%", "66%"],
-					"w":"90%",
-					"h":"10%",
-					"bc":"#fdd",
-				}
-			]
-		},
-		{
-			"//": "Tap on element updates self then after a pause updates self again",
-			"play":"never",
-			"elements": [
-				{
-					"text": "tap me",
-					"pos": ["50%", "33%"],
-					"w":"90%",
-					"h":"10%",
-					"bc":"#fdd",
-					"events": {
-						"tapped": {
-							"actions": [
-								{
-									"update": {"text":"tapped"}
-								},
-								{
-									"timer": {
-										"duration":0.5,
-										"events": {
-											"tick": {
-												"actions": [
-													{
-														"update": {"text":"tick"}
-													}
-												]
-											}
+									"update": {
+										"text":"tapped", 
+										"bc":"#fee",
+										"duration":0.5, 
+										"events":{ 
+											"completion":{
+												"actions":[ 
+													{ 
+														"update":{ 
+															"text":"tap me",
+															"bc":"#fdd"
+														}
+													} 
+												] 
+											} 
 										}
 									}
 								}
@@ -87,29 +37,6 @@
 					}
 				}
 			]
-		},
-		{
-			"//": "Tap on page, updates element",
-			"play":"never",
-			"elements": [
-			  {
-				  "id": "text1",
-				  "text": "tap anywhere",
-					"pos": ["50%", "33%"],
-					"w":"90%",
-					"h":"10%",
-					"bc":"#fdd",
-			  }
-			],
-			"events": {
-				"tapped": {
-					"actions": [
-						{
-							"update": {"id":"text1", "text":"main tapped"}
-						}
-					]
-				}
-			}
 		}
-    ]
+  ]
 }
