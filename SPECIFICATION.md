@@ -489,13 +489,15 @@ Any **page** that use the **update** action must specify "play":"never" to avoid
 
 ##### Syntax
 ```
-  { "update": { "id":String, "search":Search Property:Value, Property:Value, ..., "duration":Float } }
+  { "update": { "id":String, "search":Search Property:Value, Property:Value, ..., "duration":Float, "events":Events } }
 ```
 **id** specifies the target **element** and is optional.  Wen **id** is specified, the **update** is performed on the first **element** in the parent hierarchy with a matching **id** (including the enclosing **element**).  If no **element** is found, the enclosing **page** searches its **elements** for a match.  When **id** is not specified, the **update** is performed on the enclosing **element**.
 
 **search** determines if the search for a matching **element** should be performed up the parent/child hierarchy or from the current element to its child **element**s.  A **search** value of "children" specifies the latter.  When **search** is not specified, then search is down up the parent/child hierarchy.  If no element with the matching **id** is found when search up the parent child hierarchy, the containing page searches its child **elements** for a match.
 
 **duration** specifies the animation duration in seconds.
+
+**events** the event **completion** occurs after the update has completed.  If **duration** is specified, then the **completion** event occurs after the time specified in **duration** has completed.
 
 ### Example
 
