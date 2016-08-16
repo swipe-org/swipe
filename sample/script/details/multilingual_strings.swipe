@@ -1,0 +1,25 @@
+{
+    "languages":[
+        {"id": "en", "title": "English"},
+        {"id": "de", "title": "German"},
+    ],
+    "pages":[
+        {
+            "strings": { 
+                "good day": {"*":"good day", "de": "Guten Tag"},
+                "good evening": {"*":"good evening", "de": "guten Abend"},
+            },
+
+            "elements":[
+                { "text":{"ref":"good day"}, "h":"20%", "pos":["50%", "12%"]},
+                { "text":{"ref":"good evening"}, "h":"20%", "pos":["50%", "34%"]},
+            ],
+        },
+        {
+            "elements":[
+                { "text":{"*":"good morning", "de": "guten Morgen"}, "h":"20%", "pos":["50%", "12%"]},
+                { "text":{"*":"good afternoon", "de": "guten Nachmittag"}, "h":"20%", "pos":["50%", "34%"]},
+            ]
+        }
+    ]
+}
