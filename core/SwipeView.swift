@@ -137,14 +137,6 @@ class SwipeView: SwipeNode {
         return false
     }
     
-    override func getPropertyValue(originator: SwipeNode, property: String) -> AnyObject? {
-        switch (property) {
-        case "data":
-            return self.data
-        default:
-            return nil
-        }
-    }
     func appendList(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject])  -> Bool {
         return false
     }
