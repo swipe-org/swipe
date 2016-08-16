@@ -39,12 +39,14 @@ class SwipeView: SwipeNode {
             view!.addGestureRecognizer(doubleTapRecognizer!)
         }
         
-        let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(SwipeView.didTap(_:)))
-        if doubleTapRecognizer != nil {
-            tapRecognizer.requireGestureRecognizerToFail(doubleTapRecognizer!)
+        if eventHandler.actionsFor("tapped") != nil {
+            let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(SwipeView.didTap(_:)))
+            if doubleTapRecognizer != nil {
+                tapRecognizer.requireGestureRecognizerToFail(doubleTapRecognizer!)
+            }
+            tapRecognizer.cancelsTouchesInView = false
+            view!.addGestureRecognizer(tapRecognizer)
         }
-        tapRecognizer.cancelsTouchesInView = false
-        view!.addGestureRecognizer(tapRecognizer)
     }
     
     lazy var name:String = {
