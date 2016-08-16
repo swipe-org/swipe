@@ -172,6 +172,7 @@
 		C1369A121D626FEF008FB897 /* SwipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1369A0D1D626FEF008FB897 /* SwipeView.swift */; };
 		C14FC7061CFCA8D800556476 /* SwipePageTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170B70F1CF78C04005956A8 /* SwipePageTemplate.swift */; };
 		C170B7101CF78C04005956A8 /* SwipePageTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170B70F1CF78C04005956A8 /* SwipePageTemplate.swift */; };
+		C1C500681D63977300513D6D /* update.swipe in Resources */ = {isa = PBXBuildFile; fileRef = C1C500671D63977300513D6D /* update.swipe */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -273,6 +274,7 @@
 		C1369A0C1D626FEF008FB897 /* SwipeNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeNode.swift; sourceTree = "<group>"; };
 		C1369A0D1D626FEF008FB897 /* SwipeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeView.swift; sourceTree = "<group>"; };
 		C170B70F1CF78C04005956A8 /* SwipePageTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipePageTemplate.swift; sourceTree = "<group>"; };
+		C1C500671D63977300513D6D /* update.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = update.swipe; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -472,6 +474,7 @@
 		74EA71D41BD04F8A006808EA /* script */ = {
 			isa = PBXGroup;
 			children = (
+				C1C500671D63977300513D6D /* update.swipe */,
 				C108AAF01D63939900FF89B7 /* actions.swipe */,
 				74DD7FDA1BDFE33F0042BB9D /* tutorial */,
 				74DD7F7F1BDD3E770042BB9D /* nasa */,
@@ -641,6 +644,7 @@
 				74F179481BD8550800126B49 /* movie.png in Resources */,
 				74DD7F9B1BDD3E770042BB9D /* nasa005.jpg in Resources */,
 				74DD7F461BDD3E610042BB9D /* IMG_8167.m4v in Resources */,
+				C1C500681D63977300513D6D /* update.swipe in Resources */,
 				74F1794C1BD8552700126B49 /* speech.png in Resources */,
 				74DD7FE81BDFE33F0042BB9D /* shuttle.png in Resources */,
 				74DD7F991BDD3E770042BB9D /* nasa004.jpg in Resources */,
