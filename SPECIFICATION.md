@@ -497,7 +497,7 @@ Any **page** that use the **update** action must specify "play":"never" to avoid
 
 **duration** specifies the animation duration in seconds.
 
-**events** the event **completion** occurs after the update has completed.  If **duration** is specified, then the **completion** event occurs after the time specified in **duration** has completed.
+If **events** is specified, the event **completion** occurs after the update has completed.  If **duration** is specified, then the **completion** event occurs after the time specified in **duration** has completed.
 
 ### Example
 
