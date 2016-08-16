@@ -1,0 +1,43 @@
+{
+    "elements": {
+        "ball": { "text":"⚽️", "textAlign":"left", "x":50 },
+    },
+    "pages": [
+        {
+            "elements": [
+                { "text":"\"animation\": \"auto\" (default)" }
+            ]
+        },
+        {
+            "duration": 1,
+            "elements": [
+                { "text":"\"timing\": [0.0, 0.5]", "textAlign":"left", "y":-150 },
+                { "element":"ball", "y":-100, "to":{ "translate":[200, 0], "timing":[0.0, 0.5] } },
+                { "text":"\"timing\": [0.25, 0.75]", "textAlign":"left", "y":-50 },
+                { "element":"ball", "y":0, "to":{ "translate":[200, 0], "timing":[0.25, 0.75] } },
+                { "text":"\"timing\": [0.5, 1.0]", "textAlign":"left", "y":50 },
+                { "element":"ball", "y":100, "to":{ "translate":[200, 0], "timing":[0.5, 1.0] } },
+                { "text":"\"timing\": [0.0, 1.0] (default)", "textAlign":"left", "y":150 },
+                { "element":"ball", "y":200, "to":{ "translate":[200, 0] } },
+            ]
+        },
+        {
+            "elements": [
+                { "text":"\"animation\": \"scroll\"" }
+            ]
+        },
+        {
+            "animation":"scroll",
+            "elements": [
+                { "text":"\"timing\": [0.0, 0.5]", "textAlign":"left", "y":-150 },
+                { "element":"ball", "y":-100, "to":{ "translate":[200, 0], "timing":[0.0, 0.5] } },
+                { "text":"\"timing\": [0.25, 0.75]", "textAlign":"left", "y":-50 },
+                { "element":"ball", "y":0, "to":{ "translate":[200, 0], "timing":[0.25, 0.75] } },
+                { "text":"\"timing\": [0.5, 1.0]", "textAlign":"left", "y":50 },
+                { "element":"ball", "y":100, "to":{ "translate":[200, 0], "timing":[0.5, 1.0] } },
+                { "text":"\"timing\": [0.0, 1.0] (default)", "textAlign":"left", "y":150 },
+                { "element":"ball", "y":200, "to":{ "translate":[200, 0] } },
+            ]
+        }
+    ]
+}
