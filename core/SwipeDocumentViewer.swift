@@ -14,6 +14,7 @@ import UIKit
 
 protocol SwipeDocumentViewerDelegate: NSObjectProtocol {
     func browseTo(url:NSURL)
+    func tapped()
 }
 
 protocol SwipeDocumentViewer {
