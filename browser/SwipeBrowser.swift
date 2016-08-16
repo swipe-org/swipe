@@ -326,6 +326,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     @IBAction func slided(sender:UISlider) {
         MyLog("SWBrows \(slider.value)")
     }
+#else
+    func tapped() {
+    }
 #endif
 
     private func processError(message:String) {
@@ -436,9 +439,5 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             }
             self.presentViewController(alert, animated: true, completion: nil)
         }
-    }
-    
-    // <SwipeDocumentViewerDelegate> method
-    func tapped() {
     }
 }
