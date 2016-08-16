@@ -1,14 +1,14 @@
-#Swipe Language Specification
+# Swipe Language Specification
 
-##Abstract
+## Abstract
 
 This specification defines the features and syntax of Swipe, a mark-up language for non-developers to create media-rich and animated documents for touch-enabled devices.
 
-##Status of this document
+## Status of this document
 
 This specification describes the current snapshot of the Swipe 0.1, which is still under development and may change drastically.
 
-##1. Introduction
+## 1. Introduction
 
 Swipe is a domain-specific, declarative language for non-developers (such as designers, animators, illustrators, musicians, videographers and comic writers) to create media-rich documents (books and presentations) that contains photos, videos, vector graphics, animations, voices, music and sound effects, which will be consumed on touch-enabled devices (such as smartphones, tablets and touch-enabled set-top-boxes). 
 
@@ -63,7 +63,7 @@ Swipe is NOT
 - **StringId**: Regular string used as an identifier
 - **LangId**: Language identifier, such as "\*", "en", "ja", "de", etc., where "\*" represents the default
 
-##2. Document
+## 2. Document
 
 A **Document** is a UTF8 JSON file, which consists of a collection of **Pages**. The order of **Pages** in the collection is significant, and they will be presented to the user in the specified order. 
 
@@ -102,13 +102,13 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **paths** ({Name:Path}): Named **Paths** dictionary
 - **markdown** ({Name:Style}): Named **Markdown** style
 - **voices** ({Name:VoiceInfo}): Named **Voice** style
-- **pages** ([Page,...]): Collection of **Pages** 
+- **pages** ([Page,...]): Collection of **Pages**
 - **resources** ([String,...]): Resource keys for on-demand resources
 - **viewstate** (Bool): Indicate if we need to save&restore view state. The default is true. 
 - **languages** ({"id":LangId, "title":String},...): Languages to display via the "Lang." button in the Swipe viewer.
 
 
-##3. Page
+## 3. Page
 
 **Page** consists of a collection of **Elements**. The order of **Elements** in the collection is significant, those elements will be rendered in the specified order (from bottom to top). 
 
@@ -143,8 +143,15 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 - **elements** ([Element+]): Collection of Elements
 - **eyePosition** (Float): Eye position (z-height) for the perspective relative to width, default is 1.0
 - **strings** ([StringId:[LangId:String]]): String resources
- 
-##4. Paging direction, inter-page transition and animation
+- **id** (String): Identifier used in Actions to reference the page
+- **events** ([Event+]): List of Events
+
+### Page Events
+- **loaded**: The page is loaded into the viewer and ready to display
+- **tapped**: The user singled-tapped on the page
+- **doubleTapped**: The user double-tapped on the page
+
+## 4. Paging direction, inter-page transition and animation
 
 The paging direction is defined by the "paging" property of the **Document**. It must be either *vertical*, *leftToRight* or *rightToLeft*, and the default is *vertical*.
 
@@ -164,8 +171,9 @@ The "play" property defines the timing of play/animation defined on the **Page**
 - *pause*: The animation on the **Page** will not automatically start
 - *always*: The animation on the **Page** will be played after scrolling to this page
 - *scroll*: The animation on the **Page** will be performed while the user scrolls the page
+- *never*: Page animations are disabled for the **Page**.  Used when a page contains Actions that perform animations
 
-##5. Page Template
+## 5. Page Template
 
 A **PageTemplate** defines a set of properties and **Elements** to be shared among multiple **Pages**. It also defines a background music to be played when one of those **Pages** is active.
 
@@ -230,7 +238,7 @@ The following example uses the "id" to identify a particular **Element** in the 
 ### PageTemplate specific properties
 - bgm (URL): Specifies the background music to play.
 
-##6. Element
+## 6. Element
 
 An **Element** is a visible entity on a **Page**. It occupies a specified rectangle area within a **Page**. An **Element** may contain child **Elements**. 
 
@@ -277,9 +285,18 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **to** (Transition Animation): Specifies the Transitional Animation
 - **loop** (Loop Animation): Specifies the Loop Animation
 - **tiling** (Bool): Specifies the tiling (to be used with *shift* loop animation)
-- **action** (String): Specifies the Action
+- **action** (String): Specifies the action (only **play** is supported)
 - **repeat** (Bool): Repeat rule for the element. The default is false.
 - **shadow** (shadow properties): Specifies the shadow properties; *color* (Color, default is black), *offset* ([Float, Float], default is [1,1]), *opacity* (Float, default is 0.5) and *radius* (Float, default is 1.0). 
+- **id** (String): Identifier used in Actions to reference the page
+- **events** ([Event+]): List of Events and their associated Actions
+- **enabled** (Bool): Specifies if events are enabled
+
+### Element Events
+- **tapped**: The user singled-tapped on the element. *Propagated*
+- **doubleTapped**: The user double-tapped on the element. *Propagated*
+
+Unhandled element events are propagated to their parent (containing **element**).  If no **element** in the hierarchy handles the event, then the containing **page** receives the event.
 
 ### Element Template
 
@@ -348,7 +365,7 @@ The following example shows how to use a **ElementTemplate** with child **Elemen
 }
 ```
 
-##7. Transition Animation
+## 7. Transition Animation
 
 The **Transition Animation** specifies a set of animations to play right after or during the page transition (depending on the "transition" property of the page).
 
@@ -396,7 +413,7 @@ If the "play" property of the page is "scroll" like the example below, the anima
 }
 ```
 
-##8. Loop Animation
+## 8. Loop Animation
 
 The "loop" property of the element specifies the **Loop Animation** associated with the element. Unlike **Transition Animation**, it repeats the same animation multiple times specified by the *count* property (the default is 1). 
 
@@ -431,7 +448,86 @@ Following example wiggles the text "I'm wiggling!" three times when the second p
 }
 ```
 
-##9. Multilingual Strings
+## 9. Events and Actions
+
+The **events** property and the corresponding **actions** property provide a way to respond to events.  Events can be generated internally by Swipe, such as the completion of an animation or timer, and by the user, such as taps on the screen.  An event contains the actions to be performed when the specified event occurs.
+
+### Syntax
+```
+  "events":{
+    Event:{
+      "actions":[
+        Action, Action, ...
+      ]      
+    },
+    Event:{
+      "params":Schema,
+      "actions":[
+        Action, Action, ...
+      ]      
+    },
+    ...
+  }
+```
+
+**Event** is the String name of the event.  The available events are specified in the sections throughout this document.  Some examples:
+
+- **Page**: "loaded", "tapped", "doubleTapped"
+- **Element**: "tapped", "doubleTapped"
+
+**params** optionally define the JSON schema for data parameters provided by the **Event**.  The **params** can be referenced using **valueOf** (described later in this document).  Currently, **params** are not used to validate the **valueOf**.  A future release will validate.
+
+**actions** specifies a list of actions to perform when the event occurs.  The actions are performed in the order listed.
+
+### Element Actions
+- **update**: Updates **element**'s properties
+
+#### Update Action
+Updates the specified **element**'s properties.  If no **element** is specified, then the enclosing **element**'s properties are updated.
+
+Any **page** that use the **update** action must specify "play":"never" to avoid animation conflicts with **page** animations.
+
+##### Syntax
+```
+  { "update": { "id":String, "search":Search Property:Value, Property:Value, ..., "duration":Float, "events":Events } }
+```
+**id** specifies the target **element** and is optional.  Wen **id** is specified, the **update** is performed on the first **element** in the parent hierarchy with a matching **id** (including the enclosing **element**).  If no **element** is found, the enclosing **page** searches its **elements** for a match.  When **id** is not specified, the **update** is performed on the enclosing **element**.
+
+**search** determines if the search for a matching **element** should be performed up the parent/child hierarchy or from the current element to its child **element**s.  A **search** value of "children" specifies the latter.  When **search** is not specified, then search is down up the parent/child hierarchy.  If no element with the matching **id** is found when search up the parent child hierarchy, the containing page searches its child **elements** for a match.
+
+**duration** specifies the animation duration in seconds.
+
+If **events** is specified, the event **completion** occurs after the update has completed.  If **duration** is specified, then the **completion** event occurs after the time specified in **duration** has completed.
+
+### Example
+
+The example below updates the **element**'s **text** property to "tapped" when the user taps on the **element**.
+```
+"pages": [
+  {
+    "play":"never", "//":"Required when using 'update' action",
+    "elements": [
+      {
+        "text": "tap me",
+        "pos": ["50%", "33%"],
+        "w":"90%",
+        "h":"10%",
+        "bc":"#fdd",
+        "events": {
+          "tapped": {
+            "actions": [
+              {
+                "update": {"text":"tapped"}
+              },
+            ]
+          }
+        }
+      }
+    ]
+  }
+```
+
+## 10. Multilingual Strings
 
 The "strings" property of the page specifies strings in multiple languages.  The format is:
 

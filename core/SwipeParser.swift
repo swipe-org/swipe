@@ -210,12 +210,11 @@ class SwipeParser {
                 if ret[keyString] == nil {
                     // Only the baseObject has the property
                     ret[keyString] = value
-                } else if let arrayObject = ret[keyString] as? [[String:AnyObject]],
-                  let arrayBase = value as? [[String:AnyObject]] {
-                    // Each has the property collection. We need to merge them
-                    var array = arrayBase
+                } else if let arrayObject = ret[keyString] as? [[String:AnyObject]], let arrayBase = value as? [[String:AnyObject]] {
+                    // Each has the property array. We need to merge them
+                    var retArray = arrayBase
                     var idMap = [String:Int]()
-                    for (index, item) in array.enumerate() {
+                    for (index, item) in retArray.enumerate() {
                         if let key = item["id"] as? String {
                             idMap[key] = index
                         }
@@ -224,17 +223,24 @@ class SwipeParser {
                         if let key = item["id"] as? String {
                             if let index = idMap[key] {
                                 // id matches, merge them
-                                array[index] = SwipeParser.inheritProperties(item, baseObject: array[index])
+                                retArray[index] = SwipeParser.inheritProperties(item, baseObject: retArray[index])
                             } else {
                                 // no id match, just append
-                                array.append(item)
+                                retArray.append(item)
                             }
                         } else {
                             // no id, just append
-                            array.append(item)
+                            retArray.append(item)
                         }
                     }
-                    ret[keyString] = array
+                    ret[keyString] = retArray
+                } else if let objects = ret[keyString] as? [String:AnyObject], let objectsBase = value as? [String:AnyObject] {
+                    // Each has the property objects. We need to merge them.  Example: '"events" { }'
+                    var retObjects = objectsBase
+                    for (key, val) in objects {
+                        retObjects[key] = val
+                    }
+                    ret[keyString] = retObjects
                 }
             }
         }

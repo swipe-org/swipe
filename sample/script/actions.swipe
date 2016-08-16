@@ -1,0 +1,41 @@
+{
+	"pages": [
+		{
+			"play":"never",
+			"elements": [
+				{
+					"text": "tap me",
+					"pos": ["50%", "33%"],
+					"w":"90%",
+					"h":"10%",
+					"bc":"#fdd",
+					"events": {
+						"tapped": {
+							"actions": [
+								{
+									"update": {
+										"text":"tapped", 
+										"bc":"#fee",
+										"duration":0.5, 
+										"events":{ 
+											"completion":{
+												"actions":[ 
+													{ 
+														"update":{ 
+															"text":"tap me",
+															"bc":"#fdd"
+														}
+													} 
+												] 
+											} 
+										}
+									}
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+  ]
+}
