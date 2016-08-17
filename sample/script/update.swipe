@@ -8,7 +8,7 @@
           "text":"one", "h":30, "y":90, "bc":"#fdd",
           "events": {
             "tapped": {
-              "actions":[{ "update":{ "id":"caption", "text":"one", "textColor":"#f00", "bc":"#0f0", "duration":0.4 }}]
+              "actions":[{ "update":{ "id":"caption", "text":{"valueOf":{ "property":"text"} }, "textColor":"#f00", "bc":"#0f0", "duration":0.4 }}]
             }
           }
         },
@@ -16,7 +16,7 @@
           "text":"two", "h":30, "y":130, "bc":"#dfd",
           "events": {
             "tapped": {
-              "actions":[{ "update":{ "id":"caption", "text":"two", "textColor":"#0f0", "bc":"#f00", "duration":0.4 }}]
+              "actions":[{ "update":{ "id":"caption", "text":{"valueOf":{ "property":"text"} }, "textColor":"#0f0", "bc":"#f00", "duration":0.4 }}]
             }
           }
         }

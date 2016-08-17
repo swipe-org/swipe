@@ -38,14 +38,14 @@ class SwipeView: SwipeNode {
             doubleTapRecognizer!.cancelsTouchesInView = false
             view!.addGestureRecognizer(doubleTapRecognizer!)
         }
-        
+
         if eventHandler.actionsFor("tapped") != nil {
-            let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(SwipeView.didTap(_:)))
-            if doubleTapRecognizer != nil {
-                tapRecognizer.requireGestureRecognizerToFail(doubleTapRecognizer!)
-            }
-            tapRecognizer.cancelsTouchesInView = false
-            view!.addGestureRecognizer(tapRecognizer)
+        let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(SwipeView.didTap(_:)))
+        if doubleTapRecognizer != nil {
+            tapRecognizer.requireGestureRecognizerToFail(doubleTapRecognizer!)
+        }
+        tapRecognizer.cancelsTouchesInView = false
+        view!.addGestureRecognizer(tapRecognizer)
         }
     }
     
@@ -68,11 +68,11 @@ class SwipeView: SwipeNode {
     func endEditing() {
         if let view = self.view {
             let ended = view.endEditing(true)
-            if !ended {
-                if let p = self.parent as? SwipeView {
-                    p.endEditing()
-                }
+        if !ended {
+            if let p = self.parent as? SwipeView {
+                p.endEditing()
             }
+        }
         }
     }
     
@@ -139,6 +139,14 @@ class SwipeView: SwipeNode {
         return false
     }
     
+    override func getPropertyValue(originator: SwipeNode, property: String) -> AnyObject? {
+        switch (property) {
+        case "data":
+            return self.data
+        default:
+            return nil
+        }
+    }
     func appendList(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject])  -> Bool {
         return false
     }
@@ -157,9 +165,9 @@ class SwipeView: SwipeNode {
         
         for c in self.children {
             if let e = c as? SwipeElement {
-                if let fr = e.findFirstResponder() {
-                    return fr
-                }
+            if let fr = e.findFirstResponder() {
+                return fr
+            }
             }
         }
         

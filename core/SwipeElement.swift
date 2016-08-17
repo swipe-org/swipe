@@ -675,6 +675,7 @@ class SwipeElement: SwipeView {
         if let transform = SwipeParser.parseTransform(info, scaleX:scale.width, scaleY:scale.height, base: nil, fSkipTranslate: false, fSkipScale: self.shapeLayer != nil) {
             layer.transform = transform
         }
+        
         layer.opacity = SwipeParser.parseFloat(info["opacity"])
         
         if let to = info["to"] as? [String:AnyObject] {
@@ -1213,7 +1214,13 @@ class SwipeElement: SwipeView {
         guard let params = value as? [String:AnyObject] else {
             return nil
         }
-        if let key = params["ref"] as? String,
+        if let valInfo = params["valueOf"] as? [String:AnyObject] {
+            if let text = originator.getValue(originator, info: valInfo) as? String {
+                return text
+            }
+            return nil
+        }
+        else if let key = params["ref"] as? String,
                text = delegate.localizedStringForKey(key) {
             return text
         }
@@ -1370,7 +1377,100 @@ class SwipeElement: SwipeView {
     }
     
     // SwipeNode
+    
+    override func getPropertyValue(originator: SwipeNode, property: String) -> AnyObject? {
+        if let val = helper?.getPropertyValue(originator, property: property) {
+            return val
+        }
         
+        switch (property) {
+        case "text":
+            if let string = self.textLayer?.string as? String {
+                return string
+            } else {
+                MyLog("SWElem textLayer.string is not a String!")
+                return nil
+            }
+        case "text.length":
+            if let string = self.textLayer?.string as? String {
+                return string.characters.count
+            } else {
+                MyLog("SWElem textLayer.string is not a String!")
+                return nil
+            }
+        case "enabled":
+            return self.fEnabled
+        default:
+            return super.getPropertyValue(originator, property: property)
+        }
+    }
+    
+    override func getPropertiesValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+        if let val = self.helper?.getPropertiesValue(originator, info: info) {
+            return val
+        }
+
+        let key = info.keys.first!
+        
+        if let val = info[key] as? String {
+            return getPropertyValue(originator, property: val)
+        } else {
+            return nil
+        }
+    }
+    
+    override func getValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+        var name = "*"
+        if let val = info["id"] as? String {
+            name = val
+        }
+        
+        var up = true
+        if let val = info["search"] as? String {
+            up = val != "children"
+        }
+        
+        if (name == "*" || self.name.caseInsensitiveCompare(name) == .OrderedSame) {
+            if let attribute = info["property"] as? String {
+                return getPropertyValue(originator, property: attribute)
+            } else if let attributeInfo = info["property"] as? [String:AnyObject] {
+                return getPropertiesValue(originator, info: attributeInfo)
+            }
+        }
+
+        var node: SwipeNode? = self
+        
+        if up {
+            while node?.parent != nil {
+                if let viewNode = node?.parent as? SwipeView {
+                    for c in viewNode.children {
+                        if let e = c as? SwipeElement {
+                            if name == "*" || e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                                if let attribute = info["property"] as? String {
+                                    return e.getPropertyValue(originator, property: attribute)
+                                } else if let attributeInfo = info["property"] as? [String:AnyObject] {
+                                    return e.getPropertiesValue(originator, info: attributeInfo)
+                                }
+                            }
+                        }
+                    }
+                    
+                    node = node?.parent
+                } else {
+                    return nil
+                }
+            }
+        } else {
+            for c in children {
+                if let e = c as? SwipeElement {
+                    return e.getValue(originator, info: info)
+                }
+            }
+        }
+        
+        return nil
+    }
+    
     func setupAnimations(layer: CALayer, info: [String:AnyObject]) {
         let dimension = self.screenDimension
         let baseURL = self.delegate.baseURL()
@@ -1637,9 +1737,9 @@ class SwipeElement: SwipeView {
                 ani.fillMode = kCAFillModeBoth
                 shapeLayer.addAnimation(ani, forKey: "strokeEnd")
             }
-        }    
-    }
-    
+        }
+            }
+            
     func update(originator: SwipeNode, info: [String:AnyObject]) {
         for key in info.keys {
             if key != "events" {
@@ -1686,7 +1786,12 @@ class SwipeElement: SwipeView {
 
             var enabledVal: AnyObject?
             var enabled = false
-            enabledVal = self.info["enabled"]
+            
+            if let enabledInfo = self.info["enabled"] as? [String:AnyObject], valOfInfo = enabledInfo["valueOf"] as? [String:AnyObject] {
+                enabledVal = originator.getValue(originator, info:valOfInfo)
+            } else {
+                enabledVal = self.info["enabled"]
+            }
             
             if let enabledInt = enabledVal as? Int {
                 enabled = (enabledInt > 0)
