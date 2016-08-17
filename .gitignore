@@ -7,3 +7,5 @@
 project.xcworkspace/
 xcuserdata/
 
+
+core/SwipeEvent.swift
