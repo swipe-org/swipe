@@ -448,7 +448,56 @@ Following example wiggles the text "I'm wiggling!" three times when the second p
 }
 ```
 
-## 9. Events and Actions
+## 9. Accessing Property Values
+
+JSON property values can be referenced using **valueOf**.
+
+### Syntax
+```
+  "valueOf:{"id":ElementId, "property":String}"
+```
+
+**id** optionally specifies the **element**, **params** item, or **list** item to reference.  If **id** is not specified, then the enclosing **element** is referenced.
+
+**property** specifies the name of the property to be referenced.
+
+The type of the result matches the type of the referenced property.
+
+Currently supported **element** Properties:
+- **text**
+- **text.length**
+- **enabled**
+
+### Examples
+
+The example below displays 2 buttons ("one" and "two") and a text element with **id** of "echo".  When either button is tapped, the action updates "echo"'s **text** property with the button's **text** property using **valueOf**.
+
+```
+{
+  "templates":{
+    "elements": {
+      "button":{
+        "x":"10%", "w":"80%", "h":30, "bc":"#efe",
+        "events":{
+          "tapped":{ "actions":[ { "update":{ "id":"echo", "text":{"valueOf":{ "property":"text"} }}} ]}
+        }
+      }
+    }
+  },
+  "pages":[
+    {
+      "play":"never",
+      "elements":[
+        { "template":"button", "text":"one", "y":50 },
+        { "template":"button", "text":"two", "y":82 },
+        { "id":"echo", "x":"10%", "y":114, "w":"80%", "h":30, "bc":"#eee" }
+      ]
+    }
+  ]
+}
+```
+
+## 10. Events and Actions
 
 The **events** property and the corresponding **actions** property provide a way to respond to events.  Events can be generated internally by Swipe, such as the completion of an animation or timer, and by the user, such as taps on the screen.  An event contains the actions to be performed when the specified event occurs.
 
@@ -527,7 +576,7 @@ The example below updates the **element**'s **text** property to "tapped" when t
   }
 ```
 
-## 10. Multilingual Strings
+## 11. Multilingual Strings
 
 The "strings" property of the page specifies strings in multiple languages.  The format is:
 
