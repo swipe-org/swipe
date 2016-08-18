@@ -189,6 +189,8 @@
 		C1C5006D1D639BA500513D6D /* SwipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1369A0D1D626FEF008FB897 /* SwipeView.swift */; };
 		C1C5006E1D639BAF00513D6D /* update.swipe in Resources */ = {isa = PBXBuildFile; fileRef = C1C500671D63977300513D6D /* update.swipe */; };
 		C1C5006F1D639BB300513D6D /* actions.swipe in Resources */ = {isa = PBXBuildFile; fileRef = C108AAF01D63939900FF89B7 /* actions.swipe */; };
+		C1D6D33E1D662AFA00442109 /* SwipeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19F05B21D650432001EACD4 /* SwipeList.swift */; };
+		C1D6D33F1D662B8C00442109 /* list.swipe in Resources */ = {isa = PBXBuildFile; fileRef = C19F05B41D6505AA001EACD4 /* list.swipe */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -712,6 +714,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1D6D33F1D662B8C00442109 /* list.swipe in Resources */,
 				74EA72051BD0B16A006808EA /* videostream.swipe in Resources */,
 				74DD7F4B1BDD3E610042BB9D /* IMG_8169.m4v in Resources */,
 				74DD7FAF1BDD3ED60042BB9D /* nasa.png in Resources */,
@@ -821,6 +824,7 @@
 			files = (
 				74EA71F41BD0B156006808EA /* SwipeAssetManager.swift in Sources */,
 				74EA71FD1BD0B15C006808EA /* SwipePath.swift in Sources */,
+				C1D6D33E1D662AFA00442109 /* SwipeList.swift in Sources */,
 				C1C5006A1D639B9A00513D6D /* SwipeEvent.swift in Sources */,
 				74EA72001BD0B15C006808EA /* SwipeParser.swift in Sources */,
 				C1C5006C1D639BA100513D6D /* SwipeNode.swift in Sources */,

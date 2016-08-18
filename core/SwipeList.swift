@@ -30,7 +30,9 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+#if !os(tvOS)
         self.tableView.separatorStyle = .None
+#endif
         self.tableView.allowsSelection = true
         self.tableView.backgroundColor = UIColor.clearColor()
         
