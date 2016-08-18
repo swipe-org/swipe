@@ -291,6 +291,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **id** (String): Identifier used in Actions to reference the page
 - **events** ([Event+]): List of Events and their associated Actions
 - **enabled** (Bool): Specifies if events are enabled
+- **list** (List): List of items (refer to the List section below)
 
 ### Element Events
 - **tapped**: The user singled-tapped on the element. *Propagated*
@@ -468,6 +469,10 @@ Currently supported **element** Properties:
 - **text.length**
 - **enabled**
 
+Currently supported non-**element**s:
+- **params**
+- **list** **items**
+
 ### Examples
 
 The example below displays 2 buttons ("one" and "two") and a text element with **id** of "echo".  When either button is tapped, the action updates "echo"'s **text** property with the button's **text** property using **valueOf**.
@@ -497,6 +502,96 @@ The example below displays 2 buttons ("one" and "two") and a text element with *
 }
 ```
 
+## 11. List Element
+
+Displays a scrollable list of items.  The items are composed of **elements** that define the visual layout of each item.  Items also contain **data** which defines String to be displayed.  
+
+### Syntax
+```
+  "elements": [
+    {
+      "list": {
+        "selectedItem":Integer,
+        "scrollEnabled":Boolean,
+        "items": [
+          { "elements":[ Element, ... ], "data":String or JSON },
+          ...
+        ]
+      }
+    }
+  ]
+```
+
+**selectedItem** optionally specifies the initially selected item.  Items are numbering starts with 0 (zero).  The default is 0 (zero), the first item.
+
+**scrollEnabled** optionally specifies whether the list items are scrollable.  Default is *true*.
+
+**items** optionally specifies the initial items to be displayed.  **elements** define the visual layout of the item.  **data** typically is a string to be displayed and is referenced from the **elements** using "valueOf".  **data** can also be JSON and if it contains **elements** and **data** child elements, then the JSON is used to define the item, replacing the item definition.  This is done so that a server response can fully define the item.
+
+### Events
+- **rowSelected**: Notification when the selected item changes
+
+### Actions
+- **append**: appends one or more list items to the **list**
+
+#### Syntax
+
+```
+{
+  "append": {
+    "id":String,
+    "items": [
+      { "elements":[ Element, ... ], "data":String or JSON},
+      ...
+    ]
+}
+```
+
+### Examples
+The example below displays a list and a text element that displays the currently selected list item.  When an item is tapped/selected, the **rowSelected** event occurs and the associated **action** updates the text element.
+
+```
+{
+	"templates":{
+		"elements":{
+			"item":{	"bc":"#eef", "text":{"valueOf":{"id":"aList", "property":{"items":{"data":{"person":{"id":"first"}}}}}}}
+		}
+	},
+	"pages":[
+		{
+			"id": "main",
+			"play":"never",
+			"elements":[
+				{ "h":"8%", "w":"45%", "pos":["25%","95%"], "text":"selected", "textAlign":"right"},
+				{ "id":"echo", "h":"8%", "w":"45%", "pos":["75%","95%"],"text":"2"},
+				{
+					"id": "aList",
+					"h":"80%",
+					"w":"90%",
+					"bc":"#ffe",
+					"pos":["50%","50%"],
+					"list":{
+						"selectedItem":2,
+						"items":[
+							{ "elements":[ {"template":"item" }], "data":{ "person": { "id": { "first":"fred", "last":"flintstone"}}}},
+							{ "elements":[ {"template":"item" }], "data":{ "person": { "id": { "first":"wilma", "last":"flintstone"}}}},
+							{ "elements":[ {"template":"item" }], "data":{ "person": { "id": { "first":"barney", "last":"rubble"}}}},
+							{ "elements":[ {"template":"item" }], "data":{ "person": { "id": { "first":"betty", "last":"rubble"}}}}
+						]
+					},
+					"events":{
+						"rowSelected":{
+							"actions":[
+								{ "update":{ "id":"echo", "text":{"valueOf":{"id":"aList", "property":"selectedItem"}}}}
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}
+```
 ## 10. Events and Actions
 
 The **events** property and the corresponding **actions** property provide a way to respond to events.  Events can be generated internally by Swipe, such as the completion of an animation or timer, and by the user, such as taps on the screen.  An event contains the actions to be performed when the specified event occurs.
@@ -576,7 +671,98 @@ The example below updates the **element**'s **text** property to "tapped" when t
   }
 ```
 
-## 11. Multilingual Strings
+## 11. List Element
+
+Displays a scrollable list of items.  The items are composed of **elements** that define the visual layout of each item.  Items also contain **data** which defines String to be displayed.  
+
+### Syntax
+```
+  "elements": [
+    {
+      "list": {
+        "selectedItem":Integer,
+        "scrollEnabled":Boolean,
+        "items": [
+          { "elements":[ Element, ... ], "data":String or JSON },
+          ...
+        ]
+      }
+    }
+  ]
+```
+
+**selectedItem** optionally specifies the initially selected item.  Items are numbering starts with 0 (zero).  The default is 0 (zero), the first item.
+
+**scrollEnabled** optionally specifies whether the list items are scrollable.  Default is *true*.
+
+**items** optionally specifies the initial items to be displayed.  **elements** define the visual layout of the item.  **data** typically is a string to be displayed and is referenced from the **elements** using "valueOf".  **data** can also be JSON and if it contains **elements** and **data** child elements, then the JSON is used to define the item, replacing the item definition.  This is done so that a server response can fully define the item.
+
+### Events
+- **rowSelected**: Notification when the selected item changes
+
+### Actions
+- **append**: appends one or more list items to the **list**
+
+#### Syntax
+
+```
+{
+  "append": {
+    "id":String,
+    "items": [
+      { "elements":[ Element, ... ], "data":String or JSON},
+      ...
+    ]
+}
+```
+
+### Examples
+The example below displays a list and a text element that displays the currently selected list item.  When an item is tapped/selected, the **rowSelected** event occurs and the associated **action** updates the text element.
+
+```
+{
+	"templates":{
+		"elements":{
+			"item":{	"bc":"#eef", "text":{"valueOf":{"id":"aList", "property":{"items":{"data":{"person":{"id":"first"}}}}}}}
+		}
+	},
+	"pages":[
+		{
+			"id": "main",
+			"play":"never",
+			"elements":[
+				{ "h":"8%", "w":"45%", "pos":["25%","95%"], "text":"selected", "textAlign":"right"},
+				{ "id":"echo", "h":"8%", "w":"45%", "pos":["75%","95%"],"text":"2"},
+				{
+					"id": "aList",
+					"h":"80%",
+					"w":"90%",
+					"bc":"#ffe",
+					"pos":["50%","50%"],
+					"list":{
+						"selectedItem":2,
+						"items":[
+							{ "elements":[ {"template":"item" }], "data":{ "person": { "id": { "first":"fred", "last":"flintstone"}}}},
+							{ "elements":[ {"template":"item" }], "data":{ "person": { "id": { "first":"wilma", "last":"flintstone"}}}},
+							{ "elements":[ {"template":"item" }], "data":{ "person": { "id": { "first":"barney", "last":"rubble"}}}},
+							{ "elements":[ {"template":"item" }], "data":{ "person": { "id": { "first":"betty", "last":"rubble"}}}}
+						]
+					},
+					"events":{
+						"rowSelected":{
+							"actions":[
+								{ "update":{ "id":"echo", "text":{"valueOf":{"id":"aList", "property":"selectedItem"}}}}
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}
+```
+
+## 12. Multilingual Strings
 
 The "strings" property of the page specifies strings in multiple languages.  The format is:
 

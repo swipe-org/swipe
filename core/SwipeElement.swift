@@ -184,6 +184,21 @@ class SwipeElement: SwipeView {
                 }
             }
         }
+        if let listInfo = self.info["list"] as? [String:AnyObject] {
+            if let itemsInfo = listInfo["items"] as? [[String:AnyObject]] {
+                for itemInfo in itemsInfo {
+                    if let elementsInfo = itemInfo["elements"] as? [[String:AnyObject]] {
+                        let scaleDummy = CGSizeMake(1.0, 1.0)
+                        for e in elementsInfo {
+                            let element = SwipeElement(info: e, scale:scaleDummy, parent:self, delegate:self.delegate!)
+                            for (url, prefix) in element.resourceURLs {
+                                urls[url] = prefix
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return urls
     }()
     
@@ -1037,6 +1052,13 @@ class SwipeElement: SwipeView {
             }
         }
         
+        if let value = info["list"] as? [String:AnyObject] {
+            let list = SwipeList(parent: self, info: value, scale:self.scale, frame: view.bounds, screenDimension: self.screenDimension, delegate: self.delegate)
+            helper = list
+            view.addSubview(list.tableView)
+            list.tableView.reloadData()
+        }
+        
         // Nested Elements
         if let elementsInfo = info["elements"] as? [[String:AnyObject]] {
             for e in elementsInfo {
@@ -1738,8 +1760,8 @@ class SwipeElement: SwipeView {
                 shapeLayer.addAnimation(ani, forKey: "strokeEnd")
             }
         }
-            }
-            
+    }
+    
     func update(originator: SwipeNode, info: [String:AnyObject]) {
         for key in info.keys {
             if key != "events" {
