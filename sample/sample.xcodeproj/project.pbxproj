@@ -172,6 +172,8 @@
 		98FF4D2E1CBE85D700BD9DA8 /* details_index.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 98FF4D2A1CBE857800BD9DA8 /* details_index.swipe */; };
 		98FF4D2F1CBE85D700BD9DA8 /* transition_animation.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 98FF4D2C1CBE85CD00BD9DA8 /* transition_animation.swipe */; };
 		C108AAF11D63939900FF89B7 /* actions.swipe in Resources */ = {isa = PBXBuildFile; fileRef = C108AAF01D63939900FF89B7 /* actions.swipe */; };
+		C1140F741D6642AE006D29C5 /* SwipeTextArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1140F731D6642AE006D29C5 /* SwipeTextArea.swift */; };
+		C1140F751D6642B5006D29C5 /* SwipeTextArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1140F731D6642AE006D29C5 /* SwipeTextArea.swift */; };
 		C1369A0E1D626FEF008FB897 /* SwipeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1369A091D626FEF008FB897 /* SwipeAction.swift */; };
 		C1369A0F1D626FEF008FB897 /* SwipeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1369A0A1D626FEF008FB897 /* SwipeEvent.swift */; };
 		C1369A101D626FEF008FB897 /* SwipeEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1369A0B1D626FEF008FB897 /* SwipeEventHandler.swift */; };
@@ -290,6 +292,7 @@
 		98FF4D2A1CBE857800BD9DA8 /* details_index.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = details_index.swipe; sourceTree = "<group>"; };
 		98FF4D2C1CBE85CD00BD9DA8 /* transition_animation.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = transition_animation.swipe; sourceTree = "<group>"; };
 		C108AAF01D63939900FF89B7 /* actions.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = actions.swipe; sourceTree = "<group>"; };
+		C1140F731D6642AE006D29C5 /* SwipeTextArea.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeTextArea.swift; sourceTree = "<group>"; };
 		C1369A091D626FEF008FB897 /* SwipeAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAction.swift; sourceTree = "<group>"; };
 		C1369A0A1D626FEF008FB897 /* SwipeEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeEvent.swift; sourceTree = "<group>"; };
 		C1369A0B1D626FEF008FB897 /* SwipeEventHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeEventHandler.swift; sourceTree = "<group>"; };
@@ -461,6 +464,7 @@
 		74EA71901BD04D86006808EA /* core */ = {
 			isa = PBXGroup;
 			children = (
+				C1140F731D6642AE006D29C5 /* SwipeTextArea.swift */,
 				C19F05B21D650432001EACD4 /* SwipeList.swift */,
 				C1369A091D626FEF008FB897 /* SwipeAction.swift */,
 				C1369A0A1D626FEF008FB897 /* SwipeEvent.swift */,
@@ -790,6 +794,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1140F741D6642AE006D29C5 /* SwipeTextArea.swift in Sources */,
 				74EA71B41BD04DA7006808EA /* SwipeBook.swift in Sources */,
 				74EA71B81BD04DA7006808EA /* SwipeSynthesizer.swift in Sources */,
 				C19F05B31D650432001EACD4 /* SwipeList.swift in Sources */,
@@ -822,6 +827,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1140F751D6642B5006D29C5 /* SwipeTextArea.swift in Sources */,
 				74EA71F41BD0B156006808EA /* SwipeAssetManager.swift in Sources */,
 				74EA71FD1BD0B15C006808EA /* SwipePath.swift in Sources */,
 				C1D6D33E1D662AFA00442109 /* SwipeList.swift in Sources */,

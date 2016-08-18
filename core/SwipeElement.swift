@@ -599,6 +599,12 @@ class SwipeElement: SwipeView {
 #endif
         }
         
+        if let value = info["textArea"] as? [String:AnyObject] {
+            let textArea = SwipeTextArea(parent: self, info: value, frame: view.bounds, screenDimension: self.screenDimension)
+            helper = textArea
+            view.addSubview(textArea.view!)
+        }
+        
         if let text = parseText(self, info: info, key:"text") {
             if self.helper == nil || !self.helper!.setText(text, scale:self.scale, info: info, dimension:screenDimension, layer: layer) {
                 self.textLayer = SwipeElement.addTextLayer(text, scale:scale, info: info, dimension: screenDimension, layer: layer)
@@ -1760,8 +1766,8 @@ class SwipeElement: SwipeView {
                 shapeLayer.addAnimation(ani, forKey: "strokeEnd")
             }
         }
-    }
-    
+            }
+            
     func update(originator: SwipeNode, info: [String:AnyObject]) {
         for key in info.keys {
             if key != "events" {
@@ -1787,13 +1793,17 @@ class SwipeElement: SwipeView {
                 })
                 
                 if let text = self.parseText(originator, info: self.info, key:"text") {
-
+                    if let textAreaHelper = self.helper as? SwipeTextArea {
+                        textAreaHelper.setText(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: nil)
+                    }
+                    else {
                         if self.textLayer == nil {
                             self.textLayer = SwipeElement.addTextLayer(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: self.layer!)
                         } else {
                             SwipeElement.updateTextLayer(self.textLayer!, text: text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: self.layer!)
                         }
                     }
+                }
                 
                 if let text = self.textLayer?.string as? String where self.info["textAlign"] != nil || self.info["textColor"] != nil || self.info["fontName"] != nil || self.info["fontSize"] != nil {
                     SwipeElement.updateTextLayer(self.textLayer!, text: text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: self.layer!)
@@ -1833,6 +1843,12 @@ class SwipeElement: SwipeView {
     }
     
     override func updateElement(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject]) -> Bool {
+        if let textAreaHelper = self.helper as? SwipeTextArea {
+            if textAreaHelper.updateElement(originator, name: name, up: up, info: info) {
+                return true
+            }
+        }
+        
         if (name == "*" || self.name.caseInsensitiveCompare(name) == .OrderedSame) {
             // Update self
             update(originator, info: info)
