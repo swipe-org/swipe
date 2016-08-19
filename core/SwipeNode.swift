@@ -47,6 +47,8 @@ class SwipeNode: NSObject {
             SwipeHttpGet.create(self, getInfo: getInfo)
         } else if let postInfo = action.info["post"] as? [String:AnyObject] {
             SwipeHttpPost.create(self, postInfo: postInfo)
+        } else if let timerInfo = action.info["timer"] as? [String:AnyObject] {
+            SwipeTimer.create(self, timerInfo: timerInfo)
         } else {
             parent?.executeAction(originator, action: action)
         }

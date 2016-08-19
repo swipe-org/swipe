@@ -189,6 +189,8 @@
 		C156442F1D6692740013C080 /* network.swipe in Resources */ = {isa = PBXBuildFile; fileRef = C156442E1D6692740013C080 /* network.swipe */; };
 		C15644301D66927B0013C080 /* network.swipe in Resources */ = {isa = PBXBuildFile; fileRef = C156442E1D6692740013C080 /* network.swipe */; };
 		C170B7101CF78C04005956A8 /* SwipePageTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170B70F1CF78C04005956A8 /* SwipePageTemplate.swift */; };
+		C1855A961D67A7FD000961D9 /* SwipeTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1855A951D67A7FD000961D9 /* SwipeTimer.swift */; };
+		C1855A971D67A7FD000961D9 /* SwipeTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1855A951D67A7FD000961D9 /* SwipeTimer.swift */; };
 		C19F05B31D650432001EACD4 /* SwipeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19F05B21D650432001EACD4 /* SwipeList.swift */; };
 		C19F05B51D6505AA001EACD4 /* list.swipe in Resources */ = {isa = PBXBuildFile; fileRef = C19F05B41D6505AA001EACD4 /* list.swipe */; };
 		C1C500681D63977300513D6D /* update.swipe in Resources */ = {isa = PBXBuildFile; fileRef = C1C500671D63977300513D6D /* update.swipe */; };
@@ -311,6 +313,7 @@
 		C15644291D6690050013C080 /* SwipeHttpPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeHttpPost.swift; sourceTree = "<group>"; };
 		C156442E1D6692740013C080 /* network.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = network.swipe; sourceTree = "<group>"; };
 		C170B70F1CF78C04005956A8 /* SwipePageTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipePageTemplate.swift; sourceTree = "<group>"; };
+		C1855A951D67A7FD000961D9 /* SwipeTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeTimer.swift; sourceTree = "<group>"; };
 		C19F05B21D650432001EACD4 /* SwipeList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeList.swift; sourceTree = "<group>"; };
 		C19F05B41D6505AA001EACD4 /* list.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = list.swipe; sourceTree = "<group>"; };
 		C1C500671D63977300513D6D /* update.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = update.swipe; sourceTree = "<group>"; };
@@ -495,6 +498,7 @@
 				74EA71AC1BD04DA7006808EA /* SwipePath.swift */,
 				74EA71AD1BD04DA7006808EA /* SwipeSynthesizer.swift */,
 				C1140F731D6642AE006D29C5 /* SwipeTextArea.swift */,
+				C1855A951D67A7FD000961D9 /* SwipeTimer.swift */,
 				C1369A0D1D626FEF008FB897 /* SwipeView.swift */,
 				74EA71A81BD04DA7006808EA /* SwipeViewController.swift */,
 			);
@@ -826,6 +830,7 @@
 				74EA71C21BD04E47006808EA /* SwipeExtensions.swift in Sources */,
 				74EA71D11BD04F22006808EA /* SwipeBrowser.swift in Sources */,
 				C170B7101CF78C04005956A8 /* SwipePageTemplate.swift in Sources */,
+				C1855A961D67A7FD000961D9 /* SwipeTimer.swift in Sources */,
 				74EA71D31BD04F22006808EA /* SwipeTableViewController.swift in Sources */,
 				74EA71B21BD04DA7006808EA /* SwipeDocumentViewer.swift in Sources */,
 				74EA717B1BD047F0006808EA /* AppDelegate.swift in Sources */,
@@ -862,6 +867,7 @@
 				74EA71F51BD0B156006808EA /* SwipeConnection.swift in Sources */,
 				74EA71F31BD0B156006808EA /* SNNotificationManager.swift in Sources */,
 				C14FC7061CFCA8D800556476 /* SwipePageTemplate.swift in Sources */,
+				C1855A971D67A7FD000961D9 /* SwipeTimer.swift in Sources */,
 				74EA72031BD0B15C006808EA /* SwipeExtensions.swift in Sources */,
 				74EA71F81BD0B15C006808EA /* SwipeDocumentViewer.swift in Sources */,
 				74EA71F91BD0B15C006808EA /* SwipeViewController.swift in Sources */,

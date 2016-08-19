@@ -1791,7 +1791,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 CATransaction.begin()
                 CATransaction.setDisableActions(true)
                 CATransaction.setCompletionBlock({
-                    if let eventsInfo = info["events"] as? [String:AnyObject] {
+                    if let eventsInfo = info["events"] as? [String:AnyObject] where self.delegate != nil {
                         let eventHandler = SwipeEventHandler()
                         eventHandler.parse(eventsInfo)
                         if let actions = eventHandler.actionsFor("completion") {
