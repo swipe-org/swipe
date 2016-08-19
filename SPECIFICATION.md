@@ -292,6 +292,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **events** ([Event+]): List of Events and their associated Actions
 - **enabled** (Bool): Specifies if events are enabled
 - **list** (List): List of items (refer to the List section below)
+- **textArea** (TextInput): Multiline text input box (refer to the TextArea section below)
 
 ### Element Events
 - **tapped**: The user singled-tapped on the element. *Propagated*
@@ -672,7 +673,58 @@ The example below displays a list and a text element that displays the currently
 }
 ```
 
-## 12. Multilingual Strings
+## 12. TextArea Element
+
+The **textArea** element defines a multi-line text input box where the user can enter text.  It's **text** property can be changed using the **update** action and referenced using **valueOf**.
+
+### Syntax
+```
+{ "textArea":{}, ... }
+```
+Currently, the **value** is reserved for future use and must be set to "{}".
+
+### Events
+- **textChanged**: Occurs whenever the text is changed either by the user or via the **update** action.
+- **endEdit**: Occurs when the user taps outside the **textArea**.
+
+### Actions
+- **update**
+
+### Example
+In the example below, text entered into the **textArea** is copied to the element with **id** "echo" when the user taps outside the **textArea**.
+
+```
+{
+  "templates": {
+    "elements": {
+      "text": { "h":"10%", "w":"90%", "x":"5%", "y":"15%", "bc":"#eef" }
+    }
+  },
+  "pages": [
+    {
+      "play":"never",
+      "elements": [
+        { "template":"text", "text":"Enter Text Below"},
+        {
+          "id":"input", "textArea":{}, "template":"text", "text":"hello", "h":"20%", "y":"55%",
+          "events": {
+            "endEdit": {
+              "actions": [
+                { "update": { "id":"echo", "text":{"valueOf":{"property":"text"}}}}
+              ]
+            }
+          }
+        },
+        {
+          "id":"echo", "template":"text", "h":"20%", "text":"", "y":"30%"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 13. Multilingual Strings
 
 The "strings" property of the page specifies strings in multiple languages.  The format is:
 

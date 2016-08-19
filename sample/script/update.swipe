@@ -3,9 +3,10 @@
     {
       "play":"never",
       "elements": [
-        { "id":"caption", "text":"sample", "textColor":"#fff", "h":30, "y":40 },
+        { "id":"caption", "text":"sample", "textColor":"#fff", "x":"1%", "w":"98%", "h":40, "y":40, "bc":"#eee" },
+        { "text":"Tap a button to display its 'text' property above", "x":"1%", "w":"98%", "y":82, "h":60, "fontSize":18 },
         {
-          "text":"one", "h":30, "y":90, "bc":"#fdd",
+          "text":"one", "x":"1%", "w":"48%", "h":40, "y":140, "bc":"#fdd", "borderWidth":1, "borderColor":"#ccc", "cornerRadius":10,
           "events": {
             "tapped": {
               "actions":[{ "update":{ "id":"caption", "text":{"valueOf":{ "property":"text"} }, "textColor":"#f00", "bc":"#0f0", "duration":0.4 }}]
@@ -13,10 +14,39 @@
           }
         },
         {
-          "text":"two", "h":30, "y":130, "bc":"#dfd",
+          "text":"two", "x":"51%", "w":"48%", "h":40, "y":140, "bc":"#dfd", "borderWidth":1, "borderColor":"#ccc", "cornerRadius":10,
           "events": {
             "tapped": {
               "actions":[{ "update":{ "id":"caption", "text":{"valueOf":{ "property":"text"} }, "textColor":"#0f0", "bc":"#f00", "duration":0.4 }}]
+            }
+          }
+        },
+        { "text":"Tap text area below, enter text, tap on the button to display the text area's 'text' property above", "x":"1%", "w":"98%", "y":200, "h":60, "fontSize":18 },
+        {
+          "id":"input", "textArea":{}, "textAlign":"center", "text":"", "borderWidth":1, "borderColor":"#ccc", "cornerRadius":10,
+          "x":"1%", "y":260, "w":"82%", "h":50, "bc":"#fff",
+          "events":{
+            "textChanged":{
+              "actions":[{ "update":{ "id":"btn", "enabled":{ "valueOf":{ "property":"text.length" }}}}]
+            }
+          }
+        },
+        {
+          "id":"btn", "text":"", "x":"84%", "y":260, "w":50, "h":50, "textColor":"#ccc", "bc":"#fff", "borderWidth":1, "borderColor":"#ccc", "cornerRadius":25, "enabled":false,
+          "events":{
+            "enabled":{
+              "actions":[ { "update":{ "text":"^", "textColor":"#1E88E5", "borderColor":"#1E88E5" } } ]
+            },
+            "disabled":{
+              "actions":[ { "update":{ "text":"", "textColor":"#ccc", "borderColor":"#ccc" } } ]
+            },
+            "tapped":{
+              "//": "fired only if enabled",
+              "actions":[
+                { "update":{ "id":"caption", "text":{"valueOf":{ "id":"input", "property":"text"} }, "textColor":"#000", "bc":"#ddd", "duration":0.4 }},
+                { "update":{ "enabled":false } },
+                { "update":{ "id":"input", "text":"" } }
+              ]
             }
           }
         }
