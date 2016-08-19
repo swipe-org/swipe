@@ -89,6 +89,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         
         viewLoading?.alpha = 0
         btnLanguage?.enabled = false
+        btnExport?.enabled = false
 
         if SwipeBrowser.stack.count == 0 {
             SwipeBrowser.stack.append(self) // special case for the first one
@@ -145,6 +146,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
 
         controller = vc
+        if let _ = controller as? SwipeViewController {
+            btnExport?.enabled = true
+        }
         self.addChildViewController(vc)
         vc.view.autoresizingMask = UIViewAutoresizing([.FlexibleWidth, .FlexibleHeight])
 #if os(OSX)
