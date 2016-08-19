@@ -45,6 +45,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     @IBOutlet var bottombar:UIView?
     @IBOutlet var slider:UISlider!
     @IBOutlet var labelTitle:UILabel?
+    @IBOutlet var btnExport:UIButton?
     private var landscapeMode = false
 #elseif os(tvOS)
     override weak var preferredFocusedView: UIView? { return controller?.view }
@@ -452,6 +453,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         exporter.exportAsGifAnimation(fileURL, startPage: swipeVC.book.pageIndex, pageCount: 3) { (complete, error) -> Void in
             if complete {
                 print("GIF animation export done")
+                let activity = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
+                //activity.popoverPresentationController.?
+                self.presentViewController(activity, animated: true, completion: nil)
             } else if let error = error {
                 print("Error", error)
             } else {
