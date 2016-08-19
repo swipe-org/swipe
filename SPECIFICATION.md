@@ -724,7 +724,103 @@ In the example below, text entered into the **textArea** is copied to the elemen
 }
 ```
 
-## 13. Multilingual Strings
+## 13. HTTP GET and POST
+The actions **get** and **post** provide ways to communication with an HTTP server.
+
+### Get Syntax
+```
+  { "get":{ "source": {"url":String}, "events":Events }						
+```
+
+**url** specifies the URL to get.
+
+### Post Syntax
+```
+  {"post":{ "target":{ "url":"url" }, "params":{ String:String, ... }, "headers":{String:String, ...}, "data":String or JSON, "events":Events }	
+```
+**url** specifies the URL of the receiver of the post.
+**params** specifies URL parameter to be appended to **url**
+**headers** specifies HTTP headers to be added to the POST request
+**data** specifies the HTTP POST body as either a String or JSON.
+
+### Events
+- **error**: Occurs when an internal error is detected or if an HTTP error occurs.  The event's **params** must always be `{"message":{"type":"string"}}` 
+- **completion**: Occurs when the HTTP request completes successfully.  Data is accessed via **params** which are dependent on the expected server response format.
+
+### Example
+In the example below, when the "HTTP GET" element is tapped, the **get** action GETs the JSON file from the server.  This response contains properties **caption** text and **imgURL** which are used to update the **text** and **img** properties of two elements to display the caption and image.
+```
+{
+	"pages": [
+		{
+			"play":"never",
+			"elements": [
+				{
+					"text":"HTTP GET", "pos":["50%", 80], "w":"80%", "h":40, "borderWidth":1, "borderColor":"black", "cornerRadius":10, 
+					"events":{
+						"tapped":{
+							"actions":[
+								{ "update":{"id":"label", "text":"Loading ..." } },
+								{
+									"get":{
+										"source": {"url":"http://www.stoppani.net/swipe/simpledata.txt"},
+										"events": {
+											"error": {
+												"params": {"message":{"type":"string"}},
+												"actions": [
+													{ "update":{"id":"label", "text":"** Error **"}},
+													{ "update":{"id":"error", "text":{"valueOf":{"property":{"params":"message"}}, "opacity":1}}}
+												]
+											},
+											"completion": {
+												"params": {"caption":{"type":"string"}, "imageURL":{"type":"string"}},
+												"actions": [
+													{ "update":{"id":"label", "text":{"valueOf":{"property":{"params":"caption"}}}}},
+													{ "update":{"id":"image", "img":{"valueOf":{"property":{"params":"imgURL"}}}}}
+												]
+											}
+										}
+									}
+								}								
+							]
+						}
+					}},
+				{"id":"label", "h":40, "pos":["50%", 130] },
+				{"id":"image", "w":150, "h":150, "pos":["50%", 240], "img":"more.png" },
+				{"id":"error", "textColor":"red", "h":40, "pos":["50%", 20] },
+			 ]
+		}
+  ]
+}
+```
+
+The example below uses **post** to send "hello" to a chat bot and displays the response string.
+```
+{
+  "post":{
+    "target": {"url":"https://exampledomain.com/chatbot/talk/"},
+    "headers": { "Authorization":"BASIC 000000000" },
+    "data": { "text":"hello"},
+    "events": {
+      "error": {
+        "params": {"message":{"type":"string"}},
+        "actions": [
+          { "update":{"id":"label", "text":"** Error **"}},
+          { "update":{"id":"error", "text":{"valueOf":{"property":{"params":"message"}}, "opacity":1}}}
+        ]
+      },
+      "completion": {
+        "params": {"status":"string","response":"string","sessionid":"number"},
+        "actions": [
+          {	"update":{"id":"label", "text":{"valueOf":{"property":{"params":"responses"}}}} }
+        ]
+      }
+    }
+  }
+}
+```
+
+## 14. Multilingual Strings
 
 The "strings" property of the page specifies strings in multiple languages.  The format is:
 

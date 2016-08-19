@@ -14,6 +14,10 @@ import Foundation
     import UIKit
 #endif
 
+protocol SwipeViewDelegate:NSObjectProtocol {
+    func addedResourceURLs(urls:[NSURL:String], callback:() -> Void)
+}
+
 class SwipeView: SwipeNode {
     var view: UIView?
     internal var info = [String:AnyObject]()

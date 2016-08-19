@@ -36,12 +36,13 @@ protocol SwipeElementDelegate:NSObjectProtocol {
     func parseMarkdown(element:SwipeElement, markdowns:[String]) -> NSAttributedString
     func baseURL() -> NSURL?
     func map(url:NSURL) -> NSURL?
+    func addedResourceURLs(urls:[NSURL:String], callback:() -> Void)
     func pageIndex() -> Int // for debugging
     func localizedStringForKey(key:String) -> String?
     func languageIdentifier() -> String?
 }
 
-class SwipeElement: SwipeView {
+class SwipeElement: SwipeView, SwipeViewDelegate {
     // Debugging
     static var objectCount = 0
     private let pageIndex:Int
@@ -240,17 +241,18 @@ class SwipeElement: SwipeView {
         
         if let src = info["img"] as? String {
             //imageSrc = SwipeParser.imageSourceWith(src)
-            if let url = NSURL.url(src, baseURL: baseURL),
-                   urlLocal = self.delegate.map(url),
-                   imageS = CGImageSourceCreateWithURL(urlLocal, nil) {
-                imageSrc = imageS
-                if CGImageSourceGetCount(imageS) > 0 {
-                    imageRef = CGImageSourceCreateImageAtIndex(imageS, 0, nil)
+            if let url = NSURL.url(src, baseURL: baseURL) {
+                if let urlLocal = self.delegate.map(url) {
+                    imageSrc = CGImageSourceCreateWithURL(urlLocal, nil)
                 } else {
-                    imageSrc = nil
+                    imageSrc = CGImageSourceCreateWithURL(url, nil)
                 }
+                if imageSrc != nil && CGImageSourceGetCount(imageSrc!) > 0 {
+                    imageRef = CGImageSourceCreateImageAtIndex(imageSrc!, 0, nil)
                 }
             }
+        }
+        
         if let src = info["mask"] as? String {
             //maskSrc = SwipeParser.imageWith(src)
             if let url = NSURL.url(src, baseURL: baseURL),
@@ -1499,7 +1501,7 @@ class SwipeElement: SwipeView {
         return nil
     }
     
-    func setupAnimations(layer: CALayer, info: [String:AnyObject]) {
+    func setupAnimations(layer: CALayer, originator: SwipeNode, info: [String:AnyObject]) {
         let dimension = self.screenDimension
         let baseURL = self.delegate.baseURL()
         var x = layer.frame.origin.x
@@ -1668,24 +1670,30 @@ class SwipeElement: SwipeView {
             }
         }
         
-        if let srcs = info["img"] as? [String] {
-            var images = [CGImage]()
-            for src in srcs {
-                if let url = NSURL.url(src, baseURL: baseURL),
-                    urlLocal = self.delegate.map(url),
-                    image = CGImageSourceCreateWithURL(urlLocal, nil) {
-                    if CGImageSourceGetCount(image) > 0 {
-                        images.append(CGImageSourceCreateImageAtIndex(image, 0, nil)!)
+        if info["img"] != nil && self.imageLayer != nil {
+            var urls = [NSURL:String]()
+            var urlStr: String?
+            
+            if let str = info["img"] as? String {
+                urlStr = str
+            } else if let valInfo = info["img"] as? [String:AnyObject],
+                valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
+                str = originator.getValue(originator, info:valOfInfo) as? String {
+                urlStr = str
+            }
+            if urlStr != nil {
+                if let url = NSURL.url(urlStr!, baseURL: baseURL) {
+                    urls[url] = "img"
+            
+                    self.delegate.addedResourceURLs(urls) {
+                        if let urlLocal = self.delegate.map(urls.first!.0),
+                            image = CGImageSourceCreateWithURL(urlLocal, nil) {
+                            if CGImageSourceGetCount(image) > 0 {
+                                self.imageLayer!.contents = CGImageSourceCreateImageAtIndex(image, 0, nil)!
+                            }
+                        }
                     }
                 }
-            }
-            if let imageLayer = self.imageLayer {
-                let ani = CAKeyframeAnimation(keyPath: "contents")
-                ani.values = images
-                ani.beginTime = start
-                ani.duration = duration
-                ani.fillMode = kCAFillModeBoth
-                imageLayer.addAnimation(ani, forKey: "contents")
             }
         }
         
@@ -1766,7 +1774,7 @@ class SwipeElement: SwipeView {
                 shapeLayer.addAnimation(ani, forKey: "strokeEnd")
             }
         }
-            }
+    }
             
     func update(originator: SwipeNode, info: [String:AnyObject]) {
         for key in info.keys {
@@ -1809,7 +1817,7 @@ class SwipeElement: SwipeView {
                     SwipeElement.updateTextLayer(self.textLayer!, text: text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: self.layer!)
                 }
                 
-                self.setupAnimations(self.layer!, info: self.info)
+                self.setupAnimations(self.layer!, originator: originator, info: self.info)
                 CATransaction.commit()
                 
                 }, completion: { (done: Bool) in
@@ -1931,4 +1939,15 @@ class SwipeElement: SwipeView {
         
         return false
     }
+    
+    // SwipeViewDelegate
+    func addedResourceURLs(urls:[NSURL:String], callback:() -> Void) {
+        for (url,prefix) in urls {
+            self.resourceURLs[url] = prefix
         }
+        self.delegate?.addedResourceURLs(urls) {
+            callback()
+        }
+    }
+
+}
