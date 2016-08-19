@@ -536,7 +536,6 @@
                 { "template":"demo",
                     "elements": [
                         { "x":0, "y":"center", "w":192, "h":288, "sprite":"chara_walk.png",
-                          "loop":{ "style":"sprite", "count":3 },
                           "slice":[14, 4], "slot":[0,2] },
                     ]
                 }
