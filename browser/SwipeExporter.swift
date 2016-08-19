@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Photos
 import ImageIO
 import MobileCoreServices
 
