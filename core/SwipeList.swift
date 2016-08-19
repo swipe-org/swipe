@@ -179,12 +179,19 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
                     }
                 }
             }
-        }
-        
-        self.tableView.reloadData()
-        self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.items.count - 1, inSection: 0), atScrollPosition: .Bottom, animated: true)
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.4 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
-            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.items.count - 1, inSection: 0), atScrollPosition: .Bottom, animated: true)
+            
+            self.delegate.addedResourceURLs(urls) {
+                for itemInfo in itemInfos {
+                    self.items.append(itemInfo)
+                    self.itemHeights.append(self.defaultItemHeight)
+                }
+                
+                self.tableView.reloadData()
+                self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.items.count - 1, inSection: 0), atScrollPosition: .Bottom, animated: true)
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.4 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
+                    self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.items.count - 1, inSection: 0), atScrollPosition: .Bottom, animated: true)
+                }
+            }
         }
     }
     

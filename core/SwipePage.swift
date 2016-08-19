@@ -113,6 +113,10 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     }
 
     func unloadView() {
+#if !os(tvOS)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+#endif
         if let view = self.view {
             MyLog("SWPage  unloading @\(index)", level: 2)
             view.removeFromSuperview()
@@ -490,13 +494,45 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         }
         
         setupGestureRecognizers()
-
+#if !os(tvOS)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SwipePage.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SwipePage.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+#endif
         if let actions = eventHandler.actionsFor("load") {
             execute(self, actions: actions)
         }
 
         return view
     }
+    
+#if !os(tvOS)
+    func keyboardWillShow(notification: NSNotification) {
+        if let info:NSDictionary = notification.userInfo {
+            if let kbFrame = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+                if let fr = findFirstResponder() {
+                    let frFrame = fr.view!.frame
+                    let myFrame = self.view!.frame
+                    //let duration = info[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber as NSTimeInterval
+                    //UIView.animateWithDuration(0.25, delay: 0.25, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+                        self.view!.frame = CGRectMake(0, myFrame.origin.y - max(0, (frFrame.origin.y + frFrame.size.height) - (myFrame.size.height - kbFrame.size.height)), myFrame.size.height, myFrame.size.height)
+                    //    }, completion: nil)
+                }
+            }
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if let _:NSDictionary = notification.userInfo {
+            if findFirstResponder() != nil {
+                let myFrame = self.view!.frame
+                //let duration = info[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber as NSTimeInterval
+                //UIView.animateWithDuration(0.25, delay: 0.25, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+                    self.view!.frame = CGRectMake(0, 0, myFrame.size.height, myFrame.size.height)
+                //    }, completion: nil)
+            }
+        }
+    }
+#endif
     
     private func loadSubviews() {
         let scale = delegate.scale(self)
@@ -578,6 +614,15 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     }
     
     // <SwipeElementDelegate> method
+    
+    func addedResourceURLs(urls:[NSURL:String], callback:() -> Void) {
+        self.prefetcher.append(urls) { (completed:Bool, _:[NSURL], _:[NSError]) -> Void in
+            if completed {
+                callback()
+            }
+        }
+    }
+    
     func prototypeWith(name:String?) -> [String:AnyObject]? {
         return delegate.prototypeWith(name)
     }

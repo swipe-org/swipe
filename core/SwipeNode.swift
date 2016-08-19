@@ -43,7 +43,13 @@ class SwipeNode: NSObject {
     }
     
     func executeAction(originator: SwipeNode, action: SwipeAction) {
-        parent?.executeAction(originator, action: action)
+        if let getInfo = action.info["get"] as? [String:AnyObject] {
+            SwipeHttpGet.create(self, getInfo: getInfo)
+        } else if let postInfo = action.info["post"] as? [String:AnyObject] {
+            SwipeHttpPost.create(self, postInfo: postInfo)
+        } else {
+            parent?.executeAction(originator, action: action)
+        }
     }
 
     func getPropertyValue(originator: SwipeNode, property: String) -> AnyObject? {
