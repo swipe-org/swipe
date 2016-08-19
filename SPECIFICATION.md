@@ -724,7 +724,7 @@ In the example below, text entered into the **textArea** is copied to the elemen
 }
 ```
 
-## 13. HTTP GET and POST
+## 13. HTTP GET and POST 
 The actions **get** and **post** provide ways to communication with an HTTP server.
 
 ### Get Syntax
@@ -820,7 +820,67 @@ The example below uses **post** to send "hello" to a chat bot and displays the r
 }
 ```
 
-## 14. Multilingual Strings
+## 14. Timers
+The **timer** action provides a way to perform other actions based on timed intervals that may or may not repeat.
+
+### Syntax
+```
+  { "timer": { "duration":1, "repeats":true, "events":Events } }
+```
+
+**duration** specifies the time interval in seconds
+**repeats** specifies whether or not the timer continues to fire after the first **duration**.  The default is **false**
+
+### Events
+- **tick**: Occurs when the specified **duration** seconds have transpired.
+
+### Example
+In the example below, when the "tap me" element is tapped, a repeating timer with a duration of 1 sec is started.  The **text** then alternates between "tick" and "tock" every 30 seconds (due to the additional 0.5 sec update animation).  Also notice that the element is disabled so that it can receive the **tapped** event only once.
+
+```
+{
+	"pages": [
+		{
+			"play":"never",
+			"elements": [
+				{
+					"text": "tap me to start timer", "fontSize":20, "pos": ["50%", "33%"], "w":"90%", "h":"10%", "bc":"#fdd",
+					"events": {
+						"tapped": {
+							"actions": [
+								{
+									"update": {
+										"text":"tapped", "bc":"#fee",	"duration":0.5, 
+										"events":{ 
+											"completion":{
+												"actions":[ { "update":{	"text":"tap me", "bc":"#fdd", "enabled":false	}	}	] 
+											} 
+										}
+									}
+								},
+								{
+									"timer": { 
+										"duration":1, "repeats":true,
+										"events":{
+											"tick":{
+												"actions":[
+													{ "update":{ "text":"tick", "duration":0.5, "events":{ "completion":{ "actions":[	{ "update":{ "text":"tock" }}]}}}}
+												]
+											}
+										}
+									}
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+  ]
+}
+```
+
+## 15. Multilingual Strings
 
 The "strings" property of the page specifies strings in multiple languages.  The format is:
 
