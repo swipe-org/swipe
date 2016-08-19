@@ -89,7 +89,6 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         
         viewLoading?.alpha = 0
         btnLanguage?.enabled = false
-        btnExport?.enabled = false
 
         if SwipeBrowser.stack.count == 0 {
             SwipeBrowser.stack.append(self) // special case for the first one
@@ -97,6 +96,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
         
 #if os(iOS)
+        btnExport?.enabled = false
         slider.hidden = true
 #endif
 
@@ -146,9 +146,6 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
 
         controller = vc
-        if let _ = controller as? SwipeViewController {
-            btnExport?.enabled = true
-        }
         self.addChildViewController(vc)
         vc.view.autoresizingMask = UIViewAutoresizing([.FlexibleWidth, .FlexibleHeight])
 #if os(OSX)
@@ -158,6 +155,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 #endif
         var rcFrame = self.view.bounds
 #if os(iOS)
+        if let _ = controller as? SwipeViewController {
+            btnExport?.enabled = true
+        }
         if documentViewer.hideUI() {
             let tap = UITapGestureRecognizer(target: self, action: #selector(SwipeBrowser.tapped))
             self.view.addGestureRecognizer(tap)
@@ -446,6 +446,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
     }
 
+#if os(iOS)
     @IBAction func export() {
         guard let swipeVC = controller as? SwipeViewController else {
             return
@@ -475,4 +476,5 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             }
         }
     }
+#endif
 }
