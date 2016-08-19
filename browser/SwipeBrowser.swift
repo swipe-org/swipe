@@ -464,7 +464,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                     self.viewLoading?.alpha = 0.0
                 }, completion: { (_:Bool) -> Void in
                     let activity = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
-                    //activity.popoverPresentationController.?
+                    activity.popoverPresentationController?.sourceView = self.btnExport
                     self.presentViewController(activity, animated: true, completion: nil)
                 })
             } else if let error = error {
