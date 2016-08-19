@@ -117,6 +117,8 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
 #endif
+        SwipeTimer.cancelAll()
+        
         if let view = self.view {
             MyLog("SWPage  unloading @\(index)", level: 2)
             view.removeFromSuperview()
