@@ -8,7 +8,8 @@
 					"events":{
 						"tapped":{
 							"actions":[
-								{ "update":{"id":"label", "text":"Loading ..." } },
+								{ "update":{"id":"label", "text":"Loading ...", "textColor":"black" } },
+								{ "update":{"id":"error", "text":"", "opacity":0 } },
 								{
 									"get":{
 										"source": {"url":"http://www.stoppani.net/swipe/simpledata.txt"},
@@ -16,8 +17,8 @@
 											"error": {
 												"params": {"message":{"type":"string"}},
 												"actions": [
-													{ "update":{"id":"label", "text":"** Error **"}},
-													{ "update":{"id":"error", "text":{"valueOf":{"property":{"params":"message"}}, "opacity":1}}}
+													{ "update":{"id":"label", "text":"Error.  Try Again", "textColor":"red" } },
+													{ "update":{"id":"error", "text":{"valueOf":{"property":{"params":"message"}}}, "opacity":1, "duration":0.4}}
 												]
 											},
 											"completion": {
@@ -35,7 +36,7 @@
 					}},
 				{"id":"label", "h":40, "pos":["50%", 130] },
 				{"id":"image", "w":150, "h":150, "pos":["50%", 240], "img":"more.png" },
-				{"id":"error", "textColor":"red", "h":40, "pos":["50%", 20] },
+				{"id":"error", "textColor":"red", "w":"98%", "h":200, "pos":["50%", 420], "fontSize":18 },
 			 ]
 		}
   ]
