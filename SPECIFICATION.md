@@ -293,6 +293,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **enabled** (Bool): Specifies if events are enabled
 - **list** (List): List of items (refer to the List section below)
 - **textArea** (TextInput): Multiline text input box (refer to the TextArea section below)
+- **data** (String or JSON): Application-defined data associated with the element.  May be referenced using **valueOf**
 
 ### Element Events
 - **tapped**: The user singled-tapped on the element. *Propagated*
@@ -469,6 +470,7 @@ Currently supported **element** Properties:
 - **text**
 - **text.length**
 - **enabled**
+- **data**
 
 Currently supported non-**element**s:
 - **params**
