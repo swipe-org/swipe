@@ -100,6 +100,7 @@ class SwipeExporter: NSObject {
             }
             writer.startSessionAtSourceTime(kCMTimeZero)
             
+            self.swipeViewController.scrollTo(CGFloat(startPage))
             input.requestMediaDataWhenReadyOnQueue(dispatch_get_main_queue()) {
                 print("ready", self.iFrame)
                 guard input.readyForMoreMediaData else {
@@ -107,7 +108,6 @@ class SwipeExporter: NSObject {
                 }
                 print("ready 2", self.iFrame)
                 self.progress = CGFloat(self.iFrame) / CGFloat(self.fps) / CGFloat(pageCount)
-                self.swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(self.iFrame) / CGFloat(self.fps))
 
                 var pixelBufferX: CVPixelBuffer? = nil
                 let status: CVReturn = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, adaptor.pixelBufferPool!, &pixelBufferX)
@@ -121,6 +121,8 @@ class SwipeExporter: NSObject {
                 let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
                 if let context = CGBitmapContextCreate(data, Int(videoSize.width), Int(videoSize.height), 8, CVPixelBufferGetBytesPerRow(managedPixelBuffer), rgbColorSpace, CGImageAlphaInfo.PremultipliedFirst.rawValue) {
                     //CGContextClearRect(context, CGRectMake(0, 0, videoSize.width, videoSize.height))
+                    let xf = CGAffineTransformMakeScale(scale, scale)
+                    CGContextConcatCTM(context, xf)
                     let presentationLayer = self.swipeViewController.view.layer.presentationLayer() as! CALayer
                     presentationLayer.renderInContext(context)
                 }
@@ -134,7 +136,7 @@ class SwipeExporter: NSObject {
 
                 self.iFrame += 1
                 if self.iFrame < pageCount * self.fps + 1 {
-                    // loop
+                    self.swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(self.iFrame) / CGFloat(self.fps))
                 } else {
                     input.markAsFinished()
                     writer.finishWritingWithCompletionHandler({
