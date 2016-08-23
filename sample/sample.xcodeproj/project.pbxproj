@@ -13,6 +13,7 @@
 		740FD4911BE2DD6300C2D91D /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 740FD48F1BE2DD6300C2D91D /* iTunesArtwork@2x.png */; };
 		7440D0231D6771CE002814F2 /* SwipeExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7440D0221D6771CE002814F2 /* SwipeExporter.swift */; };
 		7440D02A1D6773AD002814F2 /* SwipeExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7440D0221D6771CE002814F2 /* SwipeExporter.swift */; };
+		7473AC401D6CB70200DA34B1 /* SwipeBrowser+ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7473AC3F1D6CB70200DA34B1 /* SwipeBrowser+ex.swift */; };
 		74D641471BE9168D006A4C20 /* Icon-180.png in Resources */ = {isa = PBXBuildFile; fileRef = 74D641461BE9168D006A4C20 /* Icon-180.png */; };
 		74D641481BE9168D006A4C20 /* Icon-180.png in Resources */ = {isa = PBXBuildFile; fileRef = 74D641461BE9168D006A4C20 /* Icon-180.png */; };
 		74DD7F151BDD3E570042BB9D /* HiddenAgenda.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7F111BDD3E570042BB9D /* HiddenAgenda.mp3 */; settings = {ASSET_TAGS = (bgm, ); }; };
@@ -210,6 +211,7 @@
 		740FD4861BE2D7A700C2D91D /* SwipeTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwipeTableViewController.xib; sourceTree = "<group>"; };
 		740FD48F1BE2DD6300C2D91D /* iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork@2x.png"; sourceTree = "<group>"; };
 		7440D0221D6771CE002814F2 /* SwipeExporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeExporter.swift; sourceTree = "<group>"; };
+		7473AC3F1D6CB70200DA34B1 /* SwipeBrowser+ex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwipeBrowser+ex.swift"; sourceTree = "<group>"; };
 		74D641461BE9168D006A4C20 /* Icon-180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-180.png"; sourceTree = "<group>"; };
 		74DD7F111BDD3E570042BB9D /* HiddenAgenda.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HiddenAgenda.mp3; sourceTree = "<group>"; };
 		74DD7F121BDD3E570042BB9D /* MonkeysSpinningMonkeys.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = MonkeysSpinningMonkeys.mp3; sourceTree = "<group>"; };
@@ -456,6 +458,7 @@
 			isa = PBXGroup;
 			children = (
 				74EA717A1BD047F0006808EA /* AppDelegate.swift */,
+				7473AC3F1D6CB70200DA34B1 /* SwipeBrowser+ex.swift */,
 				74EA717E1BD047F0006808EA /* Main.storyboard */,
 				74EA71811BD047F0006808EA /* Assets.xcassets */,
 				74EA71831BD047F0006808EA /* LaunchScreen.storyboard */,
@@ -842,6 +845,7 @@
 				74EA71B91BD04DA7006808EA /* SwipeMarkdown.swift in Sources */,
 				C1369A101D626FEF008FB897 /* SwipeEventHandler.swift in Sources */,
 				74EA71C91BD04EAD006808EA /* SNNotificationManager.swift in Sources */,
+				7473AC401D6CB70200DA34B1 /* SwipeBrowser+ex.swift in Sources */,
 				C156442B1D6690050013C080 /* SwipeHttpPost.swift in Sources */,
 				C1369A121D626FEF008FB897 /* SwipeView.swift in Sources */,
 				74EA71BA1BD04DA7006808EA /* SwipeParser.swift in Sources */,

@@ -147,6 +147,4 @@ class SwipeExporter: NSObject {
             progress(complete: false, error: error)
         }
     }
-    
-
 }
