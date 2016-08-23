@@ -26,6 +26,27 @@ private func MyLog(text:String, level:Int = 0) {
     }
 }
 
+// HACK:
+// AVPlayerLayer causes a crash in deinit when it was rendered by presentationPlayer, 
+// which calls init(layer: AnyObject) to create a copy before the rendering. 
+// We can work-around this bug by calling super.init().
+class XAVPlayerLayer: AVPlayerLayer {
+    override init(layer: AnyObject) {
+        print("XAVPlayerLayer init with layer")
+        super.init() // HACK to avoid crash
+    }
+    init(player: AVPlayer) {
+        super.init()
+        self.player = player
+    }
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    deinit {
+    }
+}
+
 protocol SwipeElementDelegate:NSObjectProtocol {
     func prototypeWith(name:String?) -> [String:AnyObject]?
     func pathWith(name:String?) -> AnyObject?
@@ -635,7 +656,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         if let url = urlVideoOrRadio {
             let videoPlayer = AVPlayer()
             self.videoPlayer = videoPlayer
-            let videoLayer = AVPlayerLayer(player: videoPlayer)
+            let videoLayer = XAVPlayerLayer(player: videoPlayer)
             videoLayer.frame = CGRectMake(0.0, 0.0, w, h)
             if fScaleToFill {
                 videoLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
