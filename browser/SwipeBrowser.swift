@@ -452,12 +452,12 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             return
         }
         let docURL = try! NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true)
-        let fileURL = docURL.URLByAppendingPathComponent("ani.gif")
+        let fileURL = docURL.URLByAppendingPathComponent("ani.mov")
         
         self.viewLoading?.alpha = 1.0
         self.labelLoading?.text = "Exporting as a GIF animation...".localized
         let exporter = SwipeExporter(swipeViewController: swipeVC, fps:4)
-        exporter.exportAsGifAnimation(fileURL, startPage: swipeVC.book.pageIndex, pageCount: 3) { (complete, error) -> Void in
+        exporter.exportAsMovie(fileURL, startPage: swipeVC.book.pageIndex, pageCount: 3) { (complete, error) -> Void in
             self.progress?.progress = Float(exporter.progress)
             if complete {
                 print("GIF animation export done")
