@@ -74,7 +74,11 @@ class SwipeExporter: NSObject {
             try! manager.removeItemAtURL(fileURL)
         }
         
-        let videoSize = CGSize(width: 321, height: 481)
+        let viewSize = swipeViewController.view.frame.size
+        let scale = 320.0 / min(viewSize.width, viewSize.height)
+        let videoSize = CGSize(width: viewSize.width * scale, height: viewSize.height * scale)
+        print("viewSize, videoSize", viewSize, videoSize)
+
         do {
             let writer = try AVAssetWriter(URL: fileURL, fileType: AVFileTypeQuickTimeMovie)
             let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: [
@@ -105,12 +109,6 @@ class SwipeExporter: NSObject {
                 self.progress = CGFloat(self.iFrame) / CGFloat(self.fps) / CGFloat(pageCount)
                 self.swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(self.iFrame) / CGFloat(self.fps))
 
-                let presentationLayer = self.swipeViewController.view.layer.presentationLayer() as! CALayer
-                UIGraphicsBeginImageContext(self.swipeViewController.view.frame.size);
-                presentationLayer.renderInContext(UIGraphicsGetCurrentContext()!)
-                let image = UIGraphicsGetImageFromCurrentImageContext()!
-                UIGraphicsEndImageContext()
-
                 var pixelBufferX: CVPixelBuffer? = nil
                 let status: CVReturn = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, adaptor.pixelBufferPool!, &pixelBufferX)
                 guard let managedPixelBuffer = pixelBufferX where status == 0  else {
@@ -121,21 +119,11 @@ class SwipeExporter: NSObject {
                 CVPixelBufferLockBaseAddress(managedPixelBuffer, 0)
                 let data = CVPixelBufferGetBaseAddress(managedPixelBuffer)
                 let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-                let context = CGBitmapContextCreate(data, Int(videoSize.width), Int(videoSize.height), 8, CVPixelBufferGetBytesPerRow(managedPixelBuffer), rgbColorSpace, CGImageAlphaInfo.PremultipliedFirst.rawValue)
-
-                CGContextClearRect(context, CGRectMake(0, 0, videoSize.width, videoSize.height))
-
-                let horizontalRatio = videoSize.width / image.size.width
-                let verticalRatio = videoSize.height / image.size.height
-                let aspectRatio = min(horizontalRatio, verticalRatio) // ScaleAspectFit
-
-                let newSize:CGSize = CGSizeMake(image.size.width * aspectRatio, image.size.height * aspectRatio)
-
-                let x = newSize.width < videoSize.width ? (videoSize.width - newSize.width) / 2 : 0
-                let y = newSize.height < videoSize.height ? (videoSize.height - newSize.height) / 2 : 0
-
-                CGContextDrawImage(context, CGRectMake(x, y, newSize.width, newSize.height), image.CGImage)
-
+                if let context = CGBitmapContextCreate(data, Int(videoSize.width), Int(videoSize.height), 8, CVPixelBufferGetBytesPerRow(managedPixelBuffer), rgbColorSpace, CGImageAlphaInfo.PremultipliedFirst.rawValue) {
+                    //CGContextClearRect(context, CGRectMake(0, 0, videoSize.width, videoSize.height))
+                    let presentationLayer = self.swipeViewController.view.layer.presentationLayer() as! CALayer
+                    presentationLayer.renderInContext(context)
+                }
                 CVPixelBufferUnlockBaseAddress(managedPixelBuffer, 0)
 
                 let presentationTime = CMTimeMake(Int64(self.iFrame), Int32(self.fps))
