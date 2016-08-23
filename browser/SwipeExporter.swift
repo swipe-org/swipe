@@ -102,12 +102,11 @@ class SwipeExporter: NSObject {
             
             self.swipeViewController.scrollTo(CGFloat(startPage))
             input.requestMediaDataWhenReadyOnQueue(dispatch_get_main_queue()) {
-                print("ready", self.iFrame)
                 guard input.readyForMoreMediaData else {
                     return
                 }
-                print("ready 2", self.iFrame)
-                self.progress = CGFloat(self.iFrame) / CGFloat(self.fps) / CGFloat(pageCount)
+                self.progress = 0.5 * CGFloat(self.iFrame) / CGFloat(self.fps) / CGFloat(pageCount)
+                progress(complete: false, error: nil)
 
                 var pixelBufferX: CVPixelBuffer? = nil
                 let status: CVReturn = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, adaptor.pixelBufferPool!, &pixelBufferX)
@@ -120,9 +119,8 @@ class SwipeExporter: NSObject {
                 let data = CVPixelBufferGetBaseAddress(managedPixelBuffer)
                 let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
                 if let context = CGBitmapContextCreate(data, Int(videoSize.width), Int(videoSize.height), 8, CVPixelBufferGetBytesPerRow(managedPixelBuffer), rgbColorSpace, CGImageAlphaInfo.PremultipliedFirst.rawValue) {
-                    //CGContextClearRect(context, CGRectMake(0, 0, videoSize.width, videoSize.height))
-                    let xf = CGAffineTransformMakeScale(scale, scale)
-                    CGContextConcatCTM(context, xf)
+                    let xf = CGAffineTransformMakeScale(scale, -scale)
+                    CGContextConcatCTM(context, CGAffineTransformTranslate(xf, 0, -viewSize.height))
                     let presentationLayer = self.swipeViewController.view.layer.presentationLayer() as! CALayer
                     presentationLayer.renderInContext(context)
                 }
