@@ -20,7 +20,9 @@ class SwipeExporter: NSObject {
     let swipeViewController:SwipeViewController
     let fps:Int
     let resolution:CGFloat
-    var progress = 0.0 as CGFloat
+    var progress = 0.0 as CGFloat // Output: Proress from 0.0 to 1.0
+    var outputSize = CGSizeZero    // Output: Size of generated GIF/video
+    
     private var iFrame = 0
     
     init(swipeViewController:SwipeViewController, fps:Int, resolution:CGFloat = 720.0) {
@@ -36,6 +38,7 @@ class SwipeExporter: NSObject {
         CGImageDestinationSetProperties(idst, [String(kCGImagePropertyGIFDictionary):
                                  [String(kCGImagePropertyGIFLoopCount):0]])
         iFrame = 0
+        outputSize = swipeViewController.view.frame.size
         self.processFrame(idst, startPage:startPage, pageCount: pageCount, progress:progress)
     }
 
@@ -79,20 +82,19 @@ class SwipeExporter: NSObject {
         let viewSize = swipeViewController.view.frame.size
         let scale = min(resolution / min(viewSize.width, viewSize.height), swipeViewController.view.contentScaleFactor)
         
-        let videoSize = CGSize(width: viewSize.width * scale, height: viewSize.height * scale)
-        print("viewSize, videoSize", viewSize, videoSize)
+        outputSize = CGSize(width: viewSize.width * scale, height: viewSize.height * scale)
 
         do {
             let writer = try AVAssetWriter(URL: fileURL, fileType: AVFileTypeQuickTimeMovie)
             let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: [
                 AVVideoCodecKey : AVVideoCodecH264,
-                AVVideoWidthKey : videoSize.width,
-                AVVideoHeightKey : videoSize.height
+                AVVideoWidthKey : outputSize.width,
+                AVVideoHeightKey : outputSize.height
             ])
             let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: [
                 kCVPixelBufferPixelFormatTypeKey as String: NSNumber(unsignedInt: kCVPixelFormatType_32ARGB),
-                kCVPixelBufferWidthKey as String: videoSize.width,
-                kCVPixelBufferHeightKey as String: videoSize.height,
+                kCVPixelBufferWidthKey as String: outputSize.width,
+                kCVPixelBufferHeightKey as String: outputSize.height,
             ])
             writer.addInput(input)
             
@@ -121,7 +123,7 @@ class SwipeExporter: NSObject {
                 CVPixelBufferLockBaseAddress(managedPixelBuffer, 0)
                 let data = CVPixelBufferGetBaseAddress(managedPixelBuffer)
                 let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-                if let context = CGBitmapContextCreate(data, Int(videoSize.width), Int(videoSize.height), 8, CVPixelBufferGetBytesPerRow(managedPixelBuffer), rgbColorSpace, CGImageAlphaInfo.PremultipliedFirst.rawValue) {
+                if let context = CGBitmapContextCreate(data, Int(self.outputSize.width), Int(self.outputSize.height), 8, CVPixelBufferGetBytesPerRow(managedPixelBuffer), rgbColorSpace, CGImageAlphaInfo.PremultipliedFirst.rawValue) {
                     let xf = CGAffineTransformMakeScale(scale, -scale)
                     CGContextConcatCTM(context, CGAffineTransformTranslate(xf, 0, -viewSize.height))
                     let presentationLayer = self.swipeViewController.view.layer.presentationLayer() as! CALayer

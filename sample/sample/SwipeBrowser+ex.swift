@@ -52,11 +52,11 @@ extension SwipeBrowser {
         
         self.viewLoading?.alpha = 1.0
         self.labelLoading?.text = "Exporting as a movie...".localized
-        let exporter = SwipeExporter(swipeViewController: swipeVC, fps:24, resolution:480.0)
+        let exporter = SwipeExporter(swipeViewController: swipeVC, fps:12, resolution:480.0)
         exporter.exportAsMovie(fileURL, startPage: swipeVC.book.pageIndex, pageCount: 3) { (complete, error) -> Void in
             self.progress?.progress = Float(exporter.progress)
             if complete {
-                print("Movie export done")
+                print("Movie export done", exporter.outputSize)
                 UIView.animateWithDuration(0.2, animations: { () -> Void in
                     self.viewLoading?.alpha = 0.0
                 }, completion: { (_:Bool) -> Void in
