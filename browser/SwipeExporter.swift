@@ -108,7 +108,7 @@ class SwipeExporter: NSObject {
             self.swipeViewController.scrollTo(CGFloat(startPage))
             input.requestMediaDataWhenReadyOnQueue(dispatch_get_main_queue()) {
                 guard input.readyForMoreMediaData else {
-                    return
+                    return // Not ready. Just wait.
                 }
                 self.progress = 0.5 * CGFloat(self.iFrame) / CGFloat(self.fps) / CGFloat(pageCount)
                 progress(complete: false, error: nil)
@@ -117,7 +117,8 @@ class SwipeExporter: NSObject {
                 let status: CVReturn = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, adaptor.pixelBufferPool!, &pixelBufferX)
                 guard let managedPixelBuffer = pixelBufferX where status == 0  else {
                     print("failed to allocate pixel buffer")
-                    return
+                    writer.cancelWriting()
+                    return progress(complete: false, error: Error.FailedToCreate)
                 }
 
                 CVPixelBufferLockBaseAddress(managedPixelBuffer, 0)
@@ -133,8 +134,8 @@ class SwipeExporter: NSObject {
 
                 let presentationTime = CMTimeMake(Int64(self.iFrame), Int32(self.fps))
                 if !adaptor.appendPixelBuffer(managedPixelBuffer, withPresentationTime: presentationTime) {
-                    print("failed to append")
-                    return
+                    writer.cancelWriting()
+                    return progress(complete: false, error: Error.FailedToCreate)
                 }
 
                 self.iFrame += 1
