@@ -7,7 +7,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SwipeBrowser" customModule="sample" customModuleProvider="target">
             <connections>
                 <outlet property="bottombar" destination="5Z7-9V-xkH" id="cUw-tH-7uu"/>
-                <outlet property="btnExport" destination="x6t-zM-QPf" id="Vbm-6z-Mpw"/>
                 <outlet property="btnLanguage" destination="XpL-Rf-sYN" id="Lse-Tl-X0a"/>
                 <outlet property="labelLoading" destination="mOv-2o-bgd" id="vFB-Dg-BFd"/>
                 <outlet property="labelTitle" destination="d7L-T1-VHa" id="zNW-97-kS2"/>
@@ -85,24 +84,11 @@
                         <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="JvK-et-XQT">
                             <rect key="frame" x="58" y="8" width="201" height="31"/>
                         </slider>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x6t-zM-QPf">
-                            <rect key="frame" x="266" y="6" width="46" height="30"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="46" id="HYd-YO-jJB"/>
-                                <constraint firstAttribute="height" constant="30" id="e3h-yg-ngM"/>
-                            </constraints>
-                            <state key="normal" title="Export"/>
-                            <connections>
-                                <action selector="export" destination="-1" eventType="touchUpInside" id="per-ej-dig"/>
-                            </connections>
-                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.08235294118" green="0.67450980390000004" blue="0.80000000000000004" alpha="0.79737859320557491" colorSpace="calibratedRGB"/>
                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="x6t-zM-QPf" secondAttribute="bottom" constant="8" id="IpH-ZB-Evb"/>
                         <constraint firstAttribute="height" constant="44" id="KYM-fJ-1De"/>
-                        <constraint firstAttribute="trailing" secondItem="x6t-zM-QPf" secondAttribute="trailing" constant="8" id="yC4-pJ-89r"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tWL-fk-uyv">

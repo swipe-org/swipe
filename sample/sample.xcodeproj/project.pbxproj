@@ -14,6 +14,7 @@
 		7440D0231D6771CE002814F2 /* SwipeExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7440D0221D6771CE002814F2 /* SwipeExporter.swift */; };
 		7440D02A1D6773AD002814F2 /* SwipeExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7440D0221D6771CE002814F2 /* SwipeExporter.swift */; };
 		7473AC401D6CB70200DA34B1 /* SwipeBrowser+ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7473AC3F1D6CB70200DA34B1 /* SwipeBrowser+ex.swift */; };
+		7473AC441D6CBAB300DA34B1 /* SwipeBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7473AC411D6CB9EE00DA34B1 /* SwipeBrowser.xib */; };
 		74D641471BE9168D006A4C20 /* Icon-180.png in Resources */ = {isa = PBXBuildFile; fileRef = 74D641461BE9168D006A4C20 /* Icon-180.png */; };
 		74D641481BE9168D006A4C20 /* Icon-180.png in Resources */ = {isa = PBXBuildFile; fileRef = 74D641461BE9168D006A4C20 /* Icon-180.png */; };
 		74DD7F151BDD3E570042BB9D /* HiddenAgenda.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7F111BDD3E570042BB9D /* HiddenAgenda.mp3 */; settings = {ASSET_TAGS = (bgm, ); }; };
@@ -127,7 +128,6 @@
 		74EA71CB1BD04EAD006808EA /* SwipeConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C61BD04EAD006808EA /* SwipeConnection.swift */; };
 		74EA71CC1BD04EAD006808EA /* SwipePrefetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71C71BD04EAD006808EA /* SwipePrefetcher.swift */; };
 		74EA71D11BD04F22006808EA /* SwipeBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71CE1BD04F22006808EA /* SwipeBrowser.swift */; };
-		74EA71D21BD04F22006808EA /* SwipeBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71CF1BD04F22006808EA /* SwipeBrowser.xib */; };
 		74EA71D31BD04F22006808EA /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA71D01BD04F22006808EA /* SwipeTableViewController.swift */; };
 		74EA71D61BD04FA0006808EA /* index.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71D51BD04FA0006808EA /* index.swipe */; };
 		74EA71D81BD04FE1006808EA /* speech.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74EA71D71BD04FE1006808EA /* speech.swipe */; };
@@ -212,6 +212,7 @@
 		740FD48F1BE2DD6300C2D91D /* iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork@2x.png"; sourceTree = "<group>"; };
 		7440D0221D6771CE002814F2 /* SwipeExporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeExporter.swift; sourceTree = "<group>"; };
 		7473AC3F1D6CB70200DA34B1 /* SwipeBrowser+ex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwipeBrowser+ex.swift"; sourceTree = "<group>"; };
+		7473AC411D6CB9EE00DA34B1 /* SwipeBrowser.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwipeBrowser.xib; sourceTree = "<group>"; };
 		74D641461BE9168D006A4C20 /* Icon-180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-180.png"; sourceTree = "<group>"; };
 		74DD7F111BDD3E570042BB9D /* HiddenAgenda.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HiddenAgenda.mp3; sourceTree = "<group>"; };
 		74DD7F121BDD3E570042BB9D /* MonkeysSpinningMonkeys.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = MonkeysSpinningMonkeys.mp3; sourceTree = "<group>"; };
@@ -457,6 +458,7 @@
 		74EA71791BD047F0006808EA /* sample */ = {
 			isa = PBXGroup;
 			children = (
+				7473AC411D6CB9EE00DA34B1 /* SwipeBrowser.xib */,
 				74EA717A1BD047F0006808EA /* AppDelegate.swift */,
 				7473AC3F1D6CB70200DA34B1 /* SwipeBrowser+ex.swift */,
 				74EA717E1BD047F0006808EA /* Main.storyboard */,
@@ -671,6 +673,7 @@
 				74DD7F421BDD3E610042BB9D /* IMG_8163.m4v in Resources */,
 				9871A4E91CC51C88006DE5C6 /* loop_animation.swipe in Resources */,
 				C156442F1D6692740013C080 /* network.swipe in Resources */,
+				7473AC441D6CBAB300DA34B1 /* SwipeBrowser.xib in Resources */,
 				74DD7FB11BDD3EE90042BB9D /* espresso.png in Resources */,
 				C108AAF11D63939900FF89B7 /* actions.swipe in Resources */,
 				740FD4841BE2D5B800C2D91D /* SwipeTableViewController.xib in Resources */,
@@ -683,7 +686,6 @@
 				74DD7FEE1BDFE33F0042BB9D /* tutorial.swipe in Resources */,
 				74DD7F971BDD3E770042BB9D /* nasa003.jpg in Resources */,
 				74DD7F931BDD3E770042BB9D /* nasa001.jpg in Resources */,
-				74EA71D21BD04F22006808EA /* SwipeBrowser.xib in Resources */,
 				74DD7F1B1BDD3E570042BB9D /* TheDescent.mp3 in Resources */,
 				98FF4D2D1CBE85CD00BD9DA8 /* transition_animation.swipe in Resources */,
 				74DD7FAB1BDD3E770042BB9D /* nasa013.jpg in Resources */,

@@ -19,12 +19,14 @@ class SwipeExporter: NSObject {
 
     let swipeViewController:SwipeViewController
     let fps:Int
+    let resolution:CGFloat
     var progress = 0.0 as CGFloat
     private var iFrame = 0
     
-    init(swipeViewController:SwipeViewController, fps:Int) {
+    init(swipeViewController:SwipeViewController, fps:Int, resolution:CGFloat = 720.0) {
         self.swipeViewController = swipeViewController
         self.fps = fps
+        self.resolution = resolution
     }
     
     func exportAsGifAnimation(fileURL:NSURL, startPage:Int, pageCount:Int, progress:(complete:Bool, error:ErrorType?)->Void) {
@@ -75,7 +77,8 @@ class SwipeExporter: NSObject {
         }
         
         let viewSize = swipeViewController.view.frame.size
-        let scale = 320.0 / min(viewSize.width, viewSize.height)
+        let scale = min(resolution / min(viewSize.width, viewSize.height), swipeViewController.view.contentScaleFactor)
+        
         let videoSize = CGSize(width: viewSize.width * scale, height: viewSize.height * scale)
         print("viewSize, videoSize", viewSize, videoSize)
 
@@ -137,8 +140,8 @@ class SwipeExporter: NSObject {
                     self.swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(self.iFrame) / CGFloat(self.fps))
                 } else {
                     input.markAsFinished()
+                    print("SwipeExporter: finishWritingWithCompletionHandler")
                     writer.finishWritingWithCompletionHandler({
-                        print("finished")
                         progress(complete: true, error: nil)
                     })
                 }
