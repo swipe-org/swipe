@@ -68,30 +68,33 @@ class SwipeExporter: NSObject {
     }
 
     func exportAsMovie(fileURL:NSURL, startPage:Int, pageCount:Int, progress:(complete:Bool, error:ErrorType?)->Void) {
+        // AVAssetWrite will fail if the file already exists
         let manager = NSFileManager.defaultManager()
         if manager.fileExistsAtPath(fileURL.path!) {
             try! manager.removeItemAtURL(fileURL)
         }
+        
+        let videoSize = CGSize(width: 321, height: 481)
         do {
             let writer = try AVAssetWriter(URL: fileURL, fileType: AVFileTypeQuickTimeMovie)
             let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: [
                 AVVideoCodecKey : AVVideoCodecH264,
-                AVVideoWidthKey : 320.0,
-                AVVideoHeightKey : 480.0
+                AVVideoWidthKey : videoSize.width,
+                AVVideoHeightKey : videoSize.height
             ])
             let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: [
                 kCVPixelBufferPixelFormatTypeKey as String: NSNumber(unsignedInt: kCVPixelFormatType_32ARGB),
-                kCVPixelBufferWidthKey as String: 320.0,
-                kCVPixelBufferHeightKey as String: 480.0,
+                kCVPixelBufferWidthKey as String: videoSize.width,
+                kCVPixelBufferHeightKey as String: videoSize.height,
             ])
-            iFrame = 0
             writer.addInput(input)
+            
+            iFrame = 0
+
             guard writer.startWriting() else {
                 return progress(complete: false, error: Error.FailedToFinalize)
             }
             writer.startSessionAtSourceTime(kCMTimeZero)
-            
-            let frameDuration = CMTimeMake(1, Int32(self.fps))
             
             input.requestMediaDataWhenReadyOnQueue(dispatch_get_main_queue()) {
                 print("ready", self.iFrame)
@@ -103,45 +106,39 @@ class SwipeExporter: NSObject {
                 self.swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(self.iFrame) / CGFloat(self.fps))
 
                 let presentationLayer = self.swipeViewController.view.layer.presentationLayer() as! CALayer
-                UIGraphicsBeginImageContext(self.swipeViewController.view.frame.size); defer {
-                    UIGraphicsEndImageContext()
-                }
+                UIGraphicsBeginImageContext(self.swipeViewController.view.frame.size);
                 presentationLayer.renderInContext(UIGraphicsGetCurrentContext()!)
                 let image = UIGraphicsGetImageFromCurrentImageContext()!
-
-                let lastFrameTime = CMTimeMake(Int64(self.iFrame), Int32(self.fps))
-                let presentationTime = self.iFrame == 0 ? lastFrameTime : CMTimeAdd(lastFrameTime, frameDuration)
+                UIGraphicsEndImageContext()
 
                 var pixelBufferX: CVPixelBuffer? = nil
                 let status: CVReturn = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, adaptor.pixelBufferPool!, &pixelBufferX)
-                
                 guard let managedPixelBuffer = pixelBufferX where status == 0  else {
                     print("failed to allocate pixel buffer")
                     return
                 }
 
                 CVPixelBufferLockBaseAddress(managedPixelBuffer, 0)
-
                 let data = CVPixelBufferGetBaseAddress(managedPixelBuffer)
                 let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-                let context = CGBitmapContextCreate(data, Int(320), Int(480), 8, CVPixelBufferGetBytesPerRow(managedPixelBuffer), rgbColorSpace, CGImageAlphaInfo.PremultipliedFirst.rawValue)
+                let context = CGBitmapContextCreate(data, Int(videoSize.width), Int(videoSize.height), 8, CVPixelBufferGetBytesPerRow(managedPixelBuffer), rgbColorSpace, CGImageAlphaInfo.PremultipliedFirst.rawValue)
 
-                CGContextClearRect(context, CGRectMake(0, 0, CGFloat(320), CGFloat(480)))
+                CGContextClearRect(context, CGRectMake(0, 0, videoSize.width, videoSize.height))
 
-                let horizontalRatio = CGFloat(320) / image.size.width
-                let verticalRatio = CGFloat(480) / image.size.height
-                //aspectRatio = max(horizontalRatio, verticalRatio) // ScaleAspectFill
+                let horizontalRatio = videoSize.width / image.size.width
+                let verticalRatio = videoSize.height / image.size.height
                 let aspectRatio = min(horizontalRatio, verticalRatio) // ScaleAspectFit
 
                 let newSize:CGSize = CGSizeMake(image.size.width * aspectRatio, image.size.height * aspectRatio)
 
-                let x = newSize.width < 320 ? (320 - newSize.width) / 2 : 0
-                let y = newSize.height < 480 ? (480 - newSize.height) / 2 : 0
+                let x = newSize.width < videoSize.width ? (videoSize.width - newSize.width) / 2 : 0
+                let y = newSize.height < videoSize.height ? (videoSize.height - newSize.height) / 2 : 0
 
                 CGContextDrawImage(context, CGRectMake(x, y, newSize.width, newSize.height), image.CGImage)
 
                 CVPixelBufferUnlockBaseAddress(managedPixelBuffer, 0)
 
+                let presentationTime = CMTimeMake(Int64(self.iFrame), Int32(self.fps))
                 if !adaptor.appendPixelBuffer(managedPixelBuffer, withPresentationTime: presentationTime) {
                     print("failed to append")
                     return
