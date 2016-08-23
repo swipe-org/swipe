@@ -10,7 +10,19 @@ import UIKit
 
 extension SwipeBrowser {
     @IBAction func export() {
-        exportAsMovie()
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        //alert.popoverPresentationController?.barButtonItem = sender
+        alert.popoverPresentationController?.sourceRect = btnExport!.frame
+        alert.addAction(UIAlertAction(title: "Cancel".localized, style: .Cancel, handler:nil))
+        alert.addAction(UIAlertAction(title: "Movie".localized, style: .Default) {
+            (_:UIAlertAction) -> Void in
+            self.exportAsMovie()
+            })
+        alert.addAction(UIAlertAction(title: "GIF Animation".localized, style: .Default) {
+            (_:UIAlertAction) -> Void in
+            self.exportAsGifAnimation()
+            })
+        self.presentViewController(alert, animated: true, completion: nil)
     }
 
     func exportAsGifAnimation() {
@@ -18,7 +30,7 @@ extension SwipeBrowser {
             return
         }
         let docURL = try! NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true)
-        let fileURL = docURL.URLByAppendingPathComponent("ani.mov")
+        let fileURL = docURL.URLByAppendingPathComponent("swipe.gif")
         
         self.viewLoading?.alpha = 1.0
         self.labelLoading?.text = "Exporting as a GIF animation...".localized
@@ -48,7 +60,7 @@ extension SwipeBrowser {
             return
         }
         let docURL = try! NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true)
-        let fileURL = docURL.URLByAppendingPathComponent("ani.mov")
+        let fileURL = docURL.URLByAppendingPathComponent("swipe.mov")
         
         self.viewLoading?.alpha = 1.0
         self.labelLoading?.text = "Exporting as a movie...".localized
