@@ -19,12 +19,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         if let urlVideo = NSBundle.mainBundle().URLForResource("IMG_9401", withExtension: "mov") {
-            let playerItem = AVPlayerItem(URL: urlVideo)
-            let videoPlayer = AVPlayer(playerItem: playerItem)
+            let videoPlayer = AVPlayer(playerItem: AVPlayerItem(URL: urlVideo))
             let videoLayer = AVPlayerLayer(player: videoPlayer)
             videoLayer.frame = viewMain.bounds
             viewMain.layer.addSublayer(videoLayer)
-            videoPlayer.seekToTime(kCMTimeZero)
             videoPlayer.play()
         }
     }
