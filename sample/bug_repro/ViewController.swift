@@ -18,14 +18,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let videoPlayer = AVPlayer()
-        let videoLayer = AVPlayerLayer(player: videoPlayer)
-        videoLayer.frame = viewMain.bounds
-        viewMain.layer.addSublayer(videoLayer)
-
         if let urlVideo = NSBundle.mainBundle().URLForResource("IMG_9401", withExtension: "mov") {
             let playerItem = AVPlayerItem(URL: urlVideo)
-            videoPlayer.replaceCurrentItemWithPlayerItem(playerItem)
+            let videoPlayer = AVPlayer(playerItem: playerItem)
+            let videoLayer = AVPlayerLayer(player: videoPlayer)
+            videoLayer.frame = viewMain.bounds
+            viewMain.layer.addSublayer(videoLayer)
             videoPlayer.seekToTime(kCMTimeZero)
             videoPlayer.play()
         }
