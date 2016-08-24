@@ -1,0 +1,90 @@
+{
+  "templates":{
+    "elements":{
+      "button":{
+        "data":"one", "h":50, "bc":"#ccc", "borderWidth":1, "borderColor":"#ccc", "cornerRadius":10, "focusable":true,  
+        "events":{
+          "load":{
+            "actions":[
+              { "update": {"text":{"valueOf":{"property":"data"}}} }
+            ]
+          },
+          "gainedFocus":{
+            "actions":[
+              { 
+                "update":{ 
+                  "id":"focus", 
+                  "x":{"valueOf":{"property":"screenX"}}, 
+                  "y":{"valueOf":{"property":"screenY"}}, 
+                  "w":{"valueOf":{"property":"w"}}, 
+                  "h":{"valueOf":{"property":"h"}},
+                  "opacity":1,
+                  "duration":0.4
+                } 
+              }
+            ]
+          },
+          "lostFocus":{
+            "actions":[
+              { 
+                "update":{ 
+                  "id":"focus", 
+                  "opacity":0
+                } 
+              }
+            ]
+          },
+          "tapped":{
+            "actions":[
+              { 
+                "update":{ 
+                  "text":"tapped", "bc":"#eee", "duration":0.4, 
+                  "events":{
+                    "completion":{
+                      "actions":[
+                        { "update": {"text":{"valueOf":{"property":"data"}}, "bc":"#ccc" } }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "pages":[
+    {
+      "play":"never",
+      "elements":[
+        { "template":"button", "data":"1", "y":50 },
+        { 
+          "y":105, "h":"50", 
+          "elements":[
+            { "template":"button", "data":"2", "w":"50%" },
+            { "template":"button", "data":"3", "x":"50%", "w":"50%" }
+          ]
+        },
+        { 
+          "y":160, "h":"50", 
+          "elements":[
+            { "template":"button", "data":"4", "w":"50%" },
+            { "template":"button", "data":"5", "x":"50%", "w":"50%" }
+          ]
+        },
+        { "template":"button", "data":"6", "y":215, "x":"50%", "w":"50%" },
+        { "template":"button", "data":"7", "y":270, "x":"50%", "w":"50%" },
+        { "template":"button", "data":"8", "y":270, "w":"50%" },
+        { 
+          "y":330, "h":"105", "x":0, "w":"50%",
+          "elements":[
+            { "template":"button", "data":"9" },
+            { "template":"button", "data":"10", "y":55  }
+          ]
+        },
+        { "id":"focus", "borderWidth":2, "borderColor":"red", "opacity":0 }
+      ]
+    }
+  ]
+}

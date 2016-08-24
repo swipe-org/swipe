@@ -14,15 +14,52 @@ import Foundation
     import UIKit
 #endif
 
-protocol SwipeViewDelegate:NSObjectProtocol {
+protocol SwipeViewDelegate: NSObjectProtocol {
     func addedResourceURLs(urls:[NSURL:String], callback:() -> Void)
 }
 
 class SwipeView: SwipeNode {
-    var view: UIView?
+
     internal var info = [String:AnyObject]()
     internal var fEnabled = true
+    internal var fFocusable = false
 
+    class InternalView: UIView {
+        weak var parent: SwipeView?
+        
+        init(parentView: SwipeView?, frame: CGRect) {
+            super.init(frame: frame)
+            parent = parentView
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override func canBecomeFocused() -> Bool {
+            if let parent = self.parent {
+                return parent.fFocusable
+            } else {
+                return super.canBecomeFocused()
+            }
+        }
+        
+        override func didUpdateFocusInContext(context: UIFocusUpdateContext, withAnimationCoordinator coordinator: UIFocusAnimationCoordinator) {
+            if let parent = self.parent {
+                // lostFocus must be fired before gainedFocus
+                if let actions = parent.eventHandler.actionsFor("lostFocus") where self == context.previouslyFocusedView  {
+                    parent.execute(parent, actions: actions)
+                }
+                if let actions = parent.eventHandler.actionsFor("gainedFocus") where self == context.nextFocusedView  {
+                    parent.execute(parent, actions: actions)
+                }
+            } else {
+                super.didUpdateFocusInContext(context, withAnimationCoordinator: coordinator)
+            }
+        }
+    }
+    var view: UIView?
+    
     init(info: [String:AnyObject]) {
         self.info = info
         super.init()
@@ -106,7 +143,7 @@ class SwipeView: SwipeNode {
     }
     
     func didDoubleTap(recognizer: UITapGestureRecognizer) {
-        if let actions = eventHandler.actionsFor("doubleTapped") {
+        if let actions = eventHandler.actionsFor("doubleTapped") where fEnabled  {
             execute(self, actions: actions)
         }
     }
@@ -145,6 +182,18 @@ class SwipeView: SwipeNode {
         switch (property) {
         case "data":
             return self.data
+        case "screenX":
+            return self.view!.superview?.convertPoint(self.view!.frame.origin, toView: nil).x
+        case "screenY":
+            return self.view!.superview?.convertPoint(self.view!.frame.origin, toView: nil).y
+        case "x":
+            return self.view!.frame.origin.x
+        case "y":
+            return self.view!.frame.origin.y
+        case "w":
+            return self.view!.frame.size.width
+        case "h":
+            return self.view!.frame.size.height
         default:
             return nil
         }

@@ -438,7 +438,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     
         MyLog("SWPage  loading @\(index)", level: 2)
         assert(self.view == nil, "loadView self.view must be nil")
-        let view = UIView(frame: CGRectMake(0.0, 0.0, 100.0, 100.0))
+        let view = InternalView(parentView: self, frame: CGRectMake(0.0, 0.0, 100.0, 100.0))
         view.clipsToBounds = true
         self.view = view
         let viewVideo = UIView(frame: view.bounds)
@@ -501,7 +501,9 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SwipePage.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
 #endif
         if let actions = eventHandler.actionsFor("load") {
-            execute(self, actions: actions)
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.4 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
+                self.execute(self, actions: actions)
+            }
         }
 
         return view
@@ -770,7 +772,36 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     
     
     // SwipeNode
-
+    override func getValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+        var name = "*"
+        if let val = info["id"] as? String {
+            name = val
+        }
+        
+        // first try own page property
+        if (name == "*" || self.name.caseInsensitiveCompare(name) == .OrderedSame) {
+            if let attribute = info["property"] as? String {
+                return getPropertyValue(originator, property: attribute)
+            } else if let attributeInfo = info["property"] as? [String:AnyObject] {
+                return getPropertiesValue(originator, info: attributeInfo)
+            }
+        }
+        
+        for c in children {
+            if let e = c as? SwipeElement {
+                if name == "*" || e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                    if let attribute = info["property"] as? String {
+                        return e.getPropertyValue(originator, property: attribute)
+                    } else if let attributeInfo = info["property"] as? [String:AnyObject] {
+                        return e.getPropertiesValue(originator, info: attributeInfo)
+                    }
+                }
+            }
+        }
+        
+        return nil
+    }
+    
     override func updateElement(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject]) -> Bool {
         // Find named element and update
         for c in children {

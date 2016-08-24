@@ -177,25 +177,43 @@ class SwipeParser {
         return nil
     }
 
-    static func parseSize(param:AnyObject?, defalutValue:CGSize = CGSizeMake(0.0, 0.0), scale:CGSize) -> CGSize {
+    static func parseSize(param:AnyObject?, defaultValue:CGSize = CGSizeMake(0.0, 0.0), scale:CGSize) -> CGSize {
         if let values = param as? [CGFloat] where values.count == 2 {
             return CGSizeMake(values[0] * scale.width, values[1] * scale.height)
         }
-        return CGSizeMake(defalutValue.width * scale.width, defalutValue.height * scale.height)
+        return CGSizeMake(defaultValue.width * scale.width, defaultValue.height * scale.height)
     }
-
-    static func parseFloat(param:AnyObject?, defalutValue:Float = 1.0) -> Float {
+    
+    static func parseFloat(param:AnyObject?, defaultValue:Float = 1.0) -> Float {
         if let value = param as? Float {
             return value
         }
-        return defalutValue
+        return defaultValue
     }
 
-    static func parseCGFloat(param:AnyObject?, defalutValue:CGFloat = 0.0) -> CGFloat {
+    static func parseCGFloat(param:AnyObject?, defaultValue:CGFloat = 0.0) -> CGFloat {
         if let value = param as? CGFloat {
             return value
         }
-        return defalutValue
+        return defaultValue
+    }
+
+    static func parseAndEvalBool(originator: SwipeNode, key: String, info: [String:AnyObject]) -> Bool? {
+        var valObj: AnyObject?
+        
+        if let keyInfo = info[key] as? [String:AnyObject], valOfInfo = keyInfo["valueOf"] as? [String:AnyObject] {
+            valObj = originator.getValue(originator, info:valOfInfo)
+        } else {
+            valObj = info[key]
+        }
+        
+        if let val = valObj as? Bool {
+            return val
+        } else if let val = valObj as? Int {
+            return val != 0
+        } else {
+            return nil
+        }
     }
 
     //
@@ -338,8 +356,8 @@ class SwipeParser {
     static func parseShadow(value:AnyObject?, scale:CGSize) -> NSShadow {
         let shadow = NSShadow()
         if let info = value as? [String:AnyObject] {
-            shadow.shadowOffset = SwipeParser.parseSize(info["offset"], defalutValue: CGSizeMake(1.0, 1.0), scale:scale)
-            shadow.shadowBlurRadius = SwipeParser.parseCGFloat(info["radius"], defalutValue: 2) * scale.width
+            shadow.shadowOffset = SwipeParser.parseSize(info["offset"], defaultValue: CGSizeMake(1.0, 1.0), scale:scale)
+            shadow.shadowBlurRadius = SwipeParser.parseCGFloat(info["radius"], defaultValue: 2) * scale.width
             shadow.shadowColor = UIColor(CGColor: SwipeParser.parseColor(info["color"], defaultColor: UIColor.blackColor().CGColor))
         }
         return shadow

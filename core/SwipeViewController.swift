@@ -375,6 +375,9 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
 
     func handlePan(recognizer:UIPanGestureRecognizer) {
+        if self.book.pages.count == 1 {
+            return
+        }
         let translation = recognizer.translationInView(self.view)
         let velocity = recognizer.velocityInView(self.view)
         let size = self.scrollView.frame.size
