@@ -27,7 +27,7 @@ private func MyLog(text:String, level:Int = 0) {
 }
 
 // HACK:
-// AVPlayerLayer causes a crash in deinit when it was rendered by presentationPlayer, 
+// AVPlayerLayer causes a crash in deinit when it was rendered by presentationPlayer,
 // which calls init(layer: AnyObject) to create a copy before the rendering. 
 // We can work-around this bug by calling super.init().
 class XAVPlayerLayer: AVPlayerLayer {
