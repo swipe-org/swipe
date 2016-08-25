@@ -85,7 +85,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     private let contentScale = UIScreen.mainScreen().scale
 #endif
     private var fRepeat = false
-    private var helper: SwipeView?  // Example: SwipeList
+    var helper: SwipeView?  // Example: SwipeList
     
     // Image Element Specific
     private var imageLayer:CALayer?
@@ -355,7 +355,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         let h = h0 * scale.height
         let frame = CGRectMake(x, y, w, h)
         
-        let view = UIView(frame: frame)
+        let view = InternalView(wrapper: self, frame: frame)
 #if os(OSX)
         let layer = view.makeBackingLayer()
 #else
@@ -408,6 +408,10 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
 
         if let enabled = info["enabled"] as? Bool {
             self.fEnabled = enabled
+        }
+        
+        if let focusable = info["focusable"] as? Bool {
+            self.fFocusable = focusable
         }
         
         if let value = info["clip"] as? Bool {
@@ -567,8 +571,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             SwipeElement.processShadow(info, scale:scale, layer: shapeLayer)
 
             shapeLayer.lineCap = "round"
-            shapeLayer.strokeStart = SwipeParser.parseCGFloat(info["strokeStart"], defalutValue: 0.0)
-            shapeLayer.strokeEnd = SwipeParser.parseCGFloat(info["strokeEnd"], defalutValue: 1.0)
+            shapeLayer.strokeStart = SwipeParser.parseCGFloat(info["strokeStart"], defaultValue: 0.0)
+            shapeLayer.strokeEnd = SwipeParser.parseCGFloat(info["strokeEnd"], defaultValue: 1.0)
             layer.addSublayer(shapeLayer)
             self.shapeLayer = shapeLayer
             if let tiling = info["tiling"] as? Bool where tiling {
@@ -623,9 +627,18 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         }
         
         if let value = info["textArea"] as? [String:AnyObject] {
-            let textArea = SwipeTextArea(parent: self, info: value, frame: view.bounds, screenDimension: self.screenDimension)
-            helper = textArea
-            view.addSubview(textArea.view!)
+            let textView = SwipeTextArea(parent: self, info: value, frame: view.bounds, screenDimension: self.screenDimension)
+            helper = textView
+            view.addSubview(helper!.view!)
+        } else if let value = info["textField"] as? [String:AnyObject] {
+            let textView = SwipeTextField(parent: self, info: value, frame: view.bounds, screenDimension: self.screenDimension)
+            helper = textView
+            view.addSubview(helper!.view!)
+        } else if let value = info["list"] as? [String:AnyObject] {
+            let list = SwipeList(parent: self, info: value, scale:self.scale, frame: view.bounds, screenDimension: self.screenDimension, delegate: self.delegate)
+            helper = list
+            view.addSubview(list.tableView)
+            list.tableView.reloadData()
         }
         
         if let text = parseText(self, info: info, key:"text") {
@@ -1081,13 +1094,6 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             }
         }
         
-        if let value = info["list"] as? [String:AnyObject] {
-            let list = SwipeList(parent: self, info: value, scale:self.scale, frame: view.bounds, screenDimension: self.screenDimension, delegate: self.delegate)
-            helper = list
-            view.addSubview(list.tableView)
-            list.tableView.reloadData()
-        }
-        
         // Nested Elements
         if let elementsInfo = info["elements"] as? [[String:AnyObject]] {
             for e in elementsInfo {
@@ -1281,9 +1287,9 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     static func processShadow(info:[String:AnyObject], scale:CGSize, layer:CALayer) {
         if let shadowInfo = info["shadow"] as? [String:AnyObject] {
             layer.shadowColor = SwipeParser.parseColor(shadowInfo["color"], defaultColor: UIColor.blackColor().CGColor)
-            layer.shadowOffset = SwipeParser.parseSize(shadowInfo["offset"], defalutValue: CGSizeMake(1, 1), scale:scale)
-            layer.shadowOpacity = SwipeParser.parseFloat(shadowInfo["opacity"], defalutValue:0.5)
-            layer.shadowRadius = SwipeParser.parseCGFloat(shadowInfo["radius"], defalutValue: 1.0) * scale.width
+            layer.shadowOffset = SwipeParser.parseSize(shadowInfo["offset"], defaultValue: CGSizeMake(1, 1), scale:scale)
+            layer.shadowOpacity = SwipeParser.parseFloat(shadowInfo["opacity"], defaultValue:0.5)
+            layer.shadowRadius = SwipeParser.parseCGFloat(shadowInfo["radius"], defaultValue: 1.0) * scale.width
         }
     }
     
@@ -1451,6 +1457,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             }
         case "enabled":
             return self.fEnabled
+        case "focusable":
+            return self.fFocusable
         default:
             return super.getPropertyValue(originator, property: property)
         }
@@ -1536,11 +1544,19 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 w0 = value
             } else if let value = info["w"] as? String {
                 w0 = SwipeParser.parsePercent(value, full: dimension.width, defaultValue: dimension.width)
+            } else if let valInfo = info["w"] as? [String:AnyObject],
+                valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
+                value = originator.getValue(originator, info:valOfInfo) as? CGFloat {
+                w0 = value
             }
             if let value = info["h"] as? CGFloat {
                 h0 = value
             } else if let value = info["h"] as? String {
                 h0 = SwipeParser.parsePercent(value, full: dimension.height, defaultValue: dimension.height)
+            } else if let valInfo = info["h"] as? [String:AnyObject],
+                valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
+                value = originator.getValue(originator, info:valOfInfo) as? CGFloat {
+                h0 = value
             }
         }
         
@@ -1556,7 +1572,12 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             } else {
                 x = SwipeParser.parsePercent(value, full: dimension.width, defaultValue: 0)
             }
+        } else if let valInfo = info["x"] as? [String:AnyObject],
+            valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
+            value = originator.getValue(originator, info:valOfInfo) as? CGFloat {
+            x = value
         }
+
         if let value = info["y"] as? CGFloat {
             y = value
         } else if let value = info["y"] as? String {
@@ -1569,6 +1590,10 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             } else {
                 y = SwipeParser.parsePercent(value, full: dimension.height, defaultValue: 0)
             }
+        } else if let valInfo = info["y"] as? [String:AnyObject],
+            valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
+            value = originator.getValue(originator, info:valOfInfo) as? CGFloat {
+            y = value
         }
         //NSLog("SWEleme \(x),\(y),\(w0),\(h0),\(sizeContents),\(dimension),\(scale)")
         
@@ -1822,10 +1847,11 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 })
                 
                 if let text = self.parseText(originator, info: self.info, key:"text") {
-                    if let textAreaHelper = self.helper as? SwipeTextArea {
-                        textAreaHelper.setText(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: nil)
-                    }
-                    else {
+                    if let textHelper = self.helper as? SwipeTextArea {
+                        textHelper.setText(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: nil)
+                    } else if let textHelper = self.helper as? SwipeTextField {
+                        textHelper.setText(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: nil)
+                    } else {
                         if self.textLayer == nil {
                             self.textLayer = SwipeElement.addTextLayer(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: self.layer!)
                         } else {
@@ -1844,23 +1870,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 }, completion: { (done: Bool) in
                     //print("uiview done: \(done)")
             })
-
-            var enabledVal: AnyObject?
-            var enabled = false
             
-            if let enabledInfo = self.info["enabled"] as? [String:AnyObject], valOfInfo = enabledInfo["valueOf"] as? [String:AnyObject] {
-                enabledVal = originator.getValue(originator, info:valOfInfo)
-            } else {
-                enabledVal = self.info["enabled"]
-            }
-            
-            if let enabledInt = enabledVal as? Int {
-                enabled = (enabledInt > 0)
-            } else if let enabledBool = enabledVal as? Bool {
-                enabled = enabledBool
-            }
-            
-            if enabledVal != nil && self.fEnabled != enabled {
+            if let enabled = SwipeParser.parseAndEvalBool(originator, key: "enabled", info: self.info) where self.fEnabled != enabled {
                 self.fEnabled = enabled
                 if enabled {
                     self.execute(self, actions: self.eventHandler.actionsFor("enabled"))
@@ -1868,12 +1879,27 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     self.execute(self, actions: self.eventHandler.actionsFor("disabled"))
                 }
             }
+            
+            if let focusable = SwipeParser.parseAndEvalBool(originator, key: "focusable", info: self.info) where self.fFocusable != focusable {
+                self.fFocusable = focusable
+                if focusable {
+                    self.execute(self, actions: self.eventHandler.actionsFor("focusable"))
+                } else {
+                    self.execute(self, actions: self.eventHandler.actionsFor("unfocusable"))
+                }
+                self.view?.superview?.setNeedsFocusUpdate()
+            }
         })
     }
     
     override func updateElement(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject]) -> Bool {
-        if let textAreaHelper = self.helper as? SwipeTextArea {
-            if textAreaHelper.updateElement(originator, name: name, up: up, info: info) {
+        if let textHelper = self.helper as? SwipeTextArea {
+            if textHelper.updateElement(originator, name: name, up: up, info: info) {
+                return true
+            }
+        }
+        if let textHelper = self.helper as? SwipeTextField {
+            if textHelper.updateElement(originator, name: name, up: up, info: info) {
                 return true
             }
         }

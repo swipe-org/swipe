@@ -6,9 +6,8 @@
 				"elements": [
 					{ "img":"icon-180.png", "pos":[20,"50%"], "w":20 },
 					{
-						"x":40, "w":"80%",
-						"text":{"valueOf":{"id":"aList", "property":{"items":{"data":{"person":{"id":"first"}}}}}},
-						"textAlign":"left"
+						"x":40, "w":"80%", "textAlign":"left", "fontSize":20,
+						"text":{"valueOf":{"id":"aList", "property":{"items":{"data":{"person":{"id":"first"}}}}}}
 					}
 				]
 			},
@@ -17,9 +16,8 @@
 				"elements": [
 					{ "img":"icon-180.png", "pos":["90%","50%"], "w":20},
 					{
-						"x":0, "w":"80%",
-						"text":{"valueOf":{"id":"aList", "property":{"items":{"data":{"person":{"id":"first"}}}}}},
-						"textAlign":"right"
+						"x":0, "w":"80%", "textAlign":"right", "fontSize":20,
+						"text":{"valueOf":{"id":"aList", "property":{"items":{"data":{"person":{"id":"first"}}}}}}
 					}
 				]
 			}
@@ -32,7 +30,7 @@
 			"elements": [
 				{ "bc":"#fdd"},
 				{ "h":"8%", "w":"45%", "pos":["25%","95%"],"text":"selected", "textAlign":"right"},
-				{ "id":"echo", "h":"8%", "w":"45%", "pos":["75%","95%"],"text":"2"},
+				{ "id":"echo", "h":"8%", "w":"45%", "pos":["75%","95%"],"text":""},
 				{ "text":"Tap on List Items", "h":"8%", "pos":["50%", "5%"]},
 				{
 					"id": "aList",
@@ -59,7 +57,14 @@
 						}
 					}
 				}
-			]
+			],
+			"events": {
+				"load": {
+					"actions": [
+						{ "update": { "id":"echo", "text":{"valueOf":{"id":"aList", "property":"selectedItem"}}}}
+					]
+				}
+			}
 		}
 	]
 }

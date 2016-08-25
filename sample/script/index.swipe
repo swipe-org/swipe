@@ -17,5 +17,6 @@
         { "url":"details_index.swipe", "title":"Property Details", "icon":"more.png" },
         { "url":"http://www.swipe.net/index.swipe", "title":"More ...", "icon":"more.png" },
         { "url":"http://satoshi.blogs.com/swipe/index2.swipe", "title":"More 2...", "icon":"more.png" },
+        { "url":"tv_index.swipe", "title":"TV", "icon":"more.png" },
     ]
 }

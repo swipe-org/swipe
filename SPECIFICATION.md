@@ -294,10 +294,19 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **list** (List): List of items (refer to the List section below)
 - **textArea** (TextInput): Multiline text input box (refer to the TextArea section below)
 - **data** (String or JSON): Application-defined data associated with the element.  May be referenced using **valueOf**
+- **focusable** (Bool): For non-touch devices, such as a TV, this property specifies that the device can move focus to the element when set to *true*.  Otherwise, the focusing mechanism will ignore the element.  An element must be in focus to receive user input and fire the corresponding events.
 
 ### Element Events
 - **tapped**: The user singled-tapped on the element. *Propagated*
 - **doubleTapped**: The user double-tapped on the element. *Propagated*
+- **gainedFocus**: The user moved focus to the element.
+- **lostFocus**: The user moved focus away from the element.  
+- **enabled**: Element **enabled** property set to **true**
+- **disnabled**: Element **enabled** property set to **false**
+- **focusable**: Element **focusable** property set to **true**
+- **unfocusable**: Element **focusable** property set to **false**
+
+**lostFocus** is always received before **gainedFocus**.
 
 Unhandled element events are propagated to their parent (containing **element**).  If no **element** in the hierarchy handles the event, then the containing **page** receives the event.
 
@@ -471,6 +480,9 @@ Currently supported **element** Properties:
 - **text.length**
 - **enabled**
 - **data**
+- **x**, **y**, **w**, **h**
+- **screenX**: The screen-relative **x**
+- **screenY**: The screen-relative **y**
 
 Currently supported non-**element**s:
 - **params**
@@ -584,7 +596,93 @@ The example below updates the **element**'s **text** property to "tapped" when t
   }
 ```
 
-## 11. List Element
+## 11. Element Focus
+An **element** is in focus when the user highlights an item using a remote control or keyboard. Therefore, the notion of *focus* makes sense only on non-touch devices such as TVs.
+
+The **element** becomes focused as the user navigates through the **focuasable** elements on the screen. In a focus-based interaction model, a single **element** onscreen is considered focused, and the user can move focus to other **element**s by navigating through the **element** onscreen using a remote control.  This navigation of **element**s triggers the **lostFocus** and **gainedFocus** events on the **element**s as the lose and gain focus. The focused **element** is used as the target of any user actions. For example, when an **element** is focused, the **tapped** is triggered when the user presses the **select** button on the remote.
+
+The TV's focus engine automatically determines where focus should move in response to navigation events from a remote. Users can move focus in any two-dimensional direction: left, right, up, down, or diagonal (as supported by the remote/TV).
+
+### Focus Highlighting
+Highlighting the focused **element** can be done in many ways and is left to the app.  The following example uses a simple red focus rectangle to highlight the focused element.
+
+```
+{
+  "templates":{
+    "elements":{
+      "button":{
+        "data":"one", "h":50, "bc":"#ccc", "borderWidth":1, "borderColor":"#ccc", "cornerRadius":10, "focusable":true,  
+        "events":{
+          "load":{
+            "actions":[
+              { "update": {"text":{"valueOf":{"property":"data"}}} }
+            ]
+          },
+          "gainedFocus":{
+            "actions":[
+              { 
+                "update":{ 
+                  "id":"focus", 
+                  "x":{"valueOf":{"property":"screenX"}}, 
+                  "y":{"valueOf":{"property":"screenY"}}, 
+                  "w":{"valueOf":{"property":"w"}}, 
+                  "h":{"valueOf":{"property":"h"}},
+                  "opacity":1,
+                  "duration":0.4
+                } 
+              }
+            ]
+          },
+          "lostFocus":{
+            "actions":[
+              { 
+                "update":{ 
+                  "id":"focus", 
+                  "opacity":0
+                } 
+              }
+            ]
+          },
+          "tapped":{
+            "actions":[
+              { 
+                "update":{ 
+                  "text":"tapped", "bc":"#eee", "duration":0.4, 
+                  "events":{
+                    "completion":{
+                      "actions":[
+                        { "update": {"text":{"valueOf":{"property":"data"}}, "bc":"#ccc" } }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "pages":[
+    {
+      "play":"never",
+      "elements":[
+        { "template":"button", "data":"1", "y":50 },
+        { 
+          "y":105, "h":"50", 
+          "elements":[
+            { "template":"button", "data":"2", "w":"50%" },
+            { "template":"button", "data":"3", "x":"50%", "w":"50%" }
+          ]
+        },
+        { "id":"focus", "borderWidth":2, "borderColor":"red", "opacity":0 }
+      ]
+    }
+  ]
+}
+```
+
+## 12. List Element
 
 Displays a scrollable list of items.  The items are composed of **elements** that define the visual layout of each item.  Items also contain **data** which defines String to be displayed.  
 
@@ -675,7 +773,7 @@ The example below displays a list and a text element that displays the currently
 }
 ```
 
-## 12. TextArea Element
+## 13. TextArea Element
 
 The **textArea** element defines a multi-line text input box where the user can enter text.  It's **text** property can be changed using the **update** action and referenced using **valueOf**.
 
@@ -726,7 +824,7 @@ In the example below, text entered into the **textArea** is copied to the elemen
 }
 ```
 
-## 13. HTTP GET and POST 
+## 14. HTTP GET and POST 
 The actions **get** and **post** provide ways to communication with an HTTP server.
 
 ### Get Syntax
@@ -822,7 +920,7 @@ The example below uses **post** to send "hello" to a chat bot and displays the r
 }
 ```
 
-## 14. Timers
+## 15. Timers
 The **timer** action provides a way to perform other actions based on timed intervals that may or may not repeat.
 
 ### Syntax
@@ -882,7 +980,7 @@ In the example below, when the "tap me" element is tapped, a repeating timer wit
 }
 ```
 
-## 15. Multilingual Strings
+## 16. Multilingual Strings
 
 The "strings" property of the page specifies strings in multiple languages.  The format is:
 

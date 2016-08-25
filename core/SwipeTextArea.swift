@@ -23,7 +23,7 @@ class SwipeTextArea: SwipeView, UITextViewDelegate {
         self.textView.delegate = self
         self.textView.backgroundColor = UIColor.clearColor()
         //self.textView.becomeFirstResponder()
-        self.view = self.textView
+        self.view = self.textView as UIView
     }
     
     override func setText(text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer?) -> Bool {

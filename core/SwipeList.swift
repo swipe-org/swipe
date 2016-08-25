@@ -48,11 +48,14 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
                 itemHeights.append(defaultItemHeight)
             }
         }
-        if let selectedIndex = self.info["selectedItem"] as? Int {
-            self.tableView.selectRowAtIndexPath(NSIndexPath(forRow: selectedIndex, inSection: 0), animated: true, scrollPosition: .Middle)
-        }
         if let scrollEnabled = self.info["scrollEnabled"] as? Bool {
             self.tableView.scrollEnabled = scrollEnabled
+        }
+        self.tableView.reloadData()
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
+            if let selectedIndex = self.info["selectedItem"] as? Int {
+                self.tableView.selectRowAtIndexPath(NSIndexPath(forRow: selectedIndex, inSection: 0), animated: true, scrollPosition: .Middle)
+            }
         }
     }
     
