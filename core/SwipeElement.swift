@@ -85,7 +85,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     private let contentScale = UIScreen.mainScreen().scale
 #endif
     private var fRepeat = false
-    private var helper: SwipeView?  // Example: SwipeList
+    var helper: SwipeView?  // Example: SwipeList
     
     // Image Element Specific
     private var imageLayer:CALayer?
@@ -355,7 +355,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         let h = h0 * scale.height
         let frame = CGRectMake(x, y, w, h)
         
-        let view = InternalView(parentView: self, frame: frame)
+        let view = InternalView(wrapper: self, frame: frame)
 #if os(OSX)
         let layer = view.makeBackingLayer()
 #else
@@ -627,9 +627,18 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         }
         
         if let value = info["textArea"] as? [String:AnyObject] {
-            let textArea = SwipeTextArea(parent: self, info: value, frame: view.bounds, screenDimension: self.screenDimension)
-            helper = textArea
-            view.addSubview(textArea.view!)
+            let textView = SwipeTextArea(parent: self, info: value, frame: view.bounds, screenDimension: self.screenDimension)
+            helper = textView
+            view.addSubview(helper!.view!)
+        } else if let value = info["textField"] as? [String:AnyObject] {
+            let textView = SwipeTextField(parent: self, info: value, frame: view.bounds, screenDimension: self.screenDimension)
+            helper = textView
+            view.addSubview(helper!.view!)
+        } else if let value = info["list"] as? [String:AnyObject] {
+            let list = SwipeList(parent: self, info: value, scale:self.scale, frame: view.bounds, screenDimension: self.screenDimension, delegate: self.delegate)
+            helper = list
+            view.addSubview(list.tableView)
+            list.tableView.reloadData()
         }
         
         if let text = parseText(self, info: info, key:"text") {
@@ -1083,13 +1092,6 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             default:
                 break
             }
-        }
-        
-        if let value = info["list"] as? [String:AnyObject] {
-            let list = SwipeList(parent: self, info: value, scale:self.scale, frame: view.bounds, screenDimension: self.screenDimension, delegate: self.delegate)
-            helper = list
-            view.addSubview(list.tableView)
-            list.tableView.reloadData()
         }
         
         // Nested Elements
@@ -1845,10 +1847,11 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 })
                 
                 if let text = self.parseText(originator, info: self.info, key:"text") {
-                    if let textAreaHelper = self.helper as? SwipeTextArea {
-                        textAreaHelper.setText(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: nil)
-                    }
-                    else {
+                    if let textHelper = self.helper as? SwipeTextArea {
+                        textHelper.setText(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: nil)
+                    } else if let textHelper = self.helper as? SwipeTextField {
+                        textHelper.setText(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: nil)
+                    } else {
                         if self.textLayer == nil {
                             self.textLayer = SwipeElement.addTextLayer(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: self.layer!)
                         } else {
@@ -1884,13 +1887,19 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 } else {
                     self.execute(self, actions: self.eventHandler.actionsFor("unfocusable"))
                 }
+                self.view?.superview?.setNeedsFocusUpdate()
             }
         })
     }
     
     override func updateElement(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject]) -> Bool {
-        if let textAreaHelper = self.helper as? SwipeTextArea {
-            if textAreaHelper.updateElement(originator, name: name, up: up, info: info) {
+        if let textHelper = self.helper as? SwipeTextArea {
+            if textHelper.updateElement(originator, name: name, up: up, info: info) {
+                return true
+            }
+        }
+        if let textHelper = self.helper as? SwipeTextField {
+            if textHelper.updateElement(originator, name: name, up: up, info: info) {
                 return true
             }
         }

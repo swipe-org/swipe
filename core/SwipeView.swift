@@ -25,11 +25,11 @@ class SwipeView: SwipeNode {
     internal var fFocusable = false
 
     class InternalView: UIView {
-        weak var parent: SwipeView?
+        weak var wrapper: SwipeView?
         
-        init(parentView: SwipeView?, frame: CGRect) {
+        init(wrapper: SwipeView?, frame: CGRect) {
             super.init(frame: frame)
-            parent = parentView
+            self.wrapper = wrapper
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -37,21 +37,23 @@ class SwipeView: SwipeNode {
         }
         
         override func canBecomeFocused() -> Bool {
-            if let parent = self.parent {
-                return parent.fFocusable
+            if let element = self.wrapper as? SwipeElement, _ = element.helper?.view {
+                 return false
+            } else if let wrapper = self.wrapper {
+                return wrapper.fFocusable
             } else {
                 return super.canBecomeFocused()
             }
         }
         
         override func didUpdateFocusInContext(context: UIFocusUpdateContext, withAnimationCoordinator coordinator: UIFocusAnimationCoordinator) {
-            if let parent = self.parent {
+            if let wrapper = self.wrapper {
                 // lostFocus must be fired before gainedFocus
-                if let actions = parent.eventHandler.actionsFor("lostFocus") where self == context.previouslyFocusedView  {
-                    parent.execute(parent, actions: actions)
+                if let actions = wrapper.eventHandler.actionsFor("lostFocus") where self == context.previouslyFocusedView  {
+                    wrapper.execute(wrapper, actions: actions)
                 }
-                if let actions = parent.eventHandler.actionsFor("gainedFocus") where self == context.nextFocusedView  {
-                    parent.execute(parent, actions: actions)
+                if let actions = wrapper.eventHandler.actionsFor("gainedFocus") where self == context.nextFocusedView  {
+                    wrapper.execute(wrapper, actions: actions)
                 }
             } else {
                 super.didUpdateFocusInContext(context, withAnimationCoordinator: coordinator)

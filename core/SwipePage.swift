@@ -438,7 +438,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     
         MyLog("SWPage  loading @\(index)", level: 2)
         assert(self.view == nil, "loadView self.view must be nil")
-        let view = InternalView(parentView: self, frame: CGRectMake(0.0, 0.0, 100.0, 100.0))
+        let view = InternalView(wrapper: self, frame: CGRectMake(0.0, 0.0, 100.0, 100.0))
         view.clipsToBounds = true
         self.view = view
         let viewVideo = UIView(frame: view.bounds)
