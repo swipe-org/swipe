@@ -12,7 +12,7 @@ import MobileCoreServices
 import AVFoundation
 
 class SwipeExporter: NSObject {
-    enum Error:Swift.Error {
+    enum Error: Swift.Error {
         case FailedToCreate
         case FailedToFinalize
     }
@@ -42,7 +42,7 @@ class SwipeExporter: NSObject {
         self.processFrame(idst, startPage:startPage, pageCount: pageCount, progress:progress)
     }
 
-    func processFrame(_ idst:CGImageDestination, startPage:Int, pageCount:Int, progress:(complete:Bool, error: Error?)->Void) {
+    func processFrame(_ idst:CGImageDestination, startPage:Int, pageCount:Int, progress:(complete:Bool, error:Swift.Error?)->Void) {
         self.progress = CGFloat(iFrame) / CGFloat(fps) / CGFloat(pageCount)
         swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(iFrame) / CGFloat(fps))
         
