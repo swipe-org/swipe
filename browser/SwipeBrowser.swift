@@ -45,6 +45,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     @IBOutlet var bottombar:UIView?
     @IBOutlet var slider:UISlider!
     @IBOutlet var labelTitle:UILabel?
+    @IBOutlet var btnExport:UIButton?
     private var landscapeMode = false
 #elseif os(tvOS)
     override weak var preferredFocusedView: UIView? { return controller?.view }
@@ -95,6 +96,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
         
 #if os(iOS)
+        btnExport?.enabled = false
         slider.isHidden = true
 #endif
 
@@ -153,6 +155,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 #endif
         var rcFrame = self.view.bounds
 #if os(iOS)
+        if let _ = controller as? SwipeViewController {
+            btnExport?.enabled = true
+        }
         if documentViewer.hideUI() {
             let tap = UITapGestureRecognizer(target: self, action: #selector(SwipeBrowser.tapped))
             self.view.addGestureRecognizer(tap)
@@ -326,6 +331,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     @IBAction func slided(_ sender:UISlider) {
         MyLog("SWBrows \(slider.value)")
     }
+#else
+    func tapped() {
+    }
 #endif
 
     private func processError(_ message:String) {
@@ -437,4 +445,6 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             self.present(alert, animated: true, completion: nil)
         }
     }
+
+
 }

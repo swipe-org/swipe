@@ -1,0 +1,82 @@
+{
+    "elements": {
+        "ball": { "text":"😄", "fontSize":44 },
+    },
+    "pages": [
+        {
+            "elements": [
+                { "text":"Loop styles" }
+            ]
+        },
+        {
+            "elements": [
+                { "text":"vibrate", "textAlign":"left", "y":-150 },
+                { "element":"ball", "y":-100, "loop":{ "style":"vibrate" } },
+                { "text":"blink", "textAlign":"left", "y":-50 },
+                { "element":"ball", "y":0, "loop":{ "style":"blink" } },
+                { "text":"wiggle", "textAlign":"left", "y":50 },
+                { "element":"ball", "y":100, "loop":{ "style":"wiggle" } },
+                { "text":"spin", "textAlign":"left", "y":150 },
+                { "element":"ball", "y":200, "loop":{ "style":"spin" } },
+            ]
+        },
+        {
+            "elements": [
+                { "text":"Loop count" }
+            ]
+        },
+        {
+            "elements": [
+                { "text":"\"count\":1 (default)", "textAlign":"left", "y":-150 },
+                { "element":"ball", "y":-100, "loop":{ "style":"vibrate" } },
+                { "text":"\"count\":2", "textAlign":"left", "y":-50 },
+                { "element":"ball", "y":0, "loop":{ "style":"vibrate", "count":2 } },
+                { "text":"\"count\":4", "textAlign":"left", "y":50 },
+                { "element":"ball", "y":100, "loop":{ "style":"vibrate", "count":4 } },
+            ]
+        },
+        {
+            "elements": [
+                { "text":"Vibration delta" }
+            ]
+        },
+        {
+            "elements": [
+                { "text":"\"delta\":10 (default)", "textAlign":"left", "y":-150 },
+                { "element":"ball", "y":-100, "loop":{ "style":"vibrate" } },
+                { "text":"\"delta\":20", "textAlign":"left", "y":-50 },
+                { "element":"ball", "y":0, "loop":{ "style":"vibrate", "delta":20 } },
+                { "text":"\"delta\":40", "textAlign":"left", "y":50 },
+                { "element":"ball", "y":100, "loop":{ "style":"vibrate", "delta":40 } },
+            ]
+        },
+        {
+            "elements": [
+                { "text":"Wiggle delta" }
+            ]
+        },
+        {
+            "elements": [
+                { "text":"\"delta\":15 (default)", "textAlign":"left", "y":-150 },
+                { "element":"ball", "y":-100, "loop":{ "style":"wiggle" } },
+                { "text":"\"delta\":30", "textAlign":"left", "y":-50 },
+                { "element":"ball", "y":0, "loop":{ "style":"wiggle", "delta":30 } },
+                { "text":"\"delta\":60", "textAlign":"left", "y":50 },
+                { "element":"ball", "y":100, "loop":{ "style":"wiggle", "delta":60 } },
+            ]
+        },
+        {
+            "elements": [
+                { "text":"Spin direction" }
+            ]
+        },
+        {
+            "elements": [
+                { "text":"\"clockwise\":true (default)", "textAlign":"left", "y":-50 },
+                { "element":"ball", "y":0, "loop":{ "style":"spin" } },
+                { "text":"\"clockwise\":false", "textAlign":"left", "y":50 },
+                { "element":"ball", "y":100, "loop":{ "style":"spin", "clockwise":false } },
+            ]
+        },
+    ]
+}

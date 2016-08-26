@@ -1,0 +1,44 @@
+{
+	"pages": [
+		{
+			"play":"never",
+			"elements": [
+				{
+					"text": "tap me to start timer", "fontSize":20, "pos": ["50%", "33%"], "w":"90%", "h":"10%", "bc":"#fdd", "focusable":true,
+					"events": {
+						"tapped": {
+							"actions": [
+								{
+									"update": {
+										"text":"tapped", 
+										"bc":"#fee",
+										"duration":0.5, 
+										"events":{ 
+											"completion":{
+												"actions":[ 
+													{ "update":{ "text":"tap me", "bc":"#fdd","enabled":false	}	} 
+												] 
+											} 
+										}
+									}
+								},
+								{
+									"timer": { 
+										"duration":1, "repeats":true,
+										"events":{
+											"tick":{
+												"actions":[
+													{ "update":{ "text":"tick", "duration":0.5, "events":{ "completion":{ "actions":[	{ "update":{ "text":"tock" }}]}}}}
+												]
+											}
+										}
+									}
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+  ]
+}

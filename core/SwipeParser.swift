@@ -177,25 +177,43 @@ class SwipeParser {
         return nil
     }
 
-    static func parseSize(_ param:AnyObject?, defalutValue:CGSize = CGSize(width: 0.0, height: 0.0), scale:CGSize) -> CGSize {
-        if let values = param as? [CGFloat], values.count == 2 {
-            return CGSize(width: values[0] * scale.width, height: values[1] * scale.height)
+    static func parseSize(_ param:AnyObject?, defaultValue:CGSize = CGSize(width: 0.0, height: 0.0), scale:CGSize) -> CGSize {
+        if let values = param as? [CGFloat] where values.count == 2 {
+            return CGSizeMake(values[0] * scale.width, values[1] * scale.height)
         }
-        return CGSize(width: defalutValue.width * scale.width, height: defalutValue.height * scale.height)
+        return CGSize(width: defaultValue.width * scale.width, height: defaultValue.height * scale.height)
     }
-
-    static func parseFloat(_ param:AnyObject?, defalutValue:Float = 1.0) -> Float {
+    
+    static func parseFloat(_ param:AnyObject?, defaultValue:Float = 1.0) -> Float {
         if let value = param as? Float {
             return value
         }
-        return defalutValue
+        return defaultValue
     }
 
-    static func parseCGFloat(_ param:AnyObject?, defalutValue:CGFloat = 0.0) -> CGFloat {
+    static func parseCGFloat(_ param:AnyObject?, defaultValue:CGFloat = 0.0) -> CGFloat {
         if let value = param as? CGFloat {
             return value
         }
-        return defalutValue
+        return defaultValue
+    }
+
+    static func parseAndEvalBool(originator: SwipeNode, key: String, info: [String:AnyObject]) -> Bool? {
+        var valObj: AnyObject?
+        
+        if let keyInfo = info[key] as? [String:AnyObject], valOfInfo = keyInfo["valueOf"] as? [String:AnyObject] {
+            valObj = originator.getValue(originator, info:valOfInfo)
+        } else {
+            valObj = info[key]
+        }
+        
+        if let val = valObj as? Bool {
+            return val
+        } else if let val = valObj as? Int {
+            return val != 0
+        } else {
+            return nil
+        }
     }
 
     //
@@ -210,12 +228,11 @@ class SwipeParser {
                 if ret[keyString] == nil {
                     // Only the baseObject has the property
                     ret[keyString] = value
-                } else if let arrayObject = ret[keyString] as? [[String:AnyObject]],
-                  let arrayBase = value as? [[String:AnyObject]] {
-                    // Each has the property collection. We need to merge them
-                    var array = arrayBase
+                } else if let arrayObject = ret[keyString] as? [[String:AnyObject]], let arrayBase = value as? [[String:AnyObject]] {
+                    // Each has the property array. We need to merge them
+                    var retArray = arrayBase
                     var idMap = [String:Int]()
-                    for (index, item) in array.enumerated() {
+                    for (index, item) in retArray.enumerated() {
                         if let key = item["id"] as? String {
                             idMap[key] = index
                         }
@@ -224,17 +241,24 @@ class SwipeParser {
                         if let key = item["id"] as? String {
                             if let index = idMap[key] {
                                 // id matches, merge them
-                                array[index] = SwipeParser.inheritProperties(item, baseObject: array[index])
+                                retArray[index] = SwipeParser.inheritProperties(item, baseObject: retArray[index])
                             } else {
                                 // no id match, just append
-                                array.append(item)
+                                retArray.append(item)
                             }
                         } else {
                             // no id, just append
-                            array.append(item)
+                            retArray.append(item)
                         }
                     }
-                    ret[keyString] = array
+                    ret[keyString] = retArray
+                } else if let objects = ret[keyString] as? [String:AnyObject], let objectsBase = value as? [String:AnyObject] {
+                    // Each has the property objects. We need to merge them.  Example: '"events" { }'
+                    var retObjects = objectsBase
+                    for (key, val) in objects {
+                        retObjects[key] = val
+                    }
+                    ret[keyString] = retObjects
                 }
             }
         }
@@ -332,8 +356,8 @@ class SwipeParser {
     static func parseShadow(_ value:AnyObject?, scale:CGSize) -> NSShadow {
         let shadow = NSShadow()
         if let info = value as? [String:AnyObject] {
-            shadow.shadowOffset = SwipeParser.parseSize(info["offset"], defalutValue: CGSize(width: 1.0, height: 1.0), scale:scale)
-            shadow.shadowBlurRadius = SwipeParser.parseCGFloat(info["radius"], defalutValue: 2) * scale.width
+            shadow.shadowOffset = SwipeParser.parseSize(info["offset"], defaultValue: CGSize(width: 1.0, height: 1.0), scale:scale)
+            shadow.shadowBlurRadius = SwipeParser.parseCGFloat(info["radius"], defaultValue: 2) * scale.width
             shadow.shadowColor = UIColor(cgColor: SwipeParser.parseColor(info["color"], defaultColor: UIColor.black.cgColor))
         }
         return shadow

@@ -21,7 +21,7 @@ private func MyLog(_ text:String, level:Int = 0) {
 }
 
 class SwipePrefetcher {
-    private let urls:[URL:String]
+    private var urls = [URL:String]()
     private var urlsFetching = [URL]()
     private var urlsFetched = [URL:URL]()
     private var urlsFailed = [URL]()
@@ -89,6 +89,50 @@ class SwipePrefetcher {
         }
     }
     
+    func append(_ urls:[URL:String], callback:(Bool, [URL], [NSError]) -> Void) {
+        let manager = SwipeAssetManager.sharedInstance()
+        var count = 0
+        _progress = 0
+        let fileManager = NSFileManager.defaultManager()
+        for (url,prefix) in urls {
+            self.urls[url] = prefix
+            if url.scheme == "file" {
+                if fileManager.fileExistsAtPath(url.path!) {
+                    urlsFetched[url] = url
+                } else {
+                    // On-demand resource support
+                    urlsFetched[url] = NSBundle.mainBundle().URLForResource(url.lastPathComponent, withExtension: nil)
+                    MyLog("SWPrefe onDemand resource at \(urlsFetched[url]) instead of \(url)", level:1)
+                }
+            } else {
+                count += 1
+                urlsFetching.append(url)
+                manager.loadAsset(url, prefix: prefix, bypassCache:false, callback: { (urlLocal:URL?, error:NSError!) -> Void in
+                    if let urlL = urlLocal {
+                        self.urlsFetched[url] = urlL
+                    } else {
+                        self.urlsFailed.append(url)
+                        self.errors.append(error)
+                    }
+                    count -= 1
+                    if (count == 0) {
+                        self.fComplete = true
+                        self._progress = 1
+                        MyLog("SWPrefe completed \(self.urlsFetched.count)", level: 1)
+                        callback(true, self.urlsFailed, self.errors)
+                    } else {
+                        self._progress = Float(self.urls.count - count) / Float(self.urls.count)
+                        callback(false, self.urlsFailed, self.errors)
+                    }
+                })
+            }
+        }
+        if count == 0 {
+            self.fComplete = true
+            self._progress = 1
+            callback(true, urlsFailed, errors)
+        }
+    }
     func map(_ url:URL) -> URL? {
         return urlsFetched[url]
     }

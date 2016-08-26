@@ -1,0 +1,9 @@
+{
+    "type":"net.swipe.list",
+    "rowHeight":"10%",
+    "items":[
+        { "url":"transition_animation.swipe", "title":"Transition Animation", "icon":"more.png" },
+        { "url":"loop_animation.swipe", "title":"Loop Animation", "icon":"more.png" },
+        { "url":"multilingual_strings.swipe", "title":"Multilingual Strings", "icon":"more.png" },
+    ]
+}

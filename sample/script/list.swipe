@@ -1,0 +1,70 @@
+{
+	"templates": {
+		"elements": {
+			"even": {
+				"bc":"#eef",
+				"elements": [
+					{ "img":"icon-180.png", "pos":[20,"50%"], "w":20 },
+					{
+						"x":40, "w":"80%", "textAlign":"left", "fontSize":20,
+						"text":{"valueOf":{"id":"aList", "property":{"items":{"data":{"person":{"id":"first"}}}}}}
+					}
+				]
+			},
+			"odd": {
+				"bc":"#efe",
+				"elements": [
+					{ "img":"icon-180.png", "pos":["90%","50%"], "w":20},
+					{
+						"x":0, "w":"80%", "textAlign":"right", "fontSize":20,
+						"text":{"valueOf":{"id":"aList", "property":{"items":{"data":{"person":{"id":"first"}}}}}}
+					}
+				]
+			}
+		}
+	},
+	"pages": [
+		{
+			"id": "main",
+			"play":"never",
+			"elements": [
+				{ "bc":"#fdd"},
+				{ "h":"8%", "w":"45%", "pos":["25%","95%"],"text":"selected", "textAlign":"right"},
+				{ "id":"echo", "h":"8%", "w":"45%", "pos":["75%","95%"],"text":""},
+				{ "text":"Tap on List Items", "h":"8%", "pos":["50%", "5%"]},
+				{
+					"id": "aList",
+					"h":"80%",
+					"w":"90%",
+					"bc":"#ffe",
+					"pos":["50%","50%"],
+					"list": {
+						"selectedItem":2,
+						"items": [
+							{ "elements":[ {"template":"even" }], "data":{ "person": { "id": { "first":"fred", "last":"flintstone"}}}},
+							{ "elements":[ {"template":"odd" }], "data":{ "person": { "id": { "first":"wilma", "last":"flintstone"}}}},
+							{ "elements":[ {"template":"even" }], "data":{ "person": { "id": { "first":"pebbles", "last":"flintstone"}}}},
+							{ "elements":[ {"template":"odd" }], "data":{ "person": { "id": { "first":"barney", "last":"rubble"}}}},
+							{ "elements":[ {"template":"even" }], "data":{ "person": { "id": { "first":"betty", "last":"rubble"}}}},
+							{ "elements":[ {"template":"odd" }], "data":{ "person": { "id": { "first":"bambam", "last":"rubble"}}}}
+						]
+					},
+					"events": {
+						"rowSelected": {
+							"actions": [
+								{ "update": { "id":"echo", "text":{"valueOf":{"id":"aList", "property":"selectedItem"}}}}
+							]
+						}
+					}
+				}
+			],
+			"events": {
+				"load": {
+					"actions": [
+						{ "update": { "id":"echo", "text":{"valueOf":{"id":"aList", "property":"selectedItem"}}}}
+					]
+				}
+			}
+		}
+	]
+}

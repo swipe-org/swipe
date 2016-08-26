@@ -1,0 +1,94 @@
+{
+  "templates":{
+    "elements":{
+      "focus": {
+        "fontSize":20,
+        "events": {
+          "gainedFocus":{
+            "actions":[
+              { 
+                "update":{ 
+                  "id":"focus", 
+                  "x":{"valueOf":{"property":"screenX"}}, 
+                  "y":{"valueOf":{"property":"screenY"}}, 
+                  "w":{"valueOf":{"property":"w"}}, 
+                  "h":{"valueOf":{"property":"h"}},
+                  "opacity":1,
+                  "duration":0.4
+                } 
+              }
+            ]
+          },
+          "lostFocus":{
+            "actions":[
+              { 
+                "update":{ 
+                  "id":"focus", 
+                  "opacity":0
+                } 
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "pages": [
+    {
+      "play":"never",
+      "elements": [
+        { "id":"caption", "text":"sample", "textColor":"#fff", "fontSize":20, "x":"1%", "w":"98%", "h":40, "y":40, "bc":"#eee" },
+        { "text":"Tap a button to display its 'text' property above", "x":"1%", "w":"98%", "y":82, "h":60, "fontSize":18 },
+        {
+          "text":"one", "x":"1%", "w":"48%", "h":40, "y":140, "bc":"#fdd", "borderWidth":1, "borderColor":"#ccc", "cornerRadius":10, "template":"focus", "focusable":true,
+          "events": {
+            "tapped": {
+              "actions":[{ "update":{ "id":"caption", "text":{"valueOf":{ "property":"text"} }, "textColor":"#f00", "bc":"#0f0", "duration":0.4 }}]
+            }
+          }
+        },
+        {
+          "text":"two", "x":"51%", "w":"48%", "h":40, "y":140, "bc":"#dfd", "borderWidth":1, "borderColor":"#ccc", "cornerRadius":10, "template":"focus", "focusable":true,
+          "events": {
+            "tapped": {
+              "actions":[{ "update":{ "id":"caption", "text":{"valueOf":{ "property":"text"} }, "textColor":"#0f0", "bc":"#f00", "duration":0.4 }}]
+            }
+          }
+        },
+        { "text":"Tap text field below, enter text, tap on the button to display the text field's 'text' property above", "x":"1%", "w":"98%", "y":200, "h":60, "fontSize":18 },
+        {
+          "id":"input", "textField":{}, "textAlign":"center", "text":"hi", "borderWidth":1, "borderColor":"#ccc", "cornerRadius":10, "template":"focus", "focusable":true,
+          "x":"1%", "y":260, "w":"82%", "h":50, "bc":"#fff",
+          "events":{
+            "textChanged":{
+              "actions":[{ "update":{ "id":"btn", "enabled":{ "valueOf":{ "property":"text.length" }}} }]
+            }
+          }
+        },
+        {
+          "id":"btn", "text":"", "x":"84%", "y":260, "w":50, "h":50, "textColor":"#ccc", "bc":"#fff", "borderWidth":1, "borderColor":"#ccc", "cornerRadius":25, "enabled":false, "template":"focus", "focusable":true,
+          "events":{
+            "enabled":{
+              "actions":[ { "update":{ "focusable":true, "text":"^", "textColor":"#1E88E5", "borderColor":"#1E88E5" } } ]
+            },
+            "disabled":{
+              "actions":[ { "update":{ "focusable":false, "text":"", "textColor":"#ccc", "borderColor":"#ccc" } } ]
+            },
+            "tapped":{
+              "//": "fired only if enabled",
+              "actions":[
+                { "update":{ "id":"caption", "text":{"valueOf":{ "id":"input", "property":"text"} }, "textColor":"#000", "bc":"#ddd", "duration":0.4 }},
+                { "update":{ "enabled":false } },
+                { "update":{ "id":"input", "text":"" } }
+              ]
+            },
+            "load":{
+              "actions":[{ "update":{ "enabled":{ "valueOf":{ "id":"input", "property":"text.length" }}} }]
+            }
+          }
+        },
+        { "id":"focus", "borderWidth":2, "borderColor":"red", "opacity":0 }
+      ]
+    }
+  ]
+}

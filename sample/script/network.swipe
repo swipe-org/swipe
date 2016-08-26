@@ -1,0 +1,43 @@
+{
+	"pages": [
+		{
+			"play":"never",
+			"elements": [
+				{
+					"text":"HTTP GET", "pos":["50%", 80], "w":"80%", "h":50, "borderWidth":1, "borderColor":"black", "cornerRadius":10, "focusable":true,
+					"events":{
+						"tapped":{
+							"actions":[
+								{ "update":{"id":"label", "text":"Loading ...", "textColor":"black" } },
+								{ "update":{"id":"error", "text":"", "opacity":0 } },
+								{
+									"get":{
+										"source": {"url":"http://www.stoppani.net/swipe/simpledata.txt"},
+										"events": {
+											"error": {
+												"params": {"message":{"type":"string"}},
+												"actions": [
+													{ "update":{"id":"label", "text":"Error.  Try Again", "textColor":"red" } },
+													{ "update":{"id":"error", "text":{"valueOf":{"property":{"params":"message"}}}, "opacity":1, "duration":0.4}}
+												]
+											},
+											"completion": {
+												"params": {"caption":{"type":"string"}, "imageURL":{"type":"string"}},
+												"actions": [
+													{ "update":{"id":"label", "text":{"valueOf":{"property":{"params":"caption"}}}}},
+													{ "update":{"id":"image", "img":{"valueOf":{"property":{"params":"imgURL"}}}}}
+												]
+											}
+										}
+									}
+								}								
+							]
+						}
+					}},
+				{"id":"label", "h":50, "pos":["50%", 130] },
+				{"id":"image", "w":150, "h":150, "pos":["50%", 240], "img":"more.png" },
+				{"id":"error", "textColor":"red", "w":"98%", "h":200, "pos":["50%", 420], "fontSize":18 },
+			 ]
+		}
+  ]
+}

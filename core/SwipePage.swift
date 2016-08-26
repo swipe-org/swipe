@@ -15,6 +15,19 @@ import AVFoundation
 import MediaPlayer
 #endif
 
+extension UIResponder {
+    private weak static var _currentFirstResponder: UIResponder? = nil
+    
+    public class func currentFirstResponder() -> UIResponder? {
+        UIResponder._currentFirstResponder = nil
+        UIApplication.sharedApplication().sendAction(#selector(UIResponder.findFirstResponder(_:)), to: nil, from: nil, forEvent: nil)
+        return UIResponder._currentFirstResponder
+    }
+    
+    internal func findFirstResponder(sender: AnyObject) {
+        UIResponder._currentFirstResponder = self
+    }
+}
 
 private func MyLog(_ text:String, level:Int = 0) {
     let s_verbosLevel = 0
@@ -38,9 +51,10 @@ protocol SwipePageDelegate: NSObjectProtocol {
     func baseURL() -> URL?
     func voice(_ k:String?) -> [String:AnyObject]
     func languageIdentifier() -> String?
+    func tapped()
 }
 
-class SwipePage: NSObject, SwipeElementDelegate {
+class SwipePage: SwipeView, SwipeElementDelegate {
     // Debugging
     static var objectCount = 0
     var accessCount = 0
@@ -54,7 +68,6 @@ class SwipePage: NSObject, SwipeElementDelegate {
     // Public properties
     let index:Int
     var pageTemplate:SwipePageTemplate?
-    var view:UIView?
     weak var delegate:SwipePageDelegate!
     
     // Public Lazy Properties
@@ -68,8 +81,6 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }()
 
     // Private properties
-    private var pageInfo:[String:AnyObject]
-    private var elements = [SwipeElement]()
     private var fSeeking = false
     private var fEntered = false
     private var cPlaying = 0
@@ -87,29 +98,36 @@ class SwipePage: NSObject, SwipeElementDelegate {
     private var aniLayer:CALayer?
     private var audioPlayer:AVAudioPlayer?
     
-    init(index:Int, pageInfo:[String:AnyObject], delegate:SwipePageDelegate) {
+    init(index:Int, info:[String:AnyObject], delegate:SwipePageDelegate) {
         self.index = index
         self.delegate = delegate
-        self.pageTemplate = delegate.pageTemplateWith(pageInfo["template"] as? String)
+        self.pageTemplate = delegate.pageTemplateWith(info["template"] as? String)
         if self.pageTemplate == nil {
-            self.pageTemplate = delegate.pageTemplateWith(pageInfo["scene"] as? String)
+            self.pageTemplate = delegate.pageTemplateWith(info["scene"] as? String)
             if self.pageTemplate != nil {
                 MyLog("SwPage DEPRECATED 'scene'; use 'template'")
             }
         }
-        self.pageInfo = SwipeParser.inheritProperties(pageInfo, baseObject: pageTemplate?.pageTemplateInfo)
-        super.init()
+        super.init(info: SwipeParser.inheritProperties(info, baseObject: pageTemplate?.pageTemplateInfo))
         SwipePage.objectCount += 1
     }
 
     func unloadView() {
+#if !os(tvOS)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+#endif
+        SwipeTimer.cancelAll()
+        
         if let view = self.view {
             MyLog("SWPage  unloading @\(index)", level: 2)
             view.removeFromSuperview()
-            for element in elements {
-                element.clear() // PARANOIA (extra effort to clean up everything)
+            for c in children {
+                if let element = c as? SwipeElement {
+                    element.clear() // PARANOIA (extra effort to clean up everything)
+                }
             }
-            elements.removeAll()
+            children.removeAll()
             self.view = nil
             self.viewVideo = nil
             self.viewAnimation = nil
@@ -137,32 +155,32 @@ class SwipePage: NSObject, SwipeElementDelegate {
     
     // Private lazy properties
     private lazy var backgroundColor:CGColor = {
-        if let value: AnyObject = self.pageInfo["bc"] {
+        if let value: AnyObject = self.info["bc"] {
             return SwipeParser.parseColor(value)
         }
         return UIColor.white.cgColor
     }()
 
     private lazy var transition:String = {
-        if let value = self.pageInfo["transition"] as? String {
+        if let value = self.info["transition"] as? String {
             return value
         }
         return (self.animation == "scroll") ? "replace": "scroll" // default
     }()
 
     private lazy var fps:Int = {
-        if let value = self.pageInfo["fps"] as? Int {
+        if let value = self.info["fps"] as? Int {
             return value
         }
         return 60 // default
     }()
 
     private lazy var animation:String = {
-        if let value = self.pageInfo["play"] as? String {
+        if let value = self.info["play"] as? String {
             return value
         }
-        if let value = self.pageInfo["animation"] as? String {
-            NSLog("SWPage  #### animation instead of play ####")
+        if let value = self.info["animation"] as? String {
+            NSLog("SWPage DEPRECATED 'animation'; use 'play'")
             return value
         }
         return "auto" // default
@@ -181,28 +199,28 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }()
 
     private lazy var vibrate:Bool = {
-        if let value = self.pageInfo["vibrate"] as? Bool {
+        if let value = self.info["vibrate"] as? Bool {
             return value
         }
         return false
     }()
 
     private lazy var duration:CGFloat = {
-        if let value = self.pageInfo["duration"] as? CGFloat {
+        if let value = self.info["duration"] as? CGFloat {
             return value
         }
         return 0.2
     }()
 
     private lazy var fRepeat:Bool = {
-        if let value = self.pageInfo["repeat"] as? Bool {
+        if let value = self.info["repeat"] as? Bool {
             return value
         }
         return false
     }()
 
     private lazy var rewind:Bool = {
-        if let value = self.pageInfo["rewind"] as? Bool {
+        if let value = self.info["rewind"] as? Bool {
             return value
         }
         return false
@@ -216,8 +234,10 @@ class SwipePage: NSObject, SwipeElementDelegate {
             assert(self.viewAnimation != nil, "must have self.viewAnimation")
             assert(self.viewVideo != nil, "must have viewVideo")
             self.aniLayer?.timeOffset = CFTimeInterval(offset)
-            for element in elements {
-                element.setTimeOffsetTo(offset)
+            for c in children {
+                if let element = c as? SwipeElement {
+                    element.setTimeOffsetTo(offset)
+                }
             }
             CATransaction.commit()
         }
@@ -301,8 +321,10 @@ class SwipePage: NSObject, SwipeElementDelegate {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         self.aniLayer?.timeOffset = fForward ? 0.0 : 1.0
-        for element in elements {
-            element.setTimeOffsetTo(fForward ? 0.0 : 1.0)
+        for c in children {
+            if let element = c as? SwipeElement {
+                element.setTimeOffsetTo(fForward ? 0.0 : 1.0)
+            }
         }
         CATransaction.commit()
         self.offsetPaused = nil
@@ -362,8 +384,10 @@ class SwipePage: NSObject, SwipeElementDelegate {
                 if !fElementRepeatNext {
                     self.aniLayer?.timeOffset = CFTimeInterval(nextOffset)
                 }
-                for element in self.elements {
-                    element.setTimeOffsetTo(nextOffset, fAutoPlay: true)
+                for c in self.children {
+                    if let element = c as? SwipeElement {
+                        element.setTimeOffsetTo(nextOffset, fAutoPlay: true)
+                    }
                 }
                 CATransaction.commit()
             }
@@ -383,15 +407,15 @@ class SwipePage: NSObject, SwipeElementDelegate {
         var urls = [URL:String]()
         let baseURL = self.delegate.baseURL()
         for key in ["audio"] {
-            if let src = self.pageInfo[key] as? String,
-                let url = URL.url(src, baseURL: baseURL) {
+            if let src = self.info[key] as? String,
+                   url = URL.url(src, baseURL: baseURL) {
                 urls[url] = ""
             }
         }
-        if let elementsInfo = self.pageInfo["elements"] as? [[String:AnyObject]] {
-            let scaleDummy = CGSize(width: 0.1, height: 0.1)
+        if let elementsInfo = self.info["elements"] as? [[String:AnyObject]] {
+            let scaleDummy = CGSizeMake(0.1, 0.1)
             for e in elementsInfo {
-                let element = SwipeElement(info: e, scale:scaleDummy, delegate:self)
+                let element = SwipeElement(info: e, scale:scaleDummy, parent:self, delegate:self)
                 for (url, prefix) in element.resourceURLs {
                     urls[url as URL] = prefix
                 }
@@ -414,7 +438,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
     
         MyLog("SWPage  loading @\(index)", level: 2)
         assert(self.view == nil, "loadView self.view must be nil")
-        let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0))
+        let view = InternalView(wrapper: self, frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0))
         view.clipsToBounds = true
         self.view = view
         let viewVideo = UIView(frame: view.bounds)
@@ -433,7 +457,7 @@ class SwipePage: NSObject, SwipeElementDelegate {
         let dimension = delegate.dimension(self)
         var transform = CATransform3DIdentity
         transform.m34 = -1 / dimension.width // default eyePosition is canvas width
-        if let eyePosition = pageInfo["eyePosition"] as? CGFloat {
+        if let eyePosition = info["eyePosition"] as? CGFloat {
             transform.m34 = -1 / (dimension.width * eyePosition)
         }
         aniLayer.sublayerTransform = transform
@@ -444,9 +468,11 @@ class SwipePage: NSObject, SwipeElementDelegate {
         
         //view.tag = 100 + index // for debugging only
         layer.backgroundColor = self.backgroundColor
-        aniLayer.speed = 0 // to manually specify the media timing
-        aniLayer.beginTime = 0 // to manually specify the media timing
-        aniLayer.fillMode = kCAFillModeForwards
+        if animation != "never" {
+            aniLayer.speed = 0 // to manually specify the media timing
+            aniLayer.beginTime = 0 // to manually specify the media timing
+            aniLayer.fillMode = kCAFillModeForwards
+        }
 #if os(OSX)
         viewAnimation.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
 #else
@@ -459,20 +485,65 @@ class SwipePage: NSObject, SwipeElementDelegate {
             if completed {
                 if self.view != nil {
                     // NOTE: We are intentionally ignoring fetch errors (of network resources) here.
+                    if let eventsInfo = self.info["events"] as? [String:AnyObject] {
+                        self.eventHandler.parse(eventsInfo)
+                    }
+
                     self.loadSubviews()
                     callback?()
                 }
             }
         }
+        
+        setupGestureRecognizers()
+#if !os(tvOS)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SwipePage.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SwipePage.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+#endif
+        if let actions = eventHandler.actionsFor("load") {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.4 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
+                self.execute(self, actions: actions)
+            }
+        }
+
         return view
     }
+    
+#if !os(tvOS)
+    func keyboardWillShow(notification: NSNotification) {
+        if let info:NSDictionary = notification.userInfo {
+            if let kbFrame = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+                if let fr = findFirstResponder() {
+                    let frFrame = fr.view!.frame
+                    let myFrame = self.view!.frame
+                    //let duration = info[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber as NSTimeInterval
+                    //UIView.animateWithDuration(0.25, delay: 0.25, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+                        self.view!.frame = CGRectMake(0, myFrame.origin.y - max(0, (frFrame.origin.y + frFrame.size.height) - (myFrame.size.height - kbFrame.size.height)), myFrame.size.height, myFrame.size.height)
+                    //    }, completion: nil)
+                }
+            }
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if let _:NSDictionary = notification.userInfo {
+            if findFirstResponder() != nil {
+                let myFrame = self.view!.frame
+                //let duration = info[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber as NSTimeInterval
+                //UIView.animateWithDuration(0.25, delay: 0.25, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+                    self.view!.frame = CGRectMake(0, 0, myFrame.size.height, myFrame.size.height)
+                //    }, completion: nil)
+            }
+        }
+    }
+#endif
     
     private func loadSubviews() {
         let scale = delegate.scale(self)
         let dimension = delegate.dimension(self)
-        if let value = self.pageInfo["audio"] as? String,
-            let url = URL.url(value, baseURL: self.delegate.baseURL()),
-            let urlLocal = self.prefetcher.map(url) {
+        if let value = self.info["audio"] as? String,
+               url = URL.url(value, baseURL: self.delegate.baseURL()),
+               urlLocal = self.prefetcher.map(url) {
             do {
                 audioPlayer = try AVAudioPlayer(contentsOf: urlLocal)
                 audioPlayer?.prepareToPlay()
@@ -483,17 +554,17 @@ class SwipePage: NSObject, SwipeElementDelegate {
 
         prepareUtterance()
 
-        if let elementsInfo = self.pageInfo["elements"] as? [[String:AnyObject]] {
+        if let elementsInfo = self.info["elements"] as? [[String:AnyObject]] {
             for e in elementsInfo {
-                let element = SwipeElement(info: e, scale:scale, delegate:self)
+                let element = SwipeElement(info: e, scale:scale, parent:self, delegate:self)
                 if let subview = element.loadView(dimension) {
-                    if self.autoplay && element.isVideoElement() {
+                    if (self.autoplay || !self.scroll) && element.isVideoElement() {
                         // HACK: video element can not be played normally if it is added to the animation layer, which has the speed property zero.
                         self.viewVideo!.addSubview(subview)
                     } else {
                         self.viewAnimation!.addSubview(subview)
                     }
-                    elements.append(element)
+                    children.append(element)
                 }
             } // for e in elementsInfo
         }
@@ -502,8 +573,8 @@ class SwipePage: NSObject, SwipeElementDelegate {
     private func prepareUtterance() {
 // REVIEW: Disabled for OSX for now
 #if !os(OSX)
-        if let speech = self.pageInfo["speech"] as? [String:AnyObject],
-           let text = parseText(speech, key: "text") {
+        if let speech = self.info["speech"] as? [String:AnyObject],
+           let text = parseText(self, info: speech, key: "text") {
             let voice = self.delegate.voice(speech["voice"] as? String)
             let utterance = AVSpeechUtterance(string: text)
             
@@ -547,6 +618,15 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }
     
     // <SwipeElementDelegate> method
+    
+    func addedResourceURLs(_ urls:[URL:String], callback:() -> Void) {
+        self.prefetcher.append(urls) { (completed:Bool, _:[SURL], _:[NSError]) -> Void in
+            if completed {
+                callback()
+            }
+        }
+    }
+    
     func prototypeWith(_ name:String?) -> [String:AnyObject]? {
         return delegate.prototypeWith(name)
     }
@@ -598,19 +678,20 @@ class SwipePage: NSObject, SwipeElementDelegate {
 
     // <SwipeElementDelegate> method
     func localizedStringForKey(_ key:String) -> String? {
-        if let strings = pageInfo["strings"] as? [String:AnyObject],
-            let texts = strings[key] as? [String:AnyObject] {
+        if let strings = self.info["strings"] as? [String:AnyObject],
+               texts = strings[key] as? [String:AnyObject] {
             return SwipeParser.localizedString(texts, langId: delegate.languageIdentifier())
         }
         return nil
     }
 
     // <SwipeElementDelegate> method
+    
     func languageIdentifier() -> String? {
         return delegate.languageIdentifier()
     }
 
-    func parseText(_ info:[String:AnyObject], key:String) -> String? {
+    func parseText(_ originator: SwipeNode, info:[String:AnyObject], key:String) -> String? {
         guard let value = info[key] else {
             return nil
         }
@@ -672,11 +753,81 @@ class SwipePage: NSObject, SwipeElementDelegate {
     }
     */
     func hasRepeatElement() -> Bool {
-        for element in elements {
-            if element.isRepeatElement() {
-                return true
+        for c in children {
+            if let element = c as? SwipeElement {
+                if element.isRepeatElement() {
+                    return true
+                }
             }
         }
         return false
     }
+    
+    
+    // SwipeView
+ 
+    override func tapped() {
+        self.delegate.tapped()
+    }
+    
+    
+    // SwipeNode
+    override func getValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+        var name = "*"
+        if let val = info["id"] as? String {
+            name = val
+        }
+        
+        // first try own page property
+        if (name == "*" || self.name.caseInsensitiveCompare(name) == .OrderedSame) {
+            if let attribute = info["property"] as? String {
+                return getPropertyValue(originator, property: attribute)
+            } else if let attributeInfo = info["property"] as? [String:AnyObject] {
+                return getPropertiesValue(originator, info: attributeInfo)
+            }
+        }
+        
+        for c in children {
+            if let e = c as? SwipeElement {
+                if name == "*" || e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                    if let attribute = info["property"] as? String {
+                        return e.getPropertyValue(originator, property: attribute)
+                    } else if let attributeInfo = info["property"] as? [String:AnyObject] {
+                        return e.getPropertiesValue(originator, info: attributeInfo)
+                    }
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    override func updateElement(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject]) -> Bool {
+        // Find named element and update
+        for c in children {
+            if let e = c as? SwipeElement {
+                if e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                    e.update(originator, info: info)
+                    return true
+                }
+            }
+        }
+        
+        return false
+    }
+    
+    override func appendList(originator: SwipeNode, name: String, up: Bool, info: [String : AnyObject]) -> Bool {
+        // Find named element and update
+        for c in children {
+            if let e = c as? SwipeElement {
+                if e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                    e.appendList(originator, info: info)
+                    return true
+                }
+            }
+        }
+        
+        return false
+    }
+
 }

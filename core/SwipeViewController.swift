@@ -23,7 +23,7 @@ private func MyLog(_ text:String, level:Int = 0) {
     }
 }
 
-class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocumentViewer {
+class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocumentViewer, SwipeBookDelegate {
     var book:SwipeBook!
     weak var delegate:SwipeDocumentViewerDelegate?
     private var fAdvancing = true
@@ -76,6 +76,11 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         }
     }
 
+    // <SwipeDocumentViewerDelegate> method
+    func tapped() {
+        self.delegate?.tapped()
+    }
+    
     // <SwipeDocumentViewer> method
     func documentTitle() -> String? {
         return self.book.title
@@ -83,7 +88,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
 
     // <SwipeDocumentViewer> method
     func loadDocument(_ document:[String:AnyObject], size:CGSize, url:URL?, state:[String:AnyObject]?, callback:(Float, NSError?)->(Void)) throws {
-        self.book = SwipeBook(bookInfo: document, url: url)
+        self.book = SwipeBook(bookInfo: document, url: url, delegate: self)
 
         if let languages = self.book.languages(),
             let language = languages.first,
@@ -370,6 +375,9 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
 
     func handlePan(recognizer:UIPanGestureRecognizer) {
+        if self.book.pages.count == 1 {
+            return
+        }
         let translation = recognizer.translation(in: self.view)
         let velocity = recognizer.velocity(in: self.view)
         let size = self.scrollView.frame.size
@@ -567,5 +575,18 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         _ = tagsString()
         
     }
-    
+
+    //
+    // EXPERIMENTAL: Public interface, which allows applications to scroll it to a particular scrolling position. Notice that it will play "scroll" animations, but not "auto" animations.
+    //
+    func scrollTo(amount:CGFloat) {
+        let pageIndex = Int(amount)
+        if pageIndex < self.book.pages.count {
+            let frame = scrollView.frame
+            let rem = amount - CGFloat(pageIndex)
+            adjustIndex(pageIndex, fForced: false, fDeferredEnter: false)
+            let offset = self.book.horizontal ? CGPointMake((CGFloat(self.book.pageIndex) + rem) * frame.size.width, 0) : CGPointMake(0, (CGFloat(self.book.pageIndex) + rem) * frame.size.height)
+            scrollView.contentOffset = offset
+        }
+    }
 }

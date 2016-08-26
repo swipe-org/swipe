@@ -1,7 +1,7 @@
 {
     "title":"Text",
     "markdown":{
-        "shadow":{ "color":"blue", "offset":[-2,2] },
+        "shadow":{ "color":"blue", "offset":[-2,2], "radius":3, "opacity":0.5 },
         "styles":{
             "#":{ "color":"#008", "font":{ "size":"5%", "name":["foo", "Courier"] }},
             "##":{ "color":"#080", "font":{ "size":"4.5%", "name":"Chalkboard SE" }},
