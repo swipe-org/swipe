@@ -21,25 +21,25 @@ class SwipeTextArea: SwipeView, UITextViewDelegate {
         self.textView = UITextView(frame: frame)
         super.init(parent: parent, info: info)
         self.textView.delegate = self
-        self.textView.backgroundColor = UIColor.clearColor()
+        self.textView.backgroundColor = UIColor.clear
         //self.textView.becomeFirstResponder()
         self.view = self.textView as UIView
     }
     
     override func setText(text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer?) -> Bool {
         self.textView.text = text
-        self.textView.textAlignment = NSTextAlignment.Center
+        self.textView.textAlignment = NSTextAlignment.center
         
         func processAlignment(alignment:String) {
             switch(alignment) {
             case "center":
-                self.textView.textAlignment = .Center
+                self.textView.textAlignment = .center
             case "left":
-                self.textView.textAlignment = .Left
+                self.textView.textAlignment = .left
             case "right":
-                self.textView.textAlignment = .Right
+                self.textView.textAlignment = .right
             case "justified":
-                self.textView.textAlignment = .Justified
+                self.textView.textAlignment = .justified
             default:
                 break
             }
@@ -62,7 +62,7 @@ class SwipeTextArea: SwipeView, UITextViewDelegate {
         }()
         
         self.textView.font = UIFont(name: "Helvetica", size: fontSize)
-        self.textView.textColor = UIColor(CGColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor))
+        self.textView.textColor = UIColor(CGColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.black.cgColor))
         
         parent!.execute(self, actions: parent!.eventHandler.actionsFor("textChanged"))
 
@@ -81,7 +81,7 @@ class SwipeTextArea: SwipeView, UITextViewDelegate {
     }
 
     override func isFirstResponder() -> Bool {
-        return view!.isFirstResponder()
+        return view!.isFirstResponder
     }
 
     // UITextViewDelegate

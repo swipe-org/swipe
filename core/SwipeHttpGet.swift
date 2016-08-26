@@ -26,7 +26,7 @@ class SwipeHttpGet : SwipeNode {
         
         if let sourceInfo = getInfo["source"] as? [String:AnyObject] {
             if let urlString = sourceInfo["url"] as? String, url = NSURL(string: urlString) {
-                SwipeAssetManager.sharedInstance().loadAsset(url, prefix: "", bypassCache:true) { (urlLocal:NSURL?,  error:NSError!) -> Void in
+                SwipeAssetManager.sharedInstance().loadAsset(url as URL, prefix: "", bypassCache:true) { (urlLocal:NSURL?,  error:NSError!) -> Void in
                     if let urlL = urlLocal where error == nil, let data = NSData(contentsOfURL: urlL) {
                         do {
                             guard let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? [String:AnyObject] else {

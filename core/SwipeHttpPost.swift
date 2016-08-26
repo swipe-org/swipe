@@ -44,9 +44,9 @@ class SwipeHttpPost : SwipeNode {
                         }
                         
                         if val != nil {
-                            urlString.appendContentsOf(paramsSeparator)
-                            urlString.appendContentsOf(param)
-                            urlString.appendContentsOf("=")
+                            urlString.append(paramsSeparator)
+                            urlString.append(param)
+                            urlString.append("=")
                             urlString.appendContentsOf(val!.stringByReplacingOccurrencesOfString("?", withString: ""))
                             paramsSeparator = "&"
                         }
@@ -79,7 +79,7 @@ class SwipeHttpPost : SwipeNode {
                         }
                     }
                     
-                    let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { data, response, error in
+                    let task = URLSession.sharedSession().dataTaskWithRequest(request) { data, response, error in
                         guard error == nil && data != nil else {                                                          // check for fundamental networking error
                             print("error=\(error)")
                             self.handleError("post error \(error)")
@@ -128,7 +128,7 @@ class SwipeHttpPost : SwipeNode {
     
     private func handleError(errorMsg: String) {
         if let event = self.eventHandler.getEvent("error"), actionsInfo = self.eventHandler.actionsFor("error") {
-            dispatch_async(dispatch_get_main_queue()) {
+            dispatch_get_main_queue().asynchronously(DispatchQueue.main) {
                 self.data = ["message":errorMsg]
                 self.params = event.params
                 self.execute(self, actions: actionsInfo)

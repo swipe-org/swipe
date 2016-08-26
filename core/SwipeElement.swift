@@ -1393,7 +1393,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         let (attr, alignmentMode, fTextBottom, fTextTop, font, fontSize) = SwipeElement.processTextInfo(info, dimension: dimension, scale: scale)
         
         textLayer.alignmentMode = alignmentMode // *
-        textLayer.foregroundColor = SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor) // animatable **
+        textLayer.foregroundColor = SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.black.cgColor) // animatable **
         textLayer.fontSize = fontSize // animatable **
         textLayer.font = font
         textLayer.string = text // NOTE: This is no longer an attributed string
@@ -1421,7 +1421,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     
     override func isFirstResponder() -> Bool {
         if let v = self.view {
-            if v.isFirstResponder() {
+            if v.isFirstResponder {
                 return true
             }
             
@@ -1489,7 +1489,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             up = val != "children"
         }
         
-        if (name == "*" || self.name.caseInsensitiveCompare(name) == .OrderedSame) {
+        if (name == "*" || self.name.caseInsensitiveCompare(name) == .orderedSame) {
             if let attribute = info["property"] as? String {
                 return getPropertyValue(originator, property: attribute)
             } else if let attributeInfo = info["property"] as? [String:AnyObject] {
@@ -1504,7 +1504,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 if let viewNode = node?.parent as? SwipeView {
                     for c in viewNode.children {
                         if let e = c as? SwipeElement {
-                            if name == "*" || e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                            if name == "*" || e.name.caseInsensitiveCompare(name) == .orderedSame {
                                 if let attribute = info["property"] as? String {
                                     return e.getPropertyValue(originator, property: attribute)
                                 } else if let attributeInfo = info["property"] as? [String:AnyObject] {
@@ -1622,9 +1622,9 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         
         if let path = self.parsePath(info["pos"], w: w0, h: h0, scale:self.scale) {
             let pos = layer.position
-            var xform = CGAffineTransformMakeTranslation(pos.x, pos.y)
+            var xform = CGAffineTransform(translationX: pos.x, y: pos.y)
             let ani = CAKeyframeAnimation(keyPath: "position")
-            ani.path = CGPathCreateCopyByTransformingPath(path, &xform)
+            ani.path = path.copy(using: &xform)
             ani.beginTime = start
             ani.duration = duration
             ani.fillMode = kCAFillModeBoth
@@ -1639,7 +1639,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     ani.rotationMode = nil
                 }
             }
-            layer.addAnimation(ani, forKey: "position")
+            layer.add(ani, forKey: "position")
             fSkipTranslate = true
         }
         
@@ -1650,7 +1650,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             ani.fillMode = kCAFillModeBoth
             ani.beginTime = start
             ani.duration = duration
-            layer.addAnimation(ani, forKey: "transform")
+            layer.add(ani, forKey: "transform")
         }
         
         if let opacity = info["opacity"] as? Float {
@@ -1661,7 +1661,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             //ani.fillMode = kCAFillModeBoth
             //ani.beginTime = start
             //ani.duration = duration
-            layer.addAnimation(ani, forKey: "opacity")
+            layer.add(ani, forKey: "opacity")
         }
         
         if let backgroundColor:AnyObject = info["bc"] {
@@ -1672,7 +1672,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             //ani.fillMode = kCAFillModeBoth
             //ani.beginTime = start
             //ani.duration = duration
-            layer.addAnimation(ani, forKey: "backgroundColor")
+            layer.add(ani, forKey: "backgroundColor")
         }
         if let borderColor:AnyObject = info["borderColor"] {
             let ani = CABasicAnimation(keyPath: "borderColor")
@@ -1682,7 +1682,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             //ani.fillMode = kCAFillModeBoth
             //ani.beginTime = start
             //ani.duration = duration
-            layer.addAnimation(ani, forKey: "borderColor")
+            layer.add(ani, forKey: "borderColor")
         }
         if let borderWidth = info["borderWidth"] as? CGFloat {
             let ani = CABasicAnimation(keyPath: "borderWidth")
@@ -1691,7 +1691,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             //ani.fillMode = kCAFillModeBoth
             //ani.beginTime = start
             //ani.duration = duration
-            layer.addAnimation(ani, forKey: "borderWidth")
+            layer.add(ani, forKey: "borderWidth")
         }
         if let borderWidth = info["cornerRadius"] as? CGFloat {
             let ani = CABasicAnimation(keyPath: "cornerRadius")
@@ -1700,7 +1700,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             ani.fillMode = kCAFillModeBoth
             ani.beginTime = start
             ani.duration = duration
-            layer.addAnimation(ani, forKey: "cornerRadius")
+            layer.add(ani, forKey: "cornerRadius")
         }
         
         if let textLayer = self.textLayer {
@@ -1712,7 +1712,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 //ani.beginTime = start
                 //ani.duration = duration
                 //ani.fillMode = kCAFillModeBoth
-                textLayer.addAnimation(ani, forKey: "foregroundColor")
+                textLayer.add(ani, forKey: "foregroundColor")
             }
         }
         
@@ -1756,7 +1756,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.beginTime = start
                 ani.duration = duration
                 ani.fillMode = kCAFillModeBoth
-                shapeLayer.addAnimation(ani, forKey: "path")
+                shapeLayer.add(ani, forKey: "path")
             } else if let path = self.parsePath(info["path"], w: w0, h: h0, scale:self.scale) {
                 let ani = CABasicAnimation(keyPath: "path")
                 ani.fromValue = shapeLayer.path
@@ -1764,7 +1764,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.beginTime = start
                 ani.duration = duration
                 ani.fillMode = kCAFillModeBoth
-                shapeLayer.addAnimation(ani, forKey: "path")
+                shapeLayer.add(ani, forKey: "path")
             } /*else if let path = SwipeParser.transformedPath(pathSrc!, param: info, size:frame.size) {
                 let ani = CABasicAnimation(keyPath: "path")
                 ani.fromValue = shapeLayer.path
@@ -1781,7 +1781,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.beginTime = start
                 ani.duration = duration
                 ani.fillMode = kCAFillModeBoth
-                shapeLayer.addAnimation(ani, forKey: "fillColor")
+                shapeLayer.add(ani, forKey: "fillColor")
             }
             if let strokeColor:AnyObject = info["strokeColor"] {
                 let ani = CABasicAnimation(keyPath: "strokeColor")
@@ -1790,7 +1790,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.beginTime = start
                 ani.duration = duration
                 ani.fillMode = kCAFillModeBoth
-                shapeLayer.addAnimation(ani, forKey: "strokeColor")
+                shapeLayer.add(ani, forKey: "strokeColor")
             }
             if let lineWidth = info["lineWidth"] as? CGFloat {
                 let ani = CABasicAnimation(keyPath: "lineWidth")
@@ -1799,7 +1799,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.beginTime = start
                 ani.duration = duration
                 ani.fillMode = kCAFillModeBoth
-                shapeLayer.addAnimation(ani, forKey: "lineWidth")
+                shapeLayer.add(ani, forKey: "lineWidth")
             }
             if let strokeStart = info["strokeStart"] as? CGFloat {
                 let ani = CABasicAnimation(keyPath: "strokeStart")
@@ -1808,7 +1808,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.beginTime = start
                 ani.duration = duration
                 ani.fillMode = kCAFillModeBoth
-                shapeLayer.addAnimation(ani, forKey: "strokeStart")
+                shapeLayer.add(ani, forKey: "strokeStart")
             }
             if let strokeEnd = info["strokeEnd"] as? CGFloat {
                 let ani = CABasicAnimation(keyPath: "strokeEnd")
@@ -1817,7 +1817,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.beginTime = start
                 ani.duration = duration
                 ani.fillMode = kCAFillModeBoth
-                shapeLayer.addAnimation(ani, forKey: "strokeEnd")
+                shapeLayer.add(ani, forKey: "strokeEnd")
             }
         }
     }
@@ -1829,11 +1829,11 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             }
         }
         
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        dispatch_get_main_queue().asynchronously(DispatchQueue.mainexecute: { () -> Void in
             self.layer?.removeAllAnimations()
             self.textLayer?.removeAllAnimations()
             
-            UIView.animateWithDuration(0.25, animations: {
+            UIView.animate(withDuration: 0.25, animations: {
                 CATransaction.begin()
                 CATransaction.setDisableActions(true)
                 CATransaction.setCompletionBlock({
@@ -1904,7 +1904,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             }
         }
         
-        if (name == "*" || self.name.caseInsensitiveCompare(name) == .OrderedSame) {
+        if (name == "*" || self.name.caseInsensitiveCompare(name) == .orderedSame) {
             // Update self
             update(originator, info: info)
             return true
@@ -1918,7 +1918,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 if let viewNode = node?.parent as? SwipeView {
                     for c in viewNode.children {
                         if let e = c as? SwipeElement {
-                            if e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                            if e.name.caseInsensitiveCompare(name) == .orderedSame {
                                 e.update(originator, info: info)
                                 return true
                             }
@@ -1948,7 +1948,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     }
 
     override func appendList(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject])  -> Bool {
-        if (name == "*" || self.name.caseInsensitiveCompare(name) == .OrderedSame) {
+        if (name == "*" || self.name.caseInsensitiveCompare(name) == .orderedSame) {
             // Update self
             appendList(originator, info: info)
             return true
@@ -1962,7 +1962,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 if let viewNode = node?.parent as? SwipeView {
                     for c in viewNode.children {
                         if let e = c as? SwipeElement {
-                            if e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                            if e.name.caseInsensitiveCompare(name) == .orderedSame {
                                 e.appendList(originator, info: info)
                                 return true
                             }
@@ -1990,7 +1990,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     // SwipeViewDelegate
     func addedResourceURLs(urls:[NSURL:String], callback:() -> Void) {
         for (url,prefix) in urls {
-            self.resourceURLs[url] = prefix
+            self.resourceURLs[url as URL] = prefix
         }
         self.delegate?.addedResourceURLs(urls) {
             callback()

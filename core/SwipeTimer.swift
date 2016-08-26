@@ -8,7 +8,7 @@ import Foundation
 
 class SwipeTimer : SwipeNode {
     static var timers = [SwipeTimer]()
-    var timer: NSTimer?
+    var timer: Timer?
     var repeats = false
     
     static func create(parent: SwipeNode, timerInfo: [String:AnyObject]) {
@@ -28,7 +28,7 @@ class SwipeTimer : SwipeNode {
         if let eventsInfo = timerInfo["events"] as? [String:AnyObject] {
             eventHandler.parse(eventsInfo)
             
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(duration, target:self, selector: #selector(SwipeTimer.didTimerTick(_:)), userInfo: nil, repeats: repeats)
+            self.timer = Timer.scheduledTimerWithTimeInterval(duration, target:self, selector: #selector(SwipeTimer.didTimerTick(_:)), userInfo: nil, repeats: repeats)
         }
     }
     
@@ -45,8 +45,8 @@ class SwipeTimer : SwipeNode {
         timers.removeAll()
     }
     
-    func didTimerTick(timer: NSTimer) {
-        if !timer.valid {
+    func didTimerTick(timer: Timer) {
+        if !timer.isValid {
             return
         }
 

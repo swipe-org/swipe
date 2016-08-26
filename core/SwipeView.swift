@@ -42,7 +42,7 @@ class SwipeView: SwipeNode {
             } else if let wrapper = self.wrapper {
                 return wrapper.fFocusable
             } else {
-                return super.canBecomeFocused()
+                return super.canBecomeFocused
             }
         }
         
@@ -185,9 +185,9 @@ class SwipeView: SwipeNode {
         case "data":
             return self.data
         case "screenX":
-            return self.view!.superview?.convertPoint(self.view!.frame.origin, toView: nil).x
+            return self.view!.superview?.convert(self.view!.frame.origin, to: nil).x
         case "screenY":
-            return self.view!.superview?.convertPoint(self.view!.frame.origin, toView: nil).y
+            return self.view!.superview?.convert(self.view!.frame.origin, to: nil).y
         case "x":
             return self.view!.frame.origin.x
         case "y":

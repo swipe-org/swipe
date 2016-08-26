@@ -20,7 +20,7 @@ extension UIResponder {
     
     public class func currentFirstResponder() -> UIResponder? {
         UIResponder._currentFirstResponder = nil
-        UIApplication.sharedApplication().sendAction(#selector(UIResponder.findFirstResponder(_:)), to: nil, from: nil, forEvent: nil)
+        UIApplication.sharedApplication.sendAction(#selector(UIResponder.findFirstResponder(_:)), to: nil, from: nil, for: nil)
         return UIResponder._currentFirstResponder
     }
     
@@ -114,8 +114,8 @@ class SwipePage: SwipeView, SwipeElementDelegate {
 
     func unloadView() {
 #if !os(tvOS)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
 #endif
         SwipeTimer.cancelAll()
         
@@ -497,8 +497,8 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         
         setupGestureRecognizers()
 #if !os(tvOS)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SwipePage.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SwipePage.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.defaultCenter.addObserver(self, selector: #selector(SwipePage.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NotificationCenter.defaultCenter.addObserver(self, selector: #selector(SwipePage.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
 #endif
         if let actions = eventHandler.actionsFor("load") {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.4 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
@@ -512,7 +512,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
 #if !os(tvOS)
     func keyboardWillShow(notification: NSNotification) {
         if let info:NSDictionary = notification.userInfo {
-            if let kbFrame = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+            if let kbFrame = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
                 if let fr = findFirstResponder() {
                     let frFrame = fr.view!.frame
                     let myFrame = self.view!.frame
@@ -779,7 +779,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         }
         
         // first try own page property
-        if (name == "*" || self.name.caseInsensitiveCompare(name) == .OrderedSame) {
+        if (name == "*" || self.name.caseInsensitiveCompare(name) == .orderedSame) {
             if let attribute = info["property"] as? String {
                 return getPropertyValue(originator, property: attribute)
             } else if let attributeInfo = info["property"] as? [String:AnyObject] {
@@ -789,7 +789,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         
         for c in children {
             if let e = c as? SwipeElement {
-                if name == "*" || e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                if name == "*" || e.name.caseInsensitiveCompare(name) == .orderedSame {
                     if let attribute = info["property"] as? String {
                         return e.getPropertyValue(originator, property: attribute)
                     } else if let attributeInfo = info["property"] as? [String:AnyObject] {
@@ -806,7 +806,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         // Find named element and update
         for c in children {
             if let e = c as? SwipeElement {
-                if e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                if e.name.caseInsensitiveCompare(name) == .orderedSame {
                     e.update(originator, info: info)
                     return true
                 }
@@ -820,7 +820,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         // Find named element and update
         for c in children {
             if let e = c as? SwipeElement {
-                if e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                if e.name.caseInsensitiveCompare(name) == .orderedSame {
                     e.appendList(originator, info: info)
                     return true
                 }

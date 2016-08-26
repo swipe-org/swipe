@@ -88,7 +88,7 @@ class SwipePath {
                     case "q":
                         var i = 0
                         while(p.count >= i+4) {
-                            CGPathAddQuadCurveToPoint(path, nil, pt.x+p[i], pt.y+p[i+1], pt.x+p[i+2], pt.y+p[i+3])
+                            path.addQuadCurve(nil, cpx: pt.x+p[i], cpy: pt.y+p[i+1], endingAtX: pt.x+p[i+2], y: pt.y+p[i+3])
                             cp.x = pt.x+p[i]
                             cp.y = pt.y+p[i+1]
                             pt.x += p[i+2]
@@ -98,7 +98,7 @@ class SwipePath {
                     case "Q":
                         var i = 0
                         while(p.count >= i+4) {
-                            CGPathAddQuadCurveToPoint(path, nil, p[i], p[i+1], p[i+2], p[i+3])
+                            path.addQuadCurve(nil, cpx: p[i], cpy: p[i+1], endingAtX: p[i+2], y: p[i+3])
                             cp.x = p[i]
                             cp.y = p[i+1]
                             pt.x = p[i+2]

@@ -10,25 +10,25 @@ import UIKit
 
 extension SwipeBrowser {
     @IBAction func export() {
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         alert.popoverPresentationController?.sourceView = btnExport
-        alert.addAction(UIAlertAction(title: "Cancel".localized, style: .Cancel, handler:nil))
-        alert.addAction(UIAlertAction(title: "Movie".localized, style: .Default) {
+        alert.addAction(UIAlertAction(title: "Cancel".localized, style: .cancel, handler:nil))
+        alert.addAction(UIAlertAction(title: "Movie".localized, style: .default) {
             (_:UIAlertAction) -> Void in
             self.exportAsMovie()
             })
-        alert.addAction(UIAlertAction(title: "GIF Animation".localized, style: .Default) {
+        alert.addAction(UIAlertAction(title: "GIF Animation".localized, style: .default) {
             (_:UIAlertAction) -> Void in
             self.exportAsGifAnimation()
             })
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
 
     func exportAsGifAnimation() {
         guard let swipeVC = controller as? SwipeViewController else {
             return
         }
-        let docURL = try! NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true)
+        let docURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
         let fileURL = docURL.URLByAppendingPathComponent("swipe.gif")
         
         self.viewLoading?.alpha = 1.0
@@ -58,7 +58,7 @@ extension SwipeBrowser {
         guard let swipeVC = controller as? SwipeViewController else {
             return
         }
-        let docURL = try! NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true)
+        let docURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
         let fileURL = docURL.URLByAppendingPathComponent("swipe.mov")
         
         self.viewLoading?.alpha = 1.0

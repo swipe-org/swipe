@@ -96,7 +96,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
         
 #if os(iOS)
-        btnExport?.enabled = false
+        btnExport?.isEnabled = false
         slider.isHidden = true
 #endif
 
@@ -156,7 +156,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         var rcFrame = self.view.bounds
 #if os(iOS)
         if let _ = controller as? SwipeViewController {
-            btnExport?.enabled = true
+            btnExport?.isEnabled = true
         }
         if documentViewer.hideUI() {
             let tap = UITapGestureRecognizer(target: self, action: #selector(SwipeBrowser.tapped))

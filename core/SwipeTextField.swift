@@ -31,7 +31,7 @@ class SwipeTextField: SwipeView, UITextFieldDelegate {
             if let wrapper = self.wrapper, parent = wrapper.parent as? SwipeView {
                 return parent.fFocusable
             } else {
-                return super.canBecomeFocused()
+                return super.canBecomeFocused
             }
         }
         
@@ -61,25 +61,25 @@ class SwipeTextField: SwipeView, UITextFieldDelegate {
         super.init(parent: parent, info: info)
         self.textView = InternalTextField(wrapper: self, frame: frame)
         self.textView!.delegate = self
-        self.textView!.backgroundColor = UIColor.clearColor()
+        self.textView!.backgroundColor = UIColor.clear
         self.view = self.textView! as UIView
     }
     
     override func setText(text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer?) -> Bool {
         if let textView = self.textView {
             textView.text = text
-            textView.textAlignment = NSTextAlignment.Center
+            textView.textAlignment = NSTextAlignment.center
             
             func processAlignment(alignment:String) {
                 switch(alignment) {
                 case "center":
-                    textView.textAlignment = .Center
+                    textView.textAlignment = .center
                 case "left":
-                    textView.textAlignment = .Left
+                    textView.textAlignment = .left
                 case "right":
-                    textView.textAlignment = .Right
+                    textView.textAlignment = .right
                 case "justified":
-                    textView.textAlignment = .Justified
+                    textView.textAlignment = .justified
                 default:
                     break
                 }
@@ -102,7 +102,7 @@ class SwipeTextField: SwipeView, UITextFieldDelegate {
             }()
             
             textView.font = UIFont(name: "Helvetica", size: fontSize)
-            textView.textColor = UIColor(CGColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor))
+            textView.textColor = UIColor(CGColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.black.cgColor))
             
             parent!.execute(self, actions: parent!.eventHandler.actionsFor("textChanged"))
         }
@@ -122,13 +122,13 @@ class SwipeTextField: SwipeView, UITextFieldDelegate {
     }
     
     override func isFirstResponder() -> Bool {
-        return view!.isFirstResponder()
+        return view!.isFirstResponder
     }
     
     // UITextViewDelegate
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.01 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
+        dispatch_after(dispatch_time(dispatch_time_t(DISPATCH_TIME_NOW), Int64(0.01 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
             self.parent!.execute(self, actions: self.parent!.eventHandler.actionsFor("textChanged"))
         }
         return true
