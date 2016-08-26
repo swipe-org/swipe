@@ -178,8 +178,8 @@ class SwipeParser {
     }
 
     static func parseSize(_ param:AnyObject?, defaultValue:CGSize = CGSize(width: 0.0, height: 0.0), scale:CGSize) -> CGSize {
-        if let values = param as? [CGFloat] where values.count == 2 {
-            return CGSizeMake(values[0] * scale.width, values[1] * scale.height)
+        if let values = param as? [CGFloat], values.count == 2 {
+            return CGSize(width: values[0] * scale.width, height: values[1] * scale.height)
         }
         return CGSize(width: defaultValue.width * scale.width, height: defaultValue.height * scale.height)
     }
@@ -198,7 +198,7 @@ class SwipeParser {
         return defaultValue
     }
 
-    static func parseAndEvalBool(originator: SwipeNode, key: String, info: [String:AnyObject]) -> Bool? {
+    static func parseAndEvalBool(_ originator: SwipeNode, key: String, info: [String:AnyObject]) -> Bool? {
         var valObj: AnyObject?
         
         if let keyInfo = info[key] as? [String:AnyObject], valOfInfo = keyInfo["valueOf"] as? [String:AnyObject] {
@@ -283,7 +283,7 @@ class SwipeParser {
 
     static func imageSourceWith(name:String) -> CGImageSource? {
         var components = name.componentsSeparatedByString("/")
-        let url:NSURL?
+        let url:URL?
         if components.count == 1 {
             url = NSBundle.mainBundle().URLForResource(name, withExtension: nil)
         } else {

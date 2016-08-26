@@ -107,10 +107,10 @@ class SwipePrefetcher {
             } else {
                 count += 1
                 urlsFetching.append(url)
-                manager.loadAsset(url, prefix: prefix, bypassCache:false, callback: { (urlLocal:URL?, error:NSError!) -> Void in
+                manager.loadAsset(url, prefix: prefix, bypassCache:false, callback: { (urlLocal:URL?, error:NSError?) -> Void in
                     if let urlL = urlLocal {
                         self.urlsFetched[url] = urlL
-                    } else {
+                    } else if let error = error {
                         self.urlsFailed.append(url)
                         self.errors.append(error)
                     }

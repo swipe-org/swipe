@@ -12,7 +12,7 @@ class SwipeHttpGet : SwipeNode {
     private var params: [String:AnyObject]?
     private var data: [String:AnyObject]?
     
-    static func create(parent: SwipeNode, getInfo: [String:AnyObject]) {
+    static func create(_ parent: SwipeNode, getInfo: [String:AnyObject]) {
         let geter = SwipeHttpGet(parent: parent, getInfo: getInfo)
         getters.append(geter)
     }
@@ -25,16 +25,16 @@ class SwipeHttpGet : SwipeNode {
         }
         
         if let sourceInfo = getInfo["source"] as? [String:AnyObject] {
-            if let urlString = sourceInfo["url"] as? String, url = NSURL(string: urlString) {
-                SwipeAssetManager.sharedInstance().loadAsset(url as URL, prefix: "", bypassCache:true) { (urlLocal:NSURL?,  error:NSError!) -> Void in
-                    if let urlL = urlLocal where error == nil, let data = NSData(contentsOfURL: urlL) {
+            if let urlString = sourceInfo["url"] as? String, let url = URL(string: urlString) {
+                SwipeAssetManager.sharedInstance().loadAsset(url, prefix: "", bypassCache:true) { (urlLocal:URL?, error:NSError?) -> Void in
+                    if let urlL = urlLocal, error == nil, let data = try? Data(contentsOf: urlL) {
                         do {
-                            guard let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? [String:AnyObject] else {
+                            guard let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions()) as? [String:AnyObject] else {
                                 self.handleError("get \(urlString): not a dictionary.")
                                 return
                             }
                             // Success
-                            if let event = self.eventHandler.getEvent("completion"), actionsInfo = self.eventHandler.actionsFor("completion") {
+                            if let event = self.eventHandler.getEvent("completion"), let actionsInfo = self.eventHandler.actionsFor("completion") {
                                 self.data = json
                                 self.params = event.params
                                 self.execute(self, actions: actionsInfo)
@@ -44,7 +44,7 @@ class SwipeHttpGet : SwipeNode {
                             return
                         }
                     } else {
-                        self.handleError("get \(urlString): \(error.localizedDescription)")
+                        self.handleError("get \(urlString): \(error?.localizedDescription ?? "")")
                     }
                 }
             } else {
@@ -55,7 +55,7 @@ class SwipeHttpGet : SwipeNode {
         }
     }
     
-    private func handleError(errorMsg: String) {
+    private func handleError(_ errorMsg: String) {
         if let event = self.eventHandler.getEvent("error"), actionsInfo = self.eventHandler.actionsFor("error") {
             self.data = ["message":errorMsg]
             self.params = event.params
@@ -79,7 +79,7 @@ class SwipeHttpGet : SwipeNode {
     
     // SwipeNode
     
-    override func getPropertiesValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+    override func getPropertiesValue(_ originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
         let prop = info.keys.first!
         NSLog(TAG + " getPropsVal(\(prop))")
         

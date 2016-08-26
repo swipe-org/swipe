@@ -11,7 +11,7 @@ class SwipeTimer : SwipeNode {
     var timer: Timer?
     var repeats = false
     
-    static func create(parent: SwipeNode, timerInfo: [String:AnyObject]) {
+    static func create(_ parent: SwipeNode, timerInfo: [String:AnyObject]) {
         let timer = SwipeTimer(parent: parent, timerInfo: timerInfo)
         timers.append(timer)
     }
@@ -28,7 +28,7 @@ class SwipeTimer : SwipeNode {
         if let eventsInfo = timerInfo["events"] as? [String:AnyObject] {
             eventHandler.parse(eventsInfo)
             
-            self.timer = Timer.scheduledTimerWithTimeInterval(duration, target:self, selector: #selector(SwipeTimer.didTimerTick(_:)), userInfo: nil, repeats: repeats)
+            self.timer = Timer.scheduledTimer(timeInterval: duration, target:self, selector: #selector(SwipeTimer.didTimerTick(_:)), userInfo: nil, repeats: repeats)
         }
     }
     
@@ -45,7 +45,7 @@ class SwipeTimer : SwipeNode {
         timers.removeAll()
     }
     
-    func didTimerTick(timer: Timer) {
+    func didTimerTick(_ timer: Timer) {
         if !timer.isValid {
             return
         }

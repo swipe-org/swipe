@@ -196,7 +196,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
     
     // Initializer/Deinitializer
     /*
-    init?(url:NSURL) {
+    init?(url:URL) {
         self.url = url
         if let data = NSData(contentsOfURL: url),
                script = (try? NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)) as? [String:AnyObject] {

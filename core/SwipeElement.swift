@@ -56,8 +56,8 @@ protocol SwipeElementDelegate:NSObjectProtocol {
     func didFinishPlaying(_ element:SwipeElement, completed:Bool)
     func parseMarkdown(_ element:SwipeElement, markdowns:[String]) -> NSAttributedString
     func baseURL() -> URL?
-    func map(_ url:SURL) -> SURL?
-    func addedResourceURLs(_ urls:[SURL:String], callback:() -> Void)
+    func map(_ url:URL) -> URL?
+    func addedResourceURLs(_ urls:[URL:String], callback:() -> Void)
     func pageIndex() -> Int // for debugging
     func localizedStringForKey(_ key:String) -> String?
     func languageIdentifier() -> String?
@@ -210,7 +210,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             if let itemsInfo = listInfo["items"] as? [[String:AnyObject]] {
                 for itemInfo in itemsInfo {
                     if let elementsInfo = itemInfo["elements"] as? [[String:AnyObject]] {
-                        let scaleDummy = CGSizeMake(1.0, 1.0)
+                        let scaleDummy = CGSize(width: 1.0, height: 1.0)
                         for e in elementsInfo {
                             let element = SwipeElement(info: e, scale:scaleDummy, parent:self, delegate:self.delegate!)
                             for (url, prefix) in element.resourceURLs {
@@ -1286,7 +1286,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
 
     static func processShadow(_ info:[String:AnyObject], scale:CGSize, layer:CALayer) {
         if let shadowInfo = info["shadow"] as? [String:AnyObject] {
-            layer.shadowColor = SwipeParser.parseColor(shadowInfo["color"], defaultColor: UIColor.blac.cgColor)
+            layer.shadowColor = SwipeParser.parseColor(shadowInfo["color"], defaultColor: UIColor.black.cgColor)
             layer.shadowOffset = SwipeParser.parseSize(shadowInfo["offset"], defaultValue: CGSize(width: 1, height: 1), scale:scale)
             layer.shadowOpacity = SwipeParser.parseFloat(shadowInfo["opacity"], defaultValue:0.5)
             layer.shadowRadius = SwipeParser.parseCGFloat(shadowInfo["radius"], defaultValue: 1.0) * scale.width
@@ -1389,7 +1389,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         return textLayer
     }
     
-    static func updateTextLayer(textLayer:CATextLayer, text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer) {
+    static func updateTextLayer(_ textLayer:CATextLayer, text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer) {
         let (attr, alignmentMode, fTextBottom, fTextTop, font, fontSize) = SwipeElement.processTextInfo(info, dimension: dimension, scale: scale)
         
         textLayer.alignmentMode = alignmentMode // *
@@ -1435,7 +1435,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     
     // SwipeNode
     
-    override func getPropertyValue(originator: SwipeNode, property: String) -> AnyObject? {
+    override func getPropertyValue(_ originator: SwipeNode, property: String) -> AnyObject? {
         if let val = helper?.getPropertyValue(originator, property: property) {
             return val
         }
@@ -1464,7 +1464,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         }
     }
     
-    override func getPropertiesValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+    override func getPropertiesValue(_ originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
         if let val = self.helper?.getPropertiesValue(originator, info: info) {
             return val
         }
@@ -1478,7 +1478,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         }
     }
     
-    override func getValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+    override func getValue(_ originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
         var name = "*"
         if let val = info["id"] as? String {
             name = val
@@ -1530,7 +1530,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         return nil
     }
     
-    func setupAnimations(layer: CALayer, originator: SwipeNode, info: [String:AnyObject]) {
+    func setupAnimations(_ layer: CALayer, originator: SwipeNode, info: [String:AnyObject]) {
         let dimension = self.screenDimension
         let baseURL = self.delegate.baseURL()
         var x = layer.frame.origin.x
@@ -1601,7 +1601,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         y *= self.scale.height
         let w = w0 * self.scale.width
         let h = h0 * self.scale.height
-        let frame = CGRectMake(x, y, w, h)
+        let frame = CGRect(x: x, y: y, width: w, height: h)
         layer.frame = frame
         
         let start, duration:Double
@@ -1645,8 +1645,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         
         if let transform = SwipeParser.parseTransform(info, scaleX:self.scale.width, scaleY:self.scale.height, base:info, fSkipTranslate: fSkipTranslate, fSkipScale: self.shapeLayer != nil) {
             let ani = CABasicAnimation(keyPath: "transform")
-            ani.fromValue = NSValue(CATransform3D : layer.transform)
-            ani.toValue = NSValue(CATransform3D : transform)
+            ani.fromValue = NSValue(caTransform3D : layer.transform)
+            ani.toValue = NSValue(caTransform3D : transform)
             ani.fillMode = kCAFillModeBoth
             ani.beginTime = start
             ani.duration = duration
@@ -1717,7 +1717,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         }
         
         if info["img"] != nil && self.imageLayer != nil {
-            var urls = [NSURL:String]()
+            var urls = [URL:String]()
             var urlStr: String?
             
             if let str = info["img"] as? String {
@@ -1728,7 +1728,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 urlStr = str
             }
             if urlStr != nil {
-                if let url = NSURL.url(urlStr!, baseURL: baseURL) {
+                if let url = URL.url(urlStr!, baseURL: baseURL) {
                     urls[url] = "img"
             
                     self.delegate.addedResourceURLs(urls) {
@@ -1822,14 +1822,14 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         }
     }
             
-    func update(originator: SwipeNode, info: [String:AnyObject]) {
+    func update(_ originator: SwipeNode, info: [String:AnyObject]) {
         for key in info.keys {
             if key != "events" {
                 self.info[key] = info[key]
             }
         }
         
-        dispatch_get_main_queue().asynchronously(DispatchQueue.mainexecute: { () -> Void in
+        DispatchQueue.main.async {
             self.layer?.removeAllAnimations()
             self.textLayer?.removeAllAnimations()
             
@@ -1889,10 +1889,10 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 }
                 self.view?.superview?.setNeedsFocusUpdate()
             }
-        })
+        }
     }
     
-    override func updateElement(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject]) -> Bool {
+    override func updateElement(_ originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject]) -> Bool {
         if let textHelper = self.helper as? SwipeTextArea {
             if textHelper.updateElement(originator, name: name, up: up, info: info) {
                 return true
@@ -1943,11 +1943,11 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         return false
     }
     
-    override func appendList(originator: SwipeNode, info: [String:AnyObject]) {
+    override func appendList(_ originator: SwipeNode, info: [String:AnyObject]) {
         self.helper?.appendList(originator, info: info)
     }
 
-    override func appendList(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject])  -> Bool {
+    override func appendList(_ originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject])  -> Bool {
         if (name == "*" || self.name.caseInsensitiveCompare(name) == .orderedSame) {
             // Update self
             appendList(originator, info: info)
@@ -1988,7 +1988,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     }
     
     // SwipeViewDelegate
-    func addedResourceURLs(urls:[NSURL:String], callback:() -> Void) {
+    func addedResourceURLs(_ urls:[URL:String], callback:() -> Void) {
         for (url,prefix) in urls {
             self.resourceURLs[url as URL] = prefix
         }

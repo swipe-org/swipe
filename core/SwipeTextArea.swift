@@ -26,11 +26,11 @@ class SwipeTextArea: SwipeView, UITextViewDelegate {
         self.view = self.textView as UIView
     }
     
-    override func setText(text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer?) -> Bool {
+    override func setText(_ text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer?) -> Bool {
         self.textView.text = text
         self.textView.textAlignment = NSTextAlignment.center
         
-        func processAlignment(alignment:String) {
+        func processAlignment(_ alignment:String) {
             switch(alignment) {
             case "center":
                 self.textView.textAlignment = .center
@@ -62,14 +62,14 @@ class SwipeTextArea: SwipeView, UITextViewDelegate {
         }()
         
         self.textView.font = UIFont(name: "Helvetica", size: fontSize)
-        self.textView.textColor = UIColor(CGColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.black.cgColor))
+        self.textView.textColor = UIColor(cgColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.black.cgColor))
         
         parent!.execute(self, actions: parent!.eventHandler.actionsFor("textChanged"))
 
         return true
     }
     
-    override func getPropertyValue(originator: SwipeNode, property: String) -> AnyObject? {
+    override func getPropertyValue(_ originator: SwipeNode, property: String) -> AnyObject? {
         switch (property) {
         case "text":
             return self.textView.text

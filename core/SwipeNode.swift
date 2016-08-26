@@ -16,7 +16,7 @@ class SwipeNode: NSObject {
         super.init()
     }
     
-    func evaluate(info:[String:AnyObject]) -> [String:AnyObject] {
+    func evaluate(_ info:[String:AnyObject]) -> [String:AnyObject] {
         var result = [String:AnyObject]()
         
         for k in info.keys {
@@ -33,7 +33,7 @@ class SwipeNode: NSObject {
         return result
     }
     
-    func execute(originator: SwipeNode, actions:[SwipeAction]?) {
+    func execute(_ originator: SwipeNode, actions:[SwipeAction]?) {
         if actions == nil {
             return
         }
@@ -42,7 +42,7 @@ class SwipeNode: NSObject {
         }
     }
     
-    func executeAction(originator: SwipeNode, action: SwipeAction) {
+    func executeAction(_ originator: SwipeNode, action: SwipeAction) {
         if let getInfo = action.info["get"] as? [String:AnyObject] {
             SwipeHttpGet.create(self, getInfo: getInfo)
         } else if let postInfo = action.info["post"] as? [String:AnyObject] {
@@ -54,15 +54,15 @@ class SwipeNode: NSObject {
         }
     }
 
-    func getPropertyValue(originator: SwipeNode, property: String) -> AnyObject? {
+    func getPropertyValue(_ originator: SwipeNode, property: String) -> AnyObject? {
         return self.parent?.getPropertyValue(originator, property: property)
     }
     
-    func getPropertiesValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+    func getPropertiesValue(_ originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
         return self.parent?.getPropertiesValue(originator, info: info)
     }
     
-    func getValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+    func getValue(_ originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
         var up = true
         if let val = info["search"] as? String {
             up = val != "children"

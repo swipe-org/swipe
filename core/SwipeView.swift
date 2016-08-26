@@ -15,7 +15,7 @@ import Foundation
 #endif
 
 protocol SwipeViewDelegate: NSObjectProtocol {
-    func addedResourceURLs(urls:[NSURL:String], callback:() -> Void)
+    func addedResourceURLs(_ urls:[URL:String], callback:() -> Void)
 }
 
 class SwipeView: SwipeNode {
@@ -36,7 +36,7 @@ class SwipeView: SwipeNode {
             fatalError("init(coder:) has not been implemented")
         }
         
-        override func canBecomeFocused() -> Bool {
+        override var canBecomeFocused: Bool {
             if let element = self.wrapper as? SwipeElement, _ = element.helper?.view {
                  return false
             } else if let wrapper = self.wrapper {
@@ -46,7 +46,7 @@ class SwipeView: SwipeNode {
             }
         }
         
-        override func didUpdateFocusInContext(context: UIFocusUpdateContext, withAnimationCoordinator coordinator: UIFocusAnimationCoordinator) {
+        override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
             if let wrapper = self.wrapper {
                 // lostFocus must be fired before gainedFocus
                 if let actions = wrapper.eventHandler.actionsFor("lostFocus") where self == context.previouslyFocusedView  {
@@ -56,7 +56,7 @@ class SwipeView: SwipeNode {
                     wrapper.execute(wrapper, actions: actions)
                 }
             } else {
-                super.didUpdateFocusInContext(context, withAnimationCoordinator: coordinator)
+                super.didUpdateFocus(in: context, with: coordinator)
             }
         }
     }
@@ -84,7 +84,7 @@ class SwipeView: SwipeNode {
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(SwipeView.didTap(_:)))
         if doubleTapRecognizer != nil {
-            tapRecognizer.requireGestureRecognizerToFail(doubleTapRecognizer!)
+            tapRecognizer.require(toFail: doubleTapRecognizer!)
         }
         tapRecognizer.cancelsTouchesInView = false
         view!.addGestureRecognizer(tapRecognizer)
@@ -117,7 +117,7 @@ class SwipeView: SwipeNode {
         }
     }
     
-    func setText(text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer?) -> Bool {
+    func setText(_ text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer?) -> Bool {
         return false
     }
     
@@ -132,7 +132,7 @@ class SwipeView: SwipeNode {
         tapped()
     }
     
-    func didTap(recognizer: UITapGestureRecognizer) {
+    func didTap(_ recognizer: UITapGestureRecognizer) {
         if let actions = eventHandler.actionsFor("tapped") where fEnabled {
             execute(self, actions: actions)
             completeTap()
@@ -144,13 +144,13 @@ class SwipeView: SwipeNode {
         }
     }
     
-    func didDoubleTap(recognizer: UITapGestureRecognizer) {
+    func didDoubleTap(_ recognizer: UITapGestureRecognizer) {
         if let actions = eventHandler.actionsFor("doubleTapped") where fEnabled  {
             execute(self, actions: actions)
         }
     }
     
-    override func executeAction(originator: SwipeNode, action: SwipeAction) {
+    override func executeAction(_ originator: SwipeNode, action: SwipeAction) {
         if let updateInfo = action.info["update"] as? [String:AnyObject] {
             var name = "*"; // default is 'self'
             if let value = updateInfo["id"] as? String {
@@ -176,11 +176,11 @@ class SwipeView: SwipeNode {
         }
     }
     
-    func updateElement(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject])  -> Bool {
+    func updateElement(_ originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject])  -> Bool {
         return false
     }
     
-    override func getPropertyValue(originator: SwipeNode, property: String) -> AnyObject? {
+    override func getPropertyValue(_ originator: SwipeNode, property: String) -> AnyObject? {
         switch (property) {
         case "data":
             return self.data
@@ -200,11 +200,11 @@ class SwipeView: SwipeNode {
             return nil
         }
     }
-    func appendList(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject])  -> Bool {
+    func appendList(_ originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject])  -> Bool {
         return false
     }
     
-    func appendList(originator: SwipeNode, info: [String:AnyObject]) {
+    func appendList(_ originator: SwipeNode, info: [String:AnyObject]) {
     }
     
     func isFirstResponder() -> Bool {

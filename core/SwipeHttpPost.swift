@@ -12,7 +12,7 @@ class SwipeHttpPost : SwipeNode {
     private var params: [String:AnyObject]?
     private var data: [String:AnyObject]?
     
-    static func create(parent: SwipeNode, postInfo: [String:AnyObject]) {
+    static func create(_ parent: SwipeNode, postInfo: [String:AnyObject]) {
         let poster = SwipeHttpPost(parent: parent, postInfo: postInfo)
         posters.append(poster)
     }
@@ -28,7 +28,7 @@ class SwipeHttpPost : SwipeNode {
             if var urlString = targetInfo["url"] as? String {
                 if let params = postInfo["params"] as? [String:AnyObject] {
                     var paramsSeparator = "?"
-                    if urlString.containsString("?") {
+                    if urlString.contains("?") {
                         paramsSeparator = "&"
                     }
                     
@@ -47,24 +47,24 @@ class SwipeHttpPost : SwipeNode {
                             urlString.append(paramsSeparator)
                             urlString.append(param)
                             urlString.append("=")
-                            urlString.appendContentsOf(val!.stringByReplacingOccurrencesOfString("?", withString: ""))
+                            urlString.append(val!.replacingOccurrences(of: "?", with: ""))
                             paramsSeparator = "&"
                         }
                     }
                 }
-                if let encoded = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()),
-                    url = NSURL(string: encoded) {
-                    let request = NSMutableURLRequest(URL: url)
-                    request.HTTPMethod = "POST"
+                if let encoded = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed),
+                    let url = URL(string: encoded) {
+                    var request = URLRequest(url: url)
+                    request.httpMethod = "POST"
 
                     if let dataStr = postInfo["data"] as? String {
-                        request.HTTPBody = dataStr.dataUsingEncoding(NSUTF8StringEncoding)
+                        request.httpBody = dataStr.data(using: .utf8)
                         request.setValue("text/plain; charset=UTF-8", forHTTPHeaderField: "Content-Type")
                     }
                     if let data = postInfo["data"] as? [String:AnyObject] {
                         let evalData = parent.evaluate(data)
                         do {
-                            request.HTTPBody =  try NSJSONSerialization.dataWithJSONObject(evalData, options: NSJSONWritingOptions.PrettyPrinted)
+                            request.httpBody =  try JSONSerialization.data(withJSONObject: evalData, options: JSONSerialization.WritingOptions.prettyPrinted)
                             request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
                         } catch let error as NSError {
                             print("error=\(error)")
@@ -79,31 +79,31 @@ class SwipeHttpPost : SwipeNode {
                         }
                     }
                     
-                    let task = URLSession.sharedSession().dataTaskWithRequest(request) { data, response, error in
+                    let task = URLSession.shared.dataTask(with: request) { data, response, error in
                         guard error == nil && data != nil else {                                                          // check for fundamental networking error
                             print("error=\(error)")
                             self.handleError("post error \(error)")
                             return
                         }
                         
-                        if let httpStatus = response as? NSHTTPURLResponse where httpStatus.statusCode != 200 {           // check for http errors
+                        if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
                             print("statusCode should be 200, but is \(httpStatus.statusCode)")
                             print("response = \(response)")
                             self.handleError("post error \(httpStatus.statusCode)")
                             return
                         }
                         
-                        let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                        let responseString = String(data: data!, encoding: .utf8)
                         print("responseString = \(responseString)")
                         
                         do {
-                            guard let json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions()) as? [String:AnyObject] else {
+                            guard let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions()) as? [String:AnyObject] else {
                                 self.handleError("post \(urlString): not a dictionary.")
                                 return
                             }
                             // Success
                             if let event = self.eventHandler.getEvent("completion"), actionsInfo = self.eventHandler.actionsFor("completion") {
-                                dispatch_async(dispatch_get_main_queue()) {
+                                DispatchQueue.main.async {
                                     self.data = json
                                     self.params = event.params
                                     self.execute(self, actions: actionsInfo)
@@ -126,9 +126,9 @@ class SwipeHttpPost : SwipeNode {
         }
     }
     
-    private func handleError(errorMsg: String) {
+    private func handleError(_ errorMsg: String) {
         if let event = self.eventHandler.getEvent("error"), actionsInfo = self.eventHandler.actionsFor("error") {
-            dispatch_get_main_queue().asynchronously(DispatchQueue.main) {
+            DispatchQueue.main.async {
                 self.data = ["message":errorMsg]
                 self.params = event.params
                 self.execute(self, actions: actionsInfo)
@@ -148,7 +148,7 @@ class SwipeHttpPost : SwipeNode {
     
     // SwipeNode
     
-    override func getPropertiesValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+    override func getPropertiesValue(_ originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
         let prop = info.keys.first!
         NSLog(TAG + " getPropsVal(\(prop))")
         

@@ -20,7 +20,7 @@ extension UIResponder {
     
     public class func currentFirstResponder() -> UIResponder? {
         UIResponder._currentFirstResponder = nil
-        UIApplication.sharedApplication.sendAction(#selector(UIResponder.findFirstResponder(_:)), to: nil, from: nil, for: nil)
+        UIApplication.shared.sendAction(#selector(UIResponder.findFirstResponder(sender:)), to: nil, from: nil, for: nil)
         return UIResponder._currentFirstResponder
     }
     
@@ -408,12 +408,12 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         let baseURL = self.delegate.baseURL()
         for key in ["audio"] {
             if let src = self.info[key] as? String,
-                   url = URL.url(src, baseURL: baseURL) {
+                   let url = URL.url(src, baseURL: baseURL) {
                 urls[url] = ""
             }
         }
         if let elementsInfo = self.info["elements"] as? [[String:AnyObject]] {
-            let scaleDummy = CGSizeMake(0.1, 0.1)
+            let scaleDummy = CGSize(width: 0.1, height: 0.1)
             for e in elementsInfo {
                 let element = SwipeElement(info: e, scale:scaleDummy, parent:self, delegate:self)
                 for (url, prefix) in element.resourceURLs {
@@ -497,11 +497,11 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         
         setupGestureRecognizers()
 #if !os(tvOS)
-        NotificationCenter.defaultCenter.addObserver(self, selector: #selector(SwipePage.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NotificationCenter.defaultCenter.addObserver(self, selector: #selector(SwipePage.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwipePage.keyboardWillShow(notification:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwipePage.keyboardWillHide(notification:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
 #endif
         if let actions = eventHandler.actionsFor("load") {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.4 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                 self.execute(self, actions: actions)
             }
         }
@@ -518,7 +518,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
                     let myFrame = self.view!.frame
                     //let duration = info[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber as NSTimeInterval
                     //UIView.animateWithDuration(0.25, delay: 0.25, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-                        self.view!.frame = CGRectMake(0, myFrame.origin.y - max(0, (frFrame.origin.y + frFrame.size.height) - (myFrame.size.height - kbFrame.size.height)), myFrame.size.height, myFrame.size.height)
+                        self.view!.frame = CGRect(x: 0, y: myFrame.origin.y - max(0, (frFrame.origin.y + frFrame.size.height) - (myFrame.size.height - kbFrame.size.height)), width: myFrame.size.height, height: myFrame.size.height)
                     //    }, completion: nil)
                 }
             }
@@ -531,7 +531,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
                 let myFrame = self.view!.frame
                 //let duration = info[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber as NSTimeInterval
                 //UIView.animateWithDuration(0.25, delay: 0.25, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-                    self.view!.frame = CGRectMake(0, 0, myFrame.size.height, myFrame.size.height)
+                    self.view!.frame = CGRect(x: 0, y: 0, width: myFrame.size.height, height: myFrame.size.height)
                 //    }, completion: nil)
             }
         }
@@ -620,7 +620,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     // <SwipeElementDelegate> method
     
     func addedResourceURLs(_ urls:[URL:String], callback:() -> Void) {
-        self.prefetcher.append(urls) { (completed:Bool, _:[SURL], _:[NSError]) -> Void in
+        self.prefetcher.append(urls) { (completed:Bool, _:[URL], _:[NSError]) -> Void in
             if completed {
                 callback()
             }
@@ -772,7 +772,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     
     
     // SwipeNode
-    override func getValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+    override func getValue(_ originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
         var name = "*"
         if let val = info["id"] as? String {
             name = val
@@ -802,7 +802,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         return nil
     }
     
-    override func updateElement(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject]) -> Bool {
+    override func updateElement(_ originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject]) -> Bool {
         // Find named element and update
         for c in children {
             if let e = c as? SwipeElement {
@@ -816,7 +816,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         return false
     }
     
-    override func appendList(originator: SwipeNode, name: String, up: Bool, info: [String : AnyObject]) -> Bool {
+    override func appendList(_ originator: SwipeNode, name: String, up: Bool, info: [String : AnyObject]) -> Bool {
         // Find named element and update
         for c in children {
             if let e = c as? SwipeElement {

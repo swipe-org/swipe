@@ -12,7 +12,7 @@ import MobileCoreServices
 import AVFoundation
 
 class SwipeExporter: NSObject {
-    enum Error:Error {
+    enum Error:Swift.Error {
         case FailedToCreate
         case FailedToFinalize
     }
@@ -21,7 +21,7 @@ class SwipeExporter: NSObject {
     let fps:Int
     let resolution:CGFloat
     var progress = 0.0 as CGFloat // Output: Proress from 0.0 to 1.0
-    var outputSize = CGSizeZero    // Output: Size of generated GIF/video
+    var outputSize = CGSize.zero    // Output: Size of generated GIF/video
     
     private var iFrame = 0
     
@@ -31,7 +31,7 @@ class SwipeExporter: NSObject {
         self.resolution = resolution
     }
     
-    func exportAsGifAnimation(fileURL:NSURL, startPage:Int, pageCount:Int, progress:(complete:Bool, error:Error?)->Void) {
+    func exportAsGifAnimation(_ fileURL:URL, startPage:Int, pageCount:Int, progress:(complete:Bool, error:Swift.Error?)->Void) {
         guard let idst = CGImageDestinationCreateWithURL(fileURL, kUTTypeGIF, pageCount * fps + 1, nil) else {
             return progress(complete: false, error: Error.FailedToCreate)
         }
@@ -42,18 +42,18 @@ class SwipeExporter: NSObject {
         self.processFrame(idst, startPage:startPage, pageCount: pageCount, progress:progress)
     }
 
-    func processFrame(idst:CGImageDestination, startPage:Int, pageCount:Int, progress:(complete:Bool, error: Error?)->Void) {
+    func processFrame(_ idst:CGImageDestination, startPage:Int, pageCount:Int, progress:(complete:Bool, error: Error?)->Void) {
         self.progress = CGFloat(iFrame) / CGFloat(fps) / CGFloat(pageCount)
         swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(iFrame) / CGFloat(fps))
         
         // HACK: This delay is not 100% reliable, but is sufficient practically.
-        dispatch_time(dispatch_time_t(DISPATCH_TIME_NOW), Int64(100 * Double(NSEC_PER_MSEC))).after(DispatchTime.nowwhen: DispatchQueue.main()) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 100) {
             progress(complete: false, error: nil)
-            let presentationLayer = self.swipeViewController.view.layer.presentation() as! CALayer
+            let presentationLayer = self.swipeViewController.view.layer.presentation()!
             UIGraphicsBeginImageContext(self.swipeViewController.view.frame.size); defer {
                 UIGraphicsEndImageContext()
             }
-            presentationLayer.renderInContext(UIGraphicsGetCurrentContext()!)
+            presentationLayer.render(in: UIGraphicsGetCurrentContext()!)
             let image = UIGraphicsGetImageFromCurrentImageContext()!
 
             CGImageDestinationAddImage(idst, image.cgImage!, [String(kCGImagePropertyGIFDictionary):
@@ -72,11 +72,11 @@ class SwipeExporter: NSObject {
         }
     }
 
-    func exportAsMovie(fileURL:NSURL, startPage:Int, pageCount:Int, progress:(complete:Bool, error:Error?)->Void) {
+    func exportAsMovie(_ fileURL:URL, startPage:Int, pageCount:Int, progress:(complete:Bool, error:Swift.Error?)->Void) {
         // AVAssetWrite will fail if the file already exists
         let manager = FileManager.default
-        if manager.fileExists(atPath: fileURL.path!) {
-            try! manager.removeItem(at: fileURL as URL)
+        if manager.fileExists(atPath: fileURL.path) {
+            try! manager.removeItem(at: fileURL)
         }
         
         let viewSize = swipeViewController.view.frame.size
@@ -85,14 +85,14 @@ class SwipeExporter: NSObject {
         outputSize = CGSize(width: viewSize.width * scale, height: viewSize.height * scale)
 
         do {
-            let writer = try AVAssetWriter(URL: fileURL as URL, fileType: AVFileTypeQuickTimeMovie)
+            let writer = try AVAssetWriter(url: fileURL, fileType: AVFileTypeQuickTimeMovie)
             let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: [
                 AVVideoCodecKey : AVVideoCodecH264,
                 AVVideoWidthKey : outputSize.width,
                 AVVideoHeightKey : outputSize.height
             ])
             let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: [
-                kCVPixelBufferPixelFormatTypeKey as String: NSNumber(unsignedInt: kCVPixelFormatType_32ARGB),
+                kCVPixelBufferPixelFormatTypeKey as String: NSNumber(value: kCVPixelFormatType_32ARGB),
                 kCVPixelBufferWidthKey as String: outputSize.width,
                 kCVPixelBufferHeightKey as String: outputSize.height,
             ])
@@ -115,7 +115,7 @@ class SwipeExporter: NSObject {
 
                 var pixelBufferX: CVPixelBuffer? = nil
                 let status: CVReturn = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, adaptor.pixelBufferPool!, &pixelBufferX)
-                guard let managedPixelBuffer = pixelBufferX where status == 0  else {
+                guard let managedPixelBuffer = pixelBufferX, status == 0  else {
                     print("failed to allocate pixel buffer")
                     writer.cancelWriting()
                     return progress(complete: false, error: Error.FailedToCreate)
@@ -127,8 +127,8 @@ class SwipeExporter: NSObject {
                 if let context = CGContext(data: data, width: Int(self.outputSize.width), height: Int(self.outputSize.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(managedPixelBuffer), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue) {
                     let xf = CGAffineTransform(scaleX: scale, y: -scale)
                     context.concatenate(xf.translatedBy(x: 0, y: -viewSize.height))
-                    let presentationLayer = self.swipeViewController.view.layer.presentation() as! CALayer
-                    presentationLayer.renderInContext(context)
+                    let presentationLayer = self.swipeViewController.view.layer.presentation()!
+                    presentationLayer.render(in: context)
                 }
                 CVPixelBufferUnlockBaseAddress(managedPixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
 
