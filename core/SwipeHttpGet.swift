@@ -56,7 +56,7 @@ class SwipeHttpGet : SwipeNode {
     }
     
     private func handleError(_ errorMsg: String) {
-        if let event = self.eventHandler.getEvent("error"), actionsInfo = self.eventHandler.actionsFor("error") {
+        if let event = self.eventHandler.getEvent("error"), let actionsInfo = self.eventHandler.actionsFor("error") {
             self.data = ["message":errorMsg]
             self.params = event.params
             self.execute(self, actions: actionsInfo)
@@ -85,7 +85,7 @@ class SwipeHttpGet : SwipeNode {
         
         switch (prop) {
         case "params":
-            if let params = self.params, data = self.data {
+            if let params = self.params, let data = self.data {
                 NSLog(TAG + " not checking params \(params)")
                 var item:[String:AnyObject] = ["params":data]
                 var path = info

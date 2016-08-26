@@ -1278,7 +1278,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             return nil
         }
         else if let key = params["ref"] as? String,
-               text = delegate.localizedStringForKey(key) {
+               let text = delegate.localizedStringForKey(key) {
             return text
         }
         return SwipeParser.localizedString(params, langId: delegate.languageIdentifier())
@@ -1545,8 +1545,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             } else if let value = info["w"] as? String {
                 w0 = SwipeParser.parsePercent(value, full: dimension.width, defaultValue: dimension.width)
             } else if let valInfo = info["w"] as? [String:AnyObject],
-                valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
-                value = originator.getValue(originator, info:valOfInfo) as? CGFloat {
+                let valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
+                let value = originator.getValue(originator, info:valOfInfo) as? CGFloat {
                 w0 = value
             }
             if let value = info["h"] as? CGFloat {
@@ -1554,8 +1554,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             } else if let value = info["h"] as? String {
                 h0 = SwipeParser.parsePercent(value, full: dimension.height, defaultValue: dimension.height)
             } else if let valInfo = info["h"] as? [String:AnyObject],
-                valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
-                value = originator.getValue(originator, info:valOfInfo) as? CGFloat {
+                let valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
+                let value = originator.getValue(originator, info:valOfInfo) as? CGFloat {
                 h0 = value
             }
         }
@@ -1573,8 +1573,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 x = SwipeParser.parsePercent(value, full: dimension.width, defaultValue: 0)
             }
         } else if let valInfo = info["x"] as? [String:AnyObject],
-            valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
-            value = originator.getValue(originator, info:valOfInfo) as? CGFloat {
+            let valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
+            let value = originator.getValue(originator, info:valOfInfo) as? CGFloat {
             x = value
         }
 
@@ -1591,8 +1591,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 y = SwipeParser.parsePercent(value, full: dimension.height, defaultValue: 0)
             }
         } else if let valInfo = info["y"] as? [String:AnyObject],
-            valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
-            value = originator.getValue(originator, info:valOfInfo) as? CGFloat {
+            let valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
+            let value = originator.getValue(originator, info:valOfInfo) as? CGFloat {
             y = value
         }
         //NSLog("SWEleme \(x),\(y),\(w0),\(h0),\(sizeContents),\(dimension),\(scale)")
@@ -1605,8 +1605,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         layer.frame = frame
         
         let start, duration:Double
-        if let timing = info["timing"] as? [Double]
-            where timing.count == 2 && timing[0] >= 0 && timing[0] <= timing[1] && timing[1] <= 1 {
+        if let timing = info["timing"] as? [Double],
+            timing.count == 2 && timing[0] >= 0 && timing[0] <= timing[1] && timing[1] <= 1 {
             start = timing[0] == 0 ? 1e-10 : timing[0]
             duration = timing[1] - start
         } else {
@@ -1723,8 +1723,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             if let str = info["img"] as? String {
                 urlStr = str
             } else if let valInfo = info["img"] as? [String:AnyObject],
-                valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
-                str = originator.getValue(originator, info:valOfInfo) as? String {
+                let valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
+                let str = originator.getValue(originator, info:valOfInfo) as? String {
                 urlStr = str
             }
             if urlStr != nil {
@@ -1733,7 +1733,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             
                     self.delegate.addedResourceURLs(urls) {
                         if let urlLocal = self.delegate.map(urls.first!.0),
-                            image = CGImageSourceCreateWithURL(urlLocal, nil) {
+                            let image = CGImageSourceCreateWithURL(urlLocal, nil) {
                             if CGImageSourceGetCount(image) > 0 {
                                 self.imageLayer!.contents = CGImageSourceCreateImageAtIndex(image, 0, nil)!
                             }
@@ -1837,7 +1837,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 CATransaction.begin()
                 CATransaction.setDisableActions(true)
                 CATransaction.setCompletionBlock({
-                    if let eventsInfo = info["events"] as? [String:AnyObject] where self.delegate != nil {
+                    if let eventsInfo = info["events"] as? [String:AnyObject], self.delegate != nil {
                         let eventHandler = SwipeEventHandler()
                         eventHandler.parse(eventsInfo)
                         if let actions = eventHandler.actionsFor("completion") {
@@ -1848,9 +1848,9 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 
                 if let text = self.parseText(originator, info: self.info, key:"text") {
                     if let textHelper = self.helper as? SwipeTextArea {
-                        textHelper.setText(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: nil)
+                        _ = textHelper.setText(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: nil)
                     } else if let textHelper = self.helper as? SwipeTextField {
-                        textHelper.setText(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: nil)
+                        _ = textHelper.setText(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: nil)
                     } else {
                         if self.textLayer == nil {
                             self.textLayer = SwipeElement.addTextLayer(text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: self.layer!)
@@ -1860,7 +1860,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     }
                 }
                 
-                if let text = self.textLayer?.string as? String where self.info["textAlign"] != nil || self.info["textColor"] != nil || self.info["fontName"] != nil || self.info["fontSize"] != nil {
+                if let text = self.textLayer?.string as? String, self.info["textAlign"] != nil || self.info["textColor"] != nil || self.info["fontName"] != nil || self.info["fontSize"] != nil {
                     SwipeElement.updateTextLayer(self.textLayer!, text: text, scale: self.scale, info: self.info, dimension: self.screenDimension, layer: self.layer!)
                 }
                 
@@ -1871,7 +1871,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     //print("uiview done: \(done)")
             })
             
-            if let enabled = SwipeParser.parseAndEvalBool(originator, key: "enabled", info: self.info) where self.fEnabled != enabled {
+            if let enabled = SwipeParser.parseAndEvalBool(originator, key: "enabled", info: self.info), self.fEnabled != enabled {
                 self.fEnabled = enabled
                 if enabled {
                     self.execute(self, actions: self.eventHandler.actionsFor("enabled"))
@@ -1880,7 +1880,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 }
             }
             
-            if let focusable = SwipeParser.parseAndEvalBool(originator, key: "focusable", info: self.info) where self.fFocusable != focusable {
+            if let focusable = SwipeParser.parseAndEvalBool(originator, key: "focusable", info: self.info), self.fFocusable != focusable {
                 self.fFocusable = focusable
                 if focusable {
                     self.execute(self, actions: self.eventHandler.actionsFor("focusable"))

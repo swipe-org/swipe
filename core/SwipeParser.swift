@@ -201,7 +201,7 @@ class SwipeParser {
     static func parseAndEvalBool(_ originator: SwipeNode, key: String, info: [String:AnyObject]) -> Bool? {
         var valObj: AnyObject?
         
-        if let keyInfo = info[key] as? [String:AnyObject], valOfInfo = keyInfo["valueOf"] as? [String:AnyObject] {
+        if let keyInfo = info[key] as? [String:AnyObject], let valOfInfo = keyInfo["valueOf"] as? [String:AnyObject] {
             valObj = originator.getValue(originator, info:valOfInfo)
         } else {
             valObj = info[key]

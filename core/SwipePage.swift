@@ -542,8 +542,8 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         let scale = delegate.scale(self)
         let dimension = delegate.dimension(self)
         if let value = self.info["audio"] as? String,
-               url = URL.url(value, baseURL: self.delegate.baseURL()),
-               urlLocal = self.prefetcher.map(url) {
+               let url = URL.url(value, baseURL: self.delegate.baseURL()),
+               let urlLocal = self.prefetcher.map(url) {
             do {
                 audioPlayer = try AVAudioPlayer(contentsOf: urlLocal)
                 audioPlayer?.prepareToPlay()
@@ -679,7 +679,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     // <SwipeElementDelegate> method
     func localizedStringForKey(_ key:String) -> String? {
         if let strings = self.info["strings"] as? [String:AnyObject],
-               texts = strings[key] as? [String:AnyObject] {
+               let texts = strings[key] as? [String:AnyObject] {
             return SwipeParser.localizedString(texts, langId: delegate.languageIdentifier())
         }
         return nil

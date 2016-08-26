@@ -38,8 +38,8 @@ class SwipeHttpPost : SwipeNode {
                         if let str = params[param] as? String {
                             val = str
                         } else if let valInfo = params[param] as? [String:AnyObject],
-                            valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
-                            str = parent.getValue(parent, info:valOfInfo) as? String {
+                            let valOfInfo = valInfo["valueOf"] as? [String:AnyObject],
+                            let str = parent.getValue(parent, info:valOfInfo) as? String {
                             val = str
                         }
                         
@@ -102,7 +102,7 @@ class SwipeHttpPost : SwipeNode {
                                 return
                             }
                             // Success
-                            if let event = self.eventHandler.getEvent("completion"), actionsInfo = self.eventHandler.actionsFor("completion") {
+                            if let event = self.eventHandler.getEvent("completion"), let actionsInfo = self.eventHandler.actionsFor("completion") {
                                 DispatchQueue.main.async {
                                     self.data = json
                                     self.params = event.params
@@ -127,7 +127,7 @@ class SwipeHttpPost : SwipeNode {
     }
     
     private func handleError(_ errorMsg: String) {
-        if let event = self.eventHandler.getEvent("error"), actionsInfo = self.eventHandler.actionsFor("error") {
+        if let event = self.eventHandler.getEvent("error"), let actionsInfo = self.eventHandler.actionsFor("error") {
             DispatchQueue.main.async {
                 self.data = ["message":errorMsg]
                 self.params = event.params
@@ -154,7 +154,7 @@ class SwipeHttpPost : SwipeNode {
         
         switch (prop) {
         case "params":
-            if let params = self.params, data = self.data {
+            if let params = self.params, let data = self.data {
                 NSLog(TAG + " not checking params \(params)")
                 var item:[String:AnyObject] = ["params":data]
                 var path = info
@@ -168,7 +168,7 @@ class SwipeHttpPost : SwipeNode {
                                 return str
                             } else if let arr = ret as? [AnyObject] {
                                 if arr.count > 0 {
-                                    let warning = "Array handling needs to be completed"
+                                    _ = "Array handling needs to be completed"
                                     return arr[0]
                                 } else {
                                     return nil

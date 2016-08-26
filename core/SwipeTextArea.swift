@@ -86,14 +86,14 @@ class SwipeTextArea: SwipeView, UITextViewDelegate {
 
     // UITextViewDelegate
 
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         parent!.execute(self, actions: parent!.eventHandler.actionsFor("textChanged"))
     }
     
-    func textViewDidBeginEditing(textView: UITextView) {
+    func textViewDidBeginEditing(_ textView: UITextView) {
     }
     
-    func textViewDidEndEditing(textView: UITextView) {
+    func textViewDidEndEditing(_ textView: UITextView) {
         parent!.execute(self, actions: parent!.eventHandler.actionsFor("endEdit"))
     }
 }

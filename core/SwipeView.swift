@@ -37,7 +37,7 @@ class SwipeView: SwipeNode {
         }
         
         override var canBecomeFocused: Bool {
-            if let element = self.wrapper as? SwipeElement, _ = element.helper?.view {
+            if let element = self.wrapper as? SwipeElement, let _ = element.helper?.view {
                  return false
             } else if let wrapper = self.wrapper {
                 return wrapper.fFocusable
@@ -49,10 +49,10 @@ class SwipeView: SwipeNode {
         override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
             if let wrapper = self.wrapper {
                 // lostFocus must be fired before gainedFocus
-                if let actions = wrapper.eventHandler.actionsFor("lostFocus") where self == context.previouslyFocusedView  {
+                if let actions = wrapper.eventHandler.actionsFor("lostFocus"), self == context.previouslyFocusedView  {
                     wrapper.execute(wrapper, actions: actions)
                 }
-                if let actions = wrapper.eventHandler.actionsFor("gainedFocus") where self == context.nextFocusedView  {
+                if let actions = wrapper.eventHandler.actionsFor("gainedFocus"), self == context.nextFocusedView  {
                     wrapper.execute(wrapper, actions: actions)
                 }
             } else {
@@ -133,7 +133,7 @@ class SwipeView: SwipeNode {
     }
     
     func didTap(_ recognizer: UITapGestureRecognizer) {
-        if let actions = eventHandler.actionsFor("tapped") where fEnabled {
+        if let actions = eventHandler.actionsFor("tapped"), fEnabled {
             execute(self, actions: actions)
             completeTap()
         } else  if let p = self.parent as? SwipeView {
@@ -145,7 +145,7 @@ class SwipeView: SwipeNode {
     }
     
     func didDoubleTap(_ recognizer: UITapGestureRecognizer) {
-        if let actions = eventHandler.actionsFor("doubleTapped") where fEnabled  {
+        if let actions = eventHandler.actionsFor("doubleTapped"), fEnabled  {
             execute(self, actions: actions)
         }
     }
@@ -160,7 +160,7 @@ class SwipeView: SwipeNode {
             if let value = updateInfo["search"] as? String {
                 up = value != "children"
             }
-            updateElement(originator, name:name, up:up, info: updateInfo)
+            _ = updateElement(originator, name:name, up:up, info: updateInfo)
         } else if let appendInfo = action.info["append"] as? [String:AnyObject] {
             var name = "*"; // default is 'self'
             if let value = appendInfo["id"] as? String {
@@ -170,7 +170,7 @@ class SwipeView: SwipeNode {
             if let value = appendInfo["search"] as? String {
                 up = value != "children"
             }
-            appendList(originator, name:name, up:up, info: appendInfo)
+            _ = appendList(originator, name:name, up:up, info: appendInfo)
         } else  {
            super.executeAction(originator, action: action)
         }
