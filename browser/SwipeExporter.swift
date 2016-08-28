@@ -145,7 +145,9 @@ class SwipeExporter: NSObject {
                     input.markAsFinished()
                     print("SwipeExporter: finishWritingWithCompletionHandler")
                     writer.finishWritingWithCompletionHandler({
-                        progress(complete: true, error: nil)
+                        dispatch_async(dispatch_get_main_queue()) {
+                            progress(complete: true, error: nil)
+                        }
                     })
                 }
             }
