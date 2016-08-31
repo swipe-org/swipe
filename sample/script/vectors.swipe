@@ -4,7 +4,8 @@
         "s0": {
             "elements":
             [{
-                "fillColor": "#ffffffff",
+                "bc":"#ff000033",
+                "fillColor": "#ffffffe0",
                 "y": 459.5,
                 "h": 324.5,
                 "w": 226.5,
@@ -18,7 +19,8 @@
                 "x": 141.5
             },
             {
-                "fillColor": "#ffffffff",
+                "bc":"#00ff0033",
+                "fillColor": "#ffffffe0",
                 "y": 160,
                 "h": 305.3183288574219,
                 "w": 218,
@@ -32,7 +34,8 @@
                 "x": 241.5
             },
             {
-                "fillColor": "#ffffffff",
+                "bc":"#0000ff33",
+                "fillColor": "#ffffffe0",
                 "y": 318,
                 "h": 261.5,
                 "w": 241.5,
@@ -100,7 +103,7 @@
             "_hidden": false,
             "to": {
                 "pos": "M0,0 l-153.5,46.0",
-                "fillColor": "#ff7272ff",
+                "fillColor": "#ff7272a0",
                 "translate": [ -153.5, 46],
                 "rotate": [0, 0, -51.5] 
             }
@@ -111,7 +114,7 @@
             "_hidden": false,
             "to": {
                 "pos": "M0,0 l-97.0,-51.0",
-                "fillColor": "#a9ffa1ff",
+                "fillColor": "#a9ffa1a0",
                 "translate": [ -97, -51],
                 "rotate": [0, 0, -39.5]
             }
@@ -121,7 +124,7 @@
             "_hidden": false,
             "to": {
                 "pos": "M0,0 l194.5,13.0",
-                "fillColor": "#43d9ffff",
+                "fillColor": "#43d9ffa0",
                 "translate": [194.5, 13],
                 "rotate": [0, 0, 45]
             }
