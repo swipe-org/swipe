@@ -115,9 +115,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         //NSLog("SVC urlsAll = \(urlsAll)")
         let prefetcher = SwipePrefetcher(urls: urlsAll)
         prefetcher.start { (completed:Bool, _:[NSURL], _:[NSError]) -> Void in
-            if completed {
-                callback(prefetcher.progress, nil)
-            }
+            callback(prefetcher.progress, nil)
         }
     }
 
