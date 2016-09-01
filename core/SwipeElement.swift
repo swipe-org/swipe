@@ -32,7 +32,7 @@ private func MyLog(text:String, level:Int = 0) {
 // We can work-around this bug by calling super.init().
 class XAVPlayerLayer: AVPlayerLayer {
     override init(layer: AnyObject) {
-        print("XAVPlayerLayer init with layer")
+        //print("XAVPlayerLayer init with layer")
         super.init() // HACK to avoid crash
     }
     init(player: AVPlayer) {
