@@ -264,9 +264,9 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             //imageSrc = SwipeParser.imageSourceWith(src)
             if let url = URL.url(src, baseURL: baseURL) {
                 if let urlLocal = self.delegate.map(url) {
-                    imageSrc = CGImageSourceCreateWithURL(urlLocal, nil)
+                    imageSrc = CGImageSourceCreateWithURL(urlLocal as CFURL, nil)
                 } else {
-                    imageSrc = CGImageSourceCreateWithURL(url, nil)
+                    imageSrc = CGImageSourceCreateWithURL(url as CFURL, nil)
                 }
                 if imageSrc != nil && CGImageSourceGetCount(imageSrc!) > 0 {
                     imageRef = CGImageSourceCreateImageAtIndex(imageSrc!, 0, nil)
@@ -278,7 +278,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             //maskSrc = SwipeParser.imageWith(src)
             if let url = URL.url(src, baseURL: baseURL),
                 let urlLocal = self.delegate.map(url),
-                let image = CGImageSourceCreateWithURL(urlLocal, nil) {
+                let image = CGImageSourceCreateWithURL(urlLocal as CFURL, nil) {
                 if CGImageSourceGetCount(image) > 0 {
                     maskSrc = CGImageSourceCreateImageAtIndex(image, 0, nil)
                 }
@@ -515,7 +515,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             }
             if let url = URL.url(src, baseURL: baseURL),
                 let urlLocal = self.delegate.map(url),
-                let imageSource = CGImageSourceCreateWithURL(urlLocal, nil), CGImageSourceGetCount(imageSource) > 0,
+                let imageSource = CGImageSourceCreateWithURL(urlLocal as CFURL, nil), CGImageSourceGetCount(imageSource) > 0,
                 let image = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) {
                 let imageLayer = CALayer()
                 imageLayer.contentsScale = contentScale
@@ -845,7 +845,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 for src in srcs {
                     if let url = URL.url(src, baseURL: baseURL),
                         let urlLocal = self.delegate.map(url),
-                        let image = CGImageSourceCreateWithURL(urlLocal, nil) {
+                        let image = CGImageSourceCreateWithURL(urlLocal as CFURL, nil) {
                         if CGImageSourceGetCount(image) > 0 {
                             images.append(CGImageSourceCreateImageAtIndex(image, 0, nil)!)
                         }
@@ -1332,15 +1332,15 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
 
         let fontSize: CGFloat = {
             let defaultSize = 20.0 / 480.0 * dimension.height
-            let size = SwipeParser.parseFontSize(info, full: dimension.height, defaultValue: defaultSize, markdown: false)
+            let size = SwipeParser.parseFontSize(info as AnyObject?, full: dimension.height, defaultValue: defaultSize, markdown: false)
             return round(size * scale.height)
         }()
-        let fontNames = SwipeParser.parseFontName(info, markdown: false)
+        let fontNames = SwipeParser.parseFontName(info as AnyObject?, markdown: false)
         func createFont() -> CTFont {
             for fontName in fontNames {
-                return CTFontCreateWithName(fontName, fontSize, nil)
+                return CTFontCreateWithName(fontName as CFString?, fontSize, nil)
             }
-            return CTFontCreateWithName("Helvetica", fontSize, nil)
+            return CTFontCreateWithName("Helvetica" as CFString?, fontSize, nil)
         }
         let font:CTFont = createFont()
         let attr:[String:AnyObject] = [
@@ -1445,22 +1445,22 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         switch (property) {
         case "text":
             if let string = self.textLayer?.string as? String {
-                return string
+                return string as AnyObject?
             } else {
                 MyLog("SWElem textLayer.string is not a String!")
                 return nil
             }
         case "text.length":
             if let string = self.textLayer?.string as? String {
-                return string.characters.count
+                return string.characters.count as AnyObject?
             } else {
                 MyLog("SWElem textLayer.string is not a String!")
                 return nil
             }
         case "enabled":
-            return self.fEnabled
+            return self.fEnabled as AnyObject?
         case "focusable":
-            return self.fFocusable
+            return self.fFocusable as AnyObject?
         default:
             return super.getPropertyValue(originator, property: property)
         }
@@ -1735,7 +1735,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             
                     self.delegate.addedResourceURLs(urls) {
                         if let urlLocal = self.delegate.map(urls.first!.0),
-                            let image = CGImageSourceCreateWithURL(urlLocal, nil) {
+                            let image = CGImageSourceCreateWithURL(urlLocal as CFURL, nil) {
                             if CGImageSourceGetCount(image) > 0 {
                                 self.imageLayer!.contents = CGImageSourceCreateImageAtIndex(image, 0, nil)!
                             }

@@ -29,11 +29,11 @@ class SwipeMarkdown {
            let namedFont = UIFont(name: name, size: fontSize * scale.height) {
             font = namedFont
         }
-        var attrs = [NSFontAttributeName: font, NSParagraphStyleAttributeName: style]
+        var attrs = [NSFontAttributeName: font, NSParagraphStyleAttributeName: style] as [String : Any]
         if let shadow = self.shadow {
             attrs[NSShadowAttributeName] = shadow
         }
-        return attrs
+        return attrs as [String : AnyObject]
     }
 
     // Use function instead of lazy initializer to work around a probable bug in Swift

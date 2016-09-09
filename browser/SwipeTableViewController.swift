@@ -61,7 +61,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
             self.sections = sections
         } else if let items = document["items"] as? [[String:AnyObject]] {
             let section = [ "items":items ]
-            sections.append(section)
+            sections.append(section as [String : AnyObject])
         } else {
             throw SwipeError.invalidDocument
         }

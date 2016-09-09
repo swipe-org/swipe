@@ -37,7 +37,7 @@ class SwipePrefetcher {
         self.urls = urls
     }
     
-    func start(_ callback:(Bool, [URL], [NSError]) -> Void) {
+    func start(_ callback:@escaping (Bool, [URL], [NSError]) -> Void) {
         if fComplete {
             MyLog("SWPrefe already completed", level:1)
             callback(true, self.urlsFailed, self.errors)
@@ -89,7 +89,7 @@ class SwipePrefetcher {
         }
     }
     
-    func append(_ urls:[URL:String], callback:(Bool, [URL], [NSError]) -> Void) {
+    func append(_ urls:[URL:String], callback:@escaping (Bool, [URL], [NSError]) -> Void) {
         let manager = SwipeAssetManager.sharedInstance()
         var count = 0
         _progress = 0

@@ -153,7 +153,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
     
     lazy var backgroundColor:CGColor = {
         if let value = self.bookInfo["bc"] as? String {
-            return SwipeParser.parseColor(value)
+            return SwipeParser.parseColor(value as AnyObject?)
         }
         return UIColor.black.cgColor
     }()

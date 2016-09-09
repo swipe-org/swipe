@@ -73,7 +73,7 @@ class SwipeConnection: NSObject {
             } else {
                 MyLog("SWConn  network error (\(url.lastPathComponent), \(error))")
             }
-            connection.callbackAll(error)
+            connection.callbackAll(error as NSError?)
         }
         task.resume()
         return connection
@@ -94,7 +94,7 @@ class SwipeConnection: NSObject {
         //MyLog("SWCon deinit \(url.lastPathComponent)")
     }
 
-    func load(_ callback:(NSError!) -> Void) {
+    func load(_ callback:@escaping (NSError!) -> Void) {
         callbacks.append(callback)
     }
 

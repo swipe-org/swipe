@@ -24,7 +24,7 @@ class SwipeNode: NSObject {
             if let valInfo = val as? [String:AnyObject], let valOfInfo = valInfo["valueOf"] as? [String:AnyObject] {
                 val = getValue(self, info: valOfInfo)
                 if val == nil {
-                    val = ""
+                    val = "" as AnyObject?
                 }
             }
             

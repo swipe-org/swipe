@@ -251,14 +251,14 @@ class SwipeParser {
                             retArray.append(item)
                         }
                     }
-                    ret[keyString] = retArray
+                    ret[keyString] = retArray as AnyObject?
                 } else if let objects = ret[keyString] as? [String:AnyObject], let objectsBase = value as? [String:AnyObject] {
                     // Each has the property objects. We need to merge them.  Example: '"events" { }'
                     var retObjects = objectsBase
                     for (key, val) in objects {
                         retObjects[key] = val
                     }
-                    ret[keyString] = retObjects
+                    ret[keyString] = retObjects as AnyObject?
                 }
             }
         }

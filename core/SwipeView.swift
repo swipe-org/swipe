@@ -99,11 +99,11 @@ class SwipeView: SwipeNode {
     
     lazy var data:AnyObject = {
         if let value = self.info["data"] as? String {
-            return value
+            return value as AnyObject
         } else if let value = self.info["data"] as? [String:AnyObject] {
-            return value
+            return value as AnyObject
         }
-        return "" // default
+        return "" as AnyObject // default
     }()
     
     func endEditing() {
@@ -185,17 +185,17 @@ class SwipeView: SwipeNode {
         case "data":
             return self.data
         case "screenX":
-            return self.view!.superview?.convert(self.view!.frame.origin, to: nil).x
+            return self.view!.superview?.convert(self.view!.frame.origin, to: nil).x as AnyObject?
         case "screenY":
-            return self.view!.superview?.convert(self.view!.frame.origin, to: nil).y
+            return self.view!.superview?.convert(self.view!.frame.origin, to: nil).y as AnyObject?
         case "x":
-            return self.view!.frame.origin.x
+            return self.view!.frame.origin.x as AnyObject?
         case "y":
-            return self.view!.frame.origin.y
+            return self.view!.frame.origin.y as AnyObject?
         case "w":
-            return self.view!.frame.size.width
+            return self.view!.frame.size.width as AnyObject?
         case "h":
-            return self.view!.frame.size.height
+            return self.view!.frame.size.height as AnyObject?
         default:
             return nil
         }

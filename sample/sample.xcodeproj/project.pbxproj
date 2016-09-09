@@ -149,10 +149,6 @@
 		98FF4D2E1CBE85D700BD9DA8 /* details_index.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 98FF4D2A1CBE857800BD9DA8 /* details_index.swipe */; };
 		98FF4D2F1CBE85D700BD9DA8 /* transition_animation.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 98FF4D2C1CBE85CD00BD9DA8 /* transition_animation.swipe */; };
 		C108AAF11D63939900FF89B7 /* actions.swipe in Resources */ = {isa = PBXBuildFile; fileRef = C108AAF01D63939900FF89B7 /* actions.swipe */; };
-		C1140F741D6642AE006D29C5 /* SwipeTextArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1140F731D6642AE006D29C5 /* SwipeTextArea.swift */; };
-		C1140F751D6642B5006D29C5 /* SwipeTextArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1140F731D6642AE006D29C5 /* SwipeTextArea.swift */; };
-		C132B6561D6E298900B835B0 /* SwipeTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C132B6551D6E298900B835B0 /* SwipeTextField.swift */; };
-		C132B6571D6E298F00B835B0 /* SwipeTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C132B6551D6E298900B835B0 /* SwipeTextField.swift */; };
 		C132B65C1D6F62CD00B835B0 /* focus.swipe in Resources */ = {isa = PBXBuildFile; fileRef = C132B65A1D6F62CD00B835B0 /* focus.swipe */; };
 		C132B65D1D6F62CD00B835B0 /* tv_index.swipe in Resources */ = {isa = PBXBuildFile; fileRef = C132B65B1D6F62CD00B835B0 /* tv_index.swipe */; };
 		C132B65E1D6F62DB00B835B0 /* focus.swipe in Resources */ = {isa = PBXBuildFile; fileRef = C132B65A1D6F62CD00B835B0 /* focus.swipe */; };

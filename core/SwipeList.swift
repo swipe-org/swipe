@@ -152,7 +152,7 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
                                 itemInfos.append(json)
                             } else {
                                 // 'data' is just data
-                                eval["data"] = json
+                                eval["data"] = json as AnyObject?
                                 itemInfos.append(eval)
                             }
                         } catch  {
@@ -242,9 +242,9 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
         switch (property) {
         case "selectedItem":
             if let indexPath = self.tableView.indexPathForSelectedRow {
-                return "\(indexPath.row)"
+                return "\(indexPath.row)" as AnyObject?
             } else {
-                return "none"
+                return "none" as AnyObject?
             }
         default:
             return nil
@@ -261,10 +261,10 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
                     // ie "property":{"items":"data"}}
                     if let val = item[itemStr] as? String {
                         // ie "data":String
-                        return val
+                        return val as AnyObject?
                     } else if let valInfo = item[itemStr] as? [String:AnyObject] {
                         // ie "data":{...}
-                        return originator.evaluate(valInfo)
+                        return originator.evaluate(valInfo) as AnyObject?
                     }
                 }
                 // ie "property":{"items":{"data":{...}}}

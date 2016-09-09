@@ -141,7 +141,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
 
     // <SwipeDocumentViewer> method
     func saveState() -> [String:AnyObject]? {
-        return ["page":self.book.pageIndex, "langId":self.book.langId]
+        return ["page":self.book.pageIndex as AnyObject, "langId":self.book.langId as AnyObject]
     }
 
     // <SwipeDocumentViewer> method

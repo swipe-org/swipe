@@ -72,7 +72,7 @@ class SwipeTextArea: SwipeView, UITextViewDelegate {
     override func getPropertyValue(_ originator: SwipeNode, property: String) -> AnyObject? {
         switch (property) {
         case "text":
-            return self.textView.text
+            return self.textView.text as AnyObject?
         case "text.length":
             return self.textView.text?.characters.count
         default:

@@ -31,9 +31,9 @@ class SwipeExporter: NSObject {
         self.resolution = resolution
     }
     
-    func exportAsGifAnimation(_ fileURL:URL, startPage:Int, pageCount:Int, progress:(complete:Bool, error:Swift.Error?)->Void) {
-        guard let idst = CGImageDestinationCreateWithURL(fileURL, kUTTypeGIF, pageCount * fps + 1, nil) else {
-            return progress(complete: false, error: Error.FailedToCreate)
+    func exportAsGifAnimation(_ fileURL:URL, startPage:Int, pageCount:Int, progress:@escaping (_ complete:Bool, _ error:Swift.Error?)->Void) {
+        guard let idst = CGImageDestinationCreateWithURL(fileURL as CFURL, kUTTypeGIF, pageCount * fps + 1, nil) else {
+            return progress(false, Error.FailedToCreate)
         }
         CGImageDestinationSetProperties(idst, [String(kCGImagePropertyGIFDictionary):
                                  [String(kCGImagePropertyGIFLoopCount):0]])
@@ -42,13 +42,13 @@ class SwipeExporter: NSObject {
         self.processFrame(idst, startPage:startPage, pageCount: pageCount, progress:progress)
     }
 
-    func processFrame(_ idst:CGImageDestination, startPage:Int, pageCount:Int, progress:(complete:Bool, error:Swift.Error?)->Void) {
+    func processFrame(_ idst:CGImageDestination, startPage:Int, pageCount:Int, progress:@escaping (_ complete:Bool, _ error:Swift.Error?)->Void) {
         self.progress = CGFloat(iFrame) / CGFloat(fps) / CGFloat(pageCount)
         swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(iFrame) / CGFloat(fps))
         
         // HACK: This delay is not 100% reliable, but is sufficient practically.
         DispatchQueue.main.asyncAfter(deadline: .now() + 100) {
-            progress(complete: false, error: nil)
+            progress(false, nil)
             let presentationLayer = self.swipeViewController.view.layer.presentation()!
             UIGraphicsBeginImageContext(self.swipeViewController.view.frame.size); defer {
                 UIGraphicsEndImageContext()
@@ -64,15 +64,15 @@ class SwipeExporter: NSObject {
                 self.processFrame(idst, startPage:startPage, pageCount: pageCount, progress:progress)
             } else {
                 if CGImageDestinationFinalize(idst) {
-                    progress(complete: true, error: nil)
+                    progress(true, nil)
                 } else {
-                    progress(complete: false, error: Error.FailedToFinalize)
+                    progress(false, Error.FailedToFinalize)
                 }
             }
         }
     }
 
-    func exportAsMovie(_ fileURL:URL, startPage:Int, pageCount:Int, progress:(complete:Bool, error:Swift.Error?)->Void) {
+    func exportAsMovie(_ fileURL:URL, startPage:Int, pageCount:Int, progress:@escaping (_ complete:Bool, _ error:Swift.Error?)->Void) {
         // AVAssetWrite will fail if the file already exists
         let manager = FileManager.default
         if manager.fileExists(atPath: fileURL.path) {
@@ -101,7 +101,7 @@ class SwipeExporter: NSObject {
             iFrame = 0
 
             guard writer.startWriting() else {
-                return progress(complete: false, error: Error.FailedToFinalize)
+                return progress(false, Error.FailedToFinalize)
             }
             writer.startSession(atSourceTime: kCMTimeZero)
             
@@ -111,14 +111,14 @@ class SwipeExporter: NSObject {
                     return // Not ready. Just wait.
                 }
                 self.progress = 0.5 * CGFloat(self.iFrame) / CGFloat(self.fps) / CGFloat(pageCount)
-                progress(complete: false, error: nil)
+                progress(false, nil)
 
                 var pixelBufferX: CVPixelBuffer? = nil
                 let status: CVReturn = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, adaptor.pixelBufferPool!, &pixelBufferX)
                 guard let managedPixelBuffer = pixelBufferX, status == 0  else {
                     print("failed to allocate pixel buffer")
                     writer.cancelWriting()
-                    return progress(complete: false, error: Error.FailedToCreate)
+                    return progress(false, Error.FailedToCreate)
                 }
 
                 CVPixelBufferLockBaseAddress(managedPixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
@@ -135,7 +135,7 @@ class SwipeExporter: NSObject {
                 let presentationTime = CMTimeMake(Int64(self.iFrame), Int32(self.fps))
                 if !adaptor.append(managedPixelBuffer, withPresentationTime: presentationTime) {
                     writer.cancelWriting()
-                    return progress(complete: false, error: Error.FailedToCreate)
+                    return progress(false, Error.FailedToCreate)
                 }
 
                 self.iFrame += 1
@@ -145,14 +145,14 @@ class SwipeExporter: NSObject {
                     input.markAsFinished()
                     print("SwipeExporter: finishWritingWithCompletionHandler")
                     writer.finishWritingWithCompletionHandler({
-                        dispatch_async(dispatch_get_main_queue()) {
-                            progress(complete: true, error: nil)
+                        DispatchQueue.main.asynchronously(DispatchQueue.main) {
+                            progress(true, nil)
                         }
                     })
                 }
             }
         } catch let error {
-            progress(complete: false, error: error)
+            progress(false, error)
         }
     }
 }
