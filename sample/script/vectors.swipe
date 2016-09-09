@@ -1,0 +1,138 @@
+{
+    "title": "",
+    "scenes": {
+        "s0": {
+            "elements":
+            [{
+                "bc":"#ff000033",
+                "fillColor": "#ffffffe0",
+                "y": 459.5,
+                "h": 324.5,
+                "w": 226.5,
+                "id": "id0",
+                "opacity": 0,
+                "path": "M54.5,324.5Q106.315006604422,199.846174687046,0.0,214.0 226.5,0.0,202.0,316.0 155.743702216728,211.844523128144,54.5,324.5Z",
+                "lineWidth": 3,
+                "scale": [2.129, 2.129],
+                "_hidden": true,
+                "strokeColor": "#e40000ff",
+                "x": 141.5
+            },
+            {
+                "bc":"#00ff0033",
+                "fillColor": "#ffffffe0",
+                "y": 160,
+                "h": 305.3183288574219,
+                "w": 218,
+                "id": "id1",
+                "opacity": 0,
+                "path": "M100.0,176.5Q16.0068081793643,250.81683739138,89.5,82.0 0.0,119.0,30.0,59.5 60.0,0.0,109.75,17.0 159.5,34.0,188.75,71.0 218.0,108.0,207.5,139.25 197.0,170.5,159.0,112.5 165.864229617208,305.318314190719,100.0,176.5Z",
+                "lineWidth": 4,
+                "scale": [1.829, 1.829],
+                "_hidden": true,
+                "strokeColor": "#0b8700ff",
+                "x": 241.5
+            },
+            {
+                "bc":"#0000ff33",
+                "fillColor": "#ffffffe0",
+                "y": 318,
+                "h": 261.5,
+                "w": 241.5,
+                "id": "id2",
+                "opacity": 0,
+                "path": "M140.5,229.5Q105.793442883693,144.207260232528,47.5,261.5 0.0,30.0,87.0,126.5 70.0,0.0,155.75,41.5 241.5,83.0,234.0,137.25 226.5,191.5,177.0,117.5 142.064997296804,86.5737682687859,140.5,229.5Z",
+                "lineWidth": 4,
+                "scale": [1.59, 1.59],
+                "_hidden": true,
+                "strokeColor": "#004087ff",
+                "x": 70
+            },
+            {
+                "shadow": {
+                    "opacity": 1,
+                    "radius": 4
+                },
+                "w": "90%",
+                "id": "caption",
+                "text": {
+                    "ref": "caption"
+                },
+                "opacity": 0,
+                "x": "5%",
+                "textColor": "#fff",
+                "to": {
+                    "opacity": 1
+                },
+                "textAlign": "bottom",
+                "y": "2.5%",
+                "h": "95%"
+            }
+            ],
+            "eyePosition": 1.5
+        }
+    },
+    "dimension": [576, 1024],
+    "languages": [],
+
+    "pages": [
+    {
+        "elements": [{
+            "id": "id0",
+            "opacity": 1,
+            "_hidden": false
+        },
+        {
+            "id": "id1",
+            "opacity": 1,
+            "_hidden": false
+        },
+        {
+            "id": "id2",
+            "opacity": 1,
+            "_hidden": false
+        }
+        ],
+        "scene": "s0",
+        "play": "auto"
+    },
+    {
+        "elements": [{
+            "opacity": 1,
+            "id": "id0",
+            "_hidden": false,
+            "to": {
+                "pos": "M0,0 l-153.5,46.0",
+                "fillColor": "#ff7272a0",
+                "translate": [ -153.5, 46],
+                "rotate": [0, 0, -51.5] 
+            }
+        },
+        {
+            "opacity": 1,
+            "id": "id1",
+            "_hidden": false,
+            "to": {
+                "pos": "M0,0 l-97.0,-51.0",
+                "fillColor": "#a9ffa1a0",
+                "translate": [ -97, -51],
+                "rotate": [0, 0, -39.5]
+            }
+        }, {
+            "opacity": 1,
+            "id": "id2",
+            "_hidden": false,
+            "to": {
+                "pos": "M0,0 l194.5,13.0",
+                "fillColor": "#43d9ffa0",
+                "translate": [194.5, 13],
+                "rotate": [0, 0, 45]
+            }
+        }
+        ],
+        "scene": "s0",
+        "play": "scroll"
+    }
+    ],
+    "type": "net.swipe.swipe"
+}

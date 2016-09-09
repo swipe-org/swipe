@@ -8,6 +8,7 @@
         { "url":"radiostream.swipe", "title":"Internet Radio Stations", "icon":"radio.png" },
         { "url":"markdown.swipe", "title":"Rich Text", "icon":"text.png" },
         { "url":"speech.swipe", "title":"Speech", "icon":"speech.png" },
+        { "url":"vectors.swipe", "title":"Vectors", "icon":"Icon-180.png" },
         { "url":"nasa.swipe", "title":"NASA HQ Images", "icon":"nasa.png" },
         { "url":"espresso_machine_l.swipe", "title":"Espresso Machine", "icon":"espresso.png" },
         { "url":"actions.swipe", "title":"Events & Actions", "icon":"Icon-180.png" },

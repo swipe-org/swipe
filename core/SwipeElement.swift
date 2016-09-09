@@ -32,7 +32,7 @@ private func MyLog(_ text:String, level:Int = 0) {
 // We can work-around this bug by calling super.init().
 class XAVPlayerLayer: AVPlayerLayer {
     override init(layer: AnyObject) {
-        print("XAVPlayerLayer init with layer")
+        //print("XAVPlayerLayer init with layer")
         super.init() // HACK to avoid crash
     }
     init(player: AVPlayer) {
@@ -321,39 +321,41 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             }
         }
         
-        if let value = info["x"] as? CGFloat {
-            x = value
-        } else if let value = info["x"] as? String {
-            if value == "right" {
-                x = dimension.width - w0
-            } else if value == "left" {
-                x = 0
-            } else if value == "center" {
-                x = (dimension.width - w0) / 2.0
-            } else {
-                x = SwipeParser.parsePercent(value, full: dimension.width, defaultValue: 0)
-            }
-        }
-        if let value = info["y"] as? CGFloat {
-            y = value
-        } else if let value = info["y"] as? String {
-            if value == "bottom" {
-                y = dimension.height - h0
-            } else if value == "top" {
-                y = 0
-            } else if value == "center" {
-                y = (dimension.height - h0) / 2.0
-            } else {
-                y = SwipeParser.parsePercent(value, full: dimension.height, defaultValue: 0)
-            }
-        }
-        //NSLog("SWEleme \(x),\(y),\(w0),\(h0),\(sizeContents),\(dimension),\(scale)")
-        
-        x *= scale.width
-        y *= scale.height
         let w = w0 * scale.width
         let h = h0 * scale.height
-        let frame = CGRect(x: x, y: y, width: w, height: h)
+        let frame:CGRect = {
+            if let value = info["x"] as? CGFloat {
+                x = value
+            } else if let value = info["x"] as? String {
+                if value == "right" {
+                    x = dimension.width - w0
+                } else if value == "left" {
+                    x = 0
+                } else if value == "center" {
+                    x = (dimension.width - w0) / 2.0
+                } else {
+                    x = SwipeParser.parsePercent(value, full: dimension.width, defaultValue: 0)
+                }
+            }
+            if let value = info["y"] as? CGFloat {
+                y = value
+            } else if let value = info["y"] as? String {
+                if value == "bottom" {
+                    y = dimension.height - h0
+                } else if value == "top" {
+                    y = 0
+                } else if value == "center" {
+                    y = (dimension.height - h0) / 2.0
+                } else {
+                    y = SwipeParser.parsePercent(value, full: dimension.height, defaultValue: 0)
+                }
+            }
+            //NSLog("SWEleme \(x),\(y),\(w0),\(h0),\(sizeContents),\(dimension),\(scale)")
+            
+            x *= scale.width
+            y *= scale.height
+            return CGRect(x: x, y: y, width: w, height: h)
+        }()
         
         let view = InternalView(wrapper: self, frame: frame)
 #if os(OSX)
