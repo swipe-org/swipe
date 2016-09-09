@@ -619,7 +619,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     
     // <SwipeElementDelegate> method
     
-    func addedResourceURLs(_ urls:[URL:String], callback:() -> Void) {
+    func addedResourceURLs(_ urls:[URL:String], callback:@escaping () -> Void) {
         self.prefetcher.append(urls) { (completed:Bool, _:[URL], _:[NSError]) -> Void in
             if completed {
                 callback()

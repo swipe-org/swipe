@@ -36,7 +36,7 @@ class SwipeExporter: NSObject {
             return progress(false, Error.FailedToCreate)
         }
         CGImageDestinationSetProperties(idst, [String(kCGImagePropertyGIFDictionary):
-                                 [String(kCGImagePropertyGIFLoopCount):0]])
+                                 [String(kCGImagePropertyGIFLoopCount):0]] as CFDictionary)
         iFrame = 0
         outputSize = swipeViewController.view.frame.size
         self.processFrame(idst, startPage:startPage, pageCount: pageCount, progress:progress)
@@ -57,7 +57,7 @@ class SwipeExporter: NSObject {
             let image = UIGraphicsGetImageFromCurrentImageContext()!
 
             CGImageDestinationAddImage(idst, image.cgImage!, [String(kCGImagePropertyGIFDictionary):
-                             [String(kCGImagePropertyGIFDelayTime):0.2]])
+                             [String(kCGImagePropertyGIFDelayTime):0.2]] as CFDictionary)
             
             self.iFrame += 1
             if self.iFrame < pageCount * self.fps + 1 {
@@ -144,8 +144,8 @@ class SwipeExporter: NSObject {
                 } else {
                     input.markAsFinished()
                     print("SwipeExporter: finishWritingWithCompletionHandler")
-                    writer.finishWritingWithCompletionHandler({
-                        DispatchQueue.main.asynchronously(DispatchQueue.main) {
+                    writer.finishWriting(completionHandler: {
+                        DispatchQueue.main.async {
                             progress(true, nil)
                         }
                     })

@@ -49,13 +49,13 @@ class SwipePath {
                     switch(cmd) {
                     case "m":
                         if p.count == 2 {
-                            path.moveTo(nil, x: pt.x+p[0], y: pt.y+p[1])
+                            path.move(to: CGPoint(x: pt.x+p[0], y: pt.y+p[1]))
                             pt.x += p[0]
                             pt.y += p[1]
                         }
                     case "M":
                         if p.count == 2 {
-                            path.moveTo(nil, x: p[0], y: p[1])
+                            path.move(to: CGPoint(x: p[0], y: p[1]))
                             pt.x = p[0]
                             pt.y = p[1]
                         }
@@ -68,7 +68,7 @@ class SwipePath {
                     case "c":
                         var i = 0
                         while(p.count >= i+6) {
-                            path.addCurve(nil, cp1x: pt.x+p[i], cp1y: pt.y+p[i+1], cp2x: pt.x+p[i+2], cp2y: pt.y+p[i+3], endingAtX: pt.x+p[i+4], y: pt.y+p[i+5])
+                            path.addCurve(to: CGPoint(x: pt.x+p[i+4], y: pt.y+p[i+5]), control1: CGPoint(x: pt.x+p[i], y: pt.y+p[i+1]), control2: CGPoint(x: pt.x+p[i+2], y: pt.y+p[i+3]))
                             cp.x = pt.x+p[i+2]
                             cp.y = pt.y+p[i+3]
                             pt.x += p[i+4]
@@ -78,7 +78,7 @@ class SwipePath {
                     case "C":
                         var i = 0
                         while(p.count >= i+6) {
-                            path.addCurve(nil, cp1x: p[i], cp1y: p[i+1], cp2x: p[i+2], cp2y: p[i+3], endingAtX: p[i+4], y: p[i+5])
+                            path.addCurve(to: CGPoint(x: p[i+4], y: p[i+5]), control1: CGPoint(x: p[i], y: p[i+1]), control2: CGPoint(x: p[i+2], y: p[i+3]))
                             cp.x = p[i+2]
                             cp.y = p[i+3]
                             pt.x = p[i+4]
@@ -88,7 +88,7 @@ class SwipePath {
                     case "q":
                         var i = 0
                         while(p.count >= i+4) {
-                            path.addQuadCurve(nil, cpx: pt.x+p[i], cpy: pt.y+p[i+1], endingAtX: pt.x+p[i+2], y: pt.y+p[i+3])
+                            path.addQuadCurve(to: CGPoint(x: pt.x+p[i+2], y: pt.y+p[i+3]), control: CGPoint(x: pt.x+p[i], y: pt.y+p[i+1]))
                             cp.x = pt.x+p[i]
                             cp.y = pt.y+p[i+1]
                             pt.x += p[i+2]
@@ -98,7 +98,7 @@ class SwipePath {
                     case "Q":
                         var i = 0
                         while(p.count >= i+4) {
-                            path.addQuadCurve(nil, cpx: p[i], cpy: p[i+1], endingAtX: p[i+2], y: p[i+3])
+                            path.addQuadCurve(to: CGPoint(x: p[i+2], y: p[i+3]), control: CGPoint(x: p[i], y: p[i+1]))
                             cp.x = p[i]
                             cp.y = p[i+1]
                             pt.x = p[i+2]
@@ -108,7 +108,7 @@ class SwipePath {
                     case "s":
                         var i = 0
                         while(p.count >= i+4) {
-                            path.addCurve(nil, cp1x: pt.x * 2 - cp.x, cp1y: pt.y * 2 - cp.y, cp2x: pt.x+p[i], cp2y: pt.y+p[i+1], endingAtX: pt.x+p[i+2], y: pt.y+p[i+3])
+                            path.addCurve(to: CGPoint(x: pt.x+p[i+2], y: pt.y+p[i+3]), control1: CGPoint(x: pt.x * 2 - cp.x, y: pt.y * 2 - cp.y), control2: CGPoint(x: pt.x+p[i], y: pt.y+p[i+1]))
                             cp.x = pt.x + p[i]
                             cp.y = pt.y + p[i+1]
                             pt.x += p[i+2]
@@ -118,7 +118,7 @@ class SwipePath {
                     case "S":
                         var i = 0
                         while(p.count >= i+4) {
-                            path.addCurve(nil, cp1x: pt.x * 2 - cp.x, cp1y: pt.y * 2 - cp.y, cp2x: p[i], cp2y: p[i+1], endingAtX: p[i+2], y: p[i+3])
+                            path.addCurve(to: CGPoint(x: p[i+2], y: p[i+3]), control1: CGPoint(x: pt.x * 2 - cp.x, y: pt.y * 2 - cp.y), control2: CGPoint(x: p[i], y: p[i+1]))
                             cp.x = p[i]
                             cp.y = p[i+1]
                             pt.x = p[i+2]
@@ -128,7 +128,7 @@ class SwipePath {
                     case "l":
                         var i = 0
                         while(p.count >= i+2) {
-                            path.addLineTo(nil, x: pt.x+p[i], y: pt.y+p[i+1])
+                            path.addLine(to: CGPoint(x: pt.x+p[i], y: pt.y+p[i+1]))
                             pt.x += p[i]
                             pt.y += p[i+1]
                             i += 2
@@ -136,7 +136,7 @@ class SwipePath {
                     case "L":
                         var i = 0
                         while(p.count >= i+2) {
-                            path.addLineTo(nil, x: p[i], y: p[i+1])
+                            path.addLine(to: CGPoint(x: p[i], y: p[i+1]))
                             pt.x = p[i]
                             pt.y = p[i+1]
                             i += 2
@@ -144,28 +144,28 @@ class SwipePath {
                     case "v":
                         var i = 0
                         while(p.count >= i+1) {
-                            path.addLineTo(nil, x: pt.x, y: pt.y+p[i])
+                            path.addLine(to: CGPoint(x: pt.x, y: pt.y+p[i]))
                             pt.y += p[i]
                             i += 1
                         }
                     case "V":
                         var i = 0
                         while(p.count >= i+1) {
-                            path.addLineTo(nil, x: pt.x, y: p[i])
+                            path.addLine(to: CGPoint(x: pt.x, y: p[i]))
                             pt.y = p[i]
                             i += 1
                         }
                     case "h":
                         var i = 0
                         while(p.count >= i+1) {
-                            path.addLineTo(nil, x: pt.x+p[i], y: pt.y)
+                            path.addLine(to: CGPoint(x: pt.x+p[i], y: pt.y))
                             pt.x += p[i]
                             i += 1
                         }
                     case "H":
                         var i = 0
                         while(p.count >= i+1) {
-                            path.addLineTo(nil, x: p[i], y: pt.y)
+                            path.addLine(to: CGPoint(x: p[i], y: pt.y))
                             pt.x = p[i]
                             i += 1
                         }

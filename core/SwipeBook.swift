@@ -251,7 +251,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
     // <SwipePageDelegate> method
     func pathWith(_ name:String?) -> AnyObject? {
         if let key = name,
-           let value:AnyObject = self.namedPaths[key] {
+           let value:AnyObject = self.namedPaths[key as NSObject] {
             return value
         }
         return nil

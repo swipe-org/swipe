@@ -31,7 +31,7 @@ private func MyLog(_ text:String, level:Int = 0) {
 // which calls init(layer: AnyObject) to create a copy before the rendering. 
 // We can work-around this bug by calling super.init().
 class XAVPlayerLayer: AVPlayerLayer {
-    override init(layer: AnyObject) {
+    override init(layer: Any) {
         //print("XAVPlayerLayer init with layer")
         super.init() // HACK to avoid crash
     }
@@ -57,7 +57,7 @@ protocol SwipeElementDelegate:NSObjectProtocol {
     func parseMarkdown(_ element:SwipeElement, markdowns:[String]) -> NSAttributedString
     func baseURL() -> URL?
     func map(_ url:URL) -> URL?
-    func addedResourceURLs(_ urls:[URL:String], callback:() -> Void)
+    func addedResourceURLs(_ urls:[URL:String], callback:@escaping () -> Void)
     func pageIndex() -> Int // for debugging
     func localizedStringForKey(_ key:String) -> String?
     func languageIdentifier() -> String?
@@ -613,7 +613,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             SwipeElement.processShadow(info, scale:scale, layer: layer)
         }
         
-        var mds = info["markdown"]
+        var mds: Any? = info["markdown"]
         if let md = mds as? String {
             mds = [md]
         }
@@ -1990,7 +1990,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     }
     
     // SwipeViewDelegate
-    func addedResourceURLs(_ urls:[URL:String], callback:() -> Void) {
+    func addedResourceURLs(_ urls:[URL:String], callback:@escaping () -> Void) {
         for (url,prefix) in urls {
             self.resourceURLs[url as URL] = prefix
         }

@@ -77,7 +77,7 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
     
     // UITableViewDataSource
     
-    var cellIndexPath: NSIndexPath?
+    var cellIndexPath: IndexPath?
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let subviewTag = 999

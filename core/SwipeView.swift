@@ -15,7 +15,7 @@ import Foundation
 #endif
 
 protocol SwipeViewDelegate: NSObjectProtocol {
-    func addedResourceURLs(_ urls:[URL:String], callback:() -> Void)
+    func addedResourceURLs(_ urls:[URL:String], callback:@escaping () -> Void)
 }
 
 class SwipeView: SwipeNode {
