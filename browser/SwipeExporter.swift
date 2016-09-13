@@ -49,7 +49,7 @@ class SwipeExporter: NSObject {
         // HACK: This delay is not 100% reliable, but is sufficient practically.
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(100 * Double(NSEC_PER_MSEC))), dispatch_get_main_queue()) {
             progress(complete: false, error: nil)
-            let presentationLayer = self.swipeViewController.view.layer.presentationLayer() as! CALayer
+            let presentationLayer = self.swipeViewController.view.layer.presentationLayer()!
             UIGraphicsBeginImageContext(self.swipeViewController.view.frame.size); defer {
                 UIGraphicsEndImageContext()
             }
@@ -121,16 +121,16 @@ class SwipeExporter: NSObject {
                     return progress(complete: false, error: Error.FailedToCreate)
                 }
 
-                CVPixelBufferLockBaseAddress(managedPixelBuffer, 0)
+                CVPixelBufferLockBaseAddress(managedPixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
                 let data = CVPixelBufferGetBaseAddress(managedPixelBuffer)
                 let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
                 if let context = CGBitmapContextCreate(data, Int(self.outputSize.width), Int(self.outputSize.height), 8, CVPixelBufferGetBytesPerRow(managedPixelBuffer), rgbColorSpace, CGImageAlphaInfo.PremultipliedFirst.rawValue) {
                     let xf = CGAffineTransformMakeScale(scale, -scale)
                     CGContextConcatCTM(context, CGAffineTransformTranslate(xf, 0, -viewSize.height))
-                    let presentationLayer = self.swipeViewController.view.layer.presentationLayer() as! CALayer
+                    let presentationLayer = self.swipeViewController.view.layer.presentationLayer()!
                     presentationLayer.renderInContext(context)
                 }
-                CVPixelBufferUnlockBaseAddress(managedPixelBuffer, 0)
+                CVPixelBufferUnlockBaseAddress(managedPixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
 
                 let presentationTime = CMTimeMake(Int64(self.iFrame), Int32(self.fps))
                 if !adaptor.appendPixelBuffer(managedPixelBuffer, withPresentationTime: presentationTime) {

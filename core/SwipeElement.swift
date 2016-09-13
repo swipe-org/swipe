@@ -290,11 +290,11 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         // The natural size is determined by the contents (either image or mask)
         var sizeContents:CGSize?
         if imageRef != nil {
-            sizeContents = CGSizeMake(CGFloat(CGImageGetWidth(imageRef)),
-                                      CGFloat(CGImageGetHeight(imageRef)))
+            sizeContents = CGSizeMake(CGFloat(CGImageGetWidth(imageRef!)),
+                                      CGFloat(CGImageGetHeight(imageRef!)))
         } else if maskSrc != nil {
-            sizeContents = CGSizeMake(CGFloat(CGImageGetWidth(maskSrc)),
-                                      CGFloat(CGImageGetHeight(maskSrc)))
+            sizeContents = CGSizeMake(CGFloat(CGImageGetWidth(maskSrc!)),
+                                      CGFloat(CGImageGetHeight(maskSrc!)))
         } else  if let path = pathSrc {
             let rc = CGPathGetPathBoundingBox(path)
             sizeContents = CGSizeMake(rc.origin.x + rc.width, rc.origin.y + rc.height)

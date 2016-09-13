@@ -47,11 +47,11 @@ class SwipeAssetManager {
     lazy var urlFolder:NSURL = {
         let urlFolder = self.applicationCachesDirectory.URLByAppendingPathComponent("cache.swipe.net")
         let fm = NSFileManager.defaultManager()
-        if !fm.fileExistsAtPath(urlFolder.path!) {
-            try! fm.createDirectoryAtURL(urlFolder, withIntermediateDirectories: false, attributes: nil)
-            try! urlFolder.setResourceValue(true, forKey:NSURLIsExcludedFromBackupKey)
+        if !fm.fileExistsAtPath(urlFolder!.path!) {
+            try! fm.createDirectoryAtURL(urlFolder!, withIntermediateDirectories: false, attributes: nil)
+            try! urlFolder!.setResourceValue(true, forKey:NSURLIsExcludedFromBackupKey)
         }
-        return urlFolder
+        return urlFolder!
     }()
     
     lazy var managedObjectModel: NSManagedObjectModel = {
@@ -146,7 +146,7 @@ class SwipeAssetManager {
             let fm = NSFileManager.defaultManager()
             let loaded = entity.valueForKey("loaded") as? Bool
             let fileSize = entity.valueForKey("size") as? Int
-            if !bypassCache && loaded == true && fm.fileExistsAtPath(urlLocal.path!) {
+            if !bypassCache && loaded == true && fm.fileExistsAtPath(urlLocal!.path!) {
                 MyLog("SWAsset reuse \(url.lastPathComponent!), \(fileSize)", level:1)
                 // We should call it asynchronously, which the caller expects.
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -154,11 +154,11 @@ class SwipeAssetManager {
                 })
             } else {
                 MyLog("SWAsset loading \(url.lastPathComponent!)", level:1)
-                let connection = SwipeConnection.connection(url, urlLocal:urlLocal, entity:entity)
+                let connection = SwipeConnection.connection(url, urlLocal:urlLocal!, entity:entity)
                 connection.load { (error: NSError!) -> Void in
                     if error == nil {
                         entity.setValue(true, forKey: "loaded")
-                        try! urlLocal.setResourceValue(true, forKey:NSURLIsExcludedFromBackupKey)
+                        try! urlLocal!.setResourceValue(true, forKey:NSURLIsExcludedFromBackupKey)
                         self.saveContext()
                     }
                     callback?(urlLocal, error)
@@ -190,7 +190,7 @@ class SwipeAssetManager {
                                 MyLog("SNAsset reducing date=\(date), \(uuid)")
                                 let urlLocal = self.urlFolder.URLByAppendingPathComponent(uuid)
                                 do {
-                                    try fm.removeItemAtURL(urlLocal)
+                                    try fm.removeItemAtURL(urlLocal!)
                                 } catch {
                                     MyLog("SWAsset reduce fail to remove (totally fine)")
                                 }

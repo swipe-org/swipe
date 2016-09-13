@@ -188,7 +188,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             let defaults = NSUserDefaults.standardUserDefaults()
             var state:[String:AnyObject]? = nil
             if let url = self.url where ignoreViewState == false {
-                state = defaults.objectForKey(url.absoluteString) as? [String:AnyObject]
+                state = defaults.objectForKey(url.absoluteString!) as? [String:AnyObject]
             }
             self.viewLoading?.alpha = 1.0
             self.labelLoading?.text = "Loading Network Resources...".localized
@@ -367,7 +367,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                    url = self.url {
                 MyLog("SWBrows state=\(state)", level:1)
                 let defaults = NSUserDefaults.standardUserDefaults()
-                defaults.setObject(state, forKey: url.absoluteString)
+                defaults.setObject(state, forKey: url.absoluteString!)
                 defaults.synchronize()
             }
         
