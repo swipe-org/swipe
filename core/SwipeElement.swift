@@ -737,6 +737,10 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         
         layer.opacity = SwipeParser.parseFloat(info["opacity"])
         
+        if let visible = info["visible"] as? Bool, !visible {
+            layer.opacity = 0.0
+        }
+        
         if let to = info["to"] as? [String:AnyObject] {
             let start, duration:Double
             if let timing = to["timing"] as? [Double],
