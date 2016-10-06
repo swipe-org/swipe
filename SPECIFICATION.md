@@ -92,7 +92,7 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **type** (String): This must be "net.swipe.swipe" for a Swipe document
 - **version** (String): Version of the Swipe language specification used in the document
 - **title** (String): Title of the document, optional
-- **bc** (Color): Background color, default is *darkGray*
+- **bc** (Color): Background color, default is *Black*
 - **dimension** ([Int, Int]): Dimension of the document, default is [320, 568]
 - **paging** (String): Paging direction, *vertical* (default), or *leftToRight*
 - **orientation** (String): Document orientation, *portrait* (default) or *landscape*
