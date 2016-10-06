@@ -120,9 +120,9 @@ Here is a **Document** with a **Page**, which has two **Elements**.
         {
             "elements": [
                 { "x":50, "y":100, "w":100, "h":100, "bc":"red" },
-                { "x":100, "y":150, "w":100, "h":100, "bc":"blue" },
+                { "x":100, "y":150, "w":100, "h":100, "bc":"blue" }
             ]
-        },
+        }
     ]
 }
 ```
@@ -188,7 +188,7 @@ Here is a **Document** with two **Pages**, where the first **Page** is associate
     "templates": {
         "pages": {
             "*": { "bc":"blue" },
-            "alternative": { "bc":"green" },
+            "alternative": { "bc":"green" }
         }
     },
     "pages": [
@@ -215,7 +215,7 @@ The following example uses the "id" to identify a particular **Element** in the 
         "pages": {
             "*": {
                 "elements": [
-                    { "id":"hello", "text":"Hello World" },
+                    { "id":"hello", "text":"Hello World" }
                 ]
             }
         }
@@ -230,7 +230,7 @@ The following example uses the "id" to identify a particular **Element** in the 
             "elements": [
                 { "id":"hello", "textColor":"green" }
             ]
-        },
+        }
     ]
 }
 ```
@@ -324,7 +324,7 @@ The sample below uses a **ElementTemplate**, "smile" as a template for five diff
             "smile": {
                 "lineWidth":3,
                 "path":"M0,0 C10,50 90,50 100,0",
-                "strokeColor":"red",
+                "strokeColor":"red"
             }
         }
     },
@@ -335,9 +335,9 @@ The sample below uses a **ElementTemplate**, "smile" as a template for five diff
                 { "template":"smile", "pos":["50%", 200], "rotate":30 },
                 { "template":"smile", "pos":["50%", 300], "lineWidth":10 },
                 { "template":"smile", "pos":["50%", 400], "strokeColor":"#37F" },
-                { "template":"smile", "pos":["50%", 500], "scale":[2,1] },
-            ],
-        },
+                { "template":"smile", "pos":["50%", 500], "scale":[2,1] }
+            ]
+        }
     ]
 }
 ```
@@ -354,9 +354,9 @@ The following example shows how to use a **ElementTemplate** with child **Elemen
                 "w":160, "h":100,
                 "elements":[
                     { "id":"hello", "text":"Hello", "textAlign":"left" },
-                    { "id":"world", "text":"World", "textAlign":"left", "x":80 },
-                ],
-            },
+                    { "id":"world", "text":"World", "textAlign":"left", "x":80 }
+                ]
+            }
         }
     },
     "pages": [
@@ -365,15 +365,15 @@ The following example shows how to use a **ElementTemplate** with child **Elemen
                 { "template":"helloWorld", "pos":[160, 100] },
                 { "template":"helloWorld", "pos":[160, 200],
                   "elements":[
-                    { "id":"hello", "textColor":"red", },
-                    { "id":"world", "textColor":"blue", },
+                    { "id":"hello", "textColor":"red" },
+                    { "id":"world", "textColor":"blue" }
                   ]},
                 { "template":"helloWorld", "pos":[160, 300],
                   "elements":[
-                    { "id":"world", "text":"Swipe!" },
-                  ]},
-            ],
-        },
+                    { "id":"world", "text":"Swipe!" }
+                  ]}
+            ]
+        }
     ]
 }
 ```
@@ -573,28 +573,31 @@ If **events** is specified, the event **completion** occurs after the update has
 
 The example below updates the **element**'s **text** property to "tapped" when the user taps on the **element**.
 ```
-"pages": [
-  {
-    "play":"never", "//":"Required when using 'update' action",
-    "elements": [
+{
+    "pages": [
       {
-        "text": "tap me",
-        "pos": ["50%", "33%"],
-        "w":"90%",
-        "h":"10%",
-        "bc":"#fdd",
-        "events": {
-          "tapped": {
-            "actions": [
-              {
-                "update": {"text":"tapped"}
-              },
-            ]
+        "play":"never", "//":"Required when using 'update' action",
+        "elements": [
+          {
+            "text": "tap me",
+            "pos": ["50%", "33%"],
+            "w":"90%",
+            "h":"10%",
+            "bc":"#fdd",
+            "events": {
+              "tapped": {
+                "actions": [
+                  {
+                    "update": {"text":"tapped"}
+                  }
+                ]
+              }
+            }
           }
-        }
+        ]
       }
     ]
-  }
+}
 ```
 
 ## 11. Element Focus
@@ -888,7 +891,7 @@ In the example below, when the "HTTP GET" element is tapped, the **get** action 
 					}},
 				{"id":"label", "h":40, "pos":["50%", 130] },
 				{"id":"image", "w":150, "h":150, "pos":["50%", 240], "img":"more.png" },
-				{"id":"error", "textColor":"red", "h":40, "pos":["50%", 20] },
+				{"id":"error", "textColor":"red", "h":40, "pos":["50%", 20] }
 			 ]
 		}
   ]
@@ -1002,13 +1005,13 @@ Following example displays "good day" and "good evening" unless the locale is "d
         {
             "strings": { 
             	"good day": {"*":"good day", "de": "Guten Tag"},
-            	"good evening": {"*":"good evening", "de": "guten Abend"},
+            	"good evening": {"*":"good evening", "de": "guten Abend"}
             },
             	
             "elements":[
                 { "text":{"ref":"good day"}, "h":"20%", "pos":["50%", "12%"]},
-                { "text":{"ref":"good evening"}, "h":"20%", "pos":["50%", "34%"]},
-            ],
+                { "text":{"ref":"good evening"}, "h":"20%", "pos":["50%", "34%"]}
+            ]
         }
     ]
 }
@@ -1026,7 +1029,7 @@ Following example displays "good morning" and "good afternoon" unless the locale
         {
             "elements":[
                 { "text":{"*":"good morning", "de": "guten Morgen"}, "h":"20%", "pos":["50%", "12%"]},
-                { "text":{"*":"good afternoon", "de": "guten Nachmittag"}, "h":"20%", "pos":["50%", "34%"]},
+                { "text":{"*":"good afternoon", "de": "guten Nachmittag"}, "h":"20%", "pos":["50%", "34%"]}
             ]
         }
     ]
@@ -1044,14 +1047,14 @@ Example:
 { 
     "languages":[
         {"id": "en", "title": "English"},
-        {"id": "de", "title": "German"},
+        {"id": "de", "title": "German"}
     ],
     "pages":[
         {
             "elements":[
                 { "text":{"*":"good morning", "de": "guten Morgen"}, "h":"20%", "pos":["50%", "12%"]},
-                { "text":{"*":"good afternoon", "de": "guten Nachmittag"}, "h":"20%", "pos":["50%", "34%"]},
-            ],
+                { "text":{"*":"good afternoon", "de": "guten Nachmittag"}, "h":"20%", "pos":["50%", "34%"]}
+            ]
         }
     ]
 }
