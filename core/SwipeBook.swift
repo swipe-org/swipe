@@ -72,8 +72,8 @@ class SwipeBook: NSObject, SwipePageDelegate {
     }()
 
     lazy var orientation:String = {
-        if let paging = self.bookInfo["orientation"] as? String {
-            return paging
+        if let orientation = self.bookInfo["orientation"] as? String {
+            return orientation
         }
         return "portrait"
     }()
