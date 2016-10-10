@@ -560,6 +560,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         
         if let path = pathSrc {
             let shapeLayer = CAShapeLayer()
+            shapeLayer.frame = view.bounds
             shapeLayer.contentsScale = contentScale
             if let xpath = SwipeParser.transformedPath(path, param: info, size:frame.size) {
                 shapeLayer.path = xpath
