@@ -72,11 +72,18 @@ class SwipeExporter: NSObject {
         }
     }
 
-    func exportAsMovie(fileURL:NSURL, startPage:Int, pageCount:Int, progress:(complete:Bool, error:ErrorType?)->Void) {
+    func exportAsMovie(fileURL:NSURL, startPage:Int, pageCount:Int?, progress:(complete:Bool, error:ErrorType?)->Void) {
         // AVAssetWrite will fail if the file already exists
         let manager = NSFileManager.defaultManager()
         if manager.fileExistsAtPath(fileURL.path!) {
             try! manager.removeItemAtURL(fileURL)
+        }
+        
+        let limit:Int
+        if let pageCount = pageCount where startPage + pageCount < swipeViewController.book.pages.count {
+            limit = pageCount * self.fps + 1
+        } else {
+            limit = (swipeViewController.book.pages.count - startPage - 1) * self.fps + 1
         }
         
         let viewSize = swipeViewController.view.frame.size
@@ -110,7 +117,7 @@ class SwipeExporter: NSObject {
                 guard input.readyForMoreMediaData else {
                     return // Not ready. Just wait.
                 }
-                self.progress = 0.5 * CGFloat(self.iFrame) / CGFloat(self.fps) / CGFloat(pageCount)
+                self.progress = 0.5 * CGFloat(self.iFrame) / CGFloat(limit)
                 progress(complete: false, error: nil)
 
                 var pixelBufferX: CVPixelBuffer? = nil
@@ -139,7 +146,7 @@ class SwipeExporter: NSObject {
                 }
 
                 self.iFrame += 1
-                if self.iFrame < pageCount * self.fps + 1 {
+                if self.iFrame < limit {
                     self.swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(self.iFrame) / CGFloat(self.fps))
                 } else {
                     input.markAsFinished()
