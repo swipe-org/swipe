@@ -19,5 +19,7 @@
         { "url":"http://www.swipe.net/index.swipe", "title":"More ...", "icon":"more.png" },
         { "url":"http://satoshi.blogs.com/swipe/index2.swipe", "title":"More 2...", "icon":"more.png" },
         { "url":"tv_index.swipe", "title":"TV", "icon":"more.png" },
+        { "url":"https://raw.githubusercontent.com/swipe-org/swipe-sample/master/index.swipe", "title":"Test Cases", "icon":"Icon-180.png" },
+        { "url":"https://raw.githubusercontent.com/swipe-org/swipe-sample/staging/index.swipe", "title":"Test Cases (Staging)", "icon":"Icon-180.png" }
     ]
 }
