@@ -130,7 +130,7 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 ### Page Properties
 
 - **bc** (Color): Background color, the default is *white*
-- **fpt** (Int): Frame per second, the default is 60
+- **fps** (Int): Frame per second, the default is 60
 - **transition** (String): Inter-page transition style, *scroll* (default), *fadeIn* or *replace*
 - **play** (String): Play(animation) control, *auto* (default), *pause*, *always* or *scroll*
 - **duration** (Float): Duration of the animation in seconds, the default is 0.2 seconds
