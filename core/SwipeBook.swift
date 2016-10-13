@@ -40,7 +40,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
     //
     // Calculated properties (Public)
     //
-    var currenPage:SwipePage {
+    var currentPage:SwipePage {
         return self.pages[self.pageIndex]
     }
     //

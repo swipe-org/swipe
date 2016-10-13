@@ -67,8 +67,8 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         // Even though book is unwrapped, there is a rare case that book is nil 
         // (during the construction).
         if self.book != nil && self.book.pages.count > 0 {
-            self.book.currenPage.willLeave(false)
-            self.book.currenPage.didLeave(false)
+            self.book.currentPage.willLeave(false)
+            self.book.currentPage.didLeave(false)
             // PARANOIA
             for i in -2...2 {
                 removeViewAtIndex(self.book.pageIndex - i)
@@ -301,13 +301,13 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         if target != self.book.pageIndex {
             // Forward paging was just initiated by the user's dragging
             //MyLog("SWView willEndDragging \(self.book.pageIndex) \(target)")
-            self.book.currenPage.willLeave(fAdvancing)
+            self.book.currentPage.willLeave(fAdvancing)
             
             let page = self.book.pages[target]
             fAdvancing = target > self.book.pageIndex
             page.willEnter(fAdvancing)
         } else {
-            let page = self.book.currenPage
+            let page = self.book.currentPage
             let size = self.scrollView.frame.size
             if !page.isPlaying() && (self.book.horizontal && scrollView.contentOffset.x < -size.width/8.0
               || !self.book.horizontal && scrollView.contentOffset.y < -size.height/8.0) {
@@ -358,7 +358,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
     
     func handlePlayButton(recognizer:UITapGestureRecognizer) {
-        let page = self.book.currenPage
+        let page = self.book.currentPage
         let fPlaying = page.isPlaying()
         MyLog("SWView  handlePlayButton \(fPlaying)", level: 1)
         if fPlaying {
@@ -426,7 +426,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             let offsetAligned = self.book.horizontal ? CGPointMake(size.width * CGFloat(target), 0) : CGPointMake(0, size.height * CGFloat(target))
             if target != self.book.pageIndex {
                 // Paging was initiated by the swiping (forward or backward)
-                self.book.currenPage.willLeave(fAdvancing)
+                self.book.currentPage.willLeave(fAdvancing)
                 let page = self.book.pages[target]
                 fAdvancing = target > self.book.pageIndex
                 page.willEnter(fAdvancing)
@@ -436,7 +436,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
                 if !self.book.horizontal && offset.y < -size.height/8.0
                    || self.book.horizontal && offset.x < -size.width/8.0 {
                     MyLog("SWView underscrolling detected \(offset.x), \(offset.y)", level:1)
-                    let page = self.book.currenPage
+                    let page = self.book.currentPage
                     page.willLeave(false)
                     page.willEnter(true)
                     page.didEnter(true)
@@ -498,7 +498,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         }
         
         if !fForced {
-            let pagePrev = self.book.currenPage
+            let pagePrev = self.book.currentPage
             pagePrev.didLeave(newPageIndex < self.book.pageIndex)
         }
     
@@ -513,17 +513,17 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             if fDeferredEnter && newPageIndex == index && newPageIndex == self.book.pageIndex {
                 print("SwipeVC index=\(index)")
                 if fForced {
-                    self.book.currenPage.willEnter(true)
+                    self.book.currentPage.willEnter(true)
                 }
-                self.book.currenPage.didEnter(self.fAdvancing || fForced)
+                self.book.currentPage.didEnter(self.fAdvancing || fForced)
             }
         }
         
         if !fDeferredEnter {
             if fForced {
-                self.book.currenPage.willEnter(true)
+                self.book.currentPage.willEnter(true)
             }
-            self.book.currenPage.didEnter(fAdvancing || fForced)
+            self.book.currentPage.didEnter(fAdvancing || fForced)
         }
         return true
     }
@@ -569,7 +569,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         }
 
         //MyLog("SWView tags=\(tags), \(pageIndex)")
-        self.book.setActivePage(self.book.currenPage)
+        self.book.setActivePage(self.book.currentPage)
 
         // debugging
         _ = tagsString()
