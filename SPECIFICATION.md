@@ -245,7 +245,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 ### Element properties
 
 - **id** (String): the element identifier in the associated **ElementTemplate** at the same nesting level
-- **visible** (Bool): the visibility of the element, defalult is true, not animatable.
+- **visible** (Bool): the visibility of the element, default is true, not animatable.
 - **template** (String): the name of the **ElementTemplate** to inherit properties from
 - **x** (Float or Percent): x-position of the left-top corner of element, default is 0
 - **y** (Float or Percent): y-position of the left-top corner of the element, default is 0
