@@ -384,6 +384,8 @@ The **Transition Animation** specifies a set of animations to play right after o
 
 The "to" property of each element specifies the animation to be performed on the element, by specifying a new value for animatable properties, such as "opacity", "rotate", "translate", "bc", "path", "pos" (the value should be a SVG style path, and the "translate" will be ignored), "mode". 
 
+The "mode" property can be "auto", "reverse" or empty. "mode" applies only when "pos" specifies an animation path.  When "auto" is specified, the element's rotation matches the angle along the path.  When "reverse" is specified, the element's rotation is the reverse (rotated 180 degrees) of the angle along the path.  When "mode" is not specified or is empty, the element's rotation is not affected by the path.
+
 The "timing" property specifies the timing of animation with two floating values, start and end (must be between 0.0 and 1.0). The default is [0.0, 1.0].
 
 Following example animates the text "I'm animatable!" down when the second page appears on the screen. 
