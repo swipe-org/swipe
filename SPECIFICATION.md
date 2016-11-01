@@ -263,7 +263,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **scale** (Float or [Float, Float]): Scaling factor around the anchor point, default is [1, 1], animatable
 - **translate** ([Float, Float]): Translation, default is [0, 0], animatable
 - **text** (String, [langId:String] or ["ref":StringId]): Text to display
-  - **textAlign** (String): Text alignment, *center* (default), *left* or *right*
+  - **textAlign** (String or [String]): Text alignment, *center* (default), *left*, *right*, *top*, *bottom*, or *justified*
   - **fontSize** (Float or Percent): Font size
   - **fontName** (String or [String]): Font name or names (the first name existing in the system is used)
   - **textColor** (Color): Color of the text, animatable
