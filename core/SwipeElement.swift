@@ -1364,9 +1364,9 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         manager.ensureLayoutForTextContainer(container)
         let box = manager.usedRectForTextContainer(container)
         var rcText = rcBound
-        if fTextBottom {
+        if fTextTop {
             rcText.origin.y = rcText.size.height - box.size.height
-        } else if !fTextTop {
+        } else if !fTextBottom {
             rcText.origin.y =  (rcText.size.height - box.size.height) / 2
         }
         return rcText
