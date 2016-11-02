@@ -50,7 +50,7 @@
     "pages":[
         {
             "elements":[
-                { "w":"body", "markdown":[
+                { "template":"body", "markdown":[
                     "# Swipe",
                 ]},
                 { "template":"logo", "x":300, "w":192,
@@ -125,7 +125,7 @@
 
         {
             "elements":[
-                { "w":"body", "markdown":[
+                { "template":"body", "markdown":[
                     "#2 Swipe Engine & Language",
                 ]},
             ],
