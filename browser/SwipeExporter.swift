@@ -80,7 +80,7 @@ class SwipeExporter: NSObject {
         }
         
         let limit:Int
-        if let pageCount = pageCount where startPage + pageCount < swipeViewController.book.pages.count {
+        if let pageCount = pageCount, startPage + pageCount < swipeViewController.book.pages.count {
             limit = pageCount * self.fps + 1
         } else {
             limit = (swipeViewController.book.pages.count - startPage - 1) * self.fps + 1
