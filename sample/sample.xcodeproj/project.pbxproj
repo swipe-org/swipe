@@ -693,6 +693,7 @@
 					};
 					74EA71761BD047F0006808EA = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = H34BY2CCCD;
 						LastSwiftMigration = 0800;
 					};
 					74EA71E01BD0B0EE006808EA = {
@@ -1114,6 +1115,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = H34BY2CCCD;
 				INFOPLIST_FILE = sample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = swipe.swipe.sample;
@@ -1127,6 +1129,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = H34BY2CCCD;
 				INFOPLIST_FILE = sample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = swipe.swipe.sample;

@@ -92,7 +92,7 @@ When the user opens this document with a Swipe viewer, the user will see only th
 - **type** (String): This must be "net.swipe.swipe" for a Swipe document
 - **version** (String): Version of the Swipe language specification used in the document
 - **title** (String): Title of the document, optional
-- **bc** (Color): Background color, default is *darkGray*
+- **bc** (Color): Background color, default is *Black*
 - **dimension** ([Int, Int]): Dimension of the document, default is [320, 568]
 - **paging** (String): Paging direction, *vertical* (default), or *leftToRight*
 - **orientation** (String): Document orientation, *portrait* (default) or *landscape*
@@ -120,9 +120,9 @@ Here is a **Document** with a **Page**, which has two **Elements**.
         {
             "elements": [
                 { "x":50, "y":100, "w":100, "h":100, "bc":"red" },
-                { "x":100, "y":150, "w":100, "h":100, "bc":"blue" },
+                { "x":100, "y":150, "w":100, "h":100, "bc":"blue" }
             ]
-        },
+        }
     ]
 }
 ```
@@ -130,7 +130,7 @@ Here is a **Document** with a **Page**, which has two **Elements**.
 ### Page Properties
 
 - **bc** (Color): Background color, the default is *white*
-- **fpt** (Int): Frame per second, the default is 60
+- **fps** (Int): Frame per second, the default is 60
 - **transition** (String): Inter-page transition style, *scroll* (default), *fadeIn* or *replace*
 - **play** (String): Play(animation) control, *auto* (default), *pause*, *always* or *scroll*
 - **duration** (Float): Duration of the animation in seconds, the default is 0.2 seconds
@@ -188,7 +188,7 @@ Here is a **Document** with two **Pages**, where the first **Page** is associate
     "templates": {
         "pages": {
             "*": { "bc":"blue" },
-            "alternative": { "bc":"green" },
+            "alternative": { "bc":"green" }
         }
     },
     "pages": [
@@ -215,7 +215,7 @@ The following example uses the "id" to identify a particular **Element** in the 
         "pages": {
             "*": {
                 "elements": [
-                    { "id":"hello", "text":"Hello World" },
+                    { "id":"hello", "text":"Hello World" }
                 ]
             }
         }
@@ -230,7 +230,7 @@ The following example uses the "id" to identify a particular **Element** in the 
             "elements": [
                 { "id":"hello", "textColor":"green" }
             ]
-        },
+        }
     ]
 }
 ```
@@ -245,7 +245,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 ### Element properties
 
 - **id** (String): the element identifier in the associated **ElementTemplate** at the same nesting level
-- **visible** (Bool): the visibility of the element, defalult is true, not animatable.
+- **visible** (Bool): the visibility of the element, default is true, not animatable.
 - **template** (String): the name of the **ElementTemplate** to inherit properties from
 - **x** (Float or Percent): x-position of the left-top corner of element, default is 0
 - **y** (Float or Percent): y-position of the left-top corner of the element, default is 0
@@ -263,7 +263,7 @@ An **Element** is a visible entity on a **Page**. It occupies a specified rectan
 - **scale** (Float or [Float, Float]): Scaling factor around the anchor point, default is [1, 1], animatable
 - **translate** ([Float, Float]): Translation, default is [0, 0], animatable
 - **text** (String, [langId:String] or ["ref":StringId]): Text to display
-  - **textAlign** (String): Text alignment, *center* (default), *left* or *right*
+  - **textAlign** (String or [String]): Text alignment, *center* (default), *left*, *right*, *top*, *bottom*, or *justified*
   - **fontSize** (Float or Percent): Font size
   - **fontName** (String or [String]): Font name or names (the first name existing in the system is used)
   - **textColor** (Color): Color of the text, animatable
@@ -324,7 +324,7 @@ The sample below uses a **ElementTemplate**, "smile" as a template for five diff
             "smile": {
                 "lineWidth":3,
                 "path":"M0,0 C10,50 90,50 100,0",
-                "strokeColor":"red",
+                "strokeColor":"red"
             }
         }
     },
@@ -335,9 +335,9 @@ The sample below uses a **ElementTemplate**, "smile" as a template for five diff
                 { "template":"smile", "pos":["50%", 200], "rotate":30 },
                 { "template":"smile", "pos":["50%", 300], "lineWidth":10 },
                 { "template":"smile", "pos":["50%", 400], "strokeColor":"#37F" },
-                { "template":"smile", "pos":["50%", 500], "scale":[2,1] },
-            ],
-        },
+                { "template":"smile", "pos":["50%", 500], "scale":[2,1] }
+            ]
+        }
     ]
 }
 ```
@@ -354,9 +354,9 @@ The following example shows how to use a **ElementTemplate** with child **Elemen
                 "w":160, "h":100,
                 "elements":[
                     { "id":"hello", "text":"Hello", "textAlign":"left" },
-                    { "id":"world", "text":"World", "textAlign":"left", "x":80 },
-                ],
-            },
+                    { "id":"world", "text":"World", "textAlign":"left", "x":80 }
+                ]
+            }
         }
     },
     "pages": [
@@ -365,15 +365,15 @@ The following example shows how to use a **ElementTemplate** with child **Elemen
                 { "template":"helloWorld", "pos":[160, 100] },
                 { "template":"helloWorld", "pos":[160, 200],
                   "elements":[
-                    { "id":"hello", "textColor":"red", },
-                    { "id":"world", "textColor":"blue", },
+                    { "id":"hello", "textColor":"red" },
+                    { "id":"world", "textColor":"blue" }
                   ]},
                 { "template":"helloWorld", "pos":[160, 300],
                   "elements":[
-                    { "id":"world", "text":"Swipe!" },
-                  ]},
-            ],
-        },
+                    { "id":"world", "text":"Swipe!" }
+                  ]}
+            ]
+        }
     ]
 }
 ```
@@ -383,6 +383,8 @@ The following example shows how to use a **ElementTemplate** with child **Elemen
 The **Transition Animation** specifies a set of animations to play right after or during the page transition (depending on the "transition" property of the page).
 
 The "to" property of each element specifies the animation to be performed on the element, by specifying a new value for animatable properties, such as "opacity", "rotate", "translate", "bc", "path", "pos" (the value should be a SVG style path, and the "translate" will be ignored), "mode". 
+
+The "mode" property can be "auto", "reverse" or empty. "mode" applies only when "pos" specifies an animation path.  When "auto" is specified, the element's rotation matches the angle along the path.  When "reverse" is specified, the element's rotation is the reverse (rotated 180 degrees) of the angle along the path.  When "mode" is not specified or is empty, the element's rotation is not affected by the path.
 
 The "timing" property specifies the timing of animation with two floating values, start and end (must be between 0.0 and 1.0). The default is [0.0, 1.0].
 
@@ -573,28 +575,31 @@ If **events** is specified, the event **completion** occurs after the update has
 
 The example below updates the **element**'s **text** property to "tapped" when the user taps on the **element**.
 ```
-"pages": [
-  {
-    "play":"never", "//":"Required when using 'update' action",
-    "elements": [
+{
+    "pages": [
       {
-        "text": "tap me",
-        "pos": ["50%", "33%"],
-        "w":"90%",
-        "h":"10%",
-        "bc":"#fdd",
-        "events": {
-          "tapped": {
-            "actions": [
-              {
-                "update": {"text":"tapped"}
-              },
-            ]
+        "play":"never", "//":"Required when using 'update' action",
+        "elements": [
+          {
+            "text": "tap me",
+            "pos": ["50%", "33%"],
+            "w":"90%",
+            "h":"10%",
+            "bc":"#fdd",
+            "events": {
+              "tapped": {
+                "actions": [
+                  {
+                    "update": {"text":"tapped"}
+                  }
+                ]
+              }
+            }
           }
-        }
+        ]
       }
     ]
-  }
+}
 ```
 
 ## 11. Element Focus
@@ -888,7 +893,7 @@ In the example below, when the "HTTP GET" element is tapped, the **get** action 
 					}},
 				{"id":"label", "h":40, "pos":["50%", 130] },
 				{"id":"image", "w":150, "h":150, "pos":["50%", 240], "img":"more.png" },
-				{"id":"error", "textColor":"red", "h":40, "pos":["50%", 20] },
+				{"id":"error", "textColor":"red", "h":40, "pos":["50%", 20] }
 			 ]
 		}
   ]
@@ -1002,13 +1007,13 @@ Following example displays "good day" and "good evening" unless the locale is "d
         {
             "strings": { 
             	"good day": {"*":"good day", "de": "Guten Tag"},
-            	"good evening": {"*":"good evening", "de": "guten Abend"},
+            	"good evening": {"*":"good evening", "de": "guten Abend"}
             },
             	
             "elements":[
                 { "text":{"ref":"good day"}, "h":"20%", "pos":["50%", "12%"]},
-                { "text":{"ref":"good evening"}, "h":"20%", "pos":["50%", "34%"]},
-            ],
+                { "text":{"ref":"good evening"}, "h":"20%", "pos":["50%", "34%"]}
+            ]
         }
     ]
 }
@@ -1026,7 +1031,7 @@ Following example displays "good morning" and "good afternoon" unless the locale
         {
             "elements":[
                 { "text":{"*":"good morning", "de": "guten Morgen"}, "h":"20%", "pos":["50%", "12%"]},
-                { "text":{"*":"good afternoon", "de": "guten Nachmittag"}, "h":"20%", "pos":["50%", "34%"]},
+                { "text":{"*":"good afternoon", "de": "guten Nachmittag"}, "h":"20%", "pos":["50%", "34%"]}
             ]
         }
     ]
@@ -1044,14 +1049,14 @@ Example:
 { 
     "languages":[
         {"id": "en", "title": "English"},
-        {"id": "de", "title": "German"},
+        {"id": "de", "title": "German"}
     ],
     "pages":[
         {
             "elements":[
                 { "text":{"*":"good morning", "de": "guten Morgen"}, "h":"20%", "pos":["50%", "12%"]},
-                { "text":{"*":"good afternoon", "de": "guten Nachmittag"}, "h":"20%", "pos":["50%", "34%"]},
-            ],
+                { "text":{"*":"good afternoon", "de": "guten Nachmittag"}, "h":"20%", "pos":["50%", "34%"]}
+            ]
         }
     ]
 }
