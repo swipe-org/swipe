@@ -389,14 +389,14 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             self.btn = btn
 #endif
             if action == "play" {
-                notificationManager.addObserverForName(SwipePage.didStartPlaying, object: self.delegate, queue: OperationQueue.main) {
+                notificationManager.addObserver(forName: .SwipePageDidStartPlaying, object: self.delegate, queue: OperationQueue.main) {
                     /*[unowned self]*/ (_: Notification!) -> Void in
                     // NOTE: Animation does not work because we are performing animation using the parent layer
                     //UIView.animateWithDuration(0.2, animations: { () -> Void in
                         layer.opacity = 0.0
                     //})
                 }
-                notificationManager.addObserverForName(SwipePage.didFinishPlaying, object: self.delegate, queue: OperationQueue.main) {
+                notificationManager.addObserver(forName: .SwipePageDidFinishPlaying, object: self.delegate, queue: OperationQueue.main) {
                     /*[unowned self]*/ (_: Notification!) -> Void in
                     // NOTE: Animation does not work because we are performing animation using the parent layer
                     //UIView.animateWithDuration(0.2, animations: { () -> Void in
@@ -693,7 +693,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 let playerItem = AVPlayerItem(url: urlVideo)
                 videoPlayer.replaceCurrentItem(with: playerItem)
 
-                notificationManager.addObserverForName(NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem, queue: OperationQueue.main) {
+                notificationManager.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: playerItem, queue: OperationQueue.main) {
                     [unowned self] (_:Notification!) -> Void in
                     MyLog("SWElem play to end!", level: 1)
                     if self.delegate != nil && self.delegate!.shouldRepeat(self) {
@@ -709,7 +709,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 }
             }
             
-            notificationManager.addObserverForName(SwipePage.shouldPauseAutoPlay, object: delegate, queue: OperationQueue.main) {
+            notificationManager.addObserver(forName: .SwipePageShouldPauseAutoPlay, object: delegate, queue: OperationQueue.main) {
                 [unowned self] (_:Notification!) -> Void in
                 if self.fPlaying {
                     self.fPlaying = false
@@ -717,7 +717,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     videoPlayer.pause()
                 }
             }
-            notificationManager.addObserverForName(SwipePage.shouldStartAutoPlay, object: delegate, queue: OperationQueue.main) {
+            notificationManager.addObserver(forName: .SwipePageShouldStartAutoPlay, object: delegate, queue: OperationQueue.main) {
                 [unowned self] (_:Notification!) -> Void in
                 if !self.fPlaying && layer.opacity > 0 {
                     self.fPlaying = true

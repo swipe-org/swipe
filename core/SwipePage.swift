@@ -54,16 +54,18 @@ protocol SwipePageDelegate: NSObjectProtocol {
     func tapped()
 }
 
+extension Notification.Name {
+    static let SwipePageDidStartPlaying = NSNotification.Name("SwipePageDidStartPlaying")
+    static let SwipePageDidFinishPlaying = NSNotification.Name("SwipePageDidFinishPlaying")
+    static let SwipePageShouldStartAutoPlay = NSNotification.Name("SwipePageShouldStartAutoPlay")
+    static let SwipePageShouldPauseAutoPlay = NSNotification.Name("SwipePageShouldPauseAutoPlay")
+}
+
 class SwipePage: SwipeView, SwipeElementDelegate {
     // Debugging
     static var objectCount = 0
     var accessCount = 0
     var completionCount = 0
-
-    static let didStartPlaying = "SwipePageDidStartPlaying"
-    static let didFinishPlaying = "SwipePageDidFinishPlaying"
-    static let shouldStartAutoPlay = "SwipePageShouldStartAutoPlay"
-    static let shouldPauseAutoPlay = "SwipePageShouldPauseAutoPlay"
 
     // Public properties
     let index:Int
@@ -141,7 +143,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     deinit {
         MyLog("SWPage  deinit \(index) \(accessCount) \(completionCount)", level: 1)
         if self.autoplay {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: SwipePage.shouldPauseAutoPlay), object: self)
+            NotificationCenter.default.post(name: .SwipePageShouldPauseAutoPlay, object: self)
         }
         SwipePage.objectCount -= 1
     }
@@ -258,7 +260,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
             player.stop()
         }
         
-        NotificationCenter.default.post(name: Notification.Name(rawValue: SwipePage.shouldPauseAutoPlay), object: self)
+        NotificationCenter.default.post(name: .SwipePageShouldPauseAutoPlay, object: self)
         // auto rewind
         if self.rewind || fForceRewind {
             prepareToPlay()
@@ -344,7 +346,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         fPausing = false
         if !fElementRepeat {
             playAudio()
-            NotificationCenter.default.post(name: Notification.Name(rawValue: SwipePage.shouldStartAutoPlay), object: self)
+            NotificationCenter.default.post(name: .SwipePageShouldStartAutoPlay, object: self)
         }
         assert(self.viewAnimation != nil, "must have self.viewAnimation")
         assert(self.viewVideo != nil, "must have viewVideo")
@@ -497,8 +499,8 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         
         setupGestureRecognizers()
 #if !os(tvOS)
-        NotificationCenter.default.addObserver(self, selector: #selector(SwipePage.keyboardWillShow(notification:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SwipePage.keyboardWillHide(notification:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwipePage.keyboardWillShow(notification:)), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwipePage.keyboardWillHide(notification:)), name: .UIKeyboardWillHide, object: nil)
 #endif
         if let actions = eventHandler.actionsFor("load") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
@@ -710,7 +712,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         cPlaying += 1
         if cPlaying==1 {
             //NSLog("SWPage  didStartPlaying @\(index)")
-            NotificationCenter.default.post(name: Notification.Name(rawValue: SwipePage.didStartPlaying), object: self)
+            NotificationCenter.default.post(name: .SwipePageDidStartPlaying, object: self)
         }
     }
     
@@ -718,7 +720,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         assert(cPlaying > 0, "didFinishPlaying going negative! @\(index)")
         cPlaying -= 1
         if cPlaying == 0 {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: SwipePage.didFinishPlaying), object: self)
+            NotificationCenter.default.post(name: .SwipePageDidFinishPlaying, object: self)
         }
     }
 

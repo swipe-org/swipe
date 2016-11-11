@@ -171,7 +171,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         self.view.addGestureRecognizer(tap)
 #endif
     
-        notificationManager.addObserverForName(NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: OperationQueue.main) {
+        notificationManager.addObserver(forName: .UIApplicationDidBecomeActive, object: nil, queue: OperationQueue.main) {
             [unowned self] (_:Notification!) -> Void in
             MyLog("SWView DidBecomeActive")
             // iOS & tvOS removes all the animations associated with CALayers when the app becomes the background mode. 
