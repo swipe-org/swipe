@@ -123,7 +123,7 @@ class SwipeAssetManager {
         //MyLog("SNAsset context = \(managedObjectContext)")
         
         let request = NSFetchRequest<NSManagedObject>(entityName: "Asset")
-        request.predicate = Predicate(format: "url == %@", url.path)
+        request.predicate = NSPredicate(format: "url == %@", url.path)
         do {
             let results = try managedObjectContext.fetch(request)
             //MyLog("SNAsset count = \(results.count)")
@@ -179,7 +179,7 @@ class SwipeAssetManager {
         DispatchQueue.global(qos: .default).async { () -> Void in
             let fm = FileManager.default
             let request = NSFetchRequest<NSManagedObject>(entityName: "Asset")
-            request.sortDescriptors = [SortDescriptor(key: "lastModified", ascending: true)]
+            request.sortDescriptors = [NSSortDescriptor(key: "lastModified", ascending: true)]
             request.fetchLimit = limit + amount // Number of items to fetch extra, to limit the nubmer of entities to delete for each reduce
             do {
                 let entities = try self.managedObjectContext.fetch(request)

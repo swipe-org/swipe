@@ -47,7 +47,7 @@ protocol SwipePageDelegate: NSObjectProtocol {
     func stopSpeaking()
 #endif
     func currentPageIndex() -> Int
-    func parseMarkdown(_ markdowns:[String]) -> AttributedString
+    func parseMarkdown(_ markdowns:[String]) -> NSAttributedString
     func baseURL() -> URL?
     func voice(_ k:String?) -> [String:AnyObject]
     func languageIdentifier() -> String?
@@ -730,7 +730,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     }
 #endif
 
-    func parseMarkdown(_ element:SwipeElement, markdowns:[String]) -> AttributedString {
+    func parseMarkdown(_ element:SwipeElement, markdowns:[String]) -> NSAttributedString {
         return self.delegate.parseMarkdown(markdowns)
     }
     

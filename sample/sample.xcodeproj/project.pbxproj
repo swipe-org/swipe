@@ -189,7 +189,6 @@
 		F38FB4E31D702D7E00D6DF0B /* SwipeTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38FB4CC1D702D7E00D6DF0B /* SwipeTimer.swift */; };
 		F38FB4E41D702D7E00D6DF0B /* SwipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38FB4CD1D702D7E00D6DF0B /* SwipeView.swift */; };
 		F38FB4E51D702D7E00D6DF0B /* SwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38FB4CE1D702D7E00D6DF0B /* SwipeViewController.swift */; };
-		F38FB4E61D702D7E00D6DF0B /* TypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38FB4CF1D702D7E00D6DF0B /* TypeAlias.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -318,7 +317,6 @@
 		F38FB4CC1D702D7E00D6DF0B /* SwipeTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeTimer.swift; sourceTree = "<group>"; };
 		F38FB4CD1D702D7E00D6DF0B /* SwipeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeView.swift; sourceTree = "<group>"; };
 		F38FB4CE1D702D7E00D6DF0B /* SwipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeViewController.swift; sourceTree = "<group>"; };
-		F38FB4CF1D702D7E00D6DF0B /* TypeAlias.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeAlias.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -529,7 +527,6 @@
 				F38FB4CC1D702D7E00D6DF0B /* SwipeTimer.swift */,
 				F38FB4CD1D702D7E00D6DF0B /* SwipeView.swift */,
 				F38FB4CE1D702D7E00D6DF0B /* SwipeViewController.swift */,
-				F38FB4CF1D702D7E00D6DF0B /* TypeAlias.swift */,
 			);
 			name = core;
 			path = ../core;
@@ -915,7 +912,6 @@
 				F38FB4D21D702D7E00D6DF0B /* SwipeDocumentViewer.swift in Sources */,
 				F38FB4D81D702D7E00D6DF0B /* SwipeHttpPost.swift in Sources */,
 				F38FB4E41D702D7E00D6DF0B /* SwipeView.swift in Sources */,
-				F38FB4E61D702D7E00D6DF0B /* TypeAlias.swift in Sources */,
 				F38FB4D61D702D7E00D6DF0B /* SwipeExtensions.swift in Sources */,
 				F38FB4D31D702D7E00D6DF0B /* SwipeElement.swift in Sources */,
 				F38FB4DC1D702D7E00D6DF0B /* SwipePage.swift in Sources */,

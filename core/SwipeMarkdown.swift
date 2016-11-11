@@ -115,7 +115,7 @@ class SwipeMarkdown {
         }
     }
 
-    func parse(_ markdowns:[String]) -> AttributedString {
+    func parse(_ markdowns:[String]) -> NSAttributedString {
         let strs = NSMutableAttributedString()
         var fCode = false
         for (index, markdown) in markdowns.enumerated() {

@@ -322,7 +322,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
         return self.pageIndex
     }
 
-    func parseMarkdown(_ markdowns:[String]) -> AttributedString {
+    func parseMarkdown(_ markdowns:[String]) -> NSAttributedString {
         return self.markdown.parse(markdowns)
     }
 }

@@ -55,7 +55,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     @IBOutlet var labelLoading:UILabel?
     @IBOutlet var btnLanguage:UIButton?
 
-    private var resourceRequest:BundleResourceRequest?
+    private var resourceRequest:NSBundleResourceRequest?
     var url:URL? = Bundle.main.url(forResource: "index.swipe", withExtension: nil)
     var jsonDocument:[String:AnyObject]?
     var controller:UIViewController?
@@ -212,7 +212,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     private func openDocumentWithODR(_ document:[String:AnyObject], localResource:Bool) {
             if let tags = document["resources"] as? [String], localResource {
                 //NSLog("tags = \(tags)")
-                let request = BundleResourceRequest(tags: Set<String>(tags))
+                let request = NSBundleResourceRequest(tags: Set<String>(tags))
                 self.resourceRequest = request
                 request.conditionallyBeginAccessingResources() { (resourcesAvailable:Bool) -> Void in
                     MyLog("SWBrows resourceAvailable(\(tags)) = \(resourcesAvailable)", level:1)

@@ -14,8 +14,8 @@ import UIKit
 
 class SwipePath {
 
-    private static let regexSVG = try! RegularExpression(pattern: "[a-z][0-9\\-\\.,\\s]*", options: RegularExpression.Options.caseInsensitive)
-    private static let regexNUM = try! RegularExpression(pattern: "[\\-]*[0-9\\.]+", options: RegularExpression.Options())
+    private static let regexSVG = try! NSRegularExpression(pattern: "[a-z][0-9\\-\\.,\\s]*", options: NSRegularExpression.Options.caseInsensitive)
+    private static let regexNUM = try! NSRegularExpression(pattern: "[\\-]*[0-9\\.]+", options: NSRegularExpression.Options())
     
     static func parse(_ shape:AnyObject?, w:CGFloat, h:CGFloat, scale:CGSize) -> CGPath? {
         if let string = shape as? String {
@@ -23,7 +23,7 @@ class SwipePath {
                 return CGPath(ellipseIn: CGRect(x: 0, y: 0, width: w * scale.width, height: h * scale.height), transform: nil)
             } else {
                 //NSLog("SwipePath \(string)")
-                let matches = SwipePath.regexSVG.matches(in: string, options: RegularExpression.MatchingOptions(), range: NSMakeRange(0, string.characters.count))
+                let matches = SwipePath.regexSVG.matches(in: string, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, string.characters.count))
                 //NSLog("SwipePath \(matches)")
                 let path = CGMutablePath()
                 var pt = CGPoint.zero

@@ -36,7 +36,7 @@ class SwipeParser {
         "magenta":UIColor.magenta
     ]
     
-    static let regexColor = try! RegularExpression(pattern: "^#[A-F0-9]*$", options: RegularExpression.Options.caseInsensitive)
+    static let regexColor = try! NSRegularExpression(pattern: "^#[A-F0-9]*$", options: NSRegularExpression.Options.caseInsensitive)
 
     static func parseColor(_ value:AnyObject?, defaultColor:CGColor = UIColor.clear.cgColor) -> CGColor {
         if value == nil {
@@ -62,7 +62,7 @@ class SwipeParser {
             if let color = colorMap[key] {
                 return color.cgColor
             } else {
-                let results = regexColor.matches(in: key, options: RegularExpression.MatchingOptions(), range: NSMakeRange(0, key.characters.count))
+                let results = regexColor.matches(in: key, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, key.characters.count))
                 if results.count > 0 {
                     let hex = String(key.characters.dropFirst())
                     let cstr = hex.cString(using: String.Encoding.ascii)
@@ -299,10 +299,10 @@ class SwipeParser {
     }
     */
 
-    static let regexPercent = try! RegularExpression(pattern: "^[0-9\\.]+%$", options: RegularExpression.Options.caseInsensitive)
+    static let regexPercent = try! NSRegularExpression(pattern: "^[0-9\\.]+%$", options: NSRegularExpression.Options.caseInsensitive)
 
     static func parsePercent(_ value:String, full:CGFloat, defaultValue:CGFloat) -> CGFloat {
-        let num = regexPercent.numberOfMatches(in: value, options: RegularExpression.MatchingOptions(), range: NSMakeRange(0, value.characters.count))
+        let num = regexPercent.numberOfMatches(in: value, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, value.characters.count))
         if num == 1 {
             return CGFloat((value as NSString).floatValue / 100.0) * full
         }
