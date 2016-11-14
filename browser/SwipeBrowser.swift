@@ -57,7 +57,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 
     private var resourceRequest:NSBundleResourceRequest?
     var url:URL? = Bundle.main.url(forResource: "index.swipe", withExtension: nil)
-    var jsonDocument:[String:AnyObject]?
+    var jsonDocument:[String:Any]?
     var controller:UIViewController?
     var documentViewer:SwipeDocumentViewer?
     var ignoreViewState = false
@@ -133,7 +133,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     }
     
     // NOTE: documentViewer and vc always points to the same UIController.
-    private func loadDocumentView(_ documentViewer:SwipeDocumentViewer, vc:UIViewController, document:[String:AnyObject]) {
+    private func loadDocumentView(_ documentViewer:SwipeDocumentViewer, vc:UIViewController, document:[String:Any]) {
 #if os(iOS)
         if let title = documentViewer.documentTitle() {
             labelTitle?.text = title
@@ -170,7 +170,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         vc.view.frame = rcFrame
     }
     
-    private func openDocumentViewer(_ document:[String:AnyObject]) {
+    private func openDocumentViewer(_ document:[String:Any]) {
         var documentType = "net.swipe.swipe" // default
         if let type = document["type"] as? String {
             documentType = type
@@ -186,9 +186,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         documentViewer.setDelegate(self)
         do {
             let defaults = UserDefaults.standard
-            var state:[String:AnyObject]? = nil
+            var state:[String:Any]? = nil
             if let url = self.url, ignoreViewState == false {
-                state = defaults.object(forKey: url.absoluteString) as? [String:AnyObject]
+                state = defaults.object(forKey: url.absoluteString) as? [String:Any]
             }
             self.viewLoading?.alpha = 1.0
             self.labelLoading?.text = "Loading Network Resources...".localized
@@ -209,7 +209,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
     }
     
-    private func openDocumentWithODR(_ document:[String:AnyObject], localResource:Bool) {
+    private func openDocumentWithODR(_ document:[String:Any], localResource:Bool) {
             if let tags = document["resources"] as? [String], localResource {
                 //NSLog("tags = \(tags)")
                 let request = NSBundleResourceRequest(tags: Set<String>(tags))
@@ -242,7 +242,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             }
     }
     
-    private func openDocument(_ document:[String:AnyObject], localResource:Bool) {
+    private func openDocument(_ document:[String:Any], localResource:Bool) {
         var deferred = false
 #if os(iOS)
         if let orientation = document["orientation"] as? String, orientation == "landscape" {
@@ -272,7 +272,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             return processError("Failed to open: No data".localized)
         }
         do {
-            guard let document = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions()) as? [String:AnyObject] else {
+            guard let document = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions()) as? [String:Any] else {
                 return processError("Not a dictionary.".localized)
             }
             openDocument(document, localResource: localResource)

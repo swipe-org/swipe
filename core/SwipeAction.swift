@@ -8,9 +8,9 @@ import Foundation
 
 class SwipeAction: NSObject {
     
-    let info:[String:AnyObject]
+    let info:[String:Any]
     
-    init(info:[String:AnyObject]) {
+    init(info:[String:Any]) {
         self.info = info
     }
 }

@@ -38,7 +38,7 @@ class SwipeParser {
     
     static let regexColor = try! NSRegularExpression(pattern: "^#[A-F0-9]*$", options: NSRegularExpression.Options.caseInsensitive)
 
-    static func parseColor(_ value:AnyObject?, defaultColor:CGColor = UIColor.clear.cgColor) -> CGColor {
+    static func parseColor(_ value:Any?, defaultColor:CGColor = UIColor.clear.cgColor) -> CGColor {
         if value == nil {
             return defaultColor
         }
@@ -99,7 +99,7 @@ class SwipeParser {
         return UIColor.green.cgColor
     }
     
-    static func transformedPath(_ path:CGPath, param:[String:AnyObject]?, size:CGSize) -> CGPath? {
+    static func transformedPath(_ path:CGPath, param:[String:Any]?, size:CGSize) -> CGPath? {
         if let value = param {
             var scale:CGSize?
             if let s = value["scale"] as? CGFloat {
@@ -119,7 +119,7 @@ class SwipeParser {
         return nil
     }
     
-    static func parseTransform(_ param:[String:AnyObject]?, scaleX:CGFloat, scaleY:CGFloat, base:[String:AnyObject]?, fSkipTranslate:Bool, fSkipScale:Bool) -> CATransform3D? {
+    static func parseTransform(_ param:[String:Any]?, scaleX:CGFloat, scaleY:CGFloat, base:[String:Any]?, fSkipTranslate:Bool, fSkipScale:Bool) -> CATransform3D? {
         if let p = param {
             var value = p
             var xf = CATransform3DIdentity
@@ -177,31 +177,31 @@ class SwipeParser {
         return nil
     }
 
-    static func parseSize(_ param:AnyObject?, defaultValue:CGSize = CGSize(width: 0.0, height: 0.0), scale:CGSize) -> CGSize {
+    static func parseSize(_ param:Any?, defaultValue:CGSize = CGSize(width: 0.0, height: 0.0), scale:CGSize) -> CGSize {
         if let values = param as? [CGFloat], values.count == 2 {
             return CGSize(width: values[0] * scale.width, height: values[1] * scale.height)
         }
         return CGSize(width: defaultValue.width * scale.width, height: defaultValue.height * scale.height)
     }
     
-    static func parseFloat(_ param:AnyObject?, defaultValue:Float = 1.0) -> Float {
+    static func parseFloat(_ param:Any?, defaultValue:Float = 1.0) -> Float {
         if let value = param as? Float {
             return value
         }
         return defaultValue
     }
 
-    static func parseCGFloat(_ param:AnyObject?, defaultValue:CGFloat = 0.0) -> CGFloat {
+    static func parseCGFloat(_ param:Any?, defaultValue:CGFloat = 0.0) -> CGFloat {
         if let value = param as? CGFloat {
             return value
         }
         return defaultValue
     }
 
-    static func parseAndEvalBool(_ originator: SwipeNode, key: String, info: [String:AnyObject]) -> Bool? {
-        var valObj: AnyObject?
+    static func parseAndEvalBool(_ originator: SwipeNode, key: String, info: [String:Any]) -> Bool? {
+        var valObj: Any?
         
-        if let keyInfo = info[key] as? [String:AnyObject], let valOfInfo = keyInfo["valueOf"] as? [String:AnyObject] {
+        if let keyInfo = info[key] as? [String:Any], let valOfInfo = keyInfo["valueOf"] as? [String:Any] {
             valObj = originator.getValue(originator, info:valOfInfo)
         } else {
             valObj = info[key]
@@ -221,14 +221,14 @@ class SwipeParser {
     //   Object property: Instance properties overrides Base properties
     //   Array property: Merge (inherit properties in case of "id" matches, otherwise, just append)
     //
-    static func inheritProperties(_ object:[String:AnyObject], baseObject:[String:AnyObject]?) -> [String:AnyObject] {
+    static func inheritProperties(_ object:[String:Any], baseObject:[String:Any]?) -> [String:Any] {
         var ret = object
         if let prototype = baseObject {
             for (keyString, value) in prototype {
                 if ret[keyString] == nil {
                     // Only the baseObject has the property
                     ret[keyString] = value
-                } else if let arrayObject = ret[keyString] as? [[String:AnyObject]], let arrayBase = value as? [[String:AnyObject]] {
+                } else if let arrayObject = ret[keyString] as? [[String:Any]], let arrayBase = value as? [[String:Any]] {
                     // Each has the property array. We need to merge them
                     var retArray = arrayBase
                     var idMap = [String:Int]()
@@ -251,14 +251,14 @@ class SwipeParser {
                             retArray.append(item)
                         }
                     }
-                    ret[keyString] = retArray as AnyObject?
-                } else if let objects = ret[keyString] as? [String:AnyObject], let objectsBase = value as? [String:AnyObject] {
+                    ret[keyString] = retArray
+                } else if let objects = ret[keyString] as? [String:Any], let objectsBase = value as? [String:Any] {
                     // Each has the property objects. We need to merge them.  Example: '"events" { }'
                     var retObjects = objectsBase
                     for (key, val) in objects {
                         retObjects[key] = val
                     }
-                    ret[keyString] = retObjects as AnyObject?
+                    ret[keyString] = retObjects
                 }
             }
         }
@@ -309,7 +309,7 @@ class SwipeParser {
         return defaultValue
     }
 
-    static func parsePercentAny(_ value:AnyObject, full:CGFloat, defaultValue:CGFloat) -> CGFloat? {
+    static func parsePercentAny(_ value:Any, full:CGFloat, defaultValue:CGFloat) -> CGFloat? {
         if let f = value as? CGFloat {
             return f
         } else if let str = value as? String {
@@ -318,7 +318,7 @@ class SwipeParser {
         return nil
     }
     
-    static func parseFont(_ value:AnyObject?, scale:CGSize, full:CGFloat) -> UIFont {
+    static func parseFont(_ value:Any?, scale:CGSize, full:CGFloat) -> UIFont {
         let fontSize = parseFontSize(value, full: full, defaultValue: 20, markdown: true)
         let fontNames = parseFontName(value, markdown: true)
         for name in fontNames {
@@ -329,9 +329,9 @@ class SwipeParser {
         return UIFont.systemFont(ofSize: fontSize * scale.height)
     }
     
-    static func parseFontSize(_ value:AnyObject?, full:CGFloat, defaultValue:CGFloat, markdown:Bool) -> CGFloat {
+    static func parseFontSize(_ value:Any?, full:CGFloat, defaultValue:CGFloat, markdown:Bool) -> CGFloat {
         let key = markdown ? "size" : "fontSize"
-        if let info = value as? [String:AnyObject] {
+        if let info = value as? [String:Any] {
             if let sizeValue = info[key] as? CGFloat {
                 return sizeValue
             } else if let percent = info[key] as? String {
@@ -341,9 +341,9 @@ class SwipeParser {
         return defaultValue
     }
     
-    static func parseFontName(_ value:AnyObject?, markdown:Bool) -> [String] {
+    static func parseFontName(_ value:Any?, markdown:Bool) -> [String] {
         let key = markdown ? "name" : "fontName"
-        if let info = value as? [String:AnyObject] {
+        if let info = value as? [String:Any] {
             if let name = info[key] as? String {
                 return [name]
             } else if let names = info[key] as? [String] {
@@ -353,9 +353,9 @@ class SwipeParser {
         return []
     }
     
-    static func parseShadow(_ value:AnyObject?, scale:CGSize) -> NSShadow {
+    static func parseShadow(_ value:Any?, scale:CGSize) -> NSShadow {
         let shadow = NSShadow()
-        if let info = value as? [String:AnyObject] {
+        if let info = value as? [String:Any] {
             shadow.shadowOffset = SwipeParser.parseSize(info["offset"], defaultValue: CGSize(width: 1.0, height: 1.0), scale:scale)
             shadow.shadowBlurRadius = SwipeParser.parseCGFloat(info["radius"], defaultValue: 2) * scale.width
             shadow.shadowColor = UIColor(cgColor: SwipeParser.parseColor(info["color"], defaultColor: UIColor.black.cgColor))
@@ -363,7 +363,7 @@ class SwipeParser {
         return shadow
     }
 
-    static func localizedString(_ params:[String:AnyObject], langId:String?) -> String? {
+    static func localizedString(_ params:[String:Any], langId:String?) -> String? {
         if let key = langId,
             let text = params[key] as? String {
             return text

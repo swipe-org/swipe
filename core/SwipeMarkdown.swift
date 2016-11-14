@@ -12,7 +12,7 @@ import UIKit
 #endif
 
 class SwipeMarkdown {
-    private var attrs = [String:[String:AnyObject]]()
+    private var attrs = [String:[String:Any]]()
     private var prefixes = [
         "-":"\u{2022} ", // bullet (U+2022), http://graphemica.com/%E2%80%A2
         "```":" ",
@@ -20,7 +20,7 @@ class SwipeMarkdown {
     private let scale:CGSize
     private var shadow:NSShadow?
 
-    func attributesWith(_ fontSize:CGFloat, paragraphSpacing:CGFloat, fontName:String? = nil) -> [String:AnyObject] {
+    func attributesWith(_ fontSize:CGFloat, paragraphSpacing:CGFloat, fontName:String? = nil) -> [String:Any] {
         let style = NSMutableParagraphStyle()
         style.lineBreakMode = NSLineBreakMode.byWordWrapping
         style.paragraphSpacing = paragraphSpacing * scale.height
@@ -33,11 +33,11 @@ class SwipeMarkdown {
         if let shadow = self.shadow {
             attrs[NSShadowAttributeName] = shadow
         }
-        return attrs as [String : AnyObject]
+        return attrs
     }
 
     // Use function instead of lazy initializer to work around a probable bug in Swift
-    private func genAttrs() -> [String:[String:AnyObject]] {
+    private func genAttrs() -> [String:[String:Any]] {
         return [
             "#": self.attributesWith(32, paragraphSpacing: 16),
             "##": self.attributesWith(28, paragraphSpacing: 14),
@@ -50,7 +50,7 @@ class SwipeMarkdown {
         ]
     }
     
-    init(info:[String:AnyObject]?, scale:CGSize, dimension:CGSize) {
+    init(info:[String:Any]?, scale:CGSize, dimension:CGSize) {
         self.scale = scale
         if let params = info {
             shadow = SwipeParser.parseShadow(params["shadow"], scale: scale)
@@ -58,10 +58,10 @@ class SwipeMarkdown {
         attrs = genAttrs()
 
         if let markdownInfo = info,
-           let styles = markdownInfo["styles"] as? [String:AnyObject] {
+           let styles = markdownInfo["styles"] as? [String:Any] {
             for (keyMark, value) in styles {
-                if let attrInfo = value as? [String:AnyObject] {
-                    var attrCopy:[String:AnyObject]
+                if let attrInfo = value as? [String:Any] {
+                    var attrCopy:[String:Any]
                     if let attr = attrs[keyMark] {
                         attrCopy = attr
                     } else {

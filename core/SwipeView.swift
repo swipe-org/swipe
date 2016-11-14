@@ -20,7 +20,7 @@ protocol SwipeViewDelegate: NSObjectProtocol {
 
 class SwipeView: SwipeNode {
 
-    internal var info = [String:AnyObject]()
+    internal var info = [String:Any]()
     internal var fEnabled = true
     internal var fFocusable = false
 
@@ -62,12 +62,12 @@ class SwipeView: SwipeNode {
     }
     var view: UIView?
     
-    init(info: [String:AnyObject]) {
+    init(info: [String:Any]) {
         self.info = info
         super.init()
     }
     
-    init(parent: SwipeNode, info: [String:AnyObject]) {
+    init(parent: SwipeNode, info: [String:Any]) {
         self.info = info
         super.init(parent: parent)
     }
@@ -97,13 +97,13 @@ class SwipeView: SwipeNode {
         return "" // default
     }()
     
-    lazy var data:AnyObject = {
+    lazy var data:Any = {
         if let value = self.info["data"] as? String {
-            return value as AnyObject
-        } else if let value = self.info["data"] as? [String:AnyObject] {
-            return value as AnyObject
+            return value
+        } else if let value = self.info["data"] as? [String:Any] {
+            return value
         }
-        return "" as AnyObject // default
+        return "" // default
     }()
     
     func endEditing() {
@@ -117,7 +117,7 @@ class SwipeView: SwipeNode {
         }
     }
     
-    func setText(_ text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer?) -> Bool {
+    func setText(_ text:String, scale:CGSize, info:[String:Any], dimension:CGSize, layer:CALayer?) -> Bool {
         return false
     }
     
@@ -151,7 +151,7 @@ class SwipeView: SwipeNode {
     }
     
     override func executeAction(_ originator: SwipeNode, action: SwipeAction) {
-        if let updateInfo = action.info["update"] as? [String:AnyObject] {
+        if let updateInfo = action.info["update"] as? [String:Any] {
             var name = "*"; // default is 'self'
             if let value = updateInfo["id"] as? String {
                 name = value
@@ -161,7 +161,7 @@ class SwipeView: SwipeNode {
                 up = value != "children"
             }
             _ = updateElement(originator, name:name, up:up, info: updateInfo)
-        } else if let appendInfo = action.info["append"] as? [String:AnyObject] {
+        } else if let appendInfo = action.info["append"] as? [String:Any] {
             var name = "*"; // default is 'self'
             if let value = appendInfo["id"] as? String {
                 name = value
@@ -176,35 +176,35 @@ class SwipeView: SwipeNode {
         }
     }
     
-    func updateElement(_ originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject])  -> Bool {
+    func updateElement(_ originator: SwipeNode, name: String, up: Bool, info: [String:Any])  -> Bool {
         return false
     }
     
-    override func getPropertyValue(_ originator: SwipeNode, property: String) -> AnyObject? {
+    override func getPropertyValue(_ originator: SwipeNode, property: String) -> Any? {
         switch (property) {
         case "data":
             return self.data
         case "screenX":
-            return self.view!.superview?.convert(self.view!.frame.origin, to: nil).x as AnyObject?
+            return self.view!.superview?.convert(self.view!.frame.origin, to: nil).x
         case "screenY":
-            return self.view!.superview?.convert(self.view!.frame.origin, to: nil).y as AnyObject?
+            return self.view!.superview?.convert(self.view!.frame.origin, to: nil).y
         case "x":
-            return self.view!.frame.origin.x as AnyObject?
+            return self.view!.frame.origin.x
         case "y":
-            return self.view!.frame.origin.y as AnyObject?
+            return self.view!.frame.origin.y
         case "w":
-            return self.view!.frame.size.width as AnyObject?
+            return self.view!.frame.size.width
         case "h":
-            return self.view!.frame.size.height as AnyObject?
+            return self.view!.frame.size.height
         default:
             return nil
         }
     }
-    func appendList(_ originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject])  -> Bool {
+    func appendList(_ originator: SwipeNode, name: String, up: Bool, info: [String:Any])  -> Bool {
         return false
     }
     
-    func appendList(_ originator: SwipeNode, info: [String:AnyObject]) {
+    func appendList(_ originator: SwipeNode, info: [String:Any]) {
     }
     
     func isFirstResponder() -> Bool {

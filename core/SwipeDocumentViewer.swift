@@ -19,13 +19,13 @@ protocol SwipeDocumentViewerDelegate: NSObjectProtocol {
 
 protocol SwipeDocumentViewer {
     func documentTitle() -> String?
-    func loadDocument(_ document:[String:AnyObject], size:CGSize, url:URL?, state:[String:AnyObject]?, callback:@escaping (Float, NSError?)->(Void)) throws
+    func loadDocument(_ document:[String:Any], size:CGSize, url:URL?, state:[String:Any]?, callback:@escaping (Float, NSError?)->(Void)) throws
     func hideUI() -> Bool
     func landscape() -> Bool
     func setDelegate(_ delegate:SwipeDocumentViewerDelegate)
     func becomeZombie()
-    func saveState() -> [String:AnyObject]?
-    func languages() -> [[String:AnyObject]]?
+    func saveState() -> [String:Any]?
+    func languages() -> [[String:Any]]?
     func reloadWithLanguageId(_ langId:String)
 }
 

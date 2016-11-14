@@ -23,7 +23,7 @@ private func MyLog(_ text:String, level:Int = 0) {
 }
 
 class SwipePageTemplate: NSObject, AVAudioPlayerDelegate {
-    let pageTemplateInfo:[String:AnyObject]
+    let pageTemplateInfo:[String:Any]
     private let baseURL:URL?
     private let name:String
     private var bgmPlayer:AVAudioPlayer?
@@ -38,7 +38,7 @@ class SwipePageTemplate: NSObject, AVAudioPlayerDelegate {
         return urls
     }()
     
-    init(name:String, info:[String:AnyObject], baseURL:URL?) {
+    init(name:String, info:[String:Any], baseURL:URL?) {
         self.baseURL = baseURL
         self.name = name
         self.pageTemplateInfo = info

@@ -39,9 +39,9 @@ private func MyLog(_ text:String, level:Int = 0) {
 protocol SwipePageDelegate: NSObjectProtocol {
     func dimension(_ page:SwipePage) -> CGSize
     func scale(_ page:SwipePage) -> CGSize
-    func prototypeWith(_ name:String?) -> [String:AnyObject]?
+    func prototypeWith(_ name:String?) -> [String:Any]?
     func pageTemplateWith(_ name:String?) -> SwipePageTemplate?
-    func pathWith(_ name:String?) -> AnyObject?
+    func pathWith(_ name:String?) -> Any?
 #if !os(OSX) // REVIEW
     func speak(_ utterance:AVSpeechUtterance)
     func stopSpeaking()
@@ -49,7 +49,7 @@ protocol SwipePageDelegate: NSObjectProtocol {
     func currentPageIndex() -> Int
     func parseMarkdown(_ markdowns:[String]) -> NSAttributedString
     func baseURL() -> URL?
-    func voice(_ k:String?) -> [String:AnyObject]
+    func voice(_ k:String?) -> [String:Any]
     func languageIdentifier() -> String?
     func tapped()
 }
@@ -100,7 +100,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     private var aniLayer:CALayer?
     private var audioPlayer:AVAudioPlayer?
     
-    init(index:Int, info:[String:AnyObject], delegate:SwipePageDelegate) {
+    init(index:Int, info:[String:Any], delegate:SwipePageDelegate) {
         self.index = index
         self.delegate = delegate
         self.pageTemplate = delegate.pageTemplateWith(info["template"] as? String)
@@ -157,7 +157,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     
     // Private lazy properties
     private lazy var backgroundColor:CGColor = {
-        if let value: AnyObject = self.info["bc"] {
+        if let value = self.info["bc"] {
             return SwipeParser.parseColor(value)
         }
         return UIColor.white.cgColor
@@ -414,7 +414,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
                 urls[url] = ""
             }
         }
-        if let elementsInfo = self.info["elements"] as? [[String:AnyObject]] {
+        if let elementsInfo = self.info["elements"] as? [[String:Any]] {
             let scaleDummy = CGSize(width: 0.1, height: 0.1)
             for e in elementsInfo {
                 let element = SwipeElement(info: e, scale:scaleDummy, parent:self, delegate:self)
@@ -487,7 +487,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
             if completed {
                 if self.view != nil {
                     // NOTE: We are intentionally ignoring fetch errors (of network resources) here.
-                    if let eventsInfo = self.info["events"] as? [String:AnyObject] {
+                    if let eventsInfo = self.info["events"] as? [String:Any] {
                         self.eventHandler.parse(eventsInfo)
                     }
 
@@ -556,7 +556,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
 
         prepareUtterance()
 
-        if let elementsInfo = self.info["elements"] as? [[String:AnyObject]] {
+        if let elementsInfo = self.info["elements"] as? [[String:Any]] {
             for e in elementsInfo {
                 let element = SwipeElement(info: e, scale:scale, parent:self, delegate:self)
                 if let subview = element.loadView(dimension) {
@@ -575,7 +575,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     private func prepareUtterance() {
 // REVIEW: Disabled for OSX for now
 #if !os(OSX)
-        if let speech = self.info["speech"] as? [String:AnyObject],
+        if let speech = self.info["speech"] as? [String:Any],
            let text = parseText(self, info: speech, key: "text") {
             let voice = self.delegate.voice(speech["voice"] as? String)
             let utterance = AVSpeechUtterance(string: text)
@@ -629,12 +629,12 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         }
     }
     
-    func prototypeWith(_ name:String?) -> [String:AnyObject]? {
+    func prototypeWith(_ name:String?) -> [String:Any]? {
         return delegate.prototypeWith(name)
     }
     
     // <SwipeElementDelegate> method
-    func pathWith(_ name:String?) -> AnyObject? {
+    func pathWith(_ name:String?) -> Any? {
         return delegate.pathWith(name)
     }
 
@@ -680,8 +680,8 @@ class SwipePage: SwipeView, SwipeElementDelegate {
 
     // <SwipeElementDelegate> method
     func localizedStringForKey(_ key:String) -> String? {
-        if let strings = self.info["strings"] as? [String:AnyObject],
-               let texts = strings[key] as? [String:AnyObject] {
+        if let strings = self.info["strings"] as? [String:Any],
+               let texts = strings[key] as? [String:Any] {
             return SwipeParser.localizedString(texts, langId: delegate.languageIdentifier())
         }
         return nil
@@ -693,14 +693,14 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         return delegate.languageIdentifier()
     }
 
-    func parseText(_ originator: SwipeNode, info:[String:AnyObject], key:String) -> String? {
+    func parseText(_ originator: SwipeNode, info:[String:Any], key:String) -> String? {
         guard let value = info[key] else {
             return nil
         }
         if let text = value as? String {
             return text
         }
-        if let ref = value as? [String:AnyObject],
+        if let ref = value as? [String:Any],
             let key = ref["ref"] as? String,
             let text = localizedStringForKey(key) {
             return text
@@ -774,7 +774,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     
     
     // SwipeNode
-    override func getValue(_ originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+    override func getValue(_ originator: SwipeNode, info: [String:Any]) -> Any? {
         var name = "*"
         if let val = info["id"] as? String {
             name = val
@@ -784,7 +784,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         if (name == "*" || self.name.caseInsensitiveCompare(name) == .orderedSame) {
             if let attribute = info["property"] as? String {
                 return getPropertyValue(originator, property: attribute)
-            } else if let attributeInfo = info["property"] as? [String:AnyObject] {
+            } else if let attributeInfo = info["property"] as? [String:Any] {
                 return getPropertiesValue(originator, info: attributeInfo)
             }
         }
@@ -794,7 +794,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
                 if name == "*" || e.name.caseInsensitiveCompare(name) == .orderedSame {
                     if let attribute = info["property"] as? String {
                         return e.getPropertyValue(originator, property: attribute)
-                    } else if let attributeInfo = info["property"] as? [String:AnyObject] {
+                    } else if let attributeInfo = info["property"] as? [String:Any] {
                         return e.getPropertiesValue(originator, info: attributeInfo)
                     }
                 }
@@ -804,7 +804,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         return nil
     }
     
-    override func updateElement(_ originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject]) -> Bool {
+    override func updateElement(_ originator: SwipeNode, name: String, up: Bool, info: [String:Any]) -> Bool {
         // Find named element and update
         for c in children {
             if let e = c as? SwipeElement {
@@ -818,7 +818,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         return false
     }
     
-    override func appendList(_ originator: SwipeNode, name: String, up: Bool, info: [String : AnyObject]) -> Bool {
+    override func appendList(_ originator: SwipeNode, name: String, up: Bool, info: [String : Any]) -> Bool {
         // Find named element and update
         for c in children {
             if let e = c as? SwipeElement {

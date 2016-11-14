@@ -23,9 +23,9 @@ private func MyLog(_ text:String, level:Int = 0) {
 // SwipeTableViewController is the "viewer" of documents with type "net.swipe.list"
 //
 class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeDocumentViewer {
-    private var document:[String:AnyObject]?
-    private var sections = [[String:AnyObject]]()
-    //private var items = [[String:AnyObject]]()
+    private var document:[String:Any]?
+    private var sections = [[String:Any]]()
+    //private var items = [[String:Any]]()
     private var url:URL?
     private weak var delegate:SwipeDocumentViewerDelegate?
     private var prefetching = true
@@ -36,7 +36,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     private lazy var resourceURLs:[URL:String] = {
         var urls = [URL:String]()
         for section in self.sections {
-            guard let items = section["items"] as? [[String:AnyObject]] else {
+            guard let items = section["items"] as? [[String:Any]] else {
                 continue
             }
             for item in items {
@@ -54,14 +54,14 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }()
         
     // <SwipeDocumentViewer> method
-    func loadDocument(_ document:[String:AnyObject], size:CGSize, url:URL?, state:[String:AnyObject]?, callback:@escaping (Float, NSError?)->(Void)) throws {
+    func loadDocument(_ document:[String:Any], size:CGSize, url:URL?, state:[String:Any]?, callback:@escaping (Float, NSError?)->(Void)) throws {
         self.document = document
         self.url = url
-        if let sections = document["sections"] as? [[String:AnyObject]] {
+        if let sections = document["sections"] as? [[String:Any]] {
             self.sections = sections
-        } else if let items = document["items"] as? [[String:AnyObject]] {
+        } else if let items = document["items"] as? [[String:Any]] {
             let section = [ "items":items ]
-            sections.append(section as [String : AnyObject])
+            sections.append(section as [String : Any])
         } else {
             throw SwipeError.invalidDocument
         }
@@ -124,12 +124,12 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     // <SwipeDocumentViewer> method
-    func saveState() -> [String:AnyObject]? {
+    func saveState() -> [String:Any]? {
         return nil
     }
 
     // <SwipeDocumentViewer> method
-    func languages() -> [[String:AnyObject]]? {
+    func languages() -> [[String:Any]]? {
         return nil
     }
     
@@ -153,7 +153,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         let section = self.sections[section]
-        guard let items = section["items"] as? [[String:AnyObject]] else {
+        guard let items = section["items"] as? [[String:Any]] else {
             return 0
         }
         return items.count
@@ -164,7 +164,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
 
         // Configure the cell...
         let section = self.sections[(indexPath as NSIndexPath).section]
-        guard let items = section["items"] as? [[String:AnyObject]] else {
+        guard let items = section["items"] as? [[String:Any]] else {
             return cell
         }
         let item = items[(indexPath as NSIndexPath).row]
@@ -184,7 +184,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = self.sections[(indexPath as NSIndexPath).section]
-        guard let items = section["items"] as? [[String:AnyObject]] else {
+        guard let items = section["items"] as? [[String:Any]] else {
             return
         }
         let item = items[(indexPath as NSIndexPath).row]

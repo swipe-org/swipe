@@ -16,7 +16,7 @@ class SwipeTextArea: SwipeView, UITextViewDelegate {
     private var screenDimension = CGSize(width: 0, height: 0)
     private var textView: UITextView
 
-    init(parent: SwipeNode, info: [String:AnyObject], frame: CGRect, screenDimension: CGSize) {
+    init(parent: SwipeNode, info: [String:Any], frame: CGRect, screenDimension: CGSize) {
         self.screenDimension = screenDimension
         self.textView = UITextView(frame: frame)
         super.init(parent: parent, info: info)
@@ -26,7 +26,7 @@ class SwipeTextArea: SwipeView, UITextViewDelegate {
         self.view = self.textView as UIView
     }
     
-    override func setText(_ text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer?) -> Bool {
+    override func setText(_ text:String, scale:CGSize, info:[String:Any], dimension:CGSize, layer:CALayer?) -> Bool {
         self.textView.text = text
         self.textView.textAlignment = NSTextAlignment.center
         
@@ -69,12 +69,12 @@ class SwipeTextArea: SwipeView, UITextViewDelegate {
         return true
     }
     
-    override func getPropertyValue(_ originator: SwipeNode, property: String) -> AnyObject? {
+    override func getPropertyValue(_ originator: SwipeNode, property: String) -> Any? {
         switch (property) {
         case "text":
-            return self.textView.text as AnyObject?
+            return self.textView.text
         case "text.length":
-            return self.textView.text?.characters.count as AnyObject?
+            return self.textView.text?.characters.count
         default:
             return super.getPropertyValue(originator, property: property)
         }

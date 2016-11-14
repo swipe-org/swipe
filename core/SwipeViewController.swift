@@ -87,7 +87,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
 
     // <SwipeDocumentViewer> method
-    func loadDocument(_ document:[String:AnyObject], size:CGSize, url:URL?, state:[String:AnyObject]?, callback:@escaping (Float, NSError?)->(Void)) throws {
+    func loadDocument(_ document:[String:Any], size:CGSize, url:URL?, state:[String:Any]?, callback:@escaping (Float, NSError?)->(Void)) throws {
         self.book = SwipeBook(bookInfo: document, url: url, delegate: self)
 
         if let languages = self.book.languages(),
@@ -140,12 +140,12 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     }
 
     // <SwipeDocumentViewer> method
-    func saveState() -> [String:AnyObject]? {
-        return ["page":self.book.pageIndex as AnyObject, "langId":self.book.langId as AnyObject]
+    func saveState() -> [String:Any]? {
+        return ["page":self.book.pageIndex, "langId":self.book.langId]
     }
 
     // <SwipeDocumentViewer> method
-    func languages() -> [[String:AnyObject]]? {
+    func languages() -> [[String:Any]]? {
         return self.book.languages()
     }
     
@@ -239,8 +239,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     
     // Debugging only
     func tagsString() -> String {
-        let tags = scrollView.subviews.map({ (e:AnyObject) -> String in
-            let subview = e as! UIView
+        let tags = scrollView.subviews.map({ subview in
             return "\(subview.tag)"
         })
         return "\(tags)"

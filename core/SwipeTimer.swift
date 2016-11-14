@@ -11,12 +11,12 @@ class SwipeTimer : SwipeNode {
     var timer: Timer?
     var repeats = false
     
-    static func create(_ parent: SwipeNode, timerInfo: [String:AnyObject]) {
+    static func create(_ parent: SwipeNode, timerInfo: [String:Any]) {
         let timer = SwipeTimer(parent: parent, timerInfo: timerInfo)
         timers.append(timer)
     }
     
-    init(parent: SwipeNode, timerInfo: [String:AnyObject]) {
+    init(parent: SwipeNode, timerInfo: [String:Any]) {
         super.init(parent: parent)
         var duration = 0.2
         if let value = timerInfo["duration"] as? Double {
@@ -25,7 +25,7 @@ class SwipeTimer : SwipeNode {
         if let value = timerInfo["repeats"] as? Bool {
             repeats = value
         }
-        if let eventsInfo = timerInfo["events"] as? [String:AnyObject] {
+        if let eventsInfo = timerInfo["events"] as? [String:Any] {
             eventHandler.parse(eventsInfo)
             
             self.timer = Timer.scheduledTimer(timeInterval: duration, target:self, selector: #selector(SwipeTimer.didTimerTick(_:)), userInfo: nil, repeats: repeats)
