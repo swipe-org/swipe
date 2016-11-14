@@ -384,7 +384,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
     }
 
-    @IBAction func close(_ sender:AnyObject) {
+    @IBAction func close(_ sender:Any) {
 #if os(OSX)
         self.presentingViewController!.dismissViewController(self)
 #else
