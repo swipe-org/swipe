@@ -45,11 +45,13 @@ class SwipeAssetManager {
     }()
 
     lazy var urlFolder:URL = {
-        let urlFolder = self.applicationCachesDirectory.appendingPathComponent("cache.swipe.net")
+        var urlFolder = self.applicationCachesDirectory.appendingPathComponent("cache.swipe.net")
         let fm = FileManager.default
         if !fm.fileExists(atPath: urlFolder.path) {
             try! fm.createDirectory(at: urlFolder, withIntermediateDirectories: false, attributes: nil)
-            try! (urlFolder as NSURL).setResourceValue(true, forKey:URLResourceKey.isExcludedFromBackupKey)
+            var resourceValues = URLResourceValues()
+            resourceValues.isExcludedFromBackup = true
+            try! urlFolder.setResourceValues(resourceValues)
         }
         return urlFolder
     }()
@@ -142,7 +144,7 @@ class SwipeAssetManager {
             entity.setValue(Date(), forKey: "lastModified")
             saveContext()
             
-            let urlLocal = urlFolder.appendingPathComponent(uuid)
+            var urlLocal = urlFolder.appendingPathComponent(uuid)
             let fm = FileManager.default
             let loaded = entity.value(forKey: "loaded") as? Bool
             let fileSize = entity.value(forKey: "size") as? Int
@@ -158,7 +160,9 @@ class SwipeAssetManager {
                 connection.load { (error: NSError!) -> Void in
                     if error == nil {
                         entity.setValue(true, forKey: "loaded")
-                        try! (urlLocal as NSURL).setResourceValue(true, forKey:URLResourceKey.isExcludedFromBackupKey)
+                        var resourceValues = URLResourceValues()
+                        resourceValues.isExcludedFromBackup = true
+                        try! urlLocal.setResourceValues(resourceValues)
                         self.saveContext()
                     }
                     callback?(urlLocal, error)

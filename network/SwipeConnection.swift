@@ -25,7 +25,7 @@ class SwipeConnection: NSObject {
     private static var connections = [URL:SwipeConnection]()
     static let session:URLSession = {
         let config = URLSessionConfiguration.default
-        config.urlCache = nil // disable cache by NSURLSession (because we do)
+        config.urlCache = nil // disable cache by URLSession (because we do)
         return URLSession(configuration: config, delegate: nil, delegateQueue: OperationQueue.main)
     }()
     static func connection(_ url:URL, urlLocal:URL, entity:NSManagedObject) -> SwipeConnection {
