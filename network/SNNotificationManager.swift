@@ -18,7 +18,7 @@ class SNNotificationManager {
         clear()
     }
     
-    func addObserver(forName name: NSNotification.Name?, object obj: Any?, queue: OperationQueue?, using block: @escaping (Notification) -> Void) {
+    func addObserver(forName name: Notification.Name?, object obj: Any?, queue: OperationQueue?, using block: @escaping (Notification) -> Void) {
         let observer = NotificationCenter.default.addObserver(forName: name, object: obj, queue: queue, using: block)
         observers.append(observer)
     }

@@ -55,10 +55,10 @@ protocol SwipePageDelegate: NSObjectProtocol {
 }
 
 extension Notification.Name {
-    static let SwipePageDidStartPlaying = NSNotification.Name("SwipePageDidStartPlaying")
-    static let SwipePageDidFinishPlaying = NSNotification.Name("SwipePageDidFinishPlaying")
-    static let SwipePageShouldStartAutoPlay = NSNotification.Name("SwipePageShouldStartAutoPlay")
-    static let SwipePageShouldPauseAutoPlay = NSNotification.Name("SwipePageShouldPauseAutoPlay")
+    static let SwipePageDidStartPlaying = Notification.Name("SwipePageDidStartPlaying")
+    static let SwipePageDidFinishPlaying = Notification.Name("SwipePageDidFinishPlaying")
+    static let SwipePageShouldStartAutoPlay = Notification.Name("SwipePageShouldStartAutoPlay")
+    static let SwipePageShouldPauseAutoPlay = Notification.Name("SwipePageShouldPauseAutoPlay")
 }
 
 class SwipePage: SwipeView, SwipeElementDelegate {
@@ -116,8 +116,8 @@ class SwipePage: SwipeView, SwipeElementDelegate {
 
     func unloadView() {
 #if !os(tvOS)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.UIKeyboardWillHide, object: nil)
 #endif
         SwipeTimer.cancelAll()
         
@@ -512,7 +512,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     }
     
 #if !os(tvOS)
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(notification: Notification) {
         if let info:NSDictionary = notification.userInfo as NSDictionary? {
             if let kbFrame = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
                 if let fr = findFirstResponder() {
@@ -527,7 +527,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         }
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(notification: Notification) {
         if let _:NSDictionary = notification.userInfo as NSDictionary? {
             if findFirstResponder() != nil {
                 let myFrame = self.view!.frame
