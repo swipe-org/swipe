@@ -42,7 +42,7 @@ class SwipeParser {
         if value == nil {
             return defaultColor
         }
-        if let rgba = value as? NSDictionary {
+        if let rgba = value as? [String: Any] {
             var red:CGFloat = 0.0, blue:CGFloat = 0.0, green:CGFloat = 0.0
             var alpha:CGFloat = 1.0
             if let v = rgba["r"] as? CGFloat {
