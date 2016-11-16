@@ -167,7 +167,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         let pan = UIPanGestureRecognizer(target: self, action: #selector(SwipeViewController.handlePan(recognizer:)))
         self.view.addGestureRecognizer(pan)
         let tap = UITapGestureRecognizer(target: self, action: #selector(SwipeViewController.handlePlayButton(recognizer:)))
-        tap.allowedPressTypes = [UIPressType.playPause.rawValue]
+        tap.allowedPressTypes = [NSNumber(value: UIPressType.playPause.rawValue)]
         self.view.addGestureRecognizer(tap)
 #endif
     
