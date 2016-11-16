@@ -163,11 +163,11 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
         let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "foo")
 
         // Configure the cell...
-        let section = self.sections[(indexPath as NSIndexPath).section]
+        let section = self.sections[indexPath.section]
         guard let items = section["items"] as? [[String:Any]] else {
             return cell
         }
-        let item = items[(indexPath as NSIndexPath).row]
+        let item = items[indexPath.row]
         if let title = item["title"] as? String {
             cell.textLabel!.text = title
         } else if let url = item["url"] as? String {
@@ -183,11 +183,11 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let section = self.sections[(indexPath as NSIndexPath).section]
+        let section = self.sections[indexPath.section]
         guard let items = section["items"] as? [[String:Any]] else {
             return
         }
-        let item = items[(indexPath as NSIndexPath).row]
+        let item = items[indexPath.row]
         if let urlString = item["url"] as? String,
            let url = URL.url(urlString, baseURL: self.url) {
             self.delegate?.browseTo(url)
