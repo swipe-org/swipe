@@ -165,8 +165,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         }
     }
     
-    private func value(from info:[String:Any], key:String, defaultValue:CGFloat) -> CGFloat {
-        if let value = info[key] as? CGFloat {
+    private func value<T:FloatingPoint>(from info:[String:Any], key:String, defaultValue:T) -> T {
+        if let value = info[key] as? T {
             return value
         }
         return defaultValue
@@ -981,11 +981,11 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 start = 1e-10
                 duration = 1.0
             }
-            let repeatCount = Float(value(from: animation, key: "count", defaultValue: 1))
+            let repeatCount = value(from: animation, key: "count", defaultValue: 1) as Float
         
             switch(style) {
             case "vibrate":
-                let delta = value(from: animation, key: "delta", defaultValue: 10.0)
+                let delta = value(from: animation, key: "delta", defaultValue: 10.0) as CGFloat
                 let ani = CAKeyframeAnimation(keyPath: "transform")
                 ani.values = [NSValue(caTransform3D:loopLayer.transform),
                               NSValue(caTransform3D:CATransform3DConcat(CATransform3DMakeTranslation(delta, 0.0, 0.0), loopLayer.transform)),
