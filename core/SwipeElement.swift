@@ -103,7 +103,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     private var pendingOffset:CGFloat?
     private var fPlaying = false
     private var videoStart = CGFloat(0.0)
-    private var videoDuration = CGFloat(1.0)
+    private var videoDuration:CGFloat?
 
     // Sprite Element Specific
     private var spriteLayer:CALayer?
@@ -692,20 +692,12 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             if let urlVideo = urlLocalOrStream {
                 let playerItem = AVPlayerItem(url: urlVideo)
                 videoPlayer.replaceCurrentItem(with: playerItem)
+                videoPlayer.seek(to: CMTime(seconds:Double(videoStart), preferredTimescale: 600))
 
                 notificationManager.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: playerItem, queue: OperationQueue.main) {
                     [unowned self] (_:Notification!) -> Void in
                     MyLog("SWElem play to end!", level: 1)
-                    if self.delegate != nil && self.delegate!.shouldRepeat(self) {
-                        videoPlayer.seek(to: kCMTimeZero)
-                        videoPlayer.play()
-                    } else {
-                        self.fNeedRewind = true
-                        if self.fPlaying {
-                            self.fPlaying = false
-                            self.delegate.didFinishPlaying(self, completed:true)
-                        }
-                    }
+                    self.handleVideoEnd(videoPlayer: videoPlayer)
                 }
             }
             
@@ -728,6 +720,15 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     }
                     videoPlayer.play()
                     self.fNeedRewind = false
+                    
+                    if let duration = self.videoDuration {
+                        let time = CMTime(seconds: Double(self.videoStart + duration), preferredTimescale: 600)
+                        videoPlayer.addBoundaryTimeObserver(forTimes: [time as NSValue], queue: nil) {
+                            [unowned self] in
+                            videoPlayer.pause()
+                            self.handleVideoEnd(videoPlayer: videoPlayer)
+                        }
+                    }
                 }
             }
         }
@@ -1200,7 +1201,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 self.pendingOffset = offset
                 return
             }
-            let timeSec = videoStart + offset * videoDuration
+            let timeSec = videoStart + offset * (videoDuration ?? 1.0)
             let time = CMTimeMakeWithSeconds(Float64(timeSec), 600)
             let tolerance = CMTimeMake(10, 600) // 1/60sec
             if player.status == AVPlayerStatus.readyToPlay {
@@ -1240,6 +1241,19 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         }
     }
 */
+    func handleVideoEnd(videoPlayer:AVPlayer) {
+        if self.delegate != nil && self.delegate!.shouldRepeat(self) {
+            videoPlayer.seek(to: CMTime(seconds:Double(self.videoStart), preferredTimescale: 600))
+            videoPlayer.play()
+        } else {
+            self.fNeedRewind = true
+            if self.fPlaying {
+                self.fPlaying = false
+                self.delegate.didFinishPlaying(self, completed:true)
+            }
+        }
+    }
+    
     func isVideoElement() -> Bool {
         if self.videoPlayer != nil {
             return true
