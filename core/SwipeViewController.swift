@@ -596,6 +596,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             scrollView.contentOffset = self.book.horizontal ? CGPoint(x: (CGFloat(pageIndex)) * frame.size.width, y: 0) : CGPoint(x: 0, y: (CGFloat(pageIndex)) * frame.size.height)
             self.scrollViewDidScroll(scrollView)
 
+            self.fAdvancing = fAdvancing
             let page = self.book.pages[pageIndex]
             print("moveTo", pageIndex, page.fixed);
             page.willEnter(true)
