@@ -158,7 +158,6 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(self.scrollView)
-        
         self.view.layer.backgroundColor = book.backgroundColor
 #if os(tvOS)
         // Since the paging is not enabled on tvOS, we handle PanGesture directly at this view instead.
@@ -586,6 +585,21 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             adjustIndex(pageIndex, fForced: false, fDeferredEnter: false)
             let offset = self.book.horizontal ? CGPoint(x: (CGFloat(self.book.pageIndex) + rem) * frame.size.width, y: 0) : CGPoint(x: 0, y: (CGFloat(self.book.pageIndex) + rem) * frame.size.height)
             scrollView.contentOffset = offset
+        }
+    }
+    
+    func moveTo(pageIndex:Int, fAdvancing:Bool = true) {
+        if pageIndex < self.book.pages.count && pageIndex != self.book.pageIndex {
+            let frame = scrollView.frame
+            scrollView.contentOffset = self.book.horizontal ? CGPoint(x: (CGFloat(pageIndex)-0.5) * frame.size.width, y: 0) : CGPoint(x: 0, y: (CGFloat(pageIndex)-0.5) * frame.size.height)
+            self.scrollViewDidScroll(scrollView)
+            scrollView.contentOffset = self.book.horizontal ? CGPoint(x: (CGFloat(pageIndex)) * frame.size.width, y: 0) : CGPoint(x: 0, y: (CGFloat(pageIndex)) * frame.size.height)
+            self.scrollViewDidScroll(scrollView)
+
+            let page = self.book.pages[pageIndex]
+            print("moveTo", pageIndex, page.fixed);
+            page.willEnter(true)
+            adjustIndex(pageIndex, fForced: false, fDeferredEnter: false)
         }
     }
 }
