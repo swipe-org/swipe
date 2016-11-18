@@ -10,21 +10,21 @@ class SwipeEventHandler: NSObject {
     
     private var events = [String:SwipeEvent]()
     
-    func parse(eventsInfo: [String:AnyObject]) {
+    func parse(_ eventsInfo: [String:Any]) {
         for eventType in eventsInfo.keys {
             //NSLog("XdEventH parsed event: \(eventType)");
-            if let eventInfo = eventsInfo[eventType] as? [String:AnyObject] {
+            if let eventInfo = eventsInfo[eventType] as? [String:Any] {
                 let event = SwipeEvent(type: eventType, info: eventInfo)
                 events[eventType] = event
             }
         }
     }
     
-    func actionsFor(event: String) -> [SwipeAction]? {
+    func actionsFor(_ event: String) -> [SwipeAction]? {
         return events[event]?.actions
     }
     
-    func getEvent(event: String) -> SwipeEvent? {
+    func getEvent(_ event: String) -> SwipeEvent? {
         return events[event]
     }
 }

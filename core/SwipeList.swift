@@ -13,7 +13,7 @@ import Foundation
 
 class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
     let TAG = "SWList"
-    private var items = [[String:AnyObject]]()
+    private var items = [[String:Any]]()
     private var itemHeights = [CGFloat]()
     private var defaultItemHeight: CGFloat = 40
     private let scale:CGSize
@@ -21,20 +21,20 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
     weak var delegate:SwipeElementDelegate!
     var tableView: UITableView
     
-    init(parent: SwipeNode, info: [String:AnyObject], scale: CGSize, frame: CGRect, screenDimension: CGSize, delegate:SwipeElementDelegate) {
+    init(parent: SwipeNode, info: [String:Any], scale: CGSize, frame: CGRect, screenDimension: CGSize, delegate:SwipeElementDelegate) {
         self.scale = scale
         self.screenDimension = screenDimension
         self.delegate = delegate
-        self.tableView = UITableView(frame: frame, style: .Plain)
+        self.tableView = UITableView(frame: frame, style: .plain)
         super.init(parent: parent, info: info)
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
 #if !os(tvOS)
-        self.tableView.separatorStyle = .None
+        self.tableView.separatorStyle = .none
 #endif
         self.tableView.allowsSelection = true
-        self.tableView.backgroundColor = UIColor.clearColor()
+        self.tableView.backgroundColor = UIColor.clear
         
         if let value = info["itemH"] as? CGFloat {
             defaultItemHeight = value
@@ -42,19 +42,19 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
             defaultItemHeight = SwipeParser.parsePercent(value, full: screenDimension.height, defaultValue: defaultItemHeight)
         }
 
-        if let itemsInfo = info["items"] as? [[String:AnyObject]] {
+        if let itemsInfo = info["items"] as? [[String:Any]] {
             items = itemsInfo
             for _ in items {
                 itemHeights.append(defaultItemHeight)
             }
         }
         if let scrollEnabled = self.info["scrollEnabled"] as? Bool {
-            self.tableView.scrollEnabled = scrollEnabled
+            self.tableView.isScrollEnabled = scrollEnabled
         }
         self.tableView.reloadData()
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             if let selectedIndex = self.info["selectedItem"] as? Int {
-                self.tableView.selectRowAtIndexPath(NSIndexPath(forRow: selectedIndex, inSection: 0), animated: true, scrollPosition: .Middle)
+                self.tableView.selectRow(at: IndexPath(row: selectedIndex, section: 0), animated: true, scrollPosition: .middle)
             }
         }
     }
@@ -65,11 +65,11 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
     
     // UITableViewDataDelegate
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return itemHeights[indexPath.row]
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let actions = parent!.eventHandler.actionsFor("rowSelected") {
             parent!.execute(self, actions: actions)
         }
@@ -77,13 +77,13 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
     
     // UITableViewDataSource
     
-    var cellIndexPath: NSIndexPath?
+    var cellIndexPath: IndexPath?
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let subviewTag = 999
         self.cellIndexPath = indexPath
         
-        let cell = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell")! as UITableViewCell
         if let subView = cell.contentView.viewWithTag(subviewTag) {
             subView.removeFromSuperview()
         }
@@ -96,10 +96,10 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
         }
         let itemHeight = self.itemHeights[indexPath.row]
         
-        if let elementsInfo = item["elements"] as? [[String:AnyObject]] {
+        if let elementsInfo = item["elements"] as? [[String:Any]] {
             for elementInfo in elementsInfo {
                 let element = SwipeElement(info: elementInfo, scale:self.scale, parent:self, delegate:self.delegate!)
-                if let subview = element.loadViewInternal(CGSizeMake(self.tableView.bounds.size.width, itemHeight), screenDimension: self.screenDimension) {
+                if let subview = element.loadViewInternal(CGSize(width: self.tableView.bounds.size.width, height: itemHeight), screenDimension: self.screenDimension) {
                     subview.tag = subviewTag
                     cell.contentView.addSubview(subview)
                     children.append(element)
@@ -119,35 +119,35 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
             l.text = "row \(indexPath.row) error " + cellError!
         }
         
-        cell.selectionStyle = .None
+        cell.selectionStyle = .none
         self.cellIndexPath = nil
         return cell
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
     
     // SwipeView
 
-    override func appendList(originator: SwipeNode, info: [String:AnyObject]) {
-        if let itemsInfoArray = info["items"] as? [[String:AnyObject]] {
-            var itemInfos = [[String:AnyObject]]()
+    override func appendList(_ originator: SwipeNode, info: [String:Any]) {
+        if let itemsInfoArray = info["items"] as? [[String:Any]] {
+            var itemInfos = [[String:Any]]()
 
             for itemInfo in itemsInfoArray {
-                if let _ = itemInfo["data"] as? [String:AnyObject] {
+                if let _ = itemInfo["data"] as? [String:Any] {
                     var eval = originator.evaluate(itemInfo)
                     // if 'data' is a JSON string, use it, otherwise, use the info as is
-                    if let dataStr = eval["data"] as? String, data = dataStr.dataUsingEncoding(NSUTF8StringEncoding) {
+                    if let dataStr = eval["data"] as? String, let data = dataStr.data(using: .utf8) {
                         do {
-                            guard let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? [String:AnyObject] else {
+                            guard let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions()) as? [String:Any] else {
                                 // 'data' is a plain String
                                 itemInfos.append(eval)
                                 break
                             }
                             
                             // 'data' is a JSON string so use the JSON object
-                            if (json["elements"] as? [[String:AnyObject]]) != nil {
+                            if (json["elements"] as? [[String:Any]]) != nil {
                                 // 'data' is a redefinition of the item
                                 itemInfos.append(json)
                             } else {
@@ -168,11 +168,11 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
                 }
             }
             
-            var urls = [NSURL:String]()
+            var urls = [URL:String]()
 
             for itemInfo in itemInfos {
-                if let elementsInfo = itemInfo["elements"] as? [[String:AnyObject]] {
-                    let scaleDummy = CGSizeMake(0.1, 0.1)
+                if let elementsInfo = itemInfo["elements"] as? [[String:Any]] {
+                    let scaleDummy = CGSize(width: 0.1, height: 0.1)
                     
                     for e in elementsInfo {
                         let element = SwipeElement(info: e, scale:scaleDummy, parent:self, delegate:self.delegate!)
@@ -190,16 +190,16 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
                 }
                 
                 self.tableView.reloadData()
-                self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.items.count - 1, inSection: 0), atScrollPosition: .Bottom, animated: true)
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.4 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
-                    self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.items.count - 1, inSection: 0), atScrollPosition: .Bottom, animated: true)
+                self.tableView.scrollToRow(at: IndexPath(row: self.items.count - 1, section: 0), at: .bottom, animated: true)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    self.tableView.scrollToRow(at: IndexPath(row: self.items.count - 1, section: 0), at: .bottom, animated: true)
                 }
             }
         }
     }
     
-    override func appendList(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject])  -> Bool {
-        if (name == "*" || self.name.caseInsensitiveCompare(name) == .OrderedSame) {
+    override func appendList(_ originator: SwipeNode, name: String, up: Bool, info: [String:Any])  -> Bool {
+        if (name == "*" || self.name.caseInsensitiveCompare(name) == .orderedSame) {
             appendList(originator, info: info)
             return true
         }
@@ -211,7 +211,7 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
                 if let viewNode = node?.parent as? SwipeView {
                     for c in viewNode.children {
                         if let e = c as? SwipeElement {
-                            if e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                            if e.name.caseInsensitiveCompare(name) == .orderedSame {
                                 e.appendList(originator, info: info)
                                 return true
                             }
@@ -238,7 +238,7 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
 
     // SwipeNode
     
-    override func getPropertyValue(originator: SwipeNode, property: String) -> AnyObject? {
+    override func getPropertyValue(_ originator: SwipeNode, property: String) -> Any? {
         switch (property) {
         case "selectedItem":
             if let indexPath = self.tableView.indexPathForSelectedRow {
@@ -251,7 +251,7 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    override func getPropertiesValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+    override func getPropertiesValue(_ originator: SwipeNode, info: [String:Any]) -> Any? {
         let prop = info.keys.first!
         switch (prop) {
         case "items":
@@ -262,24 +262,24 @@ class SwipeList: SwipeView, UITableViewDelegate, UITableViewDataSource {
                     if let val = item[itemStr] as? String {
                         // ie "data":String
                         return val
-                    } else if let valInfo = item[itemStr] as? [String:AnyObject] {
+                    } else if let valInfo = item[itemStr] as? [String:Any] {
                         // ie "data":{...}
                         return originator.evaluate(valInfo)
                     }
                 }
                 // ie "property":{"items":{"data":{...}}}
-                var path = info["items"] as! [String:AnyObject]
+                var path = info["items"] as! [String:Any]
                 var property = path.keys.first!
                 
                 while (true) {
                     if let next = path[property] as? String {
-                        if let sub = item[property] as? [String:AnyObject] {
+                        if let sub = item[property] as? [String:Any] {
                             return sub[next]
                         } else {
                             return nil
                         }
-                    } else if let next = path[property] as? [String:AnyObject] {
-                        if let sub = item[property] as? [String:AnyObject] {
+                    } else if let next = path[property] as? [String:Any] {
+                        if let sub = item[property] as? [String:Any] {
                             path = next
                             property = path.keys.first!
                             item = sub

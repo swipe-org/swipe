@@ -15,7 +15,7 @@ import UIKit
 #endif
 import AVFoundation
 
-private func MyLog(text:String, level:Int = 0) {
+private func MyLog(_ text:String, level:Int = 0) {
     let s_verbosLevel = 0
     if level <= s_verbosLevel {
         NSLog(text)
@@ -23,22 +23,22 @@ private func MyLog(text:String, level:Int = 0) {
 }
 
 class SwipePageTemplate: NSObject, AVAudioPlayerDelegate {
-    let pageTemplateInfo:[String:AnyObject]
-    private let baseURL:NSURL?
+    let pageTemplateInfo:[String:Any]
+    private let baseURL:URL?
     private let name:String
     private var bgmPlayer:AVAudioPlayer?
     private var fDebugEntered = false
 
-    lazy var resourceURLs:[NSURL:String] = {
-        var urls = [NSURL:String]()
+    lazy var resourceURLs:[URL:String] = {
+        var urls = [URL:String]()
         if let value = self.pageTemplateInfo["bgm"] as? String,
-               url = NSURL.url(value, baseURL: self.baseURL) {
+            let url = URL.url(value, baseURL: self.baseURL) {
             urls[url] = ""
         }
         return urls
     }()
     
-    init(name:String, info:[String:AnyObject], baseURL:NSURL?) {
+    init(name:String, info:[String:Any], baseURL:URL?) {
         self.baseURL = baseURL
         self.name = name
         self.pageTemplateInfo = info
@@ -46,18 +46,18 @@ class SwipePageTemplate: NSObject, AVAudioPlayerDelegate {
     
     // This function is called when a page associated with this pageTemplate is activated (entered)
     //  AND the previous page is NOT associated with this pageTemplate object.
-    func didEnter(prefetcher:SwipePrefetcher) {
+    func didEnter(_ prefetcher:SwipePrefetcher) {
         assert(fDebugEntered == false, "re-entering")
         fDebugEntered = true
         
         if let value = self.pageTemplateInfo["bgm"] as? String,
-               urlRaw = NSURL.url(value, baseURL: baseURL),
-               url = prefetcher.map(urlRaw) {
+            let urlRaw = URL.url(value, baseURL: baseURL),
+            let url = prefetcher.map(urlRaw) {
             MyLog("SWPageTemplate didEnter with bgm=\(value)", level:1)
-            SwipeAssetManager.sharedInstance().loadAsset(url, prefix: "", bypassCache:false, callback: { (urlLocal:NSURL?, _:NSError!) -> Void in
+            SwipeAssetManager.sharedInstance().loadAsset(url, prefix: "", bypassCache:false, callback: { (urlLocal:URL?, _) -> Void in
                 if self.fDebugEntered,
-                   let urlL = urlLocal,
-                       player = try? AVAudioPlayer(contentsOfURL: urlL) {
+                    let urlL = urlLocal,
+                    let player = try? AVAudioPlayer(contentsOf: urlL) {
                     player.delegate = self
                     player.play()
                     self.bgmPlayer = player
@@ -82,7 +82,7 @@ class SwipePageTemplate: NSObject, AVAudioPlayerDelegate {
     }
 
     // We repeat the bgm
-    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         if let player = bgmPlayer {
             if flag {
                 player.play()

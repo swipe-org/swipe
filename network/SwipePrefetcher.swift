@@ -13,7 +13,7 @@ import UIKit
 #endif
 
 
-private func MyLog(text:String, level:Int = 0) {
+private func MyLog(_ text:String, level:Int = 0) {
     let s_verbosLevel = 0
     if level <= s_verbosLevel {
         NSLog(text)
@@ -21,10 +21,10 @@ private func MyLog(text:String, level:Int = 0) {
 }
 
 class SwipePrefetcher {
-    private var urls = [NSURL:String]()
-    private var urlsFetching = [NSURL]()
-    private var urlsFetched = [NSURL:NSURL]()
-    private var urlsFailed = [NSURL]()
+    private var urls = [URL:String]()
+    private var urlsFetching = [URL]()
+    private var urlsFetched = [URL:URL]()
+    private var urlsFailed = [URL]()
     private var errors = [NSError]()
     private var fComplete = false
     private var _progress = Float(0)
@@ -33,11 +33,11 @@ class SwipePrefetcher {
         return _progress
     }
     
-    init(urls:[NSURL:String]) {
+    init(urls:[URL:String]) {
         self.urls = urls
     }
     
-    func start(callback:(Bool, [NSURL], [NSError]) -> Void) {
+    func start(_ callback:@escaping (Bool, [URL], [NSError]) -> Void) {
         if fComplete {
             MyLog("SWPrefe already completed", level:1)
             callback(true, self.urlsFailed, self.errors)
@@ -47,25 +47,27 @@ class SwipePrefetcher {
         let manager = SwipeAssetManager.sharedInstance()
         var count = 0
         _progress = 0
-        let fileManager = NSFileManager.defaultManager()
+        let fileManager = FileManager.default
         for (url,prefix) in urls {
             if url.scheme == "file" {
-                if fileManager.fileExistsAtPath(url.path!) {
+                if fileManager.fileExists(atPath: url.path) {
                     urlsFetched[url] = url
                 } else {
                     // On-demand resource support
-                    urlsFetched[url] = NSBundle.mainBundle().URLForResource(url.lastPathComponent, withExtension: nil)
+                    urlsFetched[url] = Bundle.main.url(forResource: url.lastPathComponent, withExtension: nil)
                     MyLog("SWPrefe onDemand resource at \(urlsFetched[url]) instead of \(url)", level:1)
                 }
             } else {
                 count += 1
                 urlsFetching.append(url)
-                manager.loadAsset(url, prefix: prefix, bypassCache:false, callback: { (urlLocal:NSURL?, error:NSError!) -> Void in
+                manager.loadAsset(url, prefix: prefix, bypassCache:false, callback: { (urlLocal:URL?, error:NSError?) -> Void in
                     if let urlL = urlLocal {
                         self.urlsFetched[url] = urlL
                     } else {
                         self.urlsFailed.append(url)
-                        self.errors.append(error)
+                        if let error = error {
+                            self.errors.append(error)
+                        }
                     }
                     count -= 1
                     if (count == 0) {
@@ -87,28 +89,28 @@ class SwipePrefetcher {
         }
     }
     
-    func append(urls:[NSURL:String], callback:(Bool, [NSURL], [NSError]) -> Void) {
+    func append(_ urls:[URL:String], callback:@escaping (Bool, [URL], [NSError]) -> Void) {
         let manager = SwipeAssetManager.sharedInstance()
         var count = 0
         _progress = 0
-        let fileManager = NSFileManager.defaultManager()
+        let fileManager = FileManager.default
         for (url,prefix) in urls {
             self.urls[url] = prefix
             if url.scheme == "file" {
-                if fileManager.fileExistsAtPath(url.path!) {
+                if fileManager.fileExists(atPath: url.path) {
                     urlsFetched[url] = url
                 } else {
                     // On-demand resource support
-                    urlsFetched[url] = NSBundle.mainBundle().URLForResource(url.lastPathComponent, withExtension: nil)
+                    urlsFetched[url] = Bundle.main.url(forResource: url.lastPathComponent, withExtension: nil)
                     MyLog("SWPrefe onDemand resource at \(urlsFetched[url]) instead of \(url)", level:1)
                 }
             } else {
                 count += 1
                 urlsFetching.append(url)
-                manager.loadAsset(url, prefix: prefix, bypassCache:false, callback: { (urlLocal:NSURL?, error:NSError!) -> Void in
+                manager.loadAsset(url, prefix: prefix, bypassCache:false, callback: { (urlLocal:URL?, error:NSError?) -> Void in
                     if let urlL = urlLocal {
                         self.urlsFetched[url] = urlL
-                    } else {
+                    } else if let error = error {
                         self.urlsFailed.append(url)
                         self.errors.append(error)
                     }
@@ -131,11 +133,11 @@ class SwipePrefetcher {
             callback(true, urlsFailed, errors)
         }
     }
-    func map(url:NSURL) -> NSURL? {
+    func map(_ url:URL) -> URL? {
         return urlsFetched[url]
     }
     
-    static func extensionForType(memeType:String) -> String {
+    static func extensionForType(_ memeType:String) -> String {
         let ext:String
         if memeType == "video/quicktime" {
             ext = ".mov"
@@ -147,7 +149,7 @@ class SwipePrefetcher {
         return ext
     }
     
-    static func isMovie(mimeType:String) -> Bool {
+    static func isMovie(_ mimeType:String) -> Bool {
         return mimeType == "video/quicktime" || mimeType == "video/mp4"
     }
 }

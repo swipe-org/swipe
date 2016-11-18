@@ -14,7 +14,7 @@ import UIKit
 
 import CoreData
 
-private func MyLog(text:String, level:Int = 0) {
+private func MyLog(_ text:String, level:Int = 0) {
     let s_verbosLevel = 0
     if level <= s_verbosLevel {
         NSLog(text)
@@ -22,48 +22,48 @@ private func MyLog(text:String, level:Int = 0) {
 }
 
 class SwipeConnection: NSObject {
-    private static var connections = [NSURL:SwipeConnection]()
-    static let session:NSURLSession = {
-        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        config.URLCache = nil // disable cache by NSURLSession (because we do)
-        return NSURLSession(configuration: config, delegate: nil, delegateQueue: NSOperationQueue.mainQueue())
+    private static var connections = [URL:SwipeConnection]()
+    static let session:URLSession = {
+        let config = URLSessionConfiguration.default
+        config.urlCache = nil // disable cache by URLSession (because we do)
+        return URLSession(configuration: config, delegate: nil, delegateQueue: OperationQueue.main)
     }()
-    static func connection(url:NSURL, urlLocal:NSURL, entity:NSManagedObject) -> SwipeConnection {
+    static func connection(_ url:URL, urlLocal:URL, entity:NSManagedObject) -> SwipeConnection {
         if let connection = connections[url] {
             return connection
         }
         let connection = SwipeConnection(url: url, urlLocal: urlLocal, entity:entity)
         //connection.start()
         let session = SwipeConnection.session
-        let start = NSDate()
-        let task = session.downloadTaskWithURL(url) { (urlTemp:NSURL?, res:NSURLResponse?, error:NSError?) -> Void in
-            assert(NSThread.currentThread() == NSThread.mainThread(), "thread error")
-            let duration = NSDate().timeIntervalSinceDate(start)
+        let start = Date()
+        let task = session.downloadTask(with: url) { (urlTemp:URL?, res:URLResponse?, error:Swift.Error?) -> Void in
+            assert(Thread.current == Thread.main, "thread error")
+            let duration = Date().timeIntervalSince(start)
             if let urlT = urlTemp {
-                if let httpRes = res as? NSHTTPURLResponse {
+                if let httpRes = res as? HTTPURLResponse {
                     if httpRes.statusCode == 200 {
-                        let fm = NSFileManager.defaultManager()
+                        let fm = FileManager.default
                         do {
-                            let attr = try fm.attributesOfItemAtPath(urlT.path!)
-                            if let size = attr[NSFileSize] as? Int {
+                            let attr = try fm.attributesOfItem(atPath: urlT.path)
+                            if let size = attr[FileAttributeKey.size] as? Int {
                                 connection.fileSize = size
                                 SwipeAssetManager.sharedInstance().wasFileLoaded(connection)
                             }
                         } catch {
                             MyLog("SWConn  failed to get attributes (but ignored)")
                         }
-                        MyLog("SWConn  loaded \(url.lastPathComponent!) in \(duration)s (\(connection.fileSize))", level:1)
+                        MyLog("SWConn  loaded \(url.lastPathComponent) in \(duration)s (\(connection.fileSize))", level:1)
                         do {
-                            if fm.fileExistsAtPath(urlLocal.path!) {
-                                try fm.removeItemAtURL(urlLocal)
+                            if fm.fileExists(atPath: urlLocal.path) {
+                                try fm.removeItem(at: urlLocal)
                             }
-                            try fm.copyItemAtURL(urlT, toURL: urlLocal)
+                            try fm.copyItem(at: urlT, to: urlLocal)
                         } catch {
                             connection.callbackAll(error as NSError)
                             return
                         }
                     } else {
-                        MyLog("SWConn  HTTP error (\(url.lastPathComponent!), \(httpRes.statusCode))")
+                        MyLog("SWConn  HTTP error (\(url.lastPathComponent), \(httpRes.statusCode))")
                         connection.callbackAll(NSError(domain: NSURLErrorDomain, code: httpRes.statusCode, userInfo: nil))
                         return
                     }
@@ -71,19 +71,19 @@ class SwipeConnection: NSObject {
                     MyLog("SWConn  no HTTPURLResponse, something is wrong!")
                 }
             } else {
-                MyLog("SWConn  network error (\(url.lastPathComponent!), \(error))")
+                MyLog("SWConn  network error (\(url.lastPathComponent), \(error))")
             }
-            connection.callbackAll(error)
+            connection.callbackAll(error as NSError?)
         }
         task.resume()
         return connection
     }
-    let url, urlLocal:NSURL
+    let url, urlLocal:URL
     let entity:NSManagedObject
     var callbacks = Array<(NSError!) -> Void>()
     var fileSize = 0
 
-    private init(url:NSURL, urlLocal:NSURL, entity:NSManagedObject) {
+    private init(url:URL, urlLocal:URL, entity:NSManagedObject) {
         self.url = url
         self.urlLocal = urlLocal
         self.entity = entity
@@ -94,12 +94,12 @@ class SwipeConnection: NSObject {
         //MyLog("SWCon deinit \(url.lastPathComponent)")
     }
 
-    func load(callback:(NSError!) -> Void) {
+    func load(_ callback:@escaping (NSError!) -> Void) {
         callbacks.append(callback)
     }
 
-    func callbackAll(error: NSError?) {
-        SwipeConnection.connections.removeValueForKey(self.url)
+    func callbackAll(_ error: NSError?) {
+        SwipeConnection.connections.removeValue(forKey: self.url)
         for callback in callbacks {
             callback(error)
         }

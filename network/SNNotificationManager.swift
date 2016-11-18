@@ -18,14 +18,14 @@ class SNNotificationManager {
         clear()
     }
     
-    func addObserverForName(name: String?, object obj: AnyObject?, queue: NSOperationQueue?, usingBlock block: (NSNotification!) -> Void) {
-        let observer = NSNotificationCenter.defaultCenter().addObserverForName(name, object: obj, queue: queue, usingBlock: block)
+    func addObserver(forName name: Notification.Name?, object obj: Any?, queue: OperationQueue?, using block: @escaping (Notification) -> Void) {
+        let observer = NotificationCenter.default.addObserver(forName: name, object: obj, queue: queue, using: block)
         observers.append(observer)
     }
     
     func clear() {
         for observer in observers {
-            NSNotificationCenter.defaultCenter().removeObserver(observer)
+            NotificationCenter.default.removeObserver(observer)
         }
     }
 }

@@ -20,16 +20,16 @@ extension UIResponder {
     
     public class func currentFirstResponder() -> UIResponder? {
         UIResponder._currentFirstResponder = nil
-        UIApplication.sharedApplication().sendAction(#selector(UIResponder.findFirstResponder(_:)), to: nil, from: nil, forEvent: nil)
+        UIApplication.shared.sendAction(#selector(UIResponder.findFirstResponder(sender:)), to: nil, from: nil, for: nil)
         return UIResponder._currentFirstResponder
     }
     
-    internal func findFirstResponder(sender: AnyObject) {
+    internal func findFirstResponder(sender: Any) {
         UIResponder._currentFirstResponder = self
     }
 }
 
-private func MyLog(text:String, level:Int = 0) {
+private func MyLog(_ text:String, level:Int = 0) {
     let s_verbosLevel = 0
     if level <= s_verbosLevel {
         NSLog(text)
@@ -37,21 +37,28 @@ private func MyLog(text:String, level:Int = 0) {
 }
 
 protocol SwipePageDelegate: NSObjectProtocol {
-    func dimension(page:SwipePage) -> CGSize
-    func scale(page:SwipePage) -> CGSize
-    func prototypeWith(name:String?) -> [String:AnyObject]?
-    func pageTemplateWith(name:String?) -> SwipePageTemplate?
-    func pathWith(name:String?) -> AnyObject?
+    func dimension(_ page:SwipePage) -> CGSize
+    func scale(_ page:SwipePage) -> CGSize
+    func prototypeWith(_ name:String?) -> [String:Any]?
+    func pageTemplateWith(_ name:String?) -> SwipePageTemplate?
+    func pathWith(_ name:String?) -> Any?
 #if !os(OSX) // REVIEW
-    func speak(utterance:AVSpeechUtterance)
+    func speak(_ utterance:AVSpeechUtterance)
     func stopSpeaking()
 #endif
     func currentPageIndex() -> Int
-    func parseMarkdown(markdowns:[String]) -> NSAttributedString
-    func baseURL() -> NSURL?
-    func voice(k:String?) -> [String:AnyObject]
+    func parseMarkdown(_ markdowns:[String]) -> NSAttributedString
+    func baseURL() -> URL?
+    func voice(_ k:String?) -> [String:Any]
     func languageIdentifier() -> String?
     func tapped()
+}
+
+extension Notification.Name {
+    static let SwipePageDidStartPlaying = Notification.Name("SwipePageDidStartPlaying")
+    static let SwipePageDidFinishPlaying = Notification.Name("SwipePageDidFinishPlaying")
+    static let SwipePageShouldStartAutoPlay = Notification.Name("SwipePageShouldStartAutoPlay")
+    static let SwipePageShouldPauseAutoPlay = Notification.Name("SwipePageShouldPauseAutoPlay")
 }
 
 class SwipePage: SwipeView, SwipeElementDelegate {
@@ -59,11 +66,6 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     static var objectCount = 0
     var accessCount = 0
     var completionCount = 0
-
-    static let didStartPlaying = "SwipePageDidStartPlaying"
-    static let didFinishPlaying = "SwipePageDidFinishPlaying"
-    static let shouldStartAutoPlay = "SwipePageShouldStartAutoPlay"
-    static let shouldPauseAutoPlay = "SwipePageShouldPauseAutoPlay"
 
     // Public properties
     let index:Int
@@ -98,7 +100,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     private var aniLayer:CALayer?
     private var audioPlayer:AVAudioPlayer?
     
-    init(index:Int, info:[String:AnyObject], delegate:SwipePageDelegate) {
+    init(index:Int, info:[String:Any], delegate:SwipePageDelegate) {
         self.index = index
         self.delegate = delegate
         self.pageTemplate = delegate.pageTemplateWith(info["template"] as? String)
@@ -114,8 +116,8 @@ class SwipePage: SwipeView, SwipeElementDelegate {
 
     func unloadView() {
 #if !os(tvOS)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.UIKeyboardWillHide, object: nil)
 #endif
         SwipeTimer.cancelAll()
         
@@ -141,7 +143,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     deinit {
         MyLog("SWPage  deinit \(index) \(accessCount) \(completionCount)", level: 1)
         if self.autoplay {
-            NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.shouldPauseAutoPlay, object: self)
+            NotificationCenter.default.post(name: .SwipePageShouldPauseAutoPlay, object: self)
         }
         SwipePage.objectCount -= 1
     }
@@ -155,10 +157,10 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     
     // Private lazy properties
     private lazy var backgroundColor:CGColor = {
-        if let value: AnyObject = self.info["bc"] {
+        if let value = self.info["bc"] {
             return SwipeParser.parseColor(value)
         }
-        return UIColor.whiteColor().CGColor
+        return UIColor.white.cgColor
     }()
 
     private lazy var transition:String = {
@@ -226,7 +228,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         return false
     }()
     
-    func setTimeOffsetWhileDragging(offset:CGFloat) {
+    func setTimeOffsetWhileDragging(_ offset:CGFloat) {
         if self.scroll {
             fEntered = false // stops the element animation
             CATransaction.begin()
@@ -243,7 +245,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         }
     }
     
-    func willLeave(fAdvancing:Bool) {
+    func willLeave(_ fAdvancing:Bool) {
 #if !os(OSX)
         if let _ = self.utterance {
             delegate.stopSpeaking()
@@ -252,26 +254,26 @@ class SwipePage: SwipeView, SwipeElementDelegate {
 #endif
     }
     
-    func pause(fForceRewind:Bool) {
+    func pause(_ fForceRewind:Bool) {
         fPausing = true
         if let player = self.audioPlayer {
             player.stop()
         }
         
-        NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.shouldPauseAutoPlay, object: self)
+        NotificationCenter.default.post(name: .SwipePageShouldPauseAutoPlay, object: self)
         // auto rewind
         if self.rewind || fForceRewind {
             prepareToPlay()
         }
     }
     
-    func didLeave(fGoingBack:Bool) {
+    func didLeave(_ fGoingBack:Bool) {
         fEntered = false
         self.pause(fGoingBack)
         MyLog("SWPage  didLeave @\(index) \(fGoingBack)", level: 2)
     }
     
-    func willEnter(fForward:Bool) {
+    func willEnter(_ fForward:Bool) {
         MyLog("SWPage  willEnter @\(index) \(fForward)", level: 2)
         if self.autoplay && fForward || self.always {
             prepareToPlay()
@@ -296,7 +298,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
 #endif
     }
 
-    func didEnter(fForward:Bool) {
+    func didEnter(_ fForward:Bool) {
         fEntered = true
         accessCount += 1
         if fForward && self.autoplay || self.always || self.fRepeat {
@@ -317,7 +319,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         }
     }
     
-    private func prepareToPlay(fForward:Bool = true) {
+    private func prepareToPlay(_ fForward:Bool = true) {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         self.aniLayer?.timeOffset = fForward ? 0.0 : 1.0
@@ -340,11 +342,11 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         self.autoPlay(false)
     }
     
-    private func autoPlay(fElementRepeat:Bool) {
+    private func autoPlay(_ fElementRepeat:Bool) {
         fPausing = false
         if !fElementRepeat {
             playAudio()
-            NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.shouldStartAutoPlay, object: self)
+            NotificationCenter.default.post(name: .SwipePageShouldStartAutoPlay, object: self)
         }
         assert(self.viewAnimation != nil, "must have self.viewAnimation")
         assert(self.viewVideo != nil, "must have viewVideo")
@@ -358,11 +360,11 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         self.didStartPlayingInternal()
     }
     
-    private func timerTick(offset:CGFloat, fElementRepeat:Bool) {
+    private func timerTick(_ offset:CGFloat, fElementRepeat:Bool) {
         var fElementRepeatNext = fElementRepeat
         // NOTE: We don't want to add [unowned self] because the timer will fire anyway. 
         // During the shutdown sequence, the loop will stop when didLeave was called. 
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(1000 * NSEC_PER_MSEC / UInt64(self.fps))), dispatch_get_main_queue(), {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(1000 * NSEC_PER_MSEC / UInt64(self.fps))) / Double(NSEC_PER_SEC), execute: {
             () -> Void in
             var offsetForNextTick:CGFloat?
             if self.fEntered && !self.fPausing {
@@ -403,27 +405,27 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     }
     
     // Returns the list of URLs of required resouces for this element (including children)
-    lazy var resourceURLs:[NSURL:String] = {
-        var urls = [NSURL:String]()
+    lazy var resourceURLs:[URL:String] = {
+        var urls = [URL:String]()
         let baseURL = self.delegate.baseURL()
         for key in ["audio"] {
             if let src = self.info[key] as? String,
-                   url = NSURL.url(src, baseURL: baseURL) {
+                   let url = URL.url(src, baseURL: baseURL) {
                 urls[url] = ""
             }
         }
-        if let elementsInfo = self.info["elements"] as? [[String:AnyObject]] {
-            let scaleDummy = CGSizeMake(0.1, 0.1)
+        if let elementsInfo = self.info["elements"] as? [[String:Any]] {
+            let scaleDummy = CGSize(width: 0.1, height: 0.1)
             for e in elementsInfo {
                 let element = SwipeElement(info: e, scale:scaleDummy, parent:self, delegate:self)
                 for (url, prefix) in element.resourceURLs {
-                    urls[url] = prefix
+                    urls[url as URL] = prefix
                 }
             }
         }
         if let pageTemplate = self.pageTemplate {
             for (url, prefix) in pageTemplate.resourceURLs {
-                urls[url] = prefix
+                urls[url as URL] = prefix
             }
         }
 
@@ -434,11 +436,11 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         return SwipePrefetcher(urls:self.resourceURLs)
     }()
 
-    func loadView(callback:((Void)->(Void))?) -> UIView {
+    func loadView(_ callback:((Void)->(Void))?) -> UIView {
     
         MyLog("SWPage  loading @\(index)", level: 2)
         assert(self.view == nil, "loadView self.view must be nil")
-        let view = InternalView(wrapper: self, frame: CGRectMake(0.0, 0.0, 100.0, 100.0))
+        let view = InternalView(wrapper: self, frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0))
         view.clipsToBounds = true
         self.view = view
         let viewVideo = UIView(frame: view.bounds)
@@ -476,16 +478,16 @@ class SwipePage: SwipeView, SwipeElementDelegate {
 #if os(OSX)
         viewAnimation.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
 #else
-        viewVideo.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        viewAnimation.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        viewVideo.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        viewAnimation.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 #endif
         //viewAnimation.backgroundColor = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 0.2)
         
-        self.prefetcher.start { (completed:Bool, _:[NSURL], _:[NSError]) -> Void in
+        self.prefetcher.start { (completed:Bool, _:[URL], _:[NSError]) -> Void in
             if completed {
                 if self.view != nil {
                     // NOTE: We are intentionally ignoring fetch errors (of network resources) here.
-                    if let eventsInfo = self.info["events"] as? [String:AnyObject] {
+                    if let eventsInfo = self.info["events"] as? [String:Any] {
                         self.eventHandler.parse(eventsInfo)
                     }
 
@@ -497,11 +499,11 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         
         setupGestureRecognizers()
 #if !os(tvOS)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SwipePage.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SwipePage.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwipePage.keyboardWillShow(notification:)), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwipePage.keyboardWillHide(notification:)), name: .UIKeyboardWillHide, object: nil)
 #endif
         if let actions = eventHandler.actionsFor("load") {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.4 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                 self.execute(self, actions: actions)
             }
         }
@@ -510,28 +512,28 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     }
     
 #if !os(tvOS)
-    func keyboardWillShow(notification: NSNotification) {
-        if let info:NSDictionary = notification.userInfo {
-            if let kbFrame = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+    func keyboardWillShow(notification: Notification) {
+        if let info = notification.userInfo {
+            if let kbFrame = info[UIKeyboardFrameBeginUserInfoKey] as? CGRect {
                 if let fr = findFirstResponder() {
                     let frFrame = fr.view!.frame
                     let myFrame = self.view!.frame
                     //let duration = info[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber as NSTimeInterval
                     //UIView.animateWithDuration(0.25, delay: 0.25, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-                        self.view!.frame = CGRectMake(0, myFrame.origin.y - max(0, (frFrame.origin.y + frFrame.size.height) - (myFrame.size.height - kbFrame.size.height)), myFrame.size.height, myFrame.size.height)
+                        self.view!.frame = CGRect(x: 0, y: myFrame.origin.y - max(0, (frFrame.origin.y + frFrame.size.height) - (myFrame.size.height - kbFrame.size.height)), width: myFrame.size.height, height: myFrame.size.height)
                     //    }, completion: nil)
                 }
             }
         }
     }
     
-    func keyboardWillHide(notification: NSNotification) {
-        if let _:NSDictionary = notification.userInfo {
+    func keyboardWillHide(notification: Notification) {
+        if let _ = notification.userInfo {
             if findFirstResponder() != nil {
                 let myFrame = self.view!.frame
                 //let duration = info[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber as NSTimeInterval
                 //UIView.animateWithDuration(0.25, delay: 0.25, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-                    self.view!.frame = CGRectMake(0, 0, myFrame.size.height, myFrame.size.height)
+                    self.view!.frame = CGRect(x: 0, y: 0, width: myFrame.size.height, height: myFrame.size.height)
                 //    }, completion: nil)
             }
         }
@@ -542,10 +544,10 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         let scale = delegate.scale(self)
         let dimension = delegate.dimension(self)
         if let value = self.info["audio"] as? String,
-               url = NSURL.url(value, baseURL: self.delegate.baseURL()),
-               urlLocal = self.prefetcher.map(url) {
+               let url = URL.url(value, baseURL: self.delegate.baseURL()),
+               let urlLocal = self.prefetcher.map(url) {
             do {
-                audioPlayer = try AVAudioPlayer(contentsOfURL: urlLocal)
+                audioPlayer = try AVAudioPlayer(contentsOf: urlLocal)
                 audioPlayer?.prepareToPlay()
             } catch let error as NSError {
                 NSLog("SWPage  audio error \(error)")
@@ -554,7 +556,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
 
         prepareUtterance()
 
-        if let elementsInfo = self.info["elements"] as? [[String:AnyObject]] {
+        if let elementsInfo = self.info["elements"] as? [[String:Any]] {
             for e in elementsInfo {
                 let element = SwipeElement(info: e, scale:scale, parent:self, delegate:self)
                 if let subview = element.loadView(dimension) {
@@ -573,7 +575,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     private func prepareUtterance() {
 // REVIEW: Disabled for OSX for now
 #if !os(OSX)
-        if let speech = self.info["speech"] as? [String:AnyObject],
+        if let speech = self.info["speech"] as? [String:Any],
            let text = parseText(self, info: speech, key: "text") {
             let voice = self.delegate.voice(speech["voice"] as? String)
             let utterance = AVSpeechUtterance(string: text)
@@ -619,30 +621,30 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     
     // <SwipeElementDelegate> method
     
-    func addedResourceURLs(urls:[NSURL:String], callback:() -> Void) {
-        self.prefetcher.append(urls) { (completed:Bool, _:[NSURL], _:[NSError]) -> Void in
+    func addedResourceURLs(_ urls:[URL:String], callback:@escaping () -> Void) {
+        self.prefetcher.append(urls) { (completed:Bool, _:[URL], _:[NSError]) -> Void in
             if completed {
                 callback()
             }
         }
     }
     
-    func prototypeWith(name:String?) -> [String:AnyObject]? {
+    func prototypeWith(_ name:String?) -> [String:Any]? {
         return delegate.prototypeWith(name)
     }
     
     // <SwipeElementDelegate> method
-    func pathWith(name:String?) -> AnyObject? {
+    func pathWith(_ name:String?) -> Any? {
         return delegate.pathWith(name)
     }
 
     // <SwipeElementDelegate> method
-    func shouldRepeat(element:SwipeElement) -> Bool {
+    func shouldRepeat(_ element:SwipeElement) -> Bool {
         return fEntered && self.fRepeat
     }
     
     // <SwipeElementDelegate> method
-    func onAction(element:SwipeElement) {
+    func onAction(_ element:SwipeElement) {
         if let action = element.action {
             MyLog("SWPage  onAction \(action)", level: 2)
             if action == "play" {
@@ -654,12 +656,12 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     }
     
     // <SwipeElementDelegate> method
-    func didStartPlaying(element:SwipeElement) {
+    func didStartPlaying(_ element:SwipeElement) {
         didStartPlayingInternal()
     }
     
     // <SwipeElementDelegate> method
-    func didFinishPlaying(element:SwipeElement, completed:Bool) {
+    func didFinishPlaying(_ element:SwipeElement, completed:Bool) {
         if completed {
             completionCount += 1
         }
@@ -667,7 +669,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     }
 
     // <SwipeElementDelegate> method
-    func baseURL() -> NSURL? {
+    func baseURL() -> URL? {
         return delegate.baseURL()
     }
     
@@ -677,9 +679,9 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     }
 
     // <SwipeElementDelegate> method
-    func localizedStringForKey(key:String) -> String? {
-        if let strings = self.info["strings"] as? [String:AnyObject],
-               texts = strings[key] as? [String:AnyObject] {
+    func localizedStringForKey(_ key:String) -> String? {
+        if let strings = self.info["strings"] as? [String:Any],
+               let texts = strings[key] as? [String:Any] {
             return SwipeParser.localizedString(texts, langId: delegate.languageIdentifier())
         }
         return nil
@@ -691,16 +693,16 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         return delegate.languageIdentifier()
     }
 
-    func parseText(originator: SwipeNode, info:[String:AnyObject], key:String) -> String? {
+    func parseText(_ originator: SwipeNode, info:[String:Any], key:String) -> String? {
         guard let value = info[key] else {
             return nil
         }
         if let text = value as? String {
             return text
         }
-        if let ref = value as? [String:AnyObject],
-               key = ref["ref"] as? String,
-               text = localizedStringForKey(key) {
+        if let ref = value as? [String:Any],
+            let key = ref["ref"] as? String,
+            let text = localizedStringForKey(key) {
             return text
         }
         return nil
@@ -710,7 +712,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         cPlaying += 1
         if cPlaying==1 {
             //NSLog("SWPage  didStartPlaying @\(index)")
-            NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.didStartPlaying, object: self)
+            NotificationCenter.default.post(name: .SwipePageDidStartPlaying, object: self)
         }
     }
     
@@ -718,21 +720,21 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         assert(cPlaying > 0, "didFinishPlaying going negative! @\(index)")
         cPlaying -= 1
         if cPlaying == 0 {
-            NSNotificationCenter.defaultCenter().postNotificationName(SwipePage.didFinishPlaying, object: self)
+            NotificationCenter.default.post(name: .SwipePageDidFinishPlaying, object: self)
         }
     }
 
 #if !os(OSX)
-    func speak(utterance:AVSpeechUtterance) {
+    func speak(_ utterance:AVSpeechUtterance) {
         delegate.speak(utterance)
     }
 #endif
 
-    func parseMarkdown(element:SwipeElement, markdowns:[String]) -> NSAttributedString {
+    func parseMarkdown(_ element:SwipeElement, markdowns:[String]) -> NSAttributedString {
         return self.delegate.parseMarkdown(markdowns)
     }
     
-    func map(url:NSURL) -> NSURL? {
+    func map(_ url:URL) -> URL? {
         return self.prefetcher.map(url)
     }
 
@@ -772,27 +774,27 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     
     
     // SwipeNode
-    override func getValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+    override func getValue(_ originator: SwipeNode, info: [String:Any]) -> Any? {
         var name = "*"
         if let val = info["id"] as? String {
             name = val
         }
         
         // first try own page property
-        if (name == "*" || self.name.caseInsensitiveCompare(name) == .OrderedSame) {
+        if (name == "*" || self.name.caseInsensitiveCompare(name) == .orderedSame) {
             if let attribute = info["property"] as? String {
                 return getPropertyValue(originator, property: attribute)
-            } else if let attributeInfo = info["property"] as? [String:AnyObject] {
+            } else if let attributeInfo = info["property"] as? [String:Any] {
                 return getPropertiesValue(originator, info: attributeInfo)
             }
         }
         
         for c in children {
             if let e = c as? SwipeElement {
-                if name == "*" || e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                if name == "*" || e.name.caseInsensitiveCompare(name) == .orderedSame {
                     if let attribute = info["property"] as? String {
                         return e.getPropertyValue(originator, property: attribute)
-                    } else if let attributeInfo = info["property"] as? [String:AnyObject] {
+                    } else if let attributeInfo = info["property"] as? [String:Any] {
                         return e.getPropertiesValue(originator, info: attributeInfo)
                     }
                 }
@@ -802,11 +804,11 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         return nil
     }
     
-    override func updateElement(originator: SwipeNode, name: String, up: Bool, info: [String:AnyObject]) -> Bool {
+    override func updateElement(_ originator: SwipeNode, name: String, up: Bool, info: [String:Any]) -> Bool {
         // Find named element and update
         for c in children {
             if let e = c as? SwipeElement {
-                if e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                if e.name.caseInsensitiveCompare(name) == .orderedSame {
                     e.update(originator, info: info)
                     return true
                 }
@@ -816,11 +818,11 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         return false
     }
     
-    override func appendList(originator: SwipeNode, name: String, up: Bool, info: [String : AnyObject]) -> Bool {
+    override func appendList(_ originator: SwipeNode, name: String, up: Bool, info: [String : Any]) -> Bool {
         // Find named element and update
         for c in children {
             if let e = c as? SwipeElement {
-                if e.name.caseInsensitiveCompare(name) == .OrderedSame {
+                if e.name.caseInsensitiveCompare(name) == .orderedSame {
                     e.appendList(originator, info: info)
                     return true
                 }
