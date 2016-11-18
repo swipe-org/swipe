@@ -32,7 +32,7 @@ extension UIResponder {
 private func MyLog(_ text:String, level:Int = 0) {
     let s_verbosLevel = 0
     if level <= s_verbosLevel {
-        NSLog(text)
+        print(text)
     }
 }
 
@@ -246,6 +246,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     }
     
     func willLeave(_ fAdvancing:Bool) {
+        MyLog("SWPage  willLeave @\(index) \(fAdvancing)", level: 2)
 #if !os(OSX)
         if let _ = self.utterance {
             delegate.stopSpeaking()
