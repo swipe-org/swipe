@@ -721,7 +721,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     self.delegate.didStartPlaying(self)
                     MyLog("SWElem videoPlayer.state = \(videoPlayer.status.rawValue)", level: 1)
                     if self.fNeedRewind {
-                        videoPlayer.seek(to: kCMTimeZero)
+                        videoPlayer.seek(to: CMTime(seconds:Double(self.videoStart), preferredTimescale: 600))
                     }
                     videoPlayer.play()
                     self.fNeedRewind = false
