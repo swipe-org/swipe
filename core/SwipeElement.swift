@@ -104,6 +104,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     private var fPlaying = false
     private var videoStart = CGFloat(0.0)
     private var videoDuration:CGFloat?
+    private var hasObserver = false
 
     // Sprite Element Specific
     private var spriteLayer:CALayer?
@@ -672,6 +673,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         if let url = urlVideoOrRadio {
             let videoPlayer = AVPlayer()
             self.videoPlayer = videoPlayer
+            self.hasObserver = false
             let videoLayer = XAVPlayerLayer(player: videoPlayer)
             videoLayer.frame = CGRect(x: 0.0, y: 0.0, width: w, height: h)
             if fScaleToFill {
@@ -724,8 +726,9 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     videoPlayer.play()
                     self.fNeedRewind = false
                     
-                    if let duration = self.videoDuration {
+                    if let duration = self.videoDuration, !self.hasObserver {
                         // Async call to give the play time to seek (LATER: we may need to wait a bit)
+                        self.hasObserver = true
                         DispatchQueue.main.async() {
                             MyLog("SWElem duration=\(duration) from \(self.videoStart) seeking=\(self.fSeeking)", level:0)
                             let time = CMTime(seconds: Double(self.videoStart + duration), preferredTimescale: 600)
