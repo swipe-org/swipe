@@ -598,7 +598,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
 
             self.fAdvancing = fAdvancing
             let page = self.book.pages[pageIndex]
-            print("moveTo", pageIndex, page.fixed);
+            //print("moveTo", pageIndex, page.fixed);
             page.willEnter(true)
             adjustIndex(pageIndex, fForced: false, fDeferredEnter: false)
         }

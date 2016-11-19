@@ -22,7 +22,7 @@ import CoreText
 private func MyLog(_ text:String, level:Int = 0) {
     let s_verbosLevel = 0
     if level <= s_verbosLevel {
-        NSLog(text)
+        print(text)
     }
 }
 
@@ -692,6 +692,9 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             if let urlVideo = urlLocalOrStream {
                 let playerItem = AVPlayerItem(url: urlVideo)
                 videoPlayer.replaceCurrentItem(with: playerItem)
+                if (videoStart > 0) {
+                    MyLog("SWElem seekTo \(videoStart)", level:0)
+                }
                 videoPlayer.seek(to: CMTime(seconds:Double(videoStart), preferredTimescale: 600))
 
                 notificationManager.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: playerItem, queue: OperationQueue.main) {
@@ -722,9 +725,11 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     self.fNeedRewind = false
                     
                     if let duration = self.videoDuration {
+                        MyLog("SWElem duration=\(duration) from \(self.videoStart) seeking=\(self.fSeeking)", level:0)
                         let time = CMTime(seconds: Double(self.videoStart + duration), preferredTimescale: 600)
                         videoPlayer.addBoundaryTimeObserver(forTimes: [time as NSValue], queue: nil) {
                             [unowned self] in
+                            MyLog("SWElem timeObserver pausing", level:0)
                             videoPlayer.pause()
                             self.handleVideoEnd(videoPlayer: videoPlayer)
                         }
