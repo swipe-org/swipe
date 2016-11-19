@@ -17,7 +17,7 @@ import UIKit
 // Change s_verbosLevel to 1 to see debug messages for this class
 //
 private func MyLog(_ text:String, level:Int = 0) {
-    let s_verbosLevel = 0
+    let s_verbosLevel = 1
     if level <= s_verbosLevel {
         NSLog(text)
     }
@@ -32,12 +32,19 @@ let g_typeMapping:[String:(Void) -> UIViewController] = [
     "net.swipe.swipe": { return SwipeViewController() },
 ]
 
+protocol SwipeBrowserDelegate: NSObjectProtocol {
+    func documentDidLoad(browser:SwipeBrowser)
+}
+
 //
 // SwipeBrowser is the main UIViewController that is pushed into the navigation stack.
 // SwipeBrowser "hosts" another UIViewController, which supports SwipeDocumentViewer protocol.
 //
 class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     static var stack = [SwipeBrowser]()
+    
+    public weak var delegate:SwipeBrowserDelegate?
+    var notificationManager = SNNotificationManager()
 
 #if os(iOS)
     private var fVisibleUI = true
@@ -64,6 +71,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 
     func browseTo(_ url:URL) {
         let browser = SwipeBrowser(nibName: "SwipeBrowser", bundle: nil)
+        browser.delegate = self.delegate
         browser.url = url // 
         //MyLog("SWBrows url \(browser.url!)")
 
@@ -168,6 +176,8 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
 #endif
         vc.view.frame = rcFrame
+        
+        delegate?.documentDidLoad(browser: self)
     }
     
     private func openDocumentViewer(_ document:[String:Any]) {
