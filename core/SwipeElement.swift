@@ -104,7 +104,6 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     private var fPlaying = false
     private var videoStart = CGFloat(0.0)
     private var videoDuration:CGFloat?
-    private var observer:Any?
 
     // Sprite Element Specific
     private var spriteLayer:CALayer?
@@ -673,7 +672,6 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         if let url = urlVideoOrRadio {
             let videoPlayer = AVPlayer()
             self.videoPlayer = videoPlayer
-            self.observer = nil // Paranoia
             let videoLayer = XAVPlayerLayer(player: videoPlayer)
             videoLayer.frame = CGRect(x: 0.0, y: 0.0, width: w, height: h)
             if fScaleToFill {
@@ -731,14 +729,11 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                         DispatchQueue.main.async() {
                             MyLog("SWElem duration=\(duration) from \(self.videoStart) seeking=\(self.fSeeking)", level:0)
                             let time = CMTime(seconds: Double(self.videoStart + duration), preferredTimescale: 600)
-                            self.observer = videoPlayer.addBoundaryTimeObserver(forTimes: [time as NSValue], queue: nil) {
-                                [unowned self] in
+                            videoPlayer.addBoundaryTimeObserver(forTimes: [time as NSValue], queue: nil) {
+                                [weak self] in
                                 MyLog("SWElem timeObserver pausing", level:0)
                                 videoPlayer.pause()
-                                self.handleVideoEnd(videoPlayer: videoPlayer)
-                                if let observer = self.observer {
-                                    videoPlayer.removeTimeObserver(observer)
-                                }
+                                self?.handleVideoEnd(videoPlayer: videoPlayer)
                             }
                         }
                     }
@@ -1140,9 +1135,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     // PARANOIA: Extra effort to clean up everything
     func clear() {
         notificationManager.clear()
-        self.observer = nil // Paranoia
     }
-
+    
     private func parsePath(_ shape:Any?, w:CGFloat, h:CGFloat, scale:CGSize) -> CGPath? {
         var shape0: Any? = shape
         if let refs = shape as? [String:Any], let key = refs["ref"] as? String {
