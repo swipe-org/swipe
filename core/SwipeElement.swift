@@ -697,7 +697,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 if (videoStart > 0) {
                     MyLog("SWElem seekTo \(videoStart)", level:0)
                 }
-                videoPlayer.seek(to: CMTime(seconds:Double(videoStart), preferredTimescale: 600))
+                videoPlayer.seek(to: CMTime(seconds:Double(videoStart), preferredTimescale: 600), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
 
                 notificationManager.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: playerItem, queue: OperationQueue.main) {
                     [unowned self] (_:Notification!) -> Void in
@@ -721,7 +721,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     self.delegate.didStartPlaying(self)
                     MyLog("SWElem videoPlayer.state = \(videoPlayer.status.rawValue)", level: 1)
                     if self.fNeedRewind {
-                        videoPlayer.seek(to: CMTime(seconds:Double(self.videoStart), preferredTimescale: 600))
+                        videoPlayer.seek(to: CMTime(seconds:Double(self.videoStart), preferredTimescale: 600), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
                     }
                     videoPlayer.play()
                     self.fNeedRewind = false
@@ -1254,7 +1254,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
 */
     func handleVideoEnd(videoPlayer:AVPlayer) {
         if self.delegate != nil && self.delegate!.shouldRepeat(self) {
-            videoPlayer.seek(to: CMTime(seconds:Double(self.videoStart), preferredTimescale: 600))
+            videoPlayer.seek(to: CMTime(seconds:Double(videoStart), preferredTimescale: 600), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
             videoPlayer.play()
         } else {
             self.fNeedRewind = true
