@@ -47,7 +47,7 @@ class SwipeExporter: NSObject {
         swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(iFrame) / CGFloat(fps))
         
         // HACK: This delay is not 100% reliable, but is sufficient practically.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 100) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
             progress(false, nil)
             let presentationLayer = self.swipeViewController.view.layer.presentation()!
             UIGraphicsBeginImageContext(self.swipeViewController.view.frame.size); defer {
