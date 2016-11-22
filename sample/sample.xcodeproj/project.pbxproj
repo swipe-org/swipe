@@ -19,6 +19,7 @@
 		7473AC531D6D3E5600DA34B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7473AC521D6D3E5600DA34B1 /* Assets.xcassets */; };
 		7473AC561D6D3E5600DA34B1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7473AC541D6D3E5600DA34B1 /* LaunchScreen.storyboard */; };
 		7473AC5D1D6D410800DA34B1 /* IMG_9401.mov in Resources */ = {isa = PBXBuildFile; fileRef = 7473AC5C1D6D410800DA34B1 /* IMG_9401.mov */; };
+		74AE29691DE4FE3900C6521A /* swipe.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74AE29681DE4FE3900C6521A /* swipe.swipe */; };
 		74C9BC6A1D763A04008281AF /* vectors.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74C9BC691D763A04008281AF /* vectors.swipe */; };
 		74C9BC6B1D763ABB008281AF /* vectors.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74C9BC691D763A04008281AF /* vectors.swipe */; };
 		74D641471BE9168D006A4C20 /* Icon-180.png in Resources */ = {isa = PBXBuildFile; fileRef = 74D641461BE9168D006A4C20 /* Icon-180.png */; };
@@ -111,8 +112,8 @@
 		74DD7FE91BDFE33F0042BB9D /* shuttle.png in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7FDE1BDFE33F0042BB9D /* shuttle.png */; settings = {ASSET_TAGS = (tutorial, ); }; };
 		74DD7FEA1BDFE33F0042BB9D /* sound01.wav in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7FDF1BDFE33F0042BB9D /* sound01.wav */; settings = {ASSET_TAGS = (tutorial, ); }; };
 		74DD7FEB1BDFE33F0042BB9D /* sound01.wav in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7FDF1BDFE33F0042BB9D /* sound01.wav */; settings = {ASSET_TAGS = (tutorial, ); }; };
-		74DD7FEC1BDFE33F0042BB9D /* swipe.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7FE01BDFE33F0042BB9D /* swipe.swipe */; };
-		74DD7FED1BDFE33F0042BB9D /* swipe.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7FE01BDFE33F0042BB9D /* swipe.swipe */; };
+		74DD7FEC1BDFE33F0042BB9D /* empty.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7FE01BDFE33F0042BB9D /* empty.swipe */; };
+		74DD7FED1BDFE33F0042BB9D /* empty.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7FE01BDFE33F0042BB9D /* empty.swipe */; };
 		74DD7FEE1BDFE33F0042BB9D /* tutorial.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7FE11BDFE33F0042BB9D /* tutorial.swipe */; };
 		74DD7FEF1BDFE33F0042BB9D /* tutorial.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74DD7FE11BDFE33F0042BB9D /* tutorial.swipe */; };
 		74EA717B1BD047F0006808EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74EA717A1BD047F0006808EA /* AppDelegate.swift */; };
@@ -234,6 +235,7 @@
 		7473AC551D6D3E5600DA34B1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7473AC571D6D3E5600DA34B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7473AC5C1D6D410800DA34B1 /* IMG_9401.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = IMG_9401.mov; sourceTree = "<group>"; };
+		74AE29681DE4FE3900C6521A /* swipe.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = swipe.swipe; sourceTree = "<group>"; };
 		74C9BC691D763A04008281AF /* vectors.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vectors.swipe; sourceTree = "<group>"; };
 		74D641461BE9168D006A4C20 /* Icon-180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-180.png"; sourceTree = "<group>"; };
 		74DD7F111BDD3E570042BB9D /* HiddenAgenda.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HiddenAgenda.mp3; sourceTree = "<group>"; };
@@ -280,7 +282,7 @@
 		74DD7FDD1BDFE33F0042BB9D /* izumi_06.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = izumi_06.mov; sourceTree = "<group>"; };
 		74DD7FDE1BDFE33F0042BB9D /* shuttle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shuttle.png; sourceTree = "<group>"; };
 		74DD7FDF1BDFE33F0042BB9D /* sound01.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound01.wav; sourceTree = "<group>"; };
-		74DD7FE01BDFE33F0042BB9D /* swipe.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = swipe.swipe; sourceTree = "<group>"; };
+		74DD7FE01BDFE33F0042BB9D /* empty.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = empty.swipe; sourceTree = "<group>"; };
 		74DD7FE11BDFE33F0042BB9D /* tutorial.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tutorial.swipe; sourceTree = "<group>"; };
 		74DD7FF31BE01D470042BB9D /* SPECIFICATION.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = SPECIFICATION.md; path = ../SPECIFICATION.md; sourceTree = "<group>"; };
 		74EA71771BD047F0006808EA /* sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -470,7 +472,8 @@
 				74DD7FDD1BDFE33F0042BB9D /* izumi_06.mov */,
 				74DD7FDE1BDFE33F0042BB9D /* shuttle.png */,
 				74DD7FDF1BDFE33F0042BB9D /* sound01.wav */,
-				74DD7FE01BDFE33F0042BB9D /* swipe.swipe */,
+				74DD7FE01BDFE33F0042BB9D /* empty.swipe */,
+				74AE29681DE4FE3900C6521A /* swipe.swipe */,
 				74DD7FE11BDFE33F0042BB9D /* tutorial.swipe */,
 			);
 			path = tutorial;
@@ -790,7 +793,7 @@
 				74F179451BD854EC00126B49 /* more.png in Resources */,
 				74DD7FEA1BDFE33F0042BB9D /* sound01.wav in Resources */,
 				74DD7F171BDD3E570042BB9D /* MonkeysSpinningMonkeys.mp3 in Resources */,
-				74DD7FEC1BDFE33F0042BB9D /* swipe.swipe in Resources */,
+				74DD7FEC1BDFE33F0042BB9D /* empty.swipe in Resources */,
 				74DD7F381BDD3E610042BB9D /* IMG_8156.JPG in Resources */,
 				74DD7FE61BDFE33F0042BB9D /* izumi_06.mov in Resources */,
 				74DD7F401BDD3E610042BB9D /* IMG_8162.JPG in Resources */,
@@ -812,6 +815,7 @@
 				74DD7F9F1BDD3E770042BB9D /* nasa007.jpg in Resources */,
 				74F179481BD8550800126B49 /* movie.png in Resources */,
 				74DD7F9B1BDD3E770042BB9D /* nasa005.jpg in Resources */,
+				74AE29691DE4FE3900C6521A /* swipe.swipe in Resources */,
 				C19F05B51D6505AA001EACD4 /* list.swipe in Resources */,
 				74DD7F461BDD3E610042BB9D /* IMG_8167.m4v in Resources */,
 				C1C500681D63977300513D6D /* update.swipe in Resources */,
@@ -910,7 +914,7 @@
 				98FF4D2E1CBE85D700BD9DA8 /* details_index.swipe in Resources */,
 				74D641481BE9168D006A4C20 /* Icon-180.png in Resources */,
 				74DD7F451BDD3E610042BB9D /* IMG_8166.m4v in Resources */,
-				74DD7FED1BDFE33F0042BB9D /* swipe.swipe in Resources */,
+				74DD7FED1BDFE33F0042BB9D /* empty.swipe in Resources */,
 				74EA71E91BD0B0EE006808EA /* Main.storyboard in Resources */,
 				74DD7FE71BDFE33F0042BB9D /* izumi_06.mov in Resources */,
 			);

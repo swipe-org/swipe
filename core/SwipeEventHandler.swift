@@ -7,9 +7,21 @@
 import Foundation
 
 class SwipeEventHandler: NSObject {
-    
+    static var count = 0
+
     private var events = [String:SwipeEvent]()
+
+    override init () {
+        super.init()
+        SwipeEventHandler.count += 1
+        print("SEventHandler init", SwipeEventHandler.count)
+    }
     
+    deinit {
+        SwipeEventHandler.count -= 1
+        print("SEventHandler deinit", SwipeEventHandler.count)
+    }
+
     func parse(_ eventsInfo: [String:Any]) {
         for eventType in eventsInfo.keys {
             //NSLog("XdEventH parsed event: \(eventType)");
