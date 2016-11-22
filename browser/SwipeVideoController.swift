@@ -7,17 +7,24 @@
 //
 
 import UIKit
+import AVFoundation
 
 class SwipeVideoController: UIViewController {
     fileprivate var document:[String:Any]?
     fileprivate weak var delegate:SwipeDocumentViewerDelegate?
     fileprivate var url:URL?
-    fileprivate var videoURL:URL?
+    fileprivate let videoPlayer = AVPlayer()
+    fileprivate var videoLayer:AVPlayerLayer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        videoLayer = AVPlayerLayer(player: self.videoPlayer)
+        view.layer.addSublayer(self.videoLayer)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.videoLayer.frame = view.bounds
     }
 
     override func didReceiveMemoryWarning() {
@@ -35,16 +42,21 @@ extension SwipeVideoController: SwipeDocumentViewer {
     func loadDocument(_ document:[String:Any], size:CGSize, url:URL?, state:[String:Any]?, callback:@escaping (Float, NSError?)->(Void)) throws {
         self.document = document
         self.url = url
-        if let filename = document["video"] as? String {
-            videoURL = Bundle.main.url(forResource: filename, withExtension: nil)
-        } else {
+        guard let filename = document["video"] as? String else {
             throw SwipeError.invalidDocument
         }
+
+        guard let videoURL = Bundle.main.url(forResource: filename, withExtension: nil) else {
+            return
+        }
+        let playerItem = AVPlayerItem(url:videoURL)
+        videoPlayer.replaceCurrentItem(with: playerItem)
+        
         callback(1.0, nil)
     }
     
     func hideUI() -> Bool {
-        return false
+        return true
     }
     
     func landscape() -> Bool {
