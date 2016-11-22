@@ -696,7 +696,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 let playerItem = AVPlayerItem(url: urlVideo)
                 videoPlayer.replaceCurrentItem(with: playerItem)
                 if (videoStart > 0) {
-                    MyLog("SWElem seekTo \(videoStart)", level:0)
+                    MyLog("SWElem A seekTo \(videoStart)", level:0)
                 }
                 let timescale = videoPlayer.currentItem?.asset.duration.timescale ?? 600
                 videoPlayer.seek(to: CMTime(seconds:Double(videoStart), preferredTimescale: timescale), toleranceBefore: tolerance, toleranceAfter: tolerance)
@@ -723,6 +723,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     self.delegate.didStartPlaying(self)
                     MyLog("SWElem videoPlayer.state = \(videoPlayer.status.rawValue)", level: 1)
                     if self.fNeedRewind {
+                        MyLog("SWElem B seekTo \(self.videoStart)", level:0)
                         let timescale = videoPlayer.currentItem?.asset.duration.timescale ?? 600
                         videoPlayer.seek(to: CMTime(seconds:Double(self.videoStart), preferredTimescale: timescale), toleranceBefore: self.tolerance, toleranceAfter: self.tolerance)
                     }
@@ -1256,6 +1257,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
 */
     func handleVideoEnd(videoPlayer:AVPlayer) {
         if self.delegate != nil && self.delegate!.shouldRepeat(self) {
+            MyLog("SWElem C seekTo \(self.videoStart)", level:0)
             let timescale = videoPlayer.currentItem?.asset.duration.timescale ?? 600
             videoPlayer.seek(to: CMTime(seconds:Double(videoStart), preferredTimescale: timescale), toleranceBefore: tolerance, toleranceAfter: tolerance)
             videoPlayer.play()
