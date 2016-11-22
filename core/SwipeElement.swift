@@ -105,6 +105,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     private var videoStart = CGFloat(0.0)
     private var videoDuration:CGFloat?
     private var hasObserver = false
+    private let tolerance = CMTimeMake(10, 600) // 1/60sec
 
     // Sprite Element Specific
     private var spriteLayer:CALayer?
@@ -697,7 +698,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 if (videoStart > 0) {
                     MyLog("SWElem seekTo \(videoStart)", level:0)
                 }
-                videoPlayer.seek(to: CMTime(seconds:Double(videoStart), preferredTimescale: 600), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+                let timescale = videoPlayer.currentItem?.asset.duration.timescale ?? 600
+                videoPlayer.seek(to: CMTime(seconds:Double(videoStart), preferredTimescale: timescale), toleranceBefore: tolerance, toleranceAfter: tolerance)
 
                 notificationManager.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: playerItem, queue: OperationQueue.main) {
                     [unowned self] (_:Notification!) -> Void in
@@ -721,7 +723,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     self.delegate.didStartPlaying(self)
                     MyLog("SWElem videoPlayer.state = \(videoPlayer.status.rawValue)", level: 1)
                     if self.fNeedRewind {
-                        videoPlayer.seek(to: CMTime(seconds:Double(self.videoStart), preferredTimescale: 600), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+                        let timescale = videoPlayer.currentItem?.asset.duration.timescale ?? 600
+                        videoPlayer.seek(to: CMTime(seconds:Double(self.videoStart), preferredTimescale: timescale), toleranceBefore: self.tolerance, toleranceAfter: self.tolerance)
                     }
                     videoPlayer.play()
                     self.fNeedRewind = false
@@ -1214,7 +1217,6 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             }
             let timeSec = videoStart + offset * (videoDuration ?? 1.0)
             let time = CMTimeMakeWithSeconds(Float64(timeSec), 600)
-            let tolerance = CMTimeMake(10, 600) // 1/60sec
             if player.status == AVPlayerStatus.readyToPlay {
                 self.fSeeking = true
                 SwipeElement.objectCount -= 1 // to avoid false memory leak detection
@@ -1254,7 +1256,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
 */
     func handleVideoEnd(videoPlayer:AVPlayer) {
         if self.delegate != nil && self.delegate!.shouldRepeat(self) {
-            videoPlayer.seek(to: CMTime(seconds:Double(videoStart), preferredTimescale: 600), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+            let timescale = videoPlayer.currentItem?.asset.duration.timescale ?? 600
+            videoPlayer.seek(to: CMTime(seconds:Double(videoStart), preferredTimescale: timescale), toleranceBefore: tolerance, toleranceAfter: tolerance)
             videoPlayer.play()
         } else {
             self.fNeedRewind = true
