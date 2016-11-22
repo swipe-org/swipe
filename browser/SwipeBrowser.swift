@@ -30,6 +30,7 @@ private func MyLog(_ text:String, level:Int = 0) {
 let g_typeMapping:[String:(Void) -> UIViewController] = [
     "net.swipe.list": { return SwipeTableViewController(nibName:"SwipeTableViewController", bundle:nil) },
     "net.swipe.swipe": { return SwipeViewController() },
+    "net.swipe.video": { return SwipeVideoController() }
 ]
 
 protocol SwipeBrowserDelegate: NSObjectProtocol {
