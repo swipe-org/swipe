@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 
 class SwipeVideoController: UIViewController {
+    static var playerItemContext = "playerItemContext"
     fileprivate var document = [String:Any]()
     fileprivate var pages = [[String:Any]]()
     fileprivate weak var delegate:SwipeDocumentViewerDelegate?
@@ -76,8 +77,42 @@ extension SwipeVideoController: SwipeDocumentViewer {
             }
         }
         //moveToPageAt(index: 0)
+        playerItem.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: &SwipeVideoController.playerItemContext)
         
         callback(1.0, nil)
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?,
+                           of object: Any?,
+                           change: [NSKeyValueChangeKey : Any]?,
+                           context: UnsafeMutableRawPointer?) {
+        guard context == &SwipeVideoController.playerItemContext else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+            return
+        }
+        
+        if keyPath == #keyPath(AVPlayerItem.status) {
+            let status: AVPlayerItemStatus
+            
+            // Get the status change from the change dictionary
+            if let statusNumber = change?[.newKey] as? NSNumber {
+                status = AVPlayerItemStatus(rawValue: statusNumber.intValue)!
+            } else {
+                status = .unknown
+            }
+            
+            // Switch over the status
+            switch status {
+            case .readyToPlay:
+                print("ready")
+                moveToPageAt(index: 0)
+                if let playerItem = videoPlayer.currentItem {
+                    playerItem.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), context: &SwipeVideoController.playerItemContext)
+                }
+            default:
+                break
+            }
+        }
     }
     
     func hideUI() -> Bool {
