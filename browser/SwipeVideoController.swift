@@ -183,6 +183,7 @@ extension SwipeVideoController: SwipeDocumentViewer {
             
             CATransaction.begin()
             CATransaction.setDisableActions(true)
+            overlayLayer.timeOffset = 0.0
             if let sublayers = overlayLayer.sublayers {
                 for layer in sublayers {
                     layer.removeFromSuperlayer()
@@ -192,11 +193,27 @@ extension SwipeVideoController: SwipeDocumentViewer {
                 for element in elements {
                     if let id = element["id"] as? String,
                        let layer = layers[id] {
+                        layer.removeAllAnimations()
+                        layer.transform = CATransform3DIdentity
                         let x = element["x"] as? CGFloat ?? 0
                         let y = element["y"] as? CGFloat ?? 0
                         let frame = CGRect(origin: CGPoint(x:x, y:y), size: layer.frame.size)
                         layer.frame = frame
                         overlayLayer.addSublayer(layer)
+                        
+                        if let to = element["to"] as? [String:Any] {
+                            if let tx = to["translate"] as? [CGFloat], tx.count == 2 {
+                                let ani = CABasicAnimation(keyPath: "transform")
+                                let transform = CATransform3DMakeTranslation(tx[0], tx[1], 0.0)
+                                ani.fromValue = NSValue(caTransform3D : CATransform3DIdentity)
+                                ani.toValue = NSValue(caTransform3D : transform)
+                                ani.fillMode = kCAFillModeBoth
+                                ani.beginTime = to["start"] as? Double ?? 0.0
+                                ani.duration = to["duration"] as? Double ?? duration
+                                layer.add(ani, forKey: "transform")
+                                layer.transform = transform
+                            }
+                        }
                     }
                 }
             }
