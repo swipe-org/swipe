@@ -17,6 +17,11 @@ class SwipeVideoController: UIViewController {
     fileprivate let videoPlayer = AVPlayer()
     fileprivate var videoLayer:AVPlayerLayer!
     fileprivate var index = 0
+    fileprivate var observer:Any?
+    
+    deinit {
+        print("deinit")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,6 +91,14 @@ extension SwipeVideoController: SwipeDocumentViewer {
     func reloadWithLanguageId(_ langId:String) {
         // no op
     }
+    
+    private func removeObserver() {
+        if let observer = self.observer {
+            videoPlayer.removeTimeObserver(observer)
+            self.observer = nil
+            print("remove observer")
+        }
+    }
 
     func moveToPageAt(index:Int) {
         print("moveToPageAt", index)
@@ -93,13 +106,25 @@ extension SwipeVideoController: SwipeDocumentViewer {
             self.index = index
             let page = pages[self.index]
             let start = page["start"] as? Double ?? 0.0
-            //let duration = page["duration"] as? CGFloat ?? 0.0
+            let duration = page["duration"] as? Double ?? 0.0
+            let videoPlayer = self.videoPlayer // local
             guard let playerItem = videoPlayer.currentItem else {
                 return // something is wrong
             }
+
+            removeObserver()
             let time = CMTime(seconds: start, preferredTimescale: 600)
             playerItem.seek(to: time) { (success) in
-                print("seek complete", success)
+                //print("seek complete", success)
+                if duration > 0 {
+                    videoPlayer.play()
+                    let end = CMTime(seconds: start + duration, preferredTimescale: 600)
+                    self.observer = videoPlayer.addBoundaryTimeObserver(forTimes: [end as NSValue], queue: nil) { [weak self] in
+                        print("pausing", index)
+                        videoPlayer.pause()
+                        self?.removeObserver()
+                    }
+                }
             }
         }
     }
