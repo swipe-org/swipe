@@ -18,9 +18,10 @@ class SwipeVideoController: UIViewController {
     fileprivate var videoLayer:AVPlayerLayer!
     fileprivate var index = 0
     fileprivate var observer:Any?
+    fileprivate var layers = [String:CALayer]()
     
     deinit {
-        print("deinit")
+        print("SVideoC deinit")
     }
 
     override func viewDidLoad() {
@@ -61,6 +62,21 @@ extension SwipeVideoController: SwipeDocumentViewer {
         let playerItem = AVPlayerItem(url:videoURL)
         videoPlayer.replaceCurrentItem(with: playerItem)
         
+        if let elements = document["elements"] as? [[String:Any]] {
+            print("elements", elements)
+            for element in elements {
+                if let id = element["id"] as? String,
+                   let h = element["h"] as? CGFloat,
+                   let w = element["w"] as? CGFloat {
+                   let layer = CALayer()
+                   layer.frame = CGRect(origin: .zero, size: CGSize(width: w, height: h))
+                   layer.backgroundColor = UIColor.blue.cgColor
+                   layers[id] = layer
+                }
+            }
+        }
+        //moveToPageAt(index: 0)
+        
         callback(1.0, nil)
     }
     
@@ -96,12 +112,12 @@ extension SwipeVideoController: SwipeDocumentViewer {
         if let observer = self.observer {
             videoPlayer.removeTimeObserver(observer)
             self.observer = nil
-            print("remove observer")
+            print("SVideoC remove observer")
         }
     }
 
     func moveToPageAt(index:Int) {
-        print("moveToPageAt", index)
+        print("SVideoC moveToPageAt", index)
         if index < pages.count {
             self.index = index
             let page = pages[self.index]
@@ -120,11 +136,15 @@ extension SwipeVideoController: SwipeDocumentViewer {
                     videoPlayer.play()
                     let end = CMTime(seconds: start + duration, preferredTimescale: 600)
                     self.observer = videoPlayer.addBoundaryTimeObserver(forTimes: [end as NSValue], queue: nil) { [weak self] in
-                        print("pausing", index)
+                        print("SVideoC pausing", index)
                         videoPlayer.pause()
                         self?.removeObserver()
                     }
                 }
+            }
+            
+            for (_, layer) in layers {
+                view.layer.addSublayer(layer)
             }
         }
     }
