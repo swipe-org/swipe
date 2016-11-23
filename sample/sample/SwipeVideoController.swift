@@ -30,6 +30,7 @@ class SwipeVideoController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         videoLayer = AVPlayerLayer(player: self.videoPlayer)
+        overlayLayer.masksToBounds = true
         view.layer.addSublayer(self.videoLayer)
         view.layer.addSublayer(self.overlayLayer)
     }
@@ -44,8 +45,8 @@ class SwipeVideoController: UIViewController {
                         viewSize.height / dimension.height)
         var xf = CATransform3DMakeScale(scale, scale, 0)
         xf = CATransform3DTranslate(xf,
-            (scale - 1.0) * dimension.width / 2.0 / scale + (viewSize.width - dimension.width * scale) / 2.0 / scale,
-            (scale - 1.0) * dimension.height / 2.0 / scale + (viewSize.height - dimension.height * scale) / 2.0 / scale, 0.0)
+            (viewSize.width - dimension.width) / 2.0 / scale,
+            (viewSize.height - dimension.height) / 2.0 / scale, 0.0)
         self.videoLayer.transform = xf
         self.overlayLayer.transform = xf
     }
