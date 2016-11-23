@@ -82,4 +82,14 @@ extension SwipeVideoController: SwipeDocumentViewer {
     func reloadWithLanguageId(_ langId:String) {
         // no op
     }
+
+    func moveToPageAt(index:Int) {
+        print("moveToPageAt", index)
+    }
+    func pageIndex() -> Int? {
+        return 0
+    }
+    func pageCount() -> Int? {
+        return 3
+    }
 }

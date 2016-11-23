@@ -137,6 +137,16 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     func reloadWithLanguageId(_ langID:String) {
         // no operation for this case
     }
+    
+    func moveToPageAt(index:Int) {
+        // no op
+    }
+    func pageIndex() -> Int? {
+        return nil
+    }
+    func pageCount() -> Int? {
+        return nil
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

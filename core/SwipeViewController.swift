@@ -587,8 +587,20 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
             scrollView.contentOffset = offset
         }
     }
+
+    func moveToPageAt(index:Int) {
+        if index < self.book.pages.count {
+            self.moveTo(pageIndex: index)
+        }
+    }
+    func pageIndex() -> Int? {
+        return self.book.pageIndex
+    }
+    func pageCount() -> Int? {
+        return self.book.pages.count
+    }
     
-    func moveTo(pageIndex:Int, fAdvancing:Bool = true) {
+    private func moveTo(pageIndex:Int, fAdvancing:Bool = true) {
         if pageIndex < self.book.pages.count && pageIndex != self.book.pageIndex {
             let frame = scrollView.frame
             scrollView.contentOffset = self.book.horizontal ? CGPoint(x: (CGFloat(pageIndex)-0.5) * frame.size.width, y: 0) : CGPoint(x: 0, y: (CGFloat(pageIndex)-0.5) * frame.size.height)
