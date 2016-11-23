@@ -184,7 +184,8 @@ extension SwipeVideoController: SwipeDocumentViewer {
 
             removeObserver()
             let time = CMTime(seconds: start, preferredTimescale: 600)
-            playerItem.seek(to: time) { (success) in
+            let tolerance = CMTimeMake(10, 600) // 1/60sec
+            playerItem.seek(to: time, toleranceBefore: tolerance, toleranceAfter: tolerance) { (success) in
                 //print("seek complete", success)
                 if duration > 0 {
                     videoPlayer.play()
