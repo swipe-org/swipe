@@ -27,6 +27,9 @@ protocol SwipeDocumentViewer {
     func saveState() -> [String:Any]?
     func languages() -> [[String:Any]]?
     func reloadWithLanguageId(_ langId:String)
+    func moveToPageAt(index:Int)
+    func pageIndex() -> Int?
+    func pageCount() -> Int?
 }
 
 enum SwipeError: Swift.Error {

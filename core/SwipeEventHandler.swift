@@ -14,12 +14,12 @@ class SwipeEventHandler: NSObject {
     override init () {
         super.init()
         SwipeEventHandler.count += 1
-        print("SEventHandler init", SwipeEventHandler.count)
+        //print("SEventHandler init", SwipeEventHandler.count)
     }
     
     deinit {
         SwipeEventHandler.count -= 1
-        print("SEventHandler deinit", SwipeEventHandler.count)
+        //print("SEventHandler deinit", SwipeEventHandler.count)
     }
 
     func parse(_ eventsInfo: [String:Any]) {

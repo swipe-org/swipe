@@ -17,20 +17,11 @@ import UIKit
 // Change s_verbosLevel to 1 to see debug messages for this class
 //
 private func MyLog(_ text:String, level:Int = 0) {
-    let s_verbosLevel = 1
+    let s_verbosLevel = 0
     if level <= s_verbosLevel {
-        NSLog(text)
+        print(text)
     }
 }
-
-//
-// This is the place you can add more document types. 
-// Those UIViewControllers MUST support SwipeDocumentViewer protocol.
-//
-let g_typeMapping:[String:(Void) -> UIViewController] = [
-    "net.swipe.list": { return SwipeTableViewController(nibName:"SwipeTableViewController", bundle:nil) },
-    "net.swipe.swipe": { return SwipeViewController() },
-]
 
 protocol SwipeBrowserDelegate: NSObjectProtocol {
     func documentDidLoad(browser:SwipeBrowser)
@@ -41,7 +32,18 @@ protocol SwipeBrowserDelegate: NSObjectProtocol {
 // SwipeBrowser "hosts" another UIViewController, which supports SwipeDocumentViewer protocol.
 //
 class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
+    //
+    // This is the place you can add more document types. 
+    // Those UIViewControllers MUST support SwipeDocumentViewer protocol.
+    //
+    static private var typeMapping:[String:(Void) -> UIViewController] = [
+        "net.swipe.list": { return SwipeTableViewController(nibName:"SwipeTableViewController", bundle:nil) },
+        "net.swipe.swipe": { return SwipeViewController() },
+    ]
     static var stack = [SwipeBrowser]()
+    static func register(type:String, factory:@escaping (Void) -> UIViewController) {
+        typeMapping[type] = factory
+    }
     
     public weak var delegate:SwipeBrowserDelegate?
     var notificationManager = SNNotificationManager()
@@ -185,8 +187,8 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         if let type = document["type"] as? String {
             documentType = type
         }
-        guard let type = g_typeMapping[documentType] else {
-            return processError("Unknown type:".localized + "\(g_typeMapping[documentType]).")
+        guard let type = SwipeBrowser.typeMapping[documentType] else {
+            return processError("Unknown type:".localized + "\(SwipeBrowser.typeMapping[documentType]).")
         }
         let vc = type()
         guard let documentViewer = vc as? SwipeDocumentViewer else {
