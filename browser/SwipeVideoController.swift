@@ -183,7 +183,6 @@ extension SwipeVideoController: SwipeDocumentViewer {
             
             CATransaction.begin()
             CATransaction.setDisableActions(true)
-            overlayLayer.timeOffset = 0.0
             if let sublayers = overlayLayer.sublayers {
                 for layer in sublayers {
                     layer.removeFromSuperlayer()
@@ -208,7 +207,10 @@ extension SwipeVideoController: SwipeDocumentViewer {
                                 ani.fromValue = NSValue(caTransform3D : CATransform3DIdentity)
                                 ani.toValue = NSValue(caTransform3D : transform)
                                 ani.fillMode = kCAFillModeBoth
-                                ani.beginTime = to["start"] as? Double ?? 0.0
+                                if let start = to["start"] as? Double {
+                                    let time = layer.convertTime(CACurrentMediaTime(), to: nil)
+                                    ani.beginTime = time + start
+                                }
                                 ani.duration = to["duration"] as? Double ?? duration
                                 layer.add(ani, forKey: "transform")
                                 layer.transform = transform
