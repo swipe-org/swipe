@@ -509,7 +509,7 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
         self.book.pageIndex = newPageIndex
         self.preparePages { (index:Int) -> (Void) in
             if fDeferredEnter && newPageIndex == index && newPageIndex == self.book.pageIndex {
-                print("SwipeVC index=\(index)")
+                //print("SwipeVC index=\(index)")
                 if fForced {
                     self.book.currentPage.willEnter(true)
                 }

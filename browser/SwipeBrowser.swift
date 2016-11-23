@@ -17,9 +17,9 @@ import UIKit
 // Change s_verbosLevel to 1 to see debug messages for this class
 //
 private func MyLog(_ text:String, level:Int = 0) {
-    let s_verbosLevel = 1
+    let s_verbosLevel = 0
     if level <= s_verbosLevel {
-        NSLog(text)
+        print(text)
     }
 }
 
