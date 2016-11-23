@@ -21,6 +21,7 @@ class SwipeVideoController: UIViewController {
     fileprivate var index = 0
     fileprivate var observer:Any?
     fileprivate var layers = [String:CALayer]()
+    fileprivate var dimension = CGSize(width:320, height:568)
     
     deinit {
         print("SVideoC deinit")
@@ -35,8 +36,18 @@ class SwipeVideoController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.videoLayer.frame = view.bounds
-        self.overlayLayer.frame = view.bounds
+        let frame = CGRect(origin: .zero, size: dimension)
+        self.videoLayer.frame = frame
+        self.overlayLayer.frame = frame
+        let viewSize = view.bounds.size
+        let scale = min(viewSize.width / dimension.width,
+                        viewSize.height / dimension.height)
+        var xf = CATransform3DMakeScale(scale, scale, 0)
+        xf = CATransform3DTranslate(xf,
+            (scale - 1.0) * dimension.width / 2.0 / scale + (viewSize.width - dimension.width * scale) / 2.0 / scale,
+            (scale - 1.0) * dimension.height / 2.0 / scale + (viewSize.height - dimension.height * scale) / 2.0 / scale, 0.0)
+        self.videoLayer.transform = xf
+        self.overlayLayer.transform = xf
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,6 +70,10 @@ extension SwipeVideoController: SwipeDocumentViewer {
             throw SwipeError.invalidDocument
         }
         self.pages = pages
+        if let dimension = document["dimension"] as? [CGFloat],
+           dimension.count == 2 {
+           self.dimension = CGSize(width: dimension[0], height: dimension[1])
+        }
 
         guard let videoURL = Bundle.main.url(forResource: filename, withExtension: nil) else {
             return
