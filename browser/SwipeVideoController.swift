@@ -202,17 +202,22 @@ extension SwipeVideoController: SwipeDocumentViewer {
                         overlayLayer.addSublayer(layer)
                         
                         if let to = element["to"] as? [String:Any] {
+                            var beginTime:CFTimeInterval?
+                            if let start = to["start"] as? Double {
+                                beginTime = layer.convertTime(CACurrentMediaTime(), to: nil) + start
+                            }
+                            let aniDuration = to["duration"] as? Double ?? duration
+                        
                             if let tx = to["translate"] as? [CGFloat], tx.count == 2 {
                                 let ani = CABasicAnimation(keyPath: "transform")
                                 let transform = CATransform3DMakeTranslation(tx[0], tx[1], 0.0)
-                                ani.fromValue = NSValue(caTransform3D : CATransform3DIdentity)
+                                ani.fromValue = CATransform3DIdentity as NSValue
                                 ani.toValue = transform as NSValue // NSValue(caTransform3D : transform)
                                 ani.fillMode = kCAFillModeBoth
-                                if let start = to["start"] as? Double {
-                                    let time = layer.convertTime(CACurrentMediaTime(), to: nil)
-                                    ani.beginTime = time + start
+                                if let beginTime = beginTime {
+                                    ani.beginTime = beginTime
                                 }
-                                ani.duration = to["duration"] as? Double ?? duration
+                                ani.duration = aniDuration
                                 layer.add(ani, forKey: "transform")
                                 layer.transform = transform
                             }
@@ -221,11 +226,10 @@ extension SwipeVideoController: SwipeDocumentViewer {
                                 ani.fromValue = layer.opacity as NSValue
                                 ani.toValue = opacity as NSValue
                                 ani.fillMode = kCAFillModeBoth
-                                if let start = to["start"] as? Double {
-                                    let time = layer.convertTime(CACurrentMediaTime(), to: nil)
-                                    ani.beginTime = time + start
+                                if let beginTime = beginTime {
+                                    ani.beginTime = beginTime
                                 }
-                                ani.duration = to["duration"] as? Double ?? duration
+                                ani.duration = aniDuration
                                 layer.add(ani, forKey: "transform")
                                 layer.opacity = opacity
                             }
