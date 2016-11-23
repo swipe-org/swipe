@@ -198,6 +198,7 @@ extension SwipeVideoController: SwipeDocumentViewer {
                         let y = element["y"] as? CGFloat ?? 0
                         let frame = CGRect(origin: CGPoint(x:x, y:y), size: layer.frame.size)
                         layer.frame = frame
+                        layer.opacity = element["opacity"] as? Float ?? 1.0
                         overlayLayer.addSublayer(layer)
                         
                         if let to = element["to"] as? [String:Any] {
@@ -205,7 +206,7 @@ extension SwipeVideoController: SwipeDocumentViewer {
                                 let ani = CABasicAnimation(keyPath: "transform")
                                 let transform = CATransform3DMakeTranslation(tx[0], tx[1], 0.0)
                                 ani.fromValue = NSValue(caTransform3D : CATransform3DIdentity)
-                                ani.toValue = NSValue(caTransform3D : transform)
+                                ani.toValue = transform as NSValue // NSValue(caTransform3D : transform)
                                 ani.fillMode = kCAFillModeBoth
                                 if let start = to["start"] as? Double {
                                     let time = layer.convertTime(CACurrentMediaTime(), to: nil)
@@ -214,6 +215,19 @@ extension SwipeVideoController: SwipeDocumentViewer {
                                 ani.duration = to["duration"] as? Double ?? duration
                                 layer.add(ani, forKey: "transform")
                                 layer.transform = transform
+                            }
+                            if let opacity = to["opacity"] as? Float {
+                                let ani = CABasicAnimation(keyPath: "opacity")
+                                ani.fromValue = layer.opacity as NSValue
+                                ani.toValue = opacity as NSValue
+                                ani.fillMode = kCAFillModeBoth
+                                if let start = to["start"] as? Double {
+                                    let time = layer.convertTime(CACurrentMediaTime(), to: nil)
+                                    ani.beginTime = time + start
+                                }
+                                ani.duration = to["duration"] as? Double ?? duration
+                                layer.add(ani, forKey: "transform")
+                                layer.opacity = opacity
                             }
                         }
                     }
