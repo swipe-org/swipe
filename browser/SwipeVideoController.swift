@@ -17,6 +17,7 @@ class SwipeVideoController: UIViewController {
     fileprivate var url:URL?
     fileprivate let videoPlayer = AVPlayer()
     fileprivate var videoLayer:AVPlayerLayer!
+    fileprivate let overlayLayer = CALayer()
     fileprivate var index = 0
     fileprivate var observer:Any?
     fileprivate var layers = [String:CALayer]()
@@ -29,11 +30,13 @@ class SwipeVideoController: UIViewController {
         super.viewDidLoad()
         videoLayer = AVPlayerLayer(player: self.videoPlayer)
         view.layer.addSublayer(self.videoLayer)
+        view.layer.addSublayer(self.overlayLayer)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.videoLayer.frame = view.bounds
+        self.overlayLayer.frame = view.bounds
     }
 
     override func didReceiveMemoryWarning() {
@@ -178,9 +181,26 @@ extension SwipeVideoController: SwipeDocumentViewer {
                 }
             }
             
-            for (_, layer) in layers {
-                view.layer.addSublayer(layer)
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+            if let sublayers = overlayLayer.sublayers {
+                for layer in sublayers {
+                    layer.removeFromSuperlayer()
+                }
             }
+            if let elements = page["elements"] as? [[String:Any]] {
+                for element in elements {
+                    if let id = element["id"] as? String,
+                       let layer = layers[id] {
+                        let x = element["x"] as? CGFloat ?? 0
+                        let y = element["y"] as? CGFloat ?? 0
+                        let frame = CGRect(origin: CGPoint(x:x, y:y), size: layer.frame.size)
+                        layer.frame = frame
+                        overlayLayer.addSublayer(layer)
+                    }
+                }
+            }
+            CATransaction.commit()
         }
     }
     func pageIndex() -> Int? {
