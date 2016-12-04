@@ -85,13 +85,29 @@ extension SwipeVideoController: SwipeDocumentViewer {
         if let elements = document["elements"] as? [[String:Any]] {
             print("elements", elements)
             for element in elements {
-                if let id = element["id"] as? String,
-                   let h = element["h"] as? CGFloat,
-                   let w = element["w"] as? CGFloat {
-                   let layer = CALayer()
-                   layer.frame = CGRect(origin: .zero, size: CGSize(width: w, height: h))
-                   layer.backgroundColor = UIColor.blue.cgColor
-                   layers[id] = layer
+                if let id = element["id"] as? String {
+                    var h = element["h"] as? CGFloat
+                    var w = element["w"] as? CGFloat
+                    let layer = CALayer()
+                    if let imageName = element["img"] as? String,
+                       let image = UIImage(named: imageName) {
+                        layer.contents = image.cgImage
+                        if let h = h {
+                            if w == nil {
+                                w = h / image.size.height * image.size.width
+                            }
+                        } else if let w = w {
+                            h = w / image.size.width * image.size.height
+                        } else {
+                            h = image.size.height
+                            w = image.size.width
+                        }
+                    }
+                    if let h = h, let w = w {
+                        layer.frame = CGRect(origin: .zero, size: CGSize(width: w, height: h))
+                        layer.backgroundColor = UIColor.blue.cgColor
+                        layers[id] = layer
+                    }
                 }
             }
         }
