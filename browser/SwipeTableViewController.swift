@@ -178,18 +178,22 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "foo")
-
-        // Configure the cell...
         let section = self.sections[indexPath.section]
         guard let items = section["items"] as? [[String:Any]] else {
-            return cell
+            return dequeueCell(style: .default)
         }
         let item = items[indexPath.row]
+        let text = item["text"] as? String
+        let cell = dequeueCell(style: text == nil ? .default : .subtitle)
+
+        // Configure the cell...
         if let title = item["title"] as? String {
             cell.textLabel!.text = title
         } else if let url = item["url"] as? String {
             cell.textLabel!.text = url
+        }
+        if let text = text {
+            cell.detailTextLabel!.text = text
         }
         if let icon = item["icon"] as? String,
             let url = URL.url(icon, baseURL: self.url),
@@ -215,6 +219,20 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let section = self.sections[section]
         return section["title"] as? String
+    }
+    
+    private static let cellIdentifiers = [UITableViewCellStyle.default: "default", .subtitle: "subtitle"] // value1 and value2 styles are not supported yet.
+    
+    private func dequeueCell(style: UITableViewCellStyle) -> UITableViewCell {
+        let identifier = SwipeTableViewController.cellIdentifiers[style]!
+        if let cell = tableView.dequeueReusableCell(withIdentifier: identifier) {
+            cell.textLabel?.text = nil
+            cell.detailTextLabel?.text = nil
+            cell.imageView?.image = nil
+            return cell
+        } else {
+            return UITableViewCell(style: style, reuseIdentifier: identifier)
+        }
     }
 
     func tapped() {
