@@ -170,7 +170,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "foo")
+        let cell = dequeueCell()
 
         // Configure the cell...
         let section = self.sections[indexPath.section]
@@ -207,6 +207,16 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let section = self.sections[section]
         return section["title"] as? String
+    }
+    
+    private func dequeueCell() -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "foo") {
+            cell.textLabel?.text = nil
+            cell.imageView?.image = nil
+            return cell
+        } else {
+            return UITableViewCell(style: .default, reuseIdentifier: "foo")
+        }
     }
 
     func tapped() {
