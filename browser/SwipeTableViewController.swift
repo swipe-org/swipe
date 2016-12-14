@@ -65,7 +65,17 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
         } else {
             throw SwipeError.invalidDocument
         }
-        callback(1.0, nil)
+        _ = self.view // Make sure the view and subviews (tableView) are loaded from xib.
+        updateRowHeight()
+        
+        self.prefetcher.start { (completed:Bool, _:[URL], _:[NSError]) -> Void in
+            if completed {
+                MyLog("SWTable prefetch complete", level:1)
+                self.prefetching = false
+                self.tableView.reloadData()
+            }
+            callback(self.prefetcher.progress, nil)
+        }
     }
 
     override func viewDidLoad() {
@@ -76,14 +86,6 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
             effectView.frame = imageView.frame
             effectView.autoresizingMask = UIViewAutoresizing([.flexibleWidth, .flexibleHeight])
             imageView.addSubview(effectView)
-        }
-
-        self.prefetcher.start { (completed:Bool, _:[URL], _:[NSError]) -> Void in
-            if completed {
-                MyLog("SWTable prefetch complete", level:1)
-                self.prefetching = false
-                self.tableView.reloadData()
-            }
         }
     }
     
@@ -97,7 +99,10 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+        updateRowHeight()
+    }
+    
+    private func updateRowHeight() {
         let size = self.tableView.bounds.size
         if let value = document?["rowHeight"] as? CGFloat {
             self.tableView.rowHeight = value
