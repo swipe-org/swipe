@@ -65,11 +65,12 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
         } else {
             throw SwipeError.invalidDocument
         }
+        _ = self.view // Make sure the view and subviews (tableView) are loaded from xib.
+        updateRowHeight()
         
         self.prefetcher.start { (completed:Bool, _:[URL], _:[NSError]) -> Void in
             if completed {
                 MyLog("SWTable prefetch complete", level:1)
-                _ = self.view // Make sure the view and subviews (tableView) are loaded from xib.
                 self.prefetching = false
                 self.tableView.reloadData()
             }
@@ -98,7 +99,10 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+        updateRowHeight()
+    }
+    
+    private func updateRowHeight() {
         let size = self.tableView.bounds.size
         if let value = document?["rowHeight"] as? CGFloat {
             self.tableView.rowHeight = value
