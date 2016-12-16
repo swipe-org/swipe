@@ -211,6 +211,8 @@ extension SwipeVideoController: SwipeDocumentViewer {
                         videoPlayer.pause()
                         self?.removeObserver()
                     }
+                } else {
+                    videoPlayer.pause()
                 }
             }
             
