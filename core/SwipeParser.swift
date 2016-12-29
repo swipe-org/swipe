@@ -372,4 +372,27 @@ class SwipeParser {
         }
         return nil
     }
+
+    static func preferredLangId(in languages: [[String : Any]]) -> String? {
+        // 1st, find a lang id matching system language.
+        // A lang id can be in "en-US", "en", "zh-Hans-CN" or "zh-Hans" formats (with/without a country code).
+        // "en-US" or "zh-Hans-CN" formats with a country code have higher priority to match than "en" or "zh-Hans" without a country code.
+        if let systemLanguage = NSLocale.preferredLanguages.first?.components(separatedBy: "-") {
+            for rangeEnd in systemLanguage.indices.reversed() {
+                let langId = systemLanguage[0...rangeEnd].joined(separator: "-")
+                if languages.contains(where: { $0["id"] as? String == langId }) {
+                    return langId
+                }
+            }
+        }
+        // 2nd, use the default lang id ("*") if no lang id matches, and the default id exists.
+        if languages.contains(where: { $0["id"] as? String == "*" }) {
+            return "*"
+        }
+        // At last, use the first lang id in the language list if still no lang id is specified.
+        if let langId = languages.first?["id"] as? String {
+            return langId
+        }
+        return nil
+    }
 }
