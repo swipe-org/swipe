@@ -5,6 +5,7 @@
         { "url":"swipe.swipe", "title":"Swipe Overview", "icon":"Icon-180.png" },
         { "url":"tutorial.swipe", "title":"Swipe Tutorial", "icon":"Icon-180.png" },
         { "url":"empty.swipe", "title":"Empty", "icon":"Icon-180.png" },
+        { "url":"dice.swipe", "title":"Dice", "icon":"http://satoshi.blogs.com/swipe/Dice1.png" },
         { "url":"videostream.swipe", "title":"Streaming Video", "icon":"movie.png" },
         { "url":"radiostream.swipe", "title":"Internet Radio Stations", "icon":"radio.png" },
         { "url":"markdown.swipe", "title":"Rich Text", "icon":"text.png" },

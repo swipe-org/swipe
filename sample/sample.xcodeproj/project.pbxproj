@@ -19,6 +19,7 @@
 		7473AC531D6D3E5600DA34B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7473AC521D6D3E5600DA34B1 /* Assets.xcassets */; };
 		7473AC561D6D3E5600DA34B1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7473AC541D6D3E5600DA34B1 /* LaunchScreen.storyboard */; };
 		7473AC5D1D6D410800DA34B1 /* IMG_9401.mov in Resources */ = {isa = PBXBuildFile; fileRef = 7473AC5C1D6D410800DA34B1 /* IMG_9401.mov */; };
+		748C52471E15D22A00048329 /* dice.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 748C52461E15D22A00048329 /* dice.swipe */; };
 		74AE29691DE4FE3900C6521A /* swipe.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74AE29681DE4FE3900C6521A /* swipe.swipe */; };
 		74C9BC6A1D763A04008281AF /* vectors.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74C9BC691D763A04008281AF /* vectors.swipe */; };
 		74C9BC6B1D763ABB008281AF /* vectors.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74C9BC691D763A04008281AF /* vectors.swipe */; };
@@ -235,6 +236,7 @@
 		7473AC551D6D3E5600DA34B1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7473AC571D6D3E5600DA34B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7473AC5C1D6D410800DA34B1 /* IMG_9401.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = IMG_9401.mov; sourceTree = "<group>"; };
+		748C52461E15D22A00048329 /* dice.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dice.swipe; sourceTree = "<group>"; };
 		74AE29681DE4FE3900C6521A /* swipe.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = swipe.swipe; sourceTree = "<group>"; };
 		74C9BC691D763A04008281AF /* vectors.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vectors.swipe; sourceTree = "<group>"; };
 		74D641461BE9168D006A4C20 /* Icon-180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-180.png"; sourceTree = "<group>"; };
@@ -473,6 +475,7 @@
 				74DD7FDE1BDFE33F0042BB9D /* shuttle.png */,
 				74DD7FDF1BDFE33F0042BB9D /* sound01.wav */,
 				74DD7FE01BDFE33F0042BB9D /* empty.swipe */,
+				748C52461E15D22A00048329 /* dice.swipe */,
 				74AE29681DE4FE3900C6521A /* swipe.swipe */,
 				74DD7FE11BDFE33F0042BB9D /* tutorial.swipe */,
 			);
@@ -838,6 +841,7 @@
 				98FF4D2B1CBE857800BD9DA8 /* details_index.swipe in Resources */,
 				74EA71801BD047F0006808EA /* Main.storyboard in Resources */,
 				74DD7FD81BDFCC880042BB9D /* radio.png in Resources */,
+				748C52471E15D22A00048329 /* dice.swipe in Resources */,
 				74DD7F951BDD3E770042BB9D /* nasa002.jpg in Resources */,
 				98C363301CD97B60005E7071 /* multilingual_strings.swipe in Resources */,
 			);
