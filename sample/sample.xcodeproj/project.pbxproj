@@ -172,6 +172,7 @@
 		98085FD01DDC0935008AA95A /* SwipeBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38FB4AB1D702D5200D6DF0B /* SwipeBrowser.swift */; };
 		98085FD11DDC0935008AA95A /* SwipeExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38FB4AC1D702D5200D6DF0B /* SwipeExporter.swift */; };
 		98085FD21DDC0935008AA95A /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38FB4AD1D702D5200D6DF0B /* SwipeTableViewController.swift */; };
+		986DFFF71E160906002AD77B /* multilingual_strings.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 98C3632F1CD97B60005E7071 /* multilingual_strings.swipe */; };
 		9871A4E91CC51C88006DE5C6 /* loop_animation.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 9871A4E81CC51C88006DE5C6 /* loop_animation.swipe */; };
 		9871A4EA1CC51C88006DE5C6 /* loop_animation.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 9871A4E81CC51C88006DE5C6 /* loop_animation.swipe */; };
 		98C363301CD97B60005E7071 /* multilingual_strings.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 98C3632F1CD97B60005E7071 /* multilingual_strings.swipe */; };
@@ -902,6 +903,7 @@
 				9871A4EA1CC51C88006DE5C6 /* loop_animation.swipe in Resources */,
 				74DD7FAC1BDD3E770042BB9D /* nasa013.jpg in Resources */,
 				74DD7FE31BDFE33F0042BB9D /* chara_walk.png in Resources */,
+				986DFFF71E160906002AD77B /* multilingual_strings.swipe in Resources */,
 				980482031CB8B51C0068F18C /* SwipeBrowser.xib in Resources */,
 				740FD4881BE2D7A700C2D91D /* SwipeTableViewController.xib in Resources */,
 				74DD7F9A1BDD3E770042BB9D /* nasa004.jpg in Resources */,
