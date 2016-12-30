@@ -27,6 +27,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     private var sections = [[String:Any]]()
     //private var items = [[String:Any]]()
     private var url:URL?
+    private var langId = "en"
     private weak var delegate:SwipeDocumentViewerDelegate?
     private var prefetching = true
     @IBOutlet private var tableView:UITableView!
@@ -57,6 +58,10 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     func loadDocument(_ document:[String:Any], size:CGSize, url:URL?, state:[String:Any]?, callback:@escaping (Float, NSError?)->(Void)) throws {
         self.document = document
         self.url = url
+        if let languages = languages(),
+           let langId = SwipeParser.preferredLangId(in: languages) {
+            self.langId = langId
+        }
         if let sections = document["sections"] as? [[String:Any]] {
             self.sections = sections
         } else if let items = document["items"] as? [[String:Any]] {
@@ -143,12 +148,13 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
 
     // <SwipeDocumentViewer> method
     func languages() -> [[String:Any]]? {
-        return nil
+        return document?["languages"] as? [[String:Any]]
     }
     
     // <SwipeDocumentViewer> method
     func reloadWithLanguageId(_ langID:String) {
-        // no operation for this case
+        self.langId = langID
+        tableView.reloadData()
     }
     
     func moveToPageAt(index:Int) {
@@ -188,11 +194,11 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
             return dequeueCell(style: .default)
         }
         let item = items[indexPath.row]
-        let text = item["text"] as? String
+        let text = parseText(info: item, key: "text")
         let cell = dequeueCell(style: text == nil ? .default : .subtitle)
 
         // Configure the cell...
-        if let title = item["title"] as? String {
+        if let title = parseText(info: item, key: "title") {
             cell.textLabel!.text = title
         } else if let url = item["url"] as? String {
             cell.textLabel!.text = url
@@ -223,7 +229,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let section = self.sections[section]
-        return section["title"] as? String
+        return parseText(info: section, key: "title")
     }
     
     private static let cellIdentifiers = [UITableViewCellStyle.default: "default", .subtitle: "subtitle"] // value1 and value2 styles are not supported yet.
@@ -238,6 +244,25 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
         } else {
             return UITableViewCell(style: style, reuseIdentifier: identifier)
         }
+    }
+    
+    private func parseText(info: [String:Any], key:String) -> String? {
+        guard let value = info[key] else {
+            return nil
+        }
+        if let text = value as? String {
+            return text
+        }
+        guard let params = value as? [String:Any] else {
+            return nil
+        }
+        if let key = params["ref"] as? String,
+           let strings = document?["strings"] as? [String:Any],
+           let texts = strings[key] as? [String:Any],
+           let text = SwipeParser.localizedString(texts, langId: langId) {
+            return text
+        }
+        return SwipeParser.localizedString(params, langId: langId)
     }
 
     func tapped() {

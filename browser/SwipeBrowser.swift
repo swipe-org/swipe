@@ -450,7 +450,9 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                     //print("SwipeB language selected \(langId)")
                     self.documentViewer?.reloadWithLanguageId(langId)
 #if os(iOS)
-                    self.hideUI()
+                    if let documentViewer = self.documentViewer, documentViewer.hideUI() {
+                        self.hideUI()
+                    }
 #endif
                 }))
             }
