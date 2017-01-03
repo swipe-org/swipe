@@ -21,6 +21,7 @@
 		7473AC5D1D6D410800DA34B1 /* IMG_9401.mov in Resources */ = {isa = PBXBuildFile; fileRef = 7473AC5C1D6D410800DA34B1 /* IMG_9401.mov */; };
 		748C52471E15D22A00048329 /* dice.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 748C52461E15D22A00048329 /* dice.swipe */; };
 		74AE29691DE4FE3900C6521A /* swipe.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74AE29681DE4FE3900C6521A /* swipe.swipe */; };
+		74B8D8741E1C56B200764324 /* dice2.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74B8D8731E1C56B200764324 /* dice2.swipe */; };
 		74C9BC6A1D763A04008281AF /* vectors.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74C9BC691D763A04008281AF /* vectors.swipe */; };
 		74C9BC6B1D763ABB008281AF /* vectors.swipe in Resources */ = {isa = PBXBuildFile; fileRef = 74C9BC691D763A04008281AF /* vectors.swipe */; };
 		74D641471BE9168D006A4C20 /* Icon-180.png in Resources */ = {isa = PBXBuildFile; fileRef = 74D641461BE9168D006A4C20 /* Icon-180.png */; };
@@ -239,6 +240,7 @@
 		7473AC5C1D6D410800DA34B1 /* IMG_9401.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = IMG_9401.mov; sourceTree = "<group>"; };
 		748C52461E15D22A00048329 /* dice.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dice.swipe; sourceTree = "<group>"; };
 		74AE29681DE4FE3900C6521A /* swipe.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = swipe.swipe; sourceTree = "<group>"; };
+		74B8D8731E1C56B200764324 /* dice2.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dice2.swipe; sourceTree = "<group>"; };
 		74C9BC691D763A04008281AF /* vectors.swipe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vectors.swipe; sourceTree = "<group>"; };
 		74D641461BE9168D006A4C20 /* Icon-180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-180.png"; sourceTree = "<group>"; };
 		74DD7F111BDD3E570042BB9D /* HiddenAgenda.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HiddenAgenda.mp3; sourceTree = "<group>"; };
@@ -477,6 +479,7 @@
 				74DD7FDF1BDFE33F0042BB9D /* sound01.wav */,
 				74DD7FE01BDFE33F0042BB9D /* empty.swipe */,
 				748C52461E15D22A00048329 /* dice.swipe */,
+				74B8D8731E1C56B200764324 /* dice2.swipe */,
 				74AE29681DE4FE3900C6521A /* swipe.swipe */,
 				74DD7FE11BDFE33F0042BB9D /* tutorial.swipe */,
 			);
@@ -726,7 +729,7 @@
 					};
 					74EA71761BD047F0006808EA = {
 						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = SU23HZ3B54;
+						DevelopmentTeam = H34BY2CCCD;
 						LastSwiftMigration = 0800;
 					};
 					74EA71E01BD0B0EE006808EA = {
@@ -829,6 +832,7 @@
 				74F1794F1BD8553F00126B49 /* text.png in Resources */,
 				74DD7FA71BDD3E770042BB9D /* nasa011.jpg in Resources */,
 				74DD7F4A1BDD3E610042BB9D /* IMG_8169.m4v in Resources */,
+				74B8D8741E1C56B200764324 /* dice2.swipe in Resources */,
 				74DD7F191BDD3E570042BB9D /* music.swipe in Resources */,
 				74DD7FA51BDD3E770042BB9D /* nasa010.jpg in Resources */,
 				740FD4901BE2DD6300C2D91D /* iTunesArtwork@2x.png in Resources */,
@@ -1179,7 +1183,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = SU23HZ3B54;
+				DEVELOPMENT_TEAM = H34BY2CCCD;
 				INFOPLIST_FILE = sample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = swipe.swipe.sample;
@@ -1192,7 +1196,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = SU23HZ3B54;
+				DEVELOPMENT_TEAM = H34BY2CCCD;
 				INFOPLIST_FILE = sample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = swipe.swipe.sample;
