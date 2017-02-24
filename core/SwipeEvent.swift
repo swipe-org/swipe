@@ -15,18 +15,18 @@ import Foundation
  */
 
 class SwipeEvent: NSObject {
-    private let info:[String:AnyObject]
+    private let info:[String:Any]
     let actions:[SwipeAction]
-    private(set) lazy var params: [String:AnyObject]? = {
-        return self.info["params"] as? [String:AnyObject]
+    private(set) lazy var params: [String:Any]? = {
+        return self.info["params"] as? [String:Any]
     }()
     
-    init(type: String, info: [String:AnyObject]) {
+    init(type: String, info: [String:Any]) {
         self.info = info
-        if let paramsInfo = info["params"] as? [String:AnyObject] {
+        if let paramsInfo = info["params"] as? [String:Any] {
             NSLog("XdEvent params: \(paramsInfo)")
         }
-        let actionsInfo = info["actions"] as? [[String:AnyObject]] ?? [[String:AnyObject]]()
+        let actionsInfo = info["actions"] as? [[String:Any]] ?? [[String:Any]]()
         actions = actionsInfo.map { SwipeAction(info: $0) }
     }
 }

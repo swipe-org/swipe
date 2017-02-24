@@ -14,20 +14,20 @@ extension String {
     }
 }
 
-extension NSURL {
-    static func url(urlString:String, baseURL:NSURL?) -> NSURL? {
-        let url = NSURL(string: urlString, relativeToURL: baseURL)
-        if let scheme = url?.scheme where scheme.characters.count > 0 {
+extension URL {
+    static func url(_ urlString:String, baseURL:URL?) -> URL? {
+        let url = URL(string: urlString, relativeTo: baseURL)
+        if let scheme = url?.scheme, scheme.characters.count > 0 {
             return url
         }
     
-        var components = urlString.componentsSeparatedByString("/")
+        var components = urlString.components(separatedBy: "/")
         if components.count == 1 {
-            return NSBundle.mainBundle().URLForResource(urlString, withExtension: nil)
+            return Bundle.main.url(forResource: urlString, withExtension: nil)
         }
         let filename = components.last
         components.removeLast()
-        let dir = components.joinWithSeparator("/")
-        return NSBundle.mainBundle().URLForResource(filename, withExtension: nil, subdirectory: dir)
+        let dir = components.joined(separator: "/")
+        return Bundle.main.url(forResource: filename, withExtension: nil, subdirectory: dir)
     }
 }

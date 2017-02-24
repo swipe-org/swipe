@@ -9,32 +9,32 @@ import Foundation
 class SwipeHttpGet : SwipeNode {
     let TAG = "SwipeHttpGet"
     private static var getters = [SwipeHttpGet]()
-    private var params: [String:AnyObject]?
-    private var data: [String:AnyObject]?
+    private var params: [String:Any]?
+    private var data: [String:Any]?
     
-    static func create(parent: SwipeNode, getInfo: [String:AnyObject]) {
+    static func create(_ parent: SwipeNode, getInfo: [String:Any]) {
         let geter = SwipeHttpGet(parent: parent, getInfo: getInfo)
         getters.append(geter)
     }
     
-    init(parent: SwipeNode, getInfo: [String:AnyObject]) {
+    init(parent: SwipeNode, getInfo: [String:Any]) {
         super.init(parent: parent)
 
-        if let eventsInfo = getInfo["events"] as? [String:AnyObject] {
+        if let eventsInfo = getInfo["events"] as? [String:Any] {
             eventHandler.parse(eventsInfo)
         }
         
-        if let sourceInfo = getInfo["source"] as? [String:AnyObject] {
-            if let urlString = sourceInfo["url"] as? String, url = NSURL(string: urlString) {
-                SwipeAssetManager.sharedInstance().loadAsset(url, prefix: "", bypassCache:true) { (urlLocal:NSURL?,  error:NSError!) -> Void in
-                    if let urlL = urlLocal where error == nil, let data = NSData(contentsOfURL: urlL) {
+        if let sourceInfo = getInfo["source"] as? [String:Any] {
+            if let urlString = sourceInfo["url"] as? String, let url = URL(string: urlString) {
+                SwipeAssetManager.sharedInstance().loadAsset(url, prefix: "", bypassCache:true) { (urlLocal:URL?, error:NSError?) -> Void in
+                    if let urlL = urlLocal, error == nil, let data = try? Data(contentsOf: urlL) {
                         do {
-                            guard let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? [String:AnyObject] else {
+                            guard let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions()) as? [String:Any] else {
                                 self.handleError("get \(urlString): not a dictionary.")
                                 return
                             }
                             // Success
-                            if let event = self.eventHandler.getEvent("completion"), actionsInfo = self.eventHandler.actionsFor("completion") {
+                            if let event = self.eventHandler.getEvent("completion"), let actionsInfo = self.eventHandler.actionsFor("completion") {
                                 self.data = json
                                 self.params = event.params
                                 self.execute(self, actions: actionsInfo)
@@ -44,7 +44,7 @@ class SwipeHttpGet : SwipeNode {
                             return
                         }
                     } else {
-                        self.handleError("get \(urlString): \(error.localizedDescription)")
+                        self.handleError("get \(urlString): \(error?.localizedDescription ?? "")")
                     }
                 }
             } else {
@@ -55,8 +55,8 @@ class SwipeHttpGet : SwipeNode {
         }
     }
     
-    private func handleError(errorMsg: String) {
-        if let event = self.eventHandler.getEvent("error"), actionsInfo = self.eventHandler.actionsFor("error") {
+    private func handleError(_ errorMsg: String) {
+        if let event = self.eventHandler.getEvent("error"), let actionsInfo = self.eventHandler.actionsFor("error") {
             self.data = ["message":errorMsg]
             self.params = event.params
             self.execute(self, actions: actionsInfo)
@@ -79,27 +79,27 @@ class SwipeHttpGet : SwipeNode {
     
     // SwipeNode
     
-    override func getPropertiesValue(originator: SwipeNode, info: [String:AnyObject]) -> AnyObject? {
+    override func getPropertiesValue(_ originator: SwipeNode, info: [String:Any]) -> Any? {
         let prop = info.keys.first!
         NSLog(TAG + " getPropsVal(\(prop))")
         
         switch (prop) {
         case "params":
-            if let params = self.params, data = self.data {
+            if let params = self.params, let data = self.data {
                 NSLog(TAG + " not checking params \(params)")
-                var item:[String:AnyObject] = ["params":data]
+                var item:[String:Any] = ["params":data]
                 var path = info
                 var property = "params"
                 
                 while (true) {
                     if let next = path[property] as? String {
-                        if let sub = item[property] as? [String:AnyObject] {
+                        if let sub = item[property] as? [String:Any] {
                             return sub[next]
                         } else {
                             return nil
                         }
-                    } else if let next = path[property] as? [String:AnyObject] {
-                        if let sub = item[property] as? [String:AnyObject] {
+                    } else if let next = path[property] as? [String:Any] {
+                        if let sub = item[property] as? [String:Any] {
                             path = next
                             property = path.keys.first!
                             item = sub

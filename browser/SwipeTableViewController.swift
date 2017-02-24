@@ -12,7 +12,7 @@ import Cocoa
 import UIKit
 #endif
 
-private func MyLog(text:String, level:Int = 0) {
+private func MyLog(_ text:String, level:Int = 0) {
     let s_verbosLevel = 0
     if level <= s_verbosLevel {
         NSLog(text)
@@ -23,25 +23,26 @@ private func MyLog(text:String, level:Int = 0) {
 // SwipeTableViewController is the "viewer" of documents with type "net.swipe.list"
 //
 class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeDocumentViewer {
-    private var document:[String:AnyObject]?
-    private var sections = [[String:AnyObject]]()
-    //private var items = [[String:AnyObject]]()
-    private var url:NSURL?
+    private var document:[String:Any]?
+    private var sections = [[String:Any]]()
+    //private var items = [[String:Any]]()
+    private var url:URL?
+    private var langId = "en"
     private weak var delegate:SwipeDocumentViewerDelegate?
     private var prefetching = true
     @IBOutlet private var tableView:UITableView!
     @IBOutlet private var imageView:UIImageView?
 
     // Returns the list of URLs of required resouces for this element (including children)
-    private lazy var resourceURLs:[NSURL:String] = {
-        var urls = [NSURL:String]()
+    private lazy var resourceURLs:[URL:String] = {
+        var urls = [URL:String]()
         for section in self.sections {
-            guard let items = section["items"] as? [[String:AnyObject]] else {
+            guard let items = section["items"] as? [[String:Any]] else {
                 continue
             }
             for item in items {
                 if let icon = item["icon"] as? String,
-                       url = NSURL.url(icon, baseURL: self.url) {
+                    let url = URL.url(icon, baseURL: self.url) {
                     urls[url] = "" // no prefix
                 }
             }
@@ -54,42 +55,59 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }()
         
     // <SwipeDocumentViewer> method
-    func loadDocument(document:[String:AnyObject], size:CGSize, url:NSURL?, state:[String:AnyObject]?, callback:(Float, NSError?)->(Void)) throws {
+    func loadDocument(_ document:[String:Any], size:CGSize, url:URL?, state:[String:Any]?, callback:@escaping (Float, NSError?)->(Void)) throws {
         self.document = document
         self.url = url
-        if let sections = document["sections"] as? [[String:AnyObject]] {
-            self.sections = sections
-        } else if let items = document["items"] as? [[String:AnyObject]] {
-            let section = [ "items":items ]
-            sections.append(section)
-        } else {
-            throw SwipeError.InvalidDocument
+        if let languages = languages(),
+           let langId = SwipeParser.preferredLangId(in: languages) {
+            self.langId = langId
         }
-        callback(1.0, nil)
+        if let sections = document["sections"] as? [[String:Any]] {
+            self.sections = sections
+        } else if let items = document["items"] as? [[String:Any]] {
+            let section = [ "items":items ]
+            sections.append(section as [String : Any])
+        } else {
+            throw SwipeError.invalidDocument
+        }
+        _ = self.view // Make sure the view and subviews (tableView) are loaded from xib.
+        updateRowHeight()
+        
+        self.prefetcher.start { (completed:Bool, _:[URL], _:[NSError]) -> Void in
+            if completed {
+                MyLog("SWTable prefetch complete", level:1)
+                self.prefetching = false
+                self.tableView.reloadData()
+            }
+            callback(self.prefetcher.progress, nil)
+        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         if let imageView = self.imageView {
-            let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+            let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
             effectView.frame = imageView.frame
-            effectView.autoresizingMask = UIViewAutoresizing([.FlexibleWidth, .FlexibleHeight])
+            effectView.autoresizingMask = UIViewAutoresizing([.flexibleWidth, .flexibleHeight])
             imageView.addSubview(effectView)
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
-        self.prefetcher.start { (completed:Bool, _:[NSURL], _:[NSError]) -> Void in
-            if completed {
-                MyLog("SWTable prefetch complete", level:1)
-                self.prefetching = false
-                self.tableView.reloadData()
-            }
+        if let selectedIndexPath = tableView.indexPathForSelectedRow {
+            tableView.deselectRow(at: selectedIndexPath, animated: true)
         }
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+        updateRowHeight()
+    }
+    
+    private func updateRowHeight() {
         let size = self.tableView.bounds.size
         if let value = document?["rowHeight"] as? CGFloat {
             self.tableView.rowHeight = value
@@ -104,7 +122,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     // <SwipeDocumentViewer> method
-    func setDelegate(delegate:SwipeDocumentViewerDelegate) {
+    func setDelegate(_ delegate:SwipeDocumentViewerDelegate) {
         self.delegate = delegate
     }
     
@@ -124,18 +142,29 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     // <SwipeDocumentViewer> method
-    func saveState() -> [String:AnyObject]? {
+    func saveState() -> [String:Any]? {
         return nil
     }
 
     // <SwipeDocumentViewer> method
-    func languages() -> [[String:AnyObject]]? {
-        return nil
+    func languages() -> [[String:Any]]? {
+        return document?["languages"] as? [[String:Any]]
     }
     
     // <SwipeDocumentViewer> method
-    func reloadWithLanguageId(langID:String) {
-        // no operation for this case
+    func reloadWithLanguageId(_ langID:String) {
+        self.langId = langID
+        tableView.reloadData()
+    }
+    
+    func moveToPageAt(index:Int) {
+        // no op
+    }
+    func pageIndex() -> Int? {
+        return nil
+    }
+    func pageCount() -> Int? {
+        return nil
     }
 
     override func didReceiveMemoryWarning() {
@@ -145,59 +174,95 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
 
     // MARK: - Table view data source
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return prefetching ? 0 : self.sections.count
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         let section = self.sections[section]
-        guard let items = section["items"] as? [[String:AnyObject]] else {
+        guard let items = section["items"] as? [[String:Any]] else {
             return 0
         }
         return items.count
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "foo")
-
-        // Configure the cell...
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = self.sections[indexPath.section]
-        guard let items = section["items"] as? [[String:AnyObject]] else {
-            return cell
+        guard let items = section["items"] as? [[String:Any]] else {
+            return dequeueCell(style: .default)
         }
         let item = items[indexPath.row]
-        if let title = item["title"] as? String {
+        let text = parseText(info: item, key: "text")
+        let cell = dequeueCell(style: text == nil ? .default : .subtitle)
+
+        // Configure the cell...
+        if let title = parseText(info: item, key: "title") {
             cell.textLabel!.text = title
         } else if let url = item["url"] as? String {
             cell.textLabel!.text = url
         }
+        if let text = text {
+            cell.detailTextLabel!.text = text
+        }
         if let icon = item["icon"] as? String,
-               url = NSURL.url(icon, baseURL: self.url),
-               urlLocal = self.prefetcher.map(url),
-               path = urlLocal.path,
-               image = UIImage(contentsOfFile: path) {
+            let url = URL.url(icon, baseURL: self.url),
+            let urlLocal = self.prefetcher.map(url),
+            let image = UIImage(contentsOfFile: urlLocal.path) {
             cell.imageView?.image = image
         }
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = self.sections[indexPath.section]
-        guard let items = section["items"] as? [[String:AnyObject]] else {
+        guard let items = section["items"] as? [[String:Any]] else {
             return
         }
         let item = items[indexPath.row]
         if let urlString = item["url"] as? String,
-           let url = NSURL.url(urlString, baseURL: self.url) {
+           let url = URL.url(urlString, baseURL: self.url) {
             self.delegate?.browseTo(url)
         }
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let section = self.sections[section]
-        return section["title"] as? String
+        return parseText(info: section, key: "title")
+    }
+    
+    private static let cellIdentifiers = [UITableViewCellStyle.default: "default", .subtitle: "subtitle"] // value1 and value2 styles are not supported yet.
+    
+    private func dequeueCell(style: UITableViewCellStyle) -> UITableViewCell {
+        let identifier = SwipeTableViewController.cellIdentifiers[style]!
+        if let cell = tableView.dequeueReusableCell(withIdentifier: identifier) {
+            cell.textLabel?.text = nil
+            cell.detailTextLabel?.text = nil
+            cell.imageView?.image = nil
+            return cell
+        } else {
+            return UITableViewCell(style: style, reuseIdentifier: identifier)
+        }
+    }
+    
+    private func parseText(info: [String:Any], key:String) -> String? {
+        guard let value = info[key] else {
+            return nil
+        }
+        if let text = value as? String {
+            return text
+        }
+        guard let params = value as? [String:Any] else {
+            return nil
+        }
+        if let key = params["ref"] as? String,
+           let strings = document?["strings"] as? [String:Any],
+           let texts = strings[key] as? [String:Any],
+           let text = SwipeParser.localizedString(texts, langId: langId) {
+            return text
+        }
+        return SwipeParser.localizedString(params, langId: langId)
     }
 
     func tapped() {
@@ -243,7 +308,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }

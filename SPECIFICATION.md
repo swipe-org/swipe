@@ -1062,3 +1062,84 @@ Example:
 }
 
 ```
+
+## 17. List Type Document
+
+A list type document is a list of data to display in a table view. It can be used as an index file to list and link to Swipe documents.
+
+### Document Properties
+
+A list **Document** is a UTF8 JSON file, which consists of a collection of either **Items** or **Sections**. The items can be listed under **items** property in the document level directly if the document has only a section. If the document has multiple sections, items must be listed in each section under **sections** property.
+
+- **type** (String): This must be "net.swipe.list" for a list document.
+- **title** (String): Title of the document, optional.
+- **rowHeight** (Float or Percent): Absolute value of row height in points, or relative value to table view height. Default is the system default row height.
+- **sections** ([Section,...]): List sections. Either **sections** or **items** property can exist in the document level.
+- **items** ([Item,...]): List items. Either **sections** or **items** property can exist in the document level.
+- **strings** ([StringId:[LangId:String]]): String resources.
+- **languages** ({"id":LangId, "title":String},...): Languages to display via the "Lang." button in the Swipe viewer.
+
+### Section Properties
+
+A **Section** is a collection of **Items** to group them.
+
+- **title** (String, [langId:String] or ["ref":StringId]): Title for the section header.
+- **items** ([Item,...]): List items.
+
+### Item Properties
+
+An **Item** is an entity for a table row.
+
+- **url** (String): Absolute or relative URL to a Swipe document or list file.
+- **title** (String, [langId:String] or ["ref":StringId]): Title of the item.
+- **text** (String, [langId:String] or ["ref":StringId]): Text of the item to display as a subtitle, optional.
+- **icon** (String): Absolute or relative URL to an icon image file.
+
+Example for a single section:
+```
+{
+    "type":"net.swipe.list",
+    "rowHeight":50.0,
+    "items":[
+        { "url":"a.swipe", "title":"A", "text":"Subtitle A", "icon":"a.png" },
+        { "url":"b.swipe", "title":"B", "text":"Subtitle B", "icon":"b.png" }
+    ]
+}
+```
+
+Example for multiple sections with multilingual support:
+```
+{
+    "type":"net.swipe.list",
+    "rowHeight":"10%",
+    "languages":[
+        {"id": "en", "title": "English"},
+        {"id": "de", "title": "German"}
+    ],
+    "strings": {
+        "anim": {"en":"Animation", "de": "Animation"},
+        "trans": {"en":"Transition", "de": "Übergang"},
+        "loop": {"en":"Loop", "de": "Schleife"}
+    },
+    "sections":[
+        {
+            "title":{ "ref":"anim" },
+            "items":[
+                { "url":"t.swipe", "title":{ "ref":"trans" }, "icon":"t.png" },
+                { "url":"l.swipe", "title":{ "ref":"loop" }, "icon":"l.png" }
+            ]
+        },
+        {
+            "title":{ "en":"Appearance", "de":"Aussehen" },
+            "items":[
+                {
+                    "url":"c.swipe",
+                    "title":{ "en":"Color", "de":"Farbe" },
+                    "text":{ "en":"Subtitle", "de":"Untertitel" },
+                    "icon":"c.png"
+                }
+            ]
+        }
+    ]
+}
+```

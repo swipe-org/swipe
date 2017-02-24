@@ -16,30 +16,30 @@ class SwipeTextArea: SwipeView, UITextViewDelegate {
     private var screenDimension = CGSize(width: 0, height: 0)
     private var textView: UITextView
 
-    init(parent: SwipeNode, info: [String:AnyObject], frame: CGRect, screenDimension: CGSize) {
+    init(parent: SwipeNode, info: [String:Any], frame: CGRect, screenDimension: CGSize) {
         self.screenDimension = screenDimension
         self.textView = UITextView(frame: frame)
         super.init(parent: parent, info: info)
         self.textView.delegate = self
-        self.textView.backgroundColor = UIColor.clearColor()
+        self.textView.backgroundColor = UIColor.clear
         //self.textView.becomeFirstResponder()
         self.view = self.textView as UIView
     }
     
-    override func setText(text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer?) -> Bool {
+    override func setText(_ text:String, scale:CGSize, info:[String:Any], dimension:CGSize, layer:CALayer?) -> Bool {
         self.textView.text = text
-        self.textView.textAlignment = NSTextAlignment.Center
+        self.textView.textAlignment = NSTextAlignment.center
         
-        func processAlignment(alignment:String) {
+        func processAlignment(_ alignment:String) {
             switch(alignment) {
             case "center":
-                self.textView.textAlignment = .Center
+                self.textView.textAlignment = .center
             case "left":
-                self.textView.textAlignment = .Left
+                self.textView.textAlignment = .left
             case "right":
-                self.textView.textAlignment = .Right
+                self.textView.textAlignment = .right
             case "justified":
-                self.textView.textAlignment = .Justified
+                self.textView.textAlignment = .justified
             default:
                 break
             }
@@ -62,14 +62,14 @@ class SwipeTextArea: SwipeView, UITextViewDelegate {
         }()
         
         self.textView.font = UIFont(name: "Helvetica", size: fontSize)
-        self.textView.textColor = UIColor(CGColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor))
+        self.textView.textColor = UIColor(cgColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.black.cgColor))
         
         parent!.execute(self, actions: parent!.eventHandler.actionsFor("textChanged"))
 
         return true
     }
     
-    override func getPropertyValue(originator: SwipeNode, property: String) -> AnyObject? {
+    override func getPropertyValue(_ originator: SwipeNode, property: String) -> Any? {
         switch (property) {
         case "text":
             return self.textView.text
@@ -81,19 +81,19 @@ class SwipeTextArea: SwipeView, UITextViewDelegate {
     }
 
     override func isFirstResponder() -> Bool {
-        return view!.isFirstResponder()
+        return view!.isFirstResponder
     }
 
     // UITextViewDelegate
 
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         parent!.execute(self, actions: parent!.eventHandler.actionsFor("textChanged"))
     }
     
-    func textViewDidBeginEditing(textView: UITextView) {
+    func textViewDidBeginEditing(_ textView: UITextView) {
     }
     
-    func textViewDidEndEditing(textView: UITextView) {
+    func textViewDidEndEditing(_ textView: UITextView) {
         parent!.execute(self, actions: parent!.eventHandler.actionsFor("endEdit"))
     }
 }

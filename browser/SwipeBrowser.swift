@@ -16,28 +16,37 @@ import UIKit
 //
 // Change s_verbosLevel to 1 to see debug messages for this class
 //
-private func MyLog(text:String, level:Int = 0) {
+private func MyLog(_ text:String, level:Int = 0) {
     let s_verbosLevel = 0
     if level <= s_verbosLevel {
-        NSLog(text)
+        print(text)
     }
 }
 
-//
-// This is the place you can add more document types. 
-// Those UIViewControllers MUST support SwipeDocumentViewer protocol.
-//
-let g_typeMapping:[String:Void -> UIViewController] = [
-    "net.swipe.list": { return SwipeTableViewController(nibName:"SwipeTableViewController", bundle:nil) },
-    "net.swipe.swipe": { return SwipeViewController() },
-]
+protocol SwipeBrowserDelegate: NSObjectProtocol {
+    func documentDidLoad(browser:SwipeBrowser)
+}
 
 //
 // SwipeBrowser is the main UIViewController that is pushed into the navigation stack.
 // SwipeBrowser "hosts" another UIViewController, which supports SwipeDocumentViewer protocol.
 //
 class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
+    //
+    // This is the place you can add more document types. 
+    // Those UIViewControllers MUST support SwipeDocumentViewer protocol.
+    //
+    static private var typeMapping:[String:(Void) -> UIViewController] = [
+        "net.swipe.list": { return SwipeTableViewController(nibName:"SwipeTableViewController", bundle:nil) },
+        "net.swipe.swipe": { return SwipeViewController() },
+    ]
     static var stack = [SwipeBrowser]()
+    static func register(type:String, factory:@escaping (Void) -> UIViewController) {
+        typeMapping[type] = factory
+    }
+    
+    public weak var delegate:SwipeBrowserDelegate?
+    var notificationManager = SNNotificationManager()
 
 #if os(iOS)
     private var fVisibleUI = true
@@ -56,21 +65,22 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     @IBOutlet var btnLanguage:UIButton?
 
     private var resourceRequest:NSBundleResourceRequest?
-    var url:NSURL? = NSBundle.mainBundle().URLForResource("index.swipe", withExtension: nil)
-    var jsonDocument:[String:AnyObject]?
+    var url:URL? = Bundle.main.url(forResource: "index.swipe", withExtension: nil)
+    var jsonDocument:[String:Any]?
     var controller:UIViewController?
     var documentViewer:SwipeDocumentViewer?
     var ignoreViewState = false
 
-    func browseTo(url:NSURL) {
+    func browseTo(_ url:URL) {
         let browser = SwipeBrowser(nibName: "SwipeBrowser", bundle: nil)
+        browser.delegate = self.delegate
         browser.url = url // 
         //MyLog("SWBrows url \(browser.url!)")
 
 #if os(OSX)
         self.presentViewControllerAsSheet(browser)
 #else
-        self.presentViewController(browser, animated: true) { () -> Void in
+        self.present(browser, animated: true) { () -> Void in
             SwipeBrowser.stack.append(browser)
             MyLog("SWBrows push \(SwipeBrowser.stack.count)", level: 1)
         }
@@ -88,7 +98,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         super.viewDidLoad()
         
         viewLoading?.alpha = 0
-        btnLanguage?.enabled = false
+        btnLanguage?.isEnabled = false
 
         if SwipeBrowser.stack.count == 0 {
             SwipeBrowser.stack.append(self) // special case for the first one
@@ -96,20 +106,20 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
         
 #if os(iOS)
-        btnExport?.enabled = false
-        slider.hidden = true
+        btnExport?.isEnabled = false
+        slider.isHidden = true
 #endif
 
         if let document = self.jsonDocument {
             self.openDocument(document, localResource: true)
         } else if let url = self.url {
             if url.scheme == "file" {
-                if let data = NSData(contentsOfURL: url) {
+                if let data = try? Data(contentsOf: url) {
                     self.openData(data, localResource: true)
                 } else {
                     // On-demand resource support
-                    if let urlLocal = NSBundle.mainBundle().URLForResource(url.lastPathComponent, withExtension: nil),
-                           data = NSData(contentsOfURL: urlLocal) {
+                    if let urlLocal = Bundle.main.url(forResource: url.lastPathComponent, withExtension: nil),
+                        let data = try? Data(contentsOf: urlLocal) {
                         self.openData(data, localResource: true)
                     } else {
                         self.processError("Missing resource:".localized + "\(url)")
@@ -117,12 +127,12 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 }
             } else {
                 let manager = SwipeAssetManager.sharedInstance()
-                manager.loadAsset(url, prefix: "", bypassCache:true) { (urlLocal:NSURL?,  error:NSError!) -> Void in
-                    if let urlL = urlLocal where error == nil,
-                       let data = NSData(contentsOfURL: urlL) {
+                manager.loadAsset(url, prefix: "", bypassCache:true) { (urlLocal:URL?,  error:NSError?) -> Void in
+                    if let urlL = urlLocal, error == nil,
+                       let data = try? Data(contentsOf: urlL) {
                         self.openData(data, localResource: false)
                     } else {
-                        self.processError(error.localizedDescription)
+                        self.processError(error?.localizedDescription ?? "")
                     }
                 }
             }
@@ -133,7 +143,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     }
     
     // NOTE: documentViewer and vc always points to the same UIController.
-    private func loadDocumentView(documentViewer:SwipeDocumentViewer, vc:UIViewController, document:[String:AnyObject]) {
+    private func loadDocumentView(_ documentViewer:SwipeDocumentViewer, vc:UIViewController, document:[String:Any]) {
 #if os(iOS)
         if let title = documentViewer.documentTitle() {
             labelTitle?.text = title
@@ -141,22 +151,22 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             labelTitle?.text = url?.lastPathComponent
         }
 #endif
-        if let languages = documentViewer.languages() where languages.count > 0 {
-            btnLanguage?.enabled = true
+        if let languages = documentViewer.languages(), languages.count > 0 {
+            btnLanguage?.isEnabled = true
         }
 
         controller = vc
         self.addChildViewController(vc)
-        vc.view.autoresizingMask = UIViewAutoresizing([.FlexibleWidth, .FlexibleHeight])
+        vc.view.autoresizingMask = UIViewAutoresizing([.flexibleWidth, .flexibleHeight])
 #if os(OSX)
         self.view.addSubview(vc.view, positioned: .Below, relativeTo: nil)
 #else
-        self.view.insertSubview(vc.view, atIndex: 0)
+        self.view.insertSubview(vc.view, at: 0)
 #endif
         var rcFrame = self.view.bounds
 #if os(iOS)
         if let _ = controller as? SwipeViewController {
-            btnExport?.enabled = true
+            btnExport?.isEnabled = true
         }
         if documentViewer.hideUI() {
             let tap = UITapGestureRecognizer(target: self, action: #selector(SwipeBrowser.tapped))
@@ -168,15 +178,17 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
 #endif
         vc.view.frame = rcFrame
+        
+        delegate?.documentDidLoad(browser: self)
     }
     
-    private func openDocumentViewer(document:[String:AnyObject]) {
+    private func openDocumentViewer(_ document:[String:Any]) {
         var documentType = "net.swipe.swipe" // default
         if let type = document["type"] as? String {
             documentType = type
         }
-        guard let type = g_typeMapping[documentType] else {
-            return processError("Unknown type:".localized + "\(g_typeMapping[documentType]).")
+        guard let type = SwipeBrowser.typeMapping[documentType] else {
+            return processError("Unknown type:".localized + "\(SwipeBrowser.typeMapping[documentType]).")
         }
         let vc = type()
         guard let documentViewer = vc as? SwipeDocumentViewer else {
@@ -185,17 +197,17 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         self.documentViewer = documentViewer
         documentViewer.setDelegate(self)
         do {
-            let defaults = NSUserDefaults.standardUserDefaults()
-            var state:[String:AnyObject]? = nil
-            if let url = self.url where ignoreViewState == false {
-                state = defaults.objectForKey(url.absoluteString!) as? [String:AnyObject]
+            let defaults = UserDefaults.standard
+            var state:[String:Any]? = nil
+            if let url = self.url, ignoreViewState == false {
+                state = defaults.object(forKey: url.absoluteString) as? [String:Any]
             }
             self.viewLoading?.alpha = 1.0
             self.labelLoading?.text = "Loading Network Resources...".localized
             try documentViewer.loadDocument(document, size:self.view.frame.size, url: url, state:state) { (progress:Float, error:NSError?) -> (Void) in
                 self.progress?.progress = progress
                 if progress >= 1 {
-                    UIView.animateWithDuration(0.2, animations: { () -> Void in
+                    UIView.animate(withDuration: 0.2, animations: { () -> Void in
                         self.viewLoading?.alpha = 0.0
                     }, completion: { (_:Bool) -> Void in
                         self.loadDocumentView(documentViewer, vc:vc, document: document)
@@ -209,22 +221,22 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
     }
     
-    private func openDocumentWithODR(document:[String:AnyObject], localResource:Bool) {
-            if let tags = document["resources"] as? [String] where localResource {
+    private func openDocumentWithODR(_ document:[String:Any], localResource:Bool) {
+            if let tags = document["resources"] as? [String], localResource {
                 //NSLog("tags = \(tags)")
                 let request = NSBundleResourceRequest(tags: Set<String>(tags))
                 self.resourceRequest = request
-                request.conditionallyBeginAccessingResourcesWithCompletionHandler() { (resourcesAvailable:Bool) -> Void in
+                request.conditionallyBeginAccessingResources() { (resourcesAvailable:Bool) -> Void in
                     MyLog("SWBrows resourceAvailable(\(tags)) = \(resourcesAvailable)", level:1)
-                    dispatch_async(dispatch_get_main_queue()) {
+                    DispatchQueue.main.async {
                         if resourcesAvailable {
                             self.openDocumentViewer(document)
                         } else {
-                            let alert = UIAlertController(title: "Swipe", message: "Loading Resources...".localized, preferredStyle: UIAlertControllerStyle.Alert)
-                            self.presentViewController(alert, animated: true) { () -> Void in
-                                request.beginAccessingResourcesWithCompletionHandler() { (error:NSError?) -> Void in
-                                    dispatch_async(dispatch_get_main_queue()) {
-                                        self.dismissViewControllerAnimated(false, completion: nil)
+                            let alert = UIAlertController(title: "Swipe", message: "Loading Resources...".localized, preferredStyle: UIAlertControllerStyle.alert)
+                            self.present(alert, animated: true) { () -> Void in
+                                request.beginAccessingResources() { (error:Swift.Error?) -> Void in
+                                    DispatchQueue.main.async {
+                                        self.dismiss(animated: false, completion: nil)
                                         if let e = error {
                                             MyLog("SWBrows resource error=\(error)", level:0)
                                             return self.processError(e.localizedDescription)
@@ -242,10 +254,10 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             }
     }
     
-    private func openDocument(document:[String:AnyObject], localResource:Bool) {
+    private func openDocument(_ document:[String:Any], localResource:Bool) {
         var deferred = false
 #if os(iOS)
-        if let orientation = document["orientation"] as? String where orientation == "landscape" {
+        if let orientation = document["orientation"] as? String, orientation == "landscape" {
             self.landscapeMode = true
             if !localResource {
                 // HACK ALERT: If the resource is remote and the orientation is landscape, it is too late to specify
@@ -255,8 +267,8 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                 deferred = true
                 //UIViewController.attemptRotationToDeviceOrientation() // NOTE: attempt but not working
                 let vcDummy = UIViewController()
-                self.presentViewController(vcDummy, animated: false, completion: { () -> Void in
-                    self.dismissViewControllerAnimated(false, completion: nil)
+                self.present(vcDummy, animated: false, completion: { () -> Void in
+                    self.dismiss(animated: false, completion: nil)
                     self.openDocumentWithODR(document, localResource: localResource)
                 })
             }
@@ -267,12 +279,12 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
     }
     
-    private func openData(dataRetrieved:NSData?, localResource:Bool) {
+    private func openData(_ dataRetrieved:Data?, localResource:Bool) {
         guard let data = dataRetrieved else {
             return processError("Failed to open: No data".localized)
         }
         do {
-            guard let document = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? [String:AnyObject] else {
+            guard let document = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions()) as? [String:Any] else {
                 return processError("Not a dictionary.".localized)
             }
             openDocument(document, localResource: localResource)
@@ -284,23 +296,23 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     }
     
 #if os(iOS)
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden: Bool {
         return true
     }
     
     // NOTE: This function and supportedInterfaceOrientations will not be called on iPad
     // as long as the app supports multitasking.
-    override func shouldAutorotate() -> Bool {
+    override var shouldAutorotate: Bool {
         return true
     }
     
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        if let documentViewer = self.documentViewer where documentViewer.landscape() {
-            return UIInterfaceOrientationMask.Landscape
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if let documentViewer = self.documentViewer, documentViewer.landscape() {
+            return UIInterfaceOrientationMask.landscape
         }
         return landscapeMode ?
-            UIInterfaceOrientationMask.Landscape
-            : UIInterfaceOrientationMask.Portrait
+            UIInterfaceOrientationMask.landscape
+            : UIInterfaceOrientationMask.portrait
     }
 
     @IBAction func tapped() {
@@ -314,7 +326,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     
     private func showUI() {
         fVisibleUI = true
-        UIView.animateWithDuration(0.2, animations: { () -> Void in
+        UIView.animate(withDuration: 0.2, animations: { () -> Void in
             self.toolbar?.alpha = 1.0
             self.bottombar?.alpha = 1.0
         })
@@ -322,13 +334,13 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     
     private func hideUI() {
         fVisibleUI = false
-        UIView.animateWithDuration(0.2, animations: { () -> Void in
+        UIView.animate(withDuration: 0.2, animations: { () -> Void in
             self.toolbar?.alpha = 0.0
             self.bottombar?.alpha = 0.0
         })
     }
 
-    @IBAction func slided(sender:UISlider) {
+    @IBAction func slided(_ sender:UISlider) {
         MyLog("SWBrows \(slider.value)")
     }
 #else
@@ -336,20 +348,20 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     }
 #endif
 
-    private func processError(message:String) {
-        dispatch_async(dispatch_get_main_queue()) {
+    private func processError(_ message:String) {
+        DispatchQueue.main.async {
 #if !os(OSX) // REVIEW
-            let alert = UIAlertController(title: "Can't open the document.", message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) { (_:UIAlertAction) -> Void in
-                self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+            let alert = UIAlertController(title: "Can't open the document.", message: message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (_:UIAlertAction) -> Void in
+                self.presentingViewController?.dismiss(animated: true, completion: nil)
             })
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
 #endif
         }
     }
     
 #if !os(OSX)
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
 
@@ -359,24 +371,24 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     }
 #endif
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if self.isBeingDismissed() {
+        if self.isBeingDismissed {
             if let documentViewer = self.documentViewer,
-                   state = documentViewer.saveState(),
-                   url = self.url {
+                let state = documentViewer.saveState(),
+                let url = self.url {
                 MyLog("SWBrows state=\(state)", level:1)
-                let defaults = NSUserDefaults.standardUserDefaults()
-                defaults.setObject(state, forKey: url.absoluteString!)
+                let defaults = UserDefaults.standard
+                defaults.set(state, forKey: url.absoluteString)
                 defaults.synchronize()
             }
         
-            SwipeBrowser.stack.popLast()
+            _ = SwipeBrowser.stack.popLast()
             MyLog("SWBrows pop \(SwipeBrowser.stack.count)", level:1)
             if SwipeBrowser.stack.count == 1 {
                 // Wait long enough (200ms > 1/30fps) and check the memory leak. 
                 // This gives the timerTick() in SwipePage to complete the shutdown sequence
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(200 * NSEC_PER_MSEC)), dispatch_get_main_queue()) { () -> Void in
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(200 * NSEC_PER_MSEC)) / Double(NSEC_PER_SEC)) { () -> Void in
                     SwipePage.checkMemoryLeak()
                     SwipeElement.checkMemoryLeak()
                 }
@@ -384,11 +396,11 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
     }
 
-    @IBAction func close(sender:AnyObject) {
+    @IBAction func close(_ sender:Any) {
 #if os(OSX)
         self.presentingViewController!.dismissViewController(self)
 #else
-        self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
+        self.presentingViewController!.dismiss(animated: true, completion: nil)
 #endif
     }
     
@@ -398,7 +410,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
     }
 
-    static func openURL(urlString:String) {
+    static func openURL(_ urlString:String) {
         NSLog("SWBrose openURL \(SwipeBrowser.stack.count) \(urlString)")
 #if os(OSX)
         while SwipeBrowser.stack.count > 1 {
@@ -410,15 +422,15 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         if SwipeBrowser.stack.count > 1 {
             let lastVC = SwipeBrowser.stack.last!
             lastVC.becomeZombie()
-            SwipeBrowser.stack.last!.dismissViewControllerAnimated(false, completion: { () -> Void in
+            SwipeBrowser.stack.last!.dismiss(animated: false, completion: { () -> Void in
                 openURL(urlString)
             })
             return
         }
 #endif
         
-        dispatch_async(dispatch_get_main_queue()) { () -> Void in
-            if let url = NSURL.url(urlString, baseURL: nil) {
+        DispatchQueue.main.async { () -> Void in
+            if let url = URL.url(urlString, baseURL: nil) {
                 SwipeBrowser.stack.last!.browseTo(url)
             }
         }
@@ -426,23 +438,25 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 
     @IBAction func language() {
         if let languages = documentViewer?.languages() {
-            let alert = UIAlertController(title: "Swipe", message: "Choose a language", preferredStyle: UIAlertControllerStyle.ActionSheet)
+            let alert = UIAlertController(title: "Swipe", message: "Choose a language", preferredStyle: UIAlertControllerStyle.actionSheet)
             alert.popoverPresentationController?.sourceView = self.view
             alert.popoverPresentationController?.sourceRect = btnLanguage!.frame
             for language in languages {
                 guard let title = language["title"] as? String,
-                          langId = language["id"] as? String else {
+                    let langId = language["id"] as? String else {
                     continue
                 }
-                alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: { (_:UIAlertAction) -> Void in
+                alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.default, handler: { (_:UIAlertAction) -> Void in
                     //print("SwipeB language selected \(langId)")
                     self.documentViewer?.reloadWithLanguageId(langId)
 #if os(iOS)
-                    self.hideUI()
+                    if let documentViewer = self.documentViewer, documentViewer.hideUI() {
+                        self.hideUI()
+                    }
 #endif
                 }))
             }
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
         }
     }
 

@@ -12,7 +12,7 @@ import UIKit
 #endif
 
 class SwipeMarkdown {
-    private var attrs = [String:[String:AnyObject]]()
+    private var attrs = [String:[String:Any]]()
     private var prefixes = [
         "-":"\u{2022} ", // bullet (U+2022), http://graphemica.com/%E2%80%A2
         "```":" ",
@@ -20,16 +20,16 @@ class SwipeMarkdown {
     private let scale:CGSize
     private var shadow:NSShadow?
 
-    func attributesWith(fontSize:CGFloat, paragraphSpacing:CGFloat, fontName:String? = nil) -> [String:AnyObject] {
+    func attributesWith(_ fontSize:CGFloat, paragraphSpacing:CGFloat, fontName:String? = nil) -> [String:Any] {
         let style = NSMutableParagraphStyle()
-        style.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        style.lineBreakMode = NSLineBreakMode.byWordWrapping
         style.paragraphSpacing = paragraphSpacing * scale.height
-        var font = UIFont.systemFontOfSize(fontSize * scale.height)
+        var font = UIFont.systemFont(ofSize: fontSize * scale.height)
         if let name = fontName,
            let namedFont = UIFont(name: name, size: fontSize * scale.height) {
             font = namedFont
         }
-        var attrs = [NSFontAttributeName: font, NSParagraphStyleAttributeName: style]
+        var attrs = [NSFontAttributeName: font, NSParagraphStyleAttributeName: style] as [String : Any]
         if let shadow = self.shadow {
             attrs[NSShadowAttributeName] = shadow
         }
@@ -37,7 +37,7 @@ class SwipeMarkdown {
     }
 
     // Use function instead of lazy initializer to work around a probable bug in Swift
-    private func genAttrs() -> [String:[String:AnyObject]] {
+    private func genAttrs() -> [String:[String:Any]] {
         return [
             "#": self.attributesWith(32, paragraphSpacing: 16),
             "##": self.attributesWith(28, paragraphSpacing: 14),
@@ -50,7 +50,7 @@ class SwipeMarkdown {
         ]
     }
     
-    init(info:[String:AnyObject]?, scale:CGSize, dimension:CGSize) {
+    init(info:[String:Any]?, scale:CGSize, dimension:CGSize) {
         self.scale = scale
         if let params = info {
             shadow = SwipeParser.parseShadow(params["shadow"], scale: scale)
@@ -58,10 +58,10 @@ class SwipeMarkdown {
         attrs = genAttrs()
 
         if let markdownInfo = info,
-           let styles = markdownInfo["styles"] as? [String:AnyObject] {
+           let styles = markdownInfo["styles"] as? [String:Any] {
             for (keyMark, value) in styles {
-                if let attrInfo = value as? [String:AnyObject] {
-                    var attrCopy:[String:AnyObject]
+                if let attrInfo = value as? [String:Any] {
+                    var attrCopy:[String:Any]
                     if let attr = attrs[keyMark] {
                         attrCopy = attr
                     } else {
@@ -78,7 +78,7 @@ class SwipeMarkdown {
                         switch(keyAttr) {
                         case "color":
                             // the value MUST be UIColor or NSColor, not CGColor
-                            attrCopy[NSForegroundColorAttributeName] = UIColor(CGColor:SwipeParser.parseColor(attrValue))
+                            attrCopy[NSForegroundColorAttributeName] = UIColor(cgColor:SwipeParser.parseColor(attrValue))
                         case "font":
                             attrCopy[NSFontAttributeName] = SwipeParser.parseFont(attrValue, scale:scale, full:dimension.height)
                         case "prefix":
@@ -89,11 +89,11 @@ class SwipeMarkdown {
                             if let alignment = attrValue as? String {
                                 switch(alignment) {
                                 case "center":
-                                    styleCopy.alignment = .Center
+                                    styleCopy.alignment = .center
                                 case "right":
-                                    styleCopy.alignment = .Right
+                                    styleCopy.alignment = .right
                                 case "left":
-                                    styleCopy.alignment = .Left
+                                    styleCopy.alignment = .left
                                 default:
                                     break
                                 }
@@ -115,10 +115,10 @@ class SwipeMarkdown {
         }
     }
 
-    func parse(markdowns:[String]) -> NSAttributedString {
+    func parse(_ markdowns:[String]) -> NSAttributedString {
         let strs = NSMutableAttributedString()
         var fCode = false
-        for (index, markdown) in markdowns.enumerate() {
+        for (index, markdown) in markdowns.enumerated() {
             var (key, body):(String?, String) = {
                 if markdown == "```" {
                     fCode = !fCode
@@ -127,9 +127,9 @@ class SwipeMarkdown {
                     return ("```", markdown)
                 } else {
                     for prefix in attrs.keys {
-                        let result = markdown.commonPrefixWithString(prefix + " ", options: NSStringCompareOptions.LiteralSearch)
+                        let result = markdown.commonPrefix(with: prefix + " ", options: NSString.CompareOptions.literal)
                         if result == prefix + " " {
-                            return (prefix, markdown.substringFromIndex(markdown.startIndex.advancedBy(prefix.characters.count + 1)))
+                            return (prefix, markdown.substring(from: markdown.characters.index(markdown.startIndex, offsetBy: prefix.characters.count + 1)))
                         }
                     }
                 }
@@ -141,7 +141,7 @@ class SwipeMarkdown {
                     body = prefix + body
                 }
                 body += ((index < markdowns.count - 1) ? "\n" : "")
-                strs.appendAttributedString(NSMutableAttributedString(string: body, attributes: attrs[keyPrefix]))
+                strs.append(NSMutableAttributedString(string: body, attributes: attrs[keyPrefix]))
             }
         }
         //NSLog("Markdown:parse \(strs)")

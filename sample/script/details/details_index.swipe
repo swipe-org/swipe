@@ -1,9 +1,33 @@
 {
     "type":"net.swipe.list",
     "rowHeight":"10%",
-    "items":[
-        { "url":"transition_animation.swipe", "title":"Transition Animation", "icon":"more.png" },
-        { "url":"loop_animation.swipe", "title":"Loop Animation", "icon":"more.png" },
-        { "url":"multilingual_strings.swipe", "title":"Multilingual Strings", "icon":"more.png" },
+    "languages":[
+        {"id": "en", "title": "English"},
+        {"id": "de", "title": "German"}
+    ],
+    "strings": {
+        "anim": {"en":"Animation", "de": "Animation"},
+        "trans": {"en":"Transition Animation", "de": "Übergangsanimation"},
+        "loop": {"en":"Loop Animation", "de": "Schleifenanimation"}
+    },
+    "sections":[
+        {
+            "title":{ "ref":"anim" },
+            "items":[
+                { "url":"transition_animation.swipe", "title":{ "ref":"trans" }, "icon":"more.png" },
+                { "url":"loop_animation.swipe", "title":{ "ref":"loop" }, "icon":"more.png" }
+            ]
+        },
+        {
+            "title":{ "en":"Language", "de":"Sprache" },
+            "items":[
+                {
+                    "url":"multilingual_strings.swipe",
+                    "title":{ "en":"Multilingual Strings", "de":"Mehrsprachige Strings" },
+                    "text":{ "en":"This example has translation", "de":"Dieses beispiel hat übersetzung" },
+                    "icon":"more.png"
+                }
+            ]
+        }
     ]
 }

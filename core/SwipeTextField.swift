@@ -27,16 +27,16 @@ class SwipeTextField: SwipeView, UITextFieldDelegate {
             fatalError("init(coder:) has not been implemented")
         }
         
-        override func canBecomeFocused() -> Bool {
-            if let wrapper = self.wrapper, parent = wrapper.parent as? SwipeView {
+        override var canBecomeFocused: Bool {
+            if let wrapper = self.wrapper, let parent = wrapper.parent as? SwipeView {
                 return parent.fFocusable
             } else {
-                return super.canBecomeFocused()
+                return super.canBecomeFocused
             }
         }
         
-        override func didUpdateFocusInContext(context: UIFocusUpdateContext, withAnimationCoordinator coordinator: UIFocusAnimationCoordinator) {
-            if let wrapper = self.wrapper, parent = wrapper.parent as? SwipeView {
+        override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+            if let wrapper = self.wrapper, let parent = wrapper.parent as? SwipeView {
                 // lostFocus must be fired before gainedFocus
                 if self == context.previouslyFocusedView {
                     if let actions = parent.eventHandler.actionsFor("lostFocus")  {
@@ -49,37 +49,37 @@ class SwipeTextField: SwipeView, UITextFieldDelegate {
                     }
                 }
             } else {
-                super.didUpdateFocusInContext(context, withAnimationCoordinator: coordinator)
+                super.didUpdateFocus(in: context, with: coordinator)
             }
         }
     }
     
     var textView: InternalTextField?
     
-    init(parent: SwipeView, info: [String:AnyObject], frame: CGRect, screenDimension: CGSize) {
+    init(parent: SwipeView, info: [String:Any], frame: CGRect, screenDimension: CGSize) {
         self.screenDimension = screenDimension
         super.init(parent: parent, info: info)
         self.textView = InternalTextField(wrapper: self, frame: frame)
         self.textView!.delegate = self
-        self.textView!.backgroundColor = UIColor.clearColor()
+        self.textView!.backgroundColor = UIColor.clear
         self.view = self.textView! as UIView
     }
     
-    override func setText(text:String, scale:CGSize, info:[String:AnyObject], dimension:CGSize, layer:CALayer?) -> Bool {
+    override func setText(_ text:String, scale:CGSize, info:[String:Any], dimension:CGSize, layer:CALayer?) -> Bool {
         if let textView = self.textView {
             textView.text = text
-            textView.textAlignment = NSTextAlignment.Center
+            textView.textAlignment = NSTextAlignment.center
             
-            func processAlignment(alignment:String) {
+            func processAlignment(_ alignment:String) {
                 switch(alignment) {
                 case "center":
-                    textView.textAlignment = .Center
+                    textView.textAlignment = .center
                 case "left":
-                    textView.textAlignment = .Left
+                    textView.textAlignment = .left
                 case "right":
-                    textView.textAlignment = .Right
+                    textView.textAlignment = .right
                 case "justified":
-                    textView.textAlignment = .Justified
+                    textView.textAlignment = .justified
                 default:
                     break
                 }
@@ -102,7 +102,7 @@ class SwipeTextField: SwipeView, UITextFieldDelegate {
             }()
             
             textView.font = UIFont(name: "Helvetica", size: fontSize)
-            textView.textColor = UIColor(CGColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor))
+            textView.textColor = UIColor(cgColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.black.cgColor))
             
             parent!.execute(self, actions: parent!.eventHandler.actionsFor("textChanged"))
         }
@@ -110,34 +110,34 @@ class SwipeTextField: SwipeView, UITextFieldDelegate {
         return true
     }
     
-    override func getPropertyValue(originator: SwipeNode, property: String) -> AnyObject? {
+    override func getPropertyValue(_ originator: SwipeNode, property: String) -> Any? {
         switch (property) {
         case "text":
             return self.textView!.text
         case "text.length":
-            return self.textView!.text?.characters.count
+            return self.textView?.text?.characters.count
         default:
             return super.getPropertyValue(originator, property: property)
         }
     }
     
     override func isFirstResponder() -> Bool {
-        return view!.isFirstResponder()
+        return view!.isFirstResponder
     }
     
     // UITextViewDelegate
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.01 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { () -> Void in
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.01) {
             self.parent!.execute(self, actions: self.parent!.eventHandler.actionsFor("textChanged"))
         }
         return true
     }
     
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
     }
     
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         parent!.execute(self, actions: parent!.eventHandler.actionsFor("endEdit"))
     }
 }

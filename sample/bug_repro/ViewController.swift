@@ -18,8 +18,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let urlVideo = NSBundle.mainBundle().URLForResource("IMG_9401", withExtension: "mov") {
-            let videoPlayer = AVPlayer(playerItem: AVPlayerItem(URL: urlVideo))
+        if let urlVideo = Bundle.main.url(forResource: "IMG_9401", withExtension: "mov") {
+            let videoPlayer = AVPlayer(playerItem: AVPlayerItem(url: urlVideo))
             let videoLayer = AVPlayerLayer(player: videoPlayer)
             videoLayer.frame = viewMain.bounds
             viewMain.layer.addSublayer(videoLayer)
@@ -29,8 +29,8 @@ class ViewController: UIViewController {
 
     @IBAction func test() {
         UIGraphicsBeginImageContext(view.frame.size)
-        if let layer = viewMain.layer.presentationLayer() {
-            layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        if let layer = viewMain.layer.presentation() {
+            layer.render(in: UIGraphicsGetCurrentContext()!)
         }
         UIGraphicsEndImageContext()
     }
