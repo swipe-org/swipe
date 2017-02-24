@@ -7,7 +7,7 @@
         "british":{ "lang":"en-GB" },
         "french":{ "lang":"fr-FR" },
         "german":{ "lang":"de-DE" },
-        "vader":{ "pitch":2.0, "rate":0.2 },
+        "vader":{ "pitch":2.0, "rate":0.2 }
     },
     "pages": [
         {
@@ -57,6 +57,6 @@
             "elements": [
                 { "text":"May the force be with you." }
             ]
-        },
+        }
     ]
 }
