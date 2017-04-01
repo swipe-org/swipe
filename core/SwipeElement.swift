@@ -1049,7 +1049,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 loopLayer.add(ani, forKey: "opacity")
             case "spin":
                 let fClockwise = booleanValue(from: animation, key: "clockwise", defaultValue: true)
-                let degree = (fClockwise ? 120 : -120) * CGFloat(M_PI / 180.0)
+                let degree = (fClockwise ? 120 : -120) * CGFloat(CGFloat.pi / 180.0)
                 let ani = CAKeyframeAnimation(keyPath: "transform")
                 ani.values = [NSValue(caTransform3D:loopLayer.transform),
                               NSValue(caTransform3D:CATransform3DConcat(CATransform3DMakeRotation(degree, 0.0, 0.0, 1.0), loopLayer.transform)),
@@ -1061,7 +1061,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.fillMode = kCAFillModeBoth
                 loopLayer.add(ani, forKey: "transform")
             case "wiggle":
-                let delta = value(from: animation, key: "delta", defaultValue: 15) * CGFloat(M_PI / 180.0)
+                let delta = value(from: animation, key: "delta", defaultValue: 15) * CGFloat(CGFloat.pi / 180.0)
                 let ani = CAKeyframeAnimation(keyPath: "transform")
                 ani.values = [NSValue(caTransform3D:loopLayer.transform),
                               NSValue(caTransform3D:CATransform3DConcat(CATransform3DMakeRotation(delta, 0.0, 0.0, 1.0), loopLayer.transform)),
