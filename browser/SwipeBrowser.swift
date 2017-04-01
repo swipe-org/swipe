@@ -188,7 +188,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
             documentType = type
         }
         guard let type = SwipeBrowser.typeMapping[documentType] else {
-            return processError("Unknown type:".localized + "\(SwipeBrowser.typeMapping[documentType]).")
+            return processError("Unknown type:".localized + "\(String(describing: SwipeBrowser.typeMapping[documentType])).")
         }
         let vc = type()
         guard let documentViewer = vc as? SwipeDocumentViewer else {
@@ -238,7 +238,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                                     DispatchQueue.main.async {
                                         self.dismiss(animated: false, completion: nil)
                                         if let e = error {
-                                            MyLog("SWBrows resource error=\(error)", level:0)
+                                            MyLog("SWBrows resource error=\(String(describing: error))", level:0)
                                             return self.processError(e.localizedDescription)
                                         } else {
                                             self.openDocumentViewer(document)

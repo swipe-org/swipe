@@ -307,7 +307,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
     
     func setActivePage(_ page:SwipePage) {
         if self.pageTemplateActive != page.pageTemplate {
-            MyLog("SwipeBook setActive \(self.pageTemplateActive), \(page.pageTemplate)", level:1)
+            MyLog("SwipeBook setActive \(String(describing: self.pageTemplateActive)), \(String(describing: page.pageTemplate))", level:1)
             if let pageTemplate = self.pageTemplateActive {
                 pageTemplate.didLeave()
             }
