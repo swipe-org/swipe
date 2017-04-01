@@ -55,7 +55,7 @@ class SwipePrefetcher {
                 } else {
                     // On-demand resource support
                     urlsFetched[url] = Bundle.main.url(forResource: url.lastPathComponent, withExtension: nil)
-                    MyLog("SWPrefe onDemand resource at \(urlsFetched[url]) instead of \(url)", level:1)
+                    MyLog("SWPrefe onDemand resource at \(urlsFetched[url]!) instead of \(url)", level:1)
                 }
             } else {
                 count += 1
@@ -102,7 +102,7 @@ class SwipePrefetcher {
                 } else {
                     // On-demand resource support
                     urlsFetched[url] = Bundle.main.url(forResource: url.lastPathComponent, withExtension: nil)
-                    MyLog("SWPrefe onDemand resource at \(urlsFetched[url]) instead of \(url)", level:1)
+                    MyLog("SWPrefe onDemand resource at \(String(describing: urlsFetched[url])) instead of \(url)", level:1)
                 }
             } else {
                 count += 1

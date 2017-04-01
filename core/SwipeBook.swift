@@ -300,7 +300,7 @@ class SwipeBook: NSObject, SwipePageDelegate {
     func sourceCode() -> String {
         if let url = self.url {
             let data = try? Data(contentsOf: url)
-            return NSString(data: data!, encoding: String.Encoding.utf8.rawValue) as! String
+            return NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! as String
         }
         return "N/A"
     }
