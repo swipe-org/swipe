@@ -71,7 +71,7 @@ class SwipeConnection: NSObject {
                     MyLog("SWConn  no HTTPURLResponse, something is wrong!")
                 }
             } else {
-                MyLog("SWConn  network error (\(url.lastPathComponent), \(error))")
+                MyLog("SWConn  network error (\(url.lastPathComponent), \(String(describing: error)))")
             }
             connection.callbackAll(error as NSError?)
         }

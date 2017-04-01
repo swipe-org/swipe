@@ -82,7 +82,7 @@ class SwipeHttpPost : SwipeNode {
                     let task = URLSession.shared.dataTask(with: request) { data, response, error in
                         guard error == nil && data != nil else {                                                          // check for fundamental networking error
                             print("error=\(error)")
-                            self.handleError("post error \(error)")
+                            self.handleError("post error \(String(describing: error))")
                             return
                         }
                         

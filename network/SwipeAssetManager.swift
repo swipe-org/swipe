@@ -147,7 +147,7 @@ class SwipeAssetManager {
             var urlLocal = urlFolder.appendingPathComponent(uuid)
             let fm = FileManager.default
             let loaded = entity.value(forKey: "loaded") as? Bool
-            let fileSize = entity.value(forKey: "size") as? Int
+            let fileSize = entity.value(forKey: "size") as? Int ?? 0
             if !bypassCache && loaded == true && fm.fileExists(atPath: urlLocal.path) {
                 MyLog("SWAsset reuse \(url.lastPathComponent), \(fileSize)", level:1)
                 // We should call it asynchronously, which the caller expects.
