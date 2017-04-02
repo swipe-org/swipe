@@ -30,7 +30,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     private var langId = "en"
     private weak var delegate:SwipeDocumentViewerDelegate?
     private var prefetching = true
-    @IBOutlet private var tableView:UITableView!
+    @IBOutlet public var tableView:UITableView!
     @IBOutlet private var imageView:UIImageView?
 
     // Returns the list of URLs of required resouces for this element (including children)
@@ -225,6 +225,8 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
            let url = URL.url(urlString, baseURL: self.url) {
             self.delegate?.browseTo(url)
         }
+        
+        // NOTE: Do not deselect (so that the app can use this info later)
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
