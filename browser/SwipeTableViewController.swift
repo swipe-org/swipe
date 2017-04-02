@@ -30,8 +30,11 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
     private var langId = "en"
     private weak var delegate:SwipeDocumentViewerDelegate?
     private var prefetching = true
-    @IBOutlet public var tableView:UITableView!
+    @IBOutlet private var tableView:UITableView!
     @IBOutlet private var imageView:UIImageView?
+    var indexPathForSelectedRow:IndexPath? {
+        return self.tableView.indexPathForSelectedRow
+    }
 
     // Returns the list of URLs of required resouces for this element (including children)
     private lazy var resourceURLs:[URL:String] = {
