@@ -12,6 +12,7 @@
             <connections>
                 <outlet property="bottombar" destination="5Z7-9V-xkH" id="cUw-tH-7uu"/>
                 <outlet property="btnLanguage" destination="XpL-Rf-sYN" id="Lse-Tl-X0a"/>
+                <outlet property="btnMore" destination="pC5-8j-KiK" id="5uP-mG-Ztd"/>
                 <outlet property="labelLoading" destination="mOv-2o-bgd" id="vFB-Dg-BFd"/>
                 <outlet property="labelTitle" destination="d7L-T1-VHa" id="zNW-97-kS2"/>
                 <outlet property="progress" destination="kad-kO-4T7" id="M2L-jF-GdO"/>
@@ -88,14 +89,24 @@
                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="JvK-et-XQT">
                             <rect key="frame" x="58" y="7" width="259" height="31"/>
                         </slider>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pC5-8j-KiK">
+                            <rect key="frame" x="325" y="0.0" width="50" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="50" id="jdn-Xt-Btb"/>
+                            </constraints>
+                            <state key="normal" image="ic_white_other"/>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.08235294118" green="0.67450980390000004" blue="0.80000000000000004" alpha="0.79737859320557491" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="JvK-et-XQT" firstAttribute="centerX" secondItem="5Z7-9V-xkH" secondAttribute="centerX" id="5t9-Ru-ymN"/>
                         <constraint firstAttribute="height" constant="44" id="KYM-fJ-1De"/>
+                        <constraint firstAttribute="bottom" secondItem="pC5-8j-KiK" secondAttribute="bottom" id="KsZ-a4-mr1"/>
+                        <constraint firstItem="pC5-8j-KiK" firstAttribute="top" secondItem="5Z7-9V-xkH" secondAttribute="top" id="MXY-tM-9iT"/>
                         <constraint firstItem="JvK-et-XQT" firstAttribute="centerY" secondItem="5Z7-9V-xkH" secondAttribute="centerY" id="ZzA-n1-EMa"/>
                         <constraint firstItem="JvK-et-XQT" firstAttribute="leading" secondItem="5Z7-9V-xkH" secondAttribute="leading" constant="60" id="w4D-uX-SzP"/>
+                        <constraint firstAttribute="trailing" secondItem="pC5-8j-KiK" secondAttribute="trailing" id="zZZ-EH-91X"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tWL-fk-uyv">
@@ -144,7 +155,10 @@
                 <constraint firstItem="eW2-r2-Dr0" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="vIU-PW-jhc"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
-            <point key="canvasLocation" x="35" y="248"/>
+            <point key="canvasLocation" x="34.5" y="247.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="ic_white_other" width="25" height="25"/>
+    </resources>
 </document>

@@ -55,6 +55,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     @IBOutlet var slider:UISlider!
     @IBOutlet var labelTitle:UILabel?
     @IBOutlet var btnExport:UIButton?
+    @IBOutlet var btnMore:UIButton?
     private var landscapeMode = false
 #elseif os(tvOS)
     override weak var preferredFocusedView: UIView? { return controller?.view }
