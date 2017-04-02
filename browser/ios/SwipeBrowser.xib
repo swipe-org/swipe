@@ -1,10 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G24b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SwipeBrowser" customModule="sample" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SwipeBrowser" customModule="studio" customModuleProvider="target">
             <connections>
                 <outlet property="bottombar" destination="5Z7-9V-xkH" id="cUw-tH-7uu"/>
                 <outlet property="btnLanguage" destination="XpL-Rf-sYN" id="Lse-Tl-X0a"/>
@@ -19,11 +23,11 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eW2-r2-Dr0">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xtq-vs-Vge">
                             <rect key="frame" x="0.0" y="0.0" width="60" height="44"/>
@@ -32,20 +36,20 @@
                             </constraints>
                             <inset key="contentEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="Close">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <connections>
                                 <action selector="close:" destination="-1" eventType="touchUpInside" id="4Ua-Nz-6W6"/>
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="d7L-T1-VHa">
-                            <rect key="frame" x="64" y="0.0" width="192" height="44"/>
+                            <rect key="frame" x="64" y="0.0" width="247" height="44"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XpL-Rf-sYN">
-                            <rect key="frame" x="260" y="0.0" width="60" height="44"/>
+                            <rect key="frame" x="315" y="0.0" width="60" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="60" id="jiq-yv-Pdt"/>
                             </constraints>
@@ -56,8 +60,8 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.08235294118" green="0.67450980390000004" blue="0.80000000000000004" alpha="0.80236008275261328" colorSpace="calibratedRGB"/>
-                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.08235294118" green="0.67450980390000004" blue="0.80000000000000004" alpha="0.80236008275261328" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="XpL-Rf-sYN" firstAttribute="leading" secondItem="d7L-T1-VHa" secondAttribute="trailing" constant="4" id="0BJ-bQ-QjW"/>
                         <constraint firstItem="d7L-T1-VHa" firstAttribute="leading" secondItem="xtq-vs-Vge" secondAttribute="trailing" constant="4" id="45w-iP-wmj"/>
@@ -79,39 +83,42 @@
                     </variation>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Z7-9V-xkH">
-                    <rect key="frame" x="0.0" y="436" width="320" height="44"/>
+                    <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                     <subviews>
-                        <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="JvK-et-XQT">
-                            <rect key="frame" x="58" y="8" width="201" height="31"/>
+                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="JvK-et-XQT">
+                            <rect key="frame" x="58" y="7" width="259" height="31"/>
                         </slider>
                     </subviews>
-                    <color key="backgroundColor" red="0.08235294118" green="0.67450980390000004" blue="0.80000000000000004" alpha="0.79737859320557491" colorSpace="calibratedRGB"/>
-                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.08235294118" green="0.67450980390000004" blue="0.80000000000000004" alpha="0.79737859320557491" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
+                        <constraint firstItem="JvK-et-XQT" firstAttribute="centerX" secondItem="5Z7-9V-xkH" secondAttribute="centerX" id="5t9-Ru-ymN"/>
                         <constraint firstAttribute="height" constant="44" id="KYM-fJ-1De"/>
+                        <constraint firstItem="JvK-et-XQT" firstAttribute="centerY" secondItem="5Z7-9V-xkH" secondAttribute="centerY" id="ZzA-n1-EMa"/>
+                        <constraint firstItem="JvK-et-XQT" firstAttribute="leading" secondItem="5Z7-9V-xkH" secondAttribute="leading" constant="60" id="w4D-uX-SzP"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tWL-fk-uyv">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading Resources..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOv-2o-bgd">
-                            <rect key="frame" x="8" y="229" width="304" height="21"/>
+                            <rect key="frame" x="8" y="323" width="359" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="Vkz-kb-tHg"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="kad-kO-4T7">
-                            <rect key="frame" x="10" y="274" width="300" height="2"/>
-                            <color key="tintColor" red="0.08235294118" green="0.67450980390000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <rect key="frame" x="38" y="368" width="300" height="2"/>
+                            <color key="tintColor" red="0.08235294118" green="0.67450980390000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="300" id="qeB-5u-Ube"/>
                             </constraints>
                         </progressView>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.79878048780487809" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.79878048780487809" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="mOv-2o-bgd" firstAttribute="leading" secondItem="tWL-fk-uyv" secondAttribute="leading" constant="8" id="1Jq-LQ-JSo"/>
                         <constraint firstItem="kad-kO-4T7" firstAttribute="centerX" secondItem="tWL-fk-uyv" secondAttribute="centerX" id="2DB-ke-Gqa"/>
@@ -121,8 +128,8 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="0.08235294118" green="0.67450980390000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-            <color key="tintColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.08235294118" green="0.67450980390000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="tintColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <gestureRecognizers/>
             <constraints>
                 <constraint firstItem="tWL-fk-uyv" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="4P1-vD-UBw"/>
@@ -137,7 +144,6 @@
                 <constraint firstItem="eW2-r2-Dr0" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="vIU-PW-jhc"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="35" y="248"/>
         </view>
     </objects>
