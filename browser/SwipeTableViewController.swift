@@ -190,6 +190,14 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
         }
         return items.count
     }
+    
+    func itemDataFor(indexPath:IndexPath) -> [String:Any]? {
+        let section = self.sections[indexPath.section]
+        guard let items = section["items"] as? [[String:Any]] else {
+            return nil
+        }
+        return items[indexPath.row]
+    }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = self.sections[indexPath.section]
