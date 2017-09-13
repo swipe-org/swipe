@@ -437,7 +437,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         return SwipePrefetcher(urls:self.resourceURLs)
     }()
 
-    func loadView(_ callback:((Void)->(Void))?) -> UIView {
+    func loadView(_ callback:(()->(Void))?) -> UIView {
     
         MyLog("SWPage  loading @\(index)", level: 2)
         assert(self.view == nil, "loadView self.view must be nil")

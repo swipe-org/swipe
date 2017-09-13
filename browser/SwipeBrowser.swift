@@ -36,12 +36,12 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     // This is the place you can add more document types. 
     // Those UIViewControllers MUST support SwipeDocumentViewer protocol.
     //
-    static private var typeMapping:[String:(Void) -> UIViewController] = [
+    static private var typeMapping:[String:() -> UIViewController] = [
         "net.swipe.list": { return SwipeTableViewController(nibName:"SwipeTableViewController", bundle:nil) },
         "net.swipe.swipe": { return SwipeViewController() },
     ]
     static var stack = [SwipeBrowser]()
-    static func register(type:String, factory:@escaping (Void) -> UIViewController) {
+    static func register(type:String, factory:@escaping () -> UIViewController) {
         typeMapping[type] = factory
     }
     
