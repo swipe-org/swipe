@@ -91,75 +91,83 @@ class SwipeExporter: NSObject {
         
         outputSize = CGSize(width: viewSize.width * scale, height: viewSize.height * scale)
 
-        do {
-            let writer = try AVAssetWriter(url: fileURL, fileType: AVFileTypeQuickTimeMovie)
-            let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: [
-                AVVideoCodecKey : AVVideoCodecH264,
-                AVVideoWidthKey : outputSize.width,
-                AVVideoHeightKey : outputSize.height
-            ])
-            let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: [
-                kCVPixelBufferPixelFormatTypeKey as String: NSNumber(value: kCVPixelFormatType_32ARGB),
-                kCVPixelBufferWidthKey as String: outputSize.width,
-                kCVPixelBufferHeightKey as String: outputSize.height,
-            ])
-            writer.add(input)
-            
-            iFrame = 0
+        self.swipeViewController.scrollTo(CGFloat(startPage))
+        DispatchQueue.main.async { // HACK: work-around of empty first page bug
+          do {
+              let writer = try AVAssetWriter(url: fileURL, fileType: AVFileTypeQuickTimeMovie)
+              let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: [
+                  AVVideoCodecKey : AVVideoCodecH264,
+                  AVVideoWidthKey : self.outputSize.width,
+                  AVVideoHeightKey : self.outputSize.height
+              ])
+              let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: [
+                  kCVPixelBufferPixelFormatTypeKey as String: NSNumber(value: kCVPixelFormatType_32ARGB),
+                  kCVPixelBufferWidthKey as String: self.outputSize.width,
+                  kCVPixelBufferHeightKey as String: self.outputSize.height,
+              ])
+              writer.add(input)
+              
+              self.iFrame = 0
 
-            guard writer.startWriting() else {
-                return progress(false, Error.FailedToFinalize)
-            }
-            writer.startSession(atSourceTime: kCMTimeZero)
-            
-            self.swipeViewController.scrollTo(CGFloat(startPage))
-            input.requestMediaDataWhenReady(on: DispatchQueue.main) {
-                guard input.isReadyForMoreMediaData else {
-                    return // Not ready. Just wait.
-                }
-                self.progress = 0.5 * CGFloat(self.iFrame) / CGFloat(limit)
-                progress(false, nil)
+              guard writer.startWriting() else {
+                  return progress(false, Error.FailedToFinalize)
+              }
+              writer.startSession(atSourceTime: CMTimeMake(0, Int32(self.fps)))
+              
+              //self.swipeViewController.scrollTo(CGFloat(startPage))
+              input.requestMediaDataWhenReady(on: DispatchQueue.main) {
+                  guard input.isReadyForMoreMediaData else {
+                    print("SwipeExporter:not ready", self.iFrame)
+                      return // Not ready. Just wait.
+                  }
+                  self.progress = 0.5 * CGFloat(self.iFrame) / CGFloat(limit)
+                  progress(false, nil)
 
-                var pixelBufferX: CVPixelBuffer? = nil
-                let status: CVReturn = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, adaptor.pixelBufferPool!, &pixelBufferX)
-                guard let managedPixelBuffer = pixelBufferX, status == 0  else {
-                    print("failed to allocate pixel buffer")
-                    writer.cancelWriting()
-                    return progress(false, Error.FailedToCreate)
-                }
+                  var pixelBufferX: CVPixelBuffer? = nil
+                  let status: CVReturn = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, adaptor.pixelBufferPool!, &pixelBufferX)
+                  guard let managedPixelBuffer = pixelBufferX, status == 0  else {
+                      print("failed to allocate pixel buffer")
+                      writer.cancelWriting()
+                      return progress(false, Error.FailedToCreate)
+                  }
 
-                CVPixelBufferLockBaseAddress(managedPixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
-                let data = CVPixelBufferGetBaseAddress(managedPixelBuffer)
-                let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-                if let context = CGContext(data: data, width: Int(self.outputSize.width), height: Int(self.outputSize.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(managedPixelBuffer), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue) {
-                    let xf = CGAffineTransform(scaleX: scale, y: -scale)
-                    context.concatenate(xf.translatedBy(x: 0, y: -viewSize.height))
-                    let presentationLayer = self.swipeViewController.view.layer.presentation()!
-                    presentationLayer.render(in: context)
-                }
-                CVPixelBufferUnlockBaseAddress(managedPixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
+                  CVPixelBufferLockBaseAddress(managedPixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
+                  let data = CVPixelBufferGetBaseAddress(managedPixelBuffer)
+                  let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
+                  if let context = CGContext(data: data, width: Int(self.outputSize.width), height: Int(self.outputSize.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(managedPixelBuffer), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue) {
+                      let xf = CGAffineTransform(scaleX: scale, y: -scale)
+                      context.concatenate(xf.translatedBy(x: 0, y: -viewSize.height))
+                      let presentationLayer = self.swipeViewController.view.layer.presentation()!
+                      presentationLayer.render(in: context)
+                      //print("SwipeExporter:render", self.iFrame)
+                  } else {
+                    print("SwipeExporter:failed to get context", self.iFrame, self.fps)
+                  }
+                  CVPixelBufferUnlockBaseAddress(managedPixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
 
-                let presentationTime = CMTimeMake(Int64(self.iFrame), Int32(self.fps))
-                if !adaptor.append(managedPixelBuffer, withPresentationTime: presentationTime) {
-                    writer.cancelWriting()
-                    return progress(false, Error.FailedToCreate)
-                }
+                  let presentationTime = CMTimeMake(Int64(self.iFrame), Int32(self.fps))
+                  if !adaptor.append(managedPixelBuffer, withPresentationTime: presentationTime) {
+                      print("SwipeExporter:failed to append", self.iFrame)
+                      writer.cancelWriting()
+                      return progress(false, Error.FailedToCreate)
+                  }
 
-                self.iFrame += 1
-                if self.iFrame < limit {
-                    self.swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(self.iFrame) / CGFloat(self.fps))
-                } else {
-                    input.markAsFinished()
-                    print("SwipeExporter: finishWritingWithCompletionHandler")
-                    writer.finishWriting(completionHandler: {
-                        DispatchQueue.main.async {
-                            progress(true, nil)
-                        }
-                    })
-                }
-            }
-        } catch let error {
-            progress(false, error)
+                  self.iFrame += 1
+                  if self.iFrame < limit {
+                      self.swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(self.iFrame) / CGFloat(self.fps))
+                  } else {
+                      input.markAsFinished()
+                      print("SwipeExporter: finishWritingWithCompletionHandler")
+                      writer.finishWriting(completionHandler: {
+                          DispatchQueue.main.async {
+                              progress(true, nil)
+                          }
+                      })
+                  }
+              }
+          } catch let error {
+              progress(false, error)
+          }
         }
     }
 }
