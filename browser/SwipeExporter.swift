@@ -22,6 +22,8 @@ class SwipeExporter: NSObject {
     let resolution:CGFloat
     var progress = 0.0 as CGFloat // Output: Proress from 0.0 to 1.0
     var outputSize = CGSize.zero    // Output: Size of generated GIF/video
+    var pauseDuration = 0.0 as CGFloat
+    var transitionDuration = 1.0 as CGFloat
     
     private var iFrame = 0
     
