@@ -80,12 +80,13 @@ class SwipeExporter: NSObject {
         if manager.fileExists(atPath: fileURL.path) {
             try! manager.removeItem(at: fileURL)
         }
-        
+
+        let efps = Int(round(CGFloat(fps) * transitionDuration)) // Effective FPS
         let limit:Int
         if let pageCount = pageCount, startPage + pageCount < swipeViewController.book.pages.count {
-            limit = pageCount * self.fps + 1
+            limit = pageCount * efps + 1
         } else {
-            limit = (swipeViewController.book.pages.count - startPage - 1) * self.fps + 1
+            limit = (swipeViewController.book.pages.count - startPage - 1) * efps + 1
         }
         
         let viewSize = swipeViewController.view.frame.size
@@ -156,7 +157,7 @@ class SwipeExporter: NSObject {
 
                   self.iFrame += 1
                   if self.iFrame < limit {
-                      self.swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(self.iFrame) / CGFloat(self.fps))
+                      self.swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(self.iFrame) / CGFloat(efps))
                   } else {
                       input.markAsFinished()
                       print("SwipeExporter: finishWritingWithCompletionHandler")
