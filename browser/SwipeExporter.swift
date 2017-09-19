@@ -90,6 +90,7 @@ class SwipeExporter: NSObject {
         } else {
             limit = (swipeViewController.book.pages.count - startPage - 1) * (efps + extra) + extra + 1
         }
+        print("SwipeExporter:exportAsMovie", self.fps, efps, extra, limit)
         
         let viewSize = swipeViewController.view.frame.size
         let scale = min(resolution / min(viewSize.width, viewSize.height), swipeViewController.view.contentScaleFactor)
