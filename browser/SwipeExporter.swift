@@ -82,11 +82,13 @@ class SwipeExporter: NSObject {
         }
 
         let efps = Int(round(CGFloat(fps) * transitionDuration)) // Effective FPS
+        let extra = Int(round(CGFloat(fps) * pauseDuration))
+      
         let limit:Int
         if let pageCount = pageCount, startPage + pageCount < swipeViewController.book.pages.count {
-            limit = pageCount * efps + 1
+            limit = pageCount * (efps + extra) + extra + 1
         } else {
-            limit = (swipeViewController.book.pages.count - startPage - 1) * efps + 1
+            limit = (swipeViewController.book.pages.count - startPage - 1) * (efps + extra) + extra + 1
         }
         
         let viewSize = swipeViewController.view.frame.size
@@ -157,7 +159,13 @@ class SwipeExporter: NSObject {
 
                   self.iFrame += 1
                   if self.iFrame < limit {
-                      self.swipeViewController.scrollTo(CGFloat(startPage) + CGFloat(self.iFrame) / CGFloat(efps))
+                      let curPage = self.iFrame / (extra + efps)
+                      let offset = self.iFrame % (extra + efps)
+                      if offset == 0 {
+                        self.swipeViewController.scrollTo(CGFloat(startPage + curPage))
+                      } else if offset > extra {
+                        self.swipeViewController.scrollTo(CGFloat(startPage + curPage) + CGFloat(offset - extra) / CGFloat(efps))
+                      }
                   } else {
                       input.markAsFinished()
                       print("SwipeExporter: finishWritingWithCompletionHandler")
