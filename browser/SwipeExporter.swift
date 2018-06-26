@@ -100,8 +100,8 @@ class SwipeExporter: NSObject {
         self.swipeViewController.scrollTo(CGFloat(startPage))
         DispatchQueue.main.async { // HACK: work-around of empty first page bug
           do {
-              let writer = try AVAssetWriter(url: fileURL, fileType: AVFileTypeQuickTimeMovie)
-              let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: [
+              let writer = try AVAssetWriter(url: fileURL, fileType: AVFileType.mov)
+              let input = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: [
                   AVVideoCodecKey : AVVideoCodecH264,
                   AVVideoWidthKey : self.outputSize.width,
                   AVVideoHeightKey : self.outputSize.height

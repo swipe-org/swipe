@@ -730,7 +730,7 @@
 					74EA71761BD047F0006808EA = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = H34BY2CCCD;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0940;
 					};
 					74EA71E01BD0B0EE006808EA = {
 						CreatedOnToolsVersion = 7.1;
@@ -1188,6 +1188,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = swipe.swipe.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1202,6 +1204,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = swipe.swipe.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

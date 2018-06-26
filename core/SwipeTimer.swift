@@ -45,7 +45,7 @@ class SwipeTimer : SwipeNode {
         timers.removeAll()
     }
     
-    func didTimerTick(_ timer: Timer) {
+    @objc func didTimerTick(_ timer: Timer) {
         if !timer.isValid {
             return
         }
