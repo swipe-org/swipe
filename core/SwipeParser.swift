@@ -62,9 +62,9 @@ class SwipeParser {
             if let color = colorMap[key] {
                 return color.cgColor
             } else {
-                let results = regexColor.matches(in: key, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, key.characters.count))
+                let results = regexColor.matches(in: key, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, key.count))
                 if results.count > 0 {
-                    let hex = String(key.characters.dropFirst())
+                    let hex = key.dropFirst()
                     let cstr = hex.cString(using: String.Encoding.ascii)
                     let v = strtoll(cstr!, nil, 16)
                     //NSLog("SwipeParser hex=\(hex), \(value)")
