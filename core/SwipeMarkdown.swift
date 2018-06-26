@@ -129,7 +129,7 @@ class SwipeMarkdown {
                     for prefix in attrs.keys {
                         let result = markdown.commonPrefix(with: prefix + " ", options: NSString.CompareOptions.literal)
                         if result == prefix + " " {
-                            return (prefix, markdown.substring(from: markdown.characters.index(markdown.startIndex, offsetBy: prefix.characters.count + 1)))
+                            return (prefix, markdown.substring(from: markdown.characters.index(markdown.startIndex, offsetBy: prefix.count + 1)))
                         }
                     }
                 }
