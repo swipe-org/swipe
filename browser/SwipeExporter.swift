@@ -102,7 +102,7 @@ class SwipeExporter: NSObject {
           do {
               let writer = try AVAssetWriter(url: fileURL, fileType: AVFileType.mov)
               let input = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: [
-                  AVVideoCodecKey : AVVideoCodecH264,
+                  AVVideoCodecKey : AVVideoCodecType.h264,
                   AVVideoWidthKey : self.outputSize.width,
                   AVVideoHeightKey : self.outputSize.height
               ])
