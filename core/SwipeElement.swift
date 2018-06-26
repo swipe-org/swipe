@@ -1487,7 +1487,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             }
         case "text.length":
             if let string = self.textLayer?.string as? String {
-                return string.characters.count
+                return string.count
             } else {
                 MyLog("SWElem textLayer.string is not a String!")
                 return nil
