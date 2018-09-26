@@ -23,7 +23,7 @@ class SwipePath {
                 return CGPath(ellipseIn: CGRect(x: 0, y: 0, width: w * scale.width, height: h * scale.height), transform: nil)
             } else {
                 //NSLog("SwipePath \(string)")
-                let matches = SwipePath.regexSVG.matches(in: string, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, string.characters.count))
+                let matches = SwipePath.regexSVG.matches(in: string, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, string.count))
                 //NSLog("SwipePath \(matches)")
                 let path = CGMutablePath()
                 var pt = CGPoint.zero
@@ -39,7 +39,7 @@ class SwipePath {
                     prevOffset = match.range.location + match.range.length
                     
                     let params = string[start..<end]
-                    let nums = SwipePath.regexNUM.matches(in: params, options: [], range: NSMakeRange(0, params.characters.count))
+                    let nums = SwipePath.regexNUM.matches(in: params, options: [], range: NSMakeRange(0, params.count))
                     let p = nums.map({ (num) -> CGFloat in
                         let start = params.index(params.startIndex, offsetBy: num.range.location)
                         let end = params.index(start, offsetBy: num.range.length)

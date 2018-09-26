@@ -115,7 +115,7 @@ class SwipeTextField: SwipeView, UITextFieldDelegate {
         case "text":
             return self.textView!.text
         case "text.length":
-            return self.textView?.text?.characters.count
+            return self.textView?.text?.count
         default:
             return super.getPropertyValue(originator, property: property)
         }

@@ -62,14 +62,14 @@ class SwipeParser {
             if let color = colorMap[key] {
                 return color.cgColor
             } else {
-                let results = regexColor.matches(in: key, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, key.characters.count))
+                let results = regexColor.matches(in: key, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, key.count))
                 if results.count > 0 {
-                    let hex = String(key.characters.dropFirst())
+                    let hex = String(key.dropFirst())
                     let cstr = hex.cString(using: String.Encoding.ascii)
                     let v = strtoll(cstr!, nil, 16)
                     //NSLog("SwipeParser hex=\(hex), \(value)")
                     var r = Int64(0), g = Int64(0), b = Int64(0), a = Int64(255)
-                    switch(hex.characters.count) {
+                    switch(hex.count) {
                     case 3:
                         r = v / 0x100 * 0x11
                         g = v / 0x10 % 0x10 * 0x11
@@ -302,7 +302,7 @@ class SwipeParser {
     static let regexPercent = try! NSRegularExpression(pattern: "^[0-9\\.]+%$", options: NSRegularExpression.Options.caseInsensitive)
 
     static func parsePercent(_ value:String, full:CGFloat, defaultValue:CGFloat) -> CGFloat {
-        let num = regexPercent.numberOfMatches(in: value, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, value.characters.count))
+        let num = regexPercent.numberOfMatches(in: value, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, value.count))
         if num == 1 {
             return CGFloat((value as NSString).floatValue / 100.0) * full
         }

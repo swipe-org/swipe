@@ -80,7 +80,7 @@ class SwipeConnection: NSObject {
     }
     let url, urlLocal:URL
     let entity:NSManagedObject
-    var callbacks = Array<(NSError!) -> Void>()
+    var callbacks = Array<(NSError?) -> Void>()
     var fileSize = 0
 
     private init(url:URL, urlLocal:URL, entity:NSManagedObject) {
@@ -94,7 +94,7 @@ class SwipeConnection: NSObject {
         //MyLog("SWCon deinit \(url.lastPathComponent)")
     }
 
-    func load(_ callback:@escaping (NSError!) -> Void) {
+    func load(_ callback:@escaping (NSError?) -> Void) {
         callbacks.append(callback)
     }
 
