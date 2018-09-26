@@ -118,7 +118,7 @@ class SwipeExporter: NSObject {
               guard writer.startWriting() else {
                   return progress(false, Error.FailedToFinalize)
               }
-              writer.startSession(atSourceTime: CMTimeMake(0, Int32(self.fps)))
+            writer.startSession(atSourceTime: CMTimeMake(value:0, timescale:Int32(self.fps)))
               
               //self.swipeViewController.scrollTo(CGFloat(startPage))
               input.requestMediaDataWhenReady(on: DispatchQueue.main) {
@@ -151,7 +151,7 @@ class SwipeExporter: NSObject {
                   }
                   CVPixelBufferUnlockBaseAddress(managedPixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
 
-                  let presentationTime = CMTimeMake(Int64(self.iFrame), Int32(self.fps))
+                let presentationTime = CMTimeMake(value:Int64(self.iFrame), timescale: Int32(self.fps))
                   if !adaptor.append(managedPixelBuffer, withPresentationTime: presentationTime) {
                       print("SwipeExporter:failed to append", self.iFrame)
                       writer.cancelWriting()

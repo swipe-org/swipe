@@ -92,7 +92,7 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
         if let imageView = self.imageView {
             let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
             effectView.frame = imageView.frame
-            effectView.autoresizingMask = UIViewAutoresizing([.flexibleWidth, .flexibleHeight])
+            effectView.autoresizingMask = UIView.AutoresizingMask([.flexibleWidth, .flexibleHeight])
             imageView.addSubview(effectView)
         }
     }
@@ -246,9 +246,9 @@ class SwipeTableViewController: UIViewController, UITableViewDelegate, UITableVi
         return parseText(info: section, key: "title")
     }
     
-    private static let cellIdentifiers = [UITableViewCellStyle.default: "default", .subtitle: "subtitle"] // value1 and value2 styles are not supported yet.
+    private static let cellIdentifiers = [UITableViewCell.CellStyle.default: "default", .subtitle: "subtitle"] // value1 and value2 styles are not supported yet.
     
-    private func dequeueCell(style: UITableViewCellStyle) -> UITableViewCell {
+    private func dequeueCell(style: UITableViewCell.CellStyle) -> UITableViewCell {
         let identifier = SwipeTableViewController.cellIdentifiers[style]!
         if let cell = tableView.dequeueReusableCell(withIdentifier: identifier) {
             cell.textLabel?.text = nil

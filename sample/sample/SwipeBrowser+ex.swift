@@ -10,7 +10,7 @@ import UIKit
 
 extension SwipeBrowser {
     @IBAction func export() {
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         alert.popoverPresentationController?.sourceView = btnExport
         alert.addAction(UIAlertAction(title: "Cancel".localized, style: .cancel, handler:nil))
         alert.addAction(UIAlertAction(title: "Movie".localized, style: .default) {

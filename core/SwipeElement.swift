@@ -105,7 +105,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     private var videoStart = CGFloat(0.0)
     private var videoDuration:CGFloat?
     private var hasObserver = false
-    private let tolerance = CMTimeMake(10, 600) // 1/60sec
+    private let tolerance = CMTimeMake(value:10, timescale:600) // 1/60sec
 
     // Sprite Element Specific
     private var spriteLayer:CALayer?
@@ -382,11 +382,11 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         if let value = info["action"] as? String {
             action = value
 #if os(iOS) // tvOS has some focus issue with UIButton, figure out OSX later
-            let btn = UIButton(type: UIButtonType.custom)
+            let btn = UIButton(type: UIButton.ButtonType.custom)
             btn.frame = view.bounds
-            btn.addTarget(self, action: #selector(SwipeElement.buttonPressed), for: UIControlEvents.touchUpInside)
-            btn.addTarget(self, action: #selector(SwipeElement.touchDown), for: UIControlEvents.touchDown)
-            btn.addTarget(self, action: #selector(SwipeElement.touchUpOutside), for: UIControlEvents.touchUpOutside)
+            btn.addTarget(self, action: #selector(SwipeElement.buttonPressed), for: UIControl.Event.touchUpInside)
+            btn.addTarget(self, action: #selector(SwipeElement.touchDown), for: UIControl.Event.touchDown)
+            btn.addTarget(self, action: #selector(SwipeElement.touchUpOutside), for: UIControl.Event.touchUpOutside)
             view.addSubview(btn)
             self.btn = btn
 #endif
@@ -429,7 +429,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             imageLayer.contentsScale = contentScale
             imageLayer.frame = rc
             imageLayer.contents = image
-            imageLayer.contentsGravity = kCAGravityResizeAspectFill
+            imageLayer.contentsGravity = CALayerContentsGravity.resizeAspectFill
             imageLayer.masksToBounds = true
             layer.addSublayer(imageLayer)
             if let tiling = info["tiling"] as? Bool, tiling {
@@ -451,7 +451,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     subLayer.contentsScale = contentScale
                     subLayer.frame = rc
                     subLayer.contents = image
-                    subLayer.contentsGravity = kCAGravityResizeAspectFill
+                    subLayer.contentsGravity = CALayerContentsGravity.resizeAspectFill
                     subLayer.masksToBounds = true
                     hostLayer.addSublayer(subLayer)
                 }
@@ -474,7 +474,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     ani.values = images
                     ani.beginTime = 1e-10
                     ani.duration = 1.0
-                    ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                     imageLayer.add(ani, forKey: "contents")
                 //}
             }
@@ -575,7 +575,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             
             SwipeElement.processShadow(info, scale:scale, layer: shapeLayer)
 
-            shapeLayer.lineCap = "round"
+            shapeLayer.lineCap = CAShapeLayerLineCap(rawValue: "round")
             shapeLayer.strokeStart = SwipeParser.parseCGFloat(info["strokeStart"], defaultValue: 0.0)
             shapeLayer.strokeEnd = SwipeParser.parseCGFloat(info["strokeEnd"], defaultValue: 1.0)
             layer.addSublayer(shapeLayer)
@@ -777,14 +777,14 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.path = path.copy(using: &xform)
                 ani.beginTime = start
                 ani.duration = duration
-                ani.fillMode = kCAFillModeBoth
-                ani.calculationMode = kCAAnimationPaced
+                ani.fillMode = CAMediaTimingFillMode.both
+                ani.calculationMode = CAAnimationCalculationMode.paced
                 if let mode = to["mode"] as? String {
                     switch(mode) {
                     case "auto":
-                        ani.rotationMode = kCAAnimationRotateAuto
+                        ani.rotationMode = CAAnimationRotationMode.rotateAuto
                     case "reverse":
-                        ani.rotationMode = kCAAnimationRotateAutoReverse
+                        ani.rotationMode = CAAnimationRotationMode.rotateAutoReverse
                     default: // or "none"
                         ani.rotationMode = nil
                     }
@@ -797,7 +797,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 let ani = CABasicAnimation(keyPath: "transform")
                 ani.fromValue = NSValue(caTransform3D : layer.transform)
                 ani.toValue = NSValue(caTransform3D : transform)
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 ani.beginTime = start
                 ani.duration = duration
                 layer.add(ani, forKey: "transform")
@@ -807,7 +807,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 let ani = CABasicAnimation(keyPath: "opacity")
                 ani.fromValue = layer.opacity
                 ani.toValue = opacity
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 ani.beginTime = start
                 ani.duration = duration
                 layer.add(ani, forKey: "opacity")
@@ -817,7 +817,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 let ani = CABasicAnimation(keyPath: "backgroundColor")
                 ani.fromValue = layer.backgroundColor
                 ani.toValue = SwipeParser.parseColor(backgroundColor)
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 ani.beginTime = start
                 ani.duration = duration
                 layer.add(ani, forKey: "backgroundColor")
@@ -826,7 +826,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 let ani = CABasicAnimation(keyPath: "borderColor")
                 ani.fromValue = layer.borderColor
                 ani.toValue = SwipeParser.parseColor(borderColor)
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 ani.beginTime = start
                 ani.duration = duration
                 layer.add(ani, forKey: "borderColor")
@@ -835,7 +835,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 let ani = CABasicAnimation(keyPath: "borderWidth")
                 ani.fromValue = layer.borderWidth
                 ani.toValue = borderWidth * scale.width
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 ani.beginTime = start
                 ani.duration = duration
                 layer.add(ani, forKey: "borderWidth")
@@ -844,7 +844,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 let ani = CABasicAnimation(keyPath: "cornerRadius")
                 ani.fromValue = layer.cornerRadius
                 ani.toValue = borderWidth * scale.width
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 ani.beginTime = start
                 ani.duration = duration
                 layer.add(ani, forKey: "cornerRadius")
@@ -857,7 +857,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     ani.toValue = SwipeParser.parseColor(textColor)
                     ani.beginTime = start
                     ani.duration = duration
-                    ani.fillMode = kCAFillModeBoth
+                    ani.fillMode = CAMediaTimingFillMode.both
                     textLayer.add(ani, forKey: "foregroundColor")
                 }
             }
@@ -880,7 +880,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     ani.values = images
                     ani.beginTime = start
                     ani.duration = duration
-                    ani.fillMode = kCAFillModeBoth
+                    ani.fillMode = CAMediaTimingFillMode.both
                     imageLayer.add(ani, forKey: "contents")
                 }
             }
@@ -897,7 +897,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     ani.values = values
                     ani.beginTime = start
                     ani.duration = duration
-                    ani.fillMode = kCAFillModeBoth
+                    ani.fillMode = CAMediaTimingFillMode.both
                     shapeLayer.add(ani, forKey: "path")
                 } else if let path = parsePath(to["path"], w: w0, h: h0, scale:scale) {
                     let ani = CABasicAnimation(keyPath: "path")
@@ -905,7 +905,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     ani.toValue = path
                     ani.beginTime = start
                     ani.duration = duration
-                    ani.fillMode = kCAFillModeBoth
+                    ani.fillMode = CAMediaTimingFillMode.both
                     shapeLayer.add(ani, forKey: "path")
                 } else if let path = SwipeParser.transformedPath(pathSrc!, param: to, size:frame.size) {
                     let ani = CABasicAnimation(keyPath: "path")
@@ -913,7 +913,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     ani.toValue = path
                     ani.beginTime = start
                     ani.duration = duration
-                    ani.fillMode = kCAFillModeBoth
+                    ani.fillMode = CAMediaTimingFillMode.both
                     shapeLayer.add(ani, forKey: "path")
                 }
                 if let fillColor = to["fillColor"] {
@@ -922,7 +922,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     ani.toValue = SwipeParser.parseColor(fillColor)
                     ani.beginTime = start
                     ani.duration = duration
-                    ani.fillMode = kCAFillModeBoth
+                    ani.fillMode = CAMediaTimingFillMode.both
                     shapeLayer.add(ani, forKey: "fillColor")
                 }
                 if let strokeColor = to["strokeColor"] {
@@ -931,7 +931,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     ani.toValue = SwipeParser.parseColor(strokeColor)
                     ani.beginTime = start
                     ani.duration = duration
-                    ani.fillMode = kCAFillModeBoth
+                    ani.fillMode = CAMediaTimingFillMode.both
                     shapeLayer.add(ani, forKey: "strokeColor")
                 }
                 if let lineWidth = to["lineWidth"] as? CGFloat {
@@ -940,7 +940,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     ani.toValue = lineWidth * scale.width
                     ani.beginTime = start
                     ani.duration = duration
-                    ani.fillMode = kCAFillModeBoth
+                    ani.fillMode = CAMediaTimingFillMode.both
                     shapeLayer.add(ani, forKey: "lineWidth")
                 }
                 if let strokeStart = to["strokeStart"] as? CGFloat {
@@ -949,7 +949,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     ani.toValue = strokeStart
                     ani.beginTime = start
                     ani.duration = duration
-                    ani.fillMode = kCAFillModeBoth
+                    ani.fillMode = CAMediaTimingFillMode.both
                     shapeLayer.add(ani, forKey: "strokeStart")
                 }
                 if let strokeEnd = to["strokeEnd"] as? CGFloat {
@@ -958,7 +958,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     ani.toValue = strokeEnd
                     ani.beginTime = start
                     ani.duration = duration
-                    ani.fillMode = kCAFillModeBoth
+                    ani.fillMode = CAMediaTimingFillMode.both
                     shapeLayer.add(ani, forKey: "strokeEnd")
                 }
             }
@@ -1011,7 +1011,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.repeatCount = repeatCount
                 ani.beginTime = start
                 ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 loopLayer.add(ani, forKey: "transform")
             case "shift":
                 let shiftLayer = (innerLayer == nil) ? layer : innerLayer!
@@ -1037,7 +1037,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.repeatCount = repeatCount
                 ani.beginTime = start
                 ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 shiftLayer.add(ani, forKey: "transform")
             case "blink":
                 let ani = CAKeyframeAnimation(keyPath: "opacity")
@@ -1045,7 +1045,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.repeatCount = repeatCount
                 ani.beginTime = start
                 ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 loopLayer.add(ani, forKey: "opacity")
             case "spin":
                 let fClockwise = booleanValue(from: animation, key: "clockwise", defaultValue: true)
@@ -1058,7 +1058,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.repeatCount = repeatCount
                 ani.beginTime = start
                 ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 loopLayer.add(ani, forKey: "transform")
             case "wiggle":
                 let delta = value(from: animation, key: "delta", defaultValue: 15) * CGFloat(CGFloat.pi / 180.0)
@@ -1071,7 +1071,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.repeatCount = repeatCount
                 ani.beginTime = start
                 ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 loopLayer.add(ani, forKey: "transform")
             case "path":
                 if let shapeLayer = self.shapeLayer {
@@ -1092,7 +1092,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                         ani.repeatCount = repeatCount
                         ani.beginTime = start
                         ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
-                        ani.fillMode = kCAFillModeBoth
+                        ani.fillMode = CAMediaTimingFillMode.both
                         shapeLayer.add(ani, forKey: "path")
                     }
                 }
@@ -1106,8 +1106,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                     ani.repeatCount = repeatCount
                     ani.beginTime = start
                     ani.duration = CFTimeInterval(duration / Double(ani.repeatCount))
-                    ani.fillMode = kCAFillModeBoth
-                    ani.calculationMode = kCAAnimationDiscrete
+                    ani.fillMode = CAMediaTimingFillMode.both
+                    ani.calculationMode = CAAnimationCalculationMode.discrete
                     targetLayer.add(ani, forKey: "contentsRect")
                 }
                 //self.dir = (1,0)
@@ -1217,8 +1217,8 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 return
             }
             let timeSec = videoStart + offset * (videoDuration ?? 1.0)
-            let time = CMTimeMakeWithSeconds(Float64(timeSec), 600)
-            if player.status == AVPlayerStatus.readyToPlay {
+            let time = CMTimeMakeWithSeconds(Float64(timeSec), preferredTimescale: 600)
+            if player.status == AVPlayer.Status.readyToPlay {
                 self.fSeeking = true
                 SwipeElement.objectCount -= 1 // to avoid false memory leak detection
                 player.seek(to: time, toleranceBefore: tolerance, toleranceAfter: tolerance) { (_:Bool) -> Void in
@@ -1330,25 +1330,25 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         }
     }
     
-    static func processTextInfo(_ info:[String:Any], dimension:CGSize, scale:CGSize) -> ([NSAttributedStringKey:Any], String, Bool, Bool, CTFont, CGFloat) {
+    static func processTextInfo(_ info:[String:Any], dimension:CGSize, scale:CGSize) -> ([NSAttributedString.Key:Any], String, Bool, Bool, CTFont, CGFloat) {
         var fTextBottom = false
         var fTextTop = false
         let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         paragraphStyle.alignment = NSTextAlignment.center
         paragraphStyle.lineBreakMode = NSLineBreakMode.byWordWrapping
-        var alignmentMode = kCAAlignmentCenter
+        var alignmentMode = CATextLayerAlignmentMode.center
         
         func processAlignment(_ alignment:String) {
             switch(alignment) {
             case "left":
                 paragraphStyle.alignment = NSTextAlignment.left
-                alignmentMode = kCAAlignmentLeft
+                alignmentMode = CATextLayerAlignmentMode.left
             case "right":
                 paragraphStyle.alignment = NSTextAlignment.right
-                alignmentMode = kCAAlignmentRight
+                alignmentMode = CATextLayerAlignmentMode.right
             case "justified":
                 paragraphStyle.alignment = NSTextAlignment.justified
-                alignmentMode = kCAAlignmentJustified
+                alignmentMode = CATextLayerAlignmentMode.justified
             case "top":
                 fTextTop = true
             case "bottom":
@@ -1378,14 +1378,14 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             return CTFontCreateWithName(("Helvetica" as CFString?)!, fontSize, nil)
         }
         let font:CTFont = createFont()
-        let attr:[NSAttributedStringKey:Any] = [
-            NSAttributedStringKey.font:font,
+        let attr:[NSAttributedString.Key:Any] = [
+            NSAttributedString.Key.font:font,
             //NSForegroundColorAttributeName:UIColor(CGColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor)),
-            NSAttributedStringKey.paragraphStyle:paragraphStyle]
-        return (attr, alignmentMode, fTextTop, fTextBottom, font, fontSize)
+            NSAttributedString.Key.paragraphStyle:paragraphStyle]
+        return (attr, alignmentMode.rawValue, fTextTop, fTextBottom, font, fontSize)
     }
     
-    static func processTextStorage(_ text:String, attr:[NSAttributedStringKey:Any], fTextBottom:Bool, fTextTop:Bool, rcBound:CGRect) -> CGRect {
+    static func processTextStorage(_ text:String, attr:[NSAttributedString.Key:Any], fTextBottom:Bool, fTextTop:Bool, rcBound:CGRect) -> CGRect {
         let textStorage = NSTextStorage(string: text, attributes: attr)
         let manager = NSLayoutManager()
         textStorage.addLayoutManager(manager)
@@ -1413,7 +1413,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         textLayer.contentsScale = UIScreen.main.scale
 #endif
         textLayer.isWrapped = true // *
-        textLayer.alignmentMode = alignmentMode // *
+        textLayer.alignmentMode = CATextLayerAlignmentMode(rawValue: alignmentMode) // *
         textLayer.foregroundColor = SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.black.cgColor) // animatable **
         textLayer.fontSize = fontSize // animatable **
         textLayer.font = font
@@ -1429,7 +1429,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
     static func updateTextLayer(_ textLayer:CATextLayer, text:String, scale:CGSize, info:[String:Any], dimension:CGSize, layer:CALayer) {
         let (attr, alignmentMode, fTextBottom, fTextTop, font, fontSize) = SwipeElement.processTextInfo(info, dimension: dimension, scale: scale)
         
-        textLayer.alignmentMode = alignmentMode // *
+        textLayer.alignmentMode = CATextLayerAlignmentMode(rawValue: alignmentMode) // *
         textLayer.foregroundColor = SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.black.cgColor) // animatable **
         textLayer.fontSize = fontSize // animatable **
         textLayer.font = font
@@ -1664,14 +1664,14 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             ani.path = path.copy(using: &xform)
             ani.beginTime = start
             ani.duration = duration
-            ani.fillMode = kCAFillModeBoth
-            ani.calculationMode = kCAAnimationPaced
+            ani.fillMode = CAMediaTimingFillMode.both
+            ani.calculationMode = CAAnimationCalculationMode.paced
             if let mode = info["mode"] as? String {
                 switch(mode) {
                 case "auto":
-                    ani.rotationMode = kCAAnimationRotateAuto
+                    ani.rotationMode = CAAnimationRotationMode.rotateAuto
                 case "reverse":
-                    ani.rotationMode = kCAAnimationRotateAutoReverse
+                    ani.rotationMode = CAAnimationRotationMode.rotateAutoReverse
                 default: // or "none"
                     ani.rotationMode = nil
                 }
@@ -1684,7 +1684,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             let ani = CABasicAnimation(keyPath: "transform")
             ani.fromValue = NSValue(caTransform3D : layer.transform)
             ani.toValue = NSValue(caTransform3D : transform)
-            ani.fillMode = kCAFillModeBoth
+            ani.fillMode = CAMediaTimingFillMode.both
             ani.beginTime = start
             ani.duration = duration
             layer.add(ani, forKey: "transform")
@@ -1734,7 +1734,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             let ani = CABasicAnimation(keyPath: "cornerRadius")
             ani.fromValue = layer.cornerRadius
             ani.toValue = borderWidth * scale.width
-            ani.fillMode = kCAFillModeBoth
+            ani.fillMode = CAMediaTimingFillMode.both
             ani.beginTime = start
             ani.duration = duration
             layer.add(ani, forKey: "cornerRadius")
@@ -1792,7 +1792,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.values = values
                 ani.beginTime = start
                 ani.duration = duration
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 shapeLayer.add(ani, forKey: "path")
             } else if let path = self.parsePath(info["path"], w: w0, h: h0, scale:self.scale) {
                 let ani = CABasicAnimation(keyPath: "path")
@@ -1800,7 +1800,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.toValue = path
                 ani.beginTime = start
                 ani.duration = duration
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 shapeLayer.add(ani, forKey: "path")
             } /*else if let path = SwipeParser.transformedPath(pathSrc!, param: info, size:frame.size) {
                 let ani = CABasicAnimation(keyPath: "path")
@@ -1817,7 +1817,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.toValue = SwipeParser.parseColor(fillColor)
                 ani.beginTime = start
                 ani.duration = duration
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 shapeLayer.add(ani, forKey: "fillColor")
             }
             if let strokeColor = info["strokeColor"] {
@@ -1826,7 +1826,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.toValue = SwipeParser.parseColor(strokeColor)
                 ani.beginTime = start
                 ani.duration = duration
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 shapeLayer.add(ani, forKey: "strokeColor")
             }
             if let lineWidth = info["lineWidth"] as? CGFloat {
@@ -1835,7 +1835,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.toValue = lineWidth * self.scale.width
                 ani.beginTime = start
                 ani.duration = duration
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 shapeLayer.add(ani, forKey: "lineWidth")
             }
             if let strokeStart = info["strokeStart"] as? CGFloat {
@@ -1844,7 +1844,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.toValue = strokeStart
                 ani.beginTime = start
                 ani.duration = duration
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 shapeLayer.add(ani, forKey: "strokeStart")
             }
             if let strokeEnd = info["strokeEnd"] as? CGFloat {
@@ -1853,7 +1853,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                 ani.toValue = strokeEnd
                 ani.beginTime = start
                 ani.duration = duration
-                ani.fillMode = kCAFillModeBoth
+                ani.fillMode = CAMediaTimingFillMode.both
                 shapeLayer.add(ani, forKey: "strokeEnd")
             }
         }

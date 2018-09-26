@@ -116,8 +116,8 @@ class SwipePage: SwipeView, SwipeElementDelegate {
 
     func unloadView() {
 #if !os(tvOS)
-        NotificationCenter.default.removeObserver(self, name: Notification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: Notification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
 #endif
         SwipeTimer.cancelAll()
         
@@ -474,7 +474,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         if animation != "never" {
             aniLayer.speed = 0 // to manually specify the media timing
             aniLayer.beginTime = 0 // to manually specify the media timing
-            aniLayer.fillMode = kCAFillModeForwards
+            aniLayer.fillMode = CAMediaTimingFillMode.forwards
         }
 #if os(OSX)
         viewAnimation.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
@@ -500,8 +500,8 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         
         setupGestureRecognizers()
 #if !os(tvOS)
-        NotificationCenter.default.addObserver(self, selector: #selector(SwipePage.keyboardWillShow(notification:)), name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SwipePage.keyboardWillHide(notification:)), name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwipePage.keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwipePage.keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
 #endif
         if let actions = eventHandler.actionsFor("load") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
@@ -515,7 +515,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
 #if !os(tvOS)
     @objc func keyboardWillShow(notification: Notification) {
         if let info = notification.userInfo {
-            if let kbFrame = info[UIKeyboardFrameBeginUserInfoKey] as? CGRect {
+            if let kbFrame = info[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect {
                 if let fr = findFirstResponder() {
                     let frFrame = fr.view!.frame
                     let myFrame = self.view!.frame

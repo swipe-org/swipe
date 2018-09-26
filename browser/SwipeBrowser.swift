@@ -157,8 +157,8 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         }
 
         controller = vc
-        self.addChildViewController(vc)
-        vc.view.autoresizingMask = UIViewAutoresizing([.flexibleWidth, .flexibleHeight])
+        self.addChild(vc)
+        vc.view.autoresizingMask = UIView.AutoresizingMask([.flexibleWidth, .flexibleHeight])
 #if os(OSX)
         self.view.addSubview(vc.view, positioned: .Below, relativeTo: nil)
 #else
@@ -233,7 +233,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                         if resourcesAvailable {
                             self.openDocumentViewer(document)
                         } else {
-                            let alert = UIAlertController(title: "Swipe", message: "Loading Resources...".localized, preferredStyle: UIAlertControllerStyle.alert)
+                            let alert = UIAlertController(title: "Swipe", message: "Loading Resources...".localized, preferredStyle: UIAlertController.Style.alert)
                             self.present(alert, animated: true) { () -> Void in
                                 request.beginAccessingResources() { (error:Swift.Error?) -> Void in
                                     DispatchQueue.main.async {
@@ -352,8 +352,8 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     private func processError(_ message:String) {
         DispatchQueue.main.async {
 #if !os(OSX) // REVIEW
-            let alert = UIAlertController(title: "Can't open the document.", message: message, preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (_:UIAlertAction) -> Void in
+            let alert = UIAlertController(title: "Can't open the document.", message: message, preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { (_:UIAlertAction) -> Void in
                 self.presentingViewController?.dismiss(animated: true, completion: nil)
             })
             self.present(alert, animated: true, completion: nil)
@@ -439,7 +439,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
 
     @IBAction func language() {
         if let languages = documentViewer?.languages() {
-            let alert = UIAlertController(title: "Swipe", message: "Choose a language", preferredStyle: UIAlertControllerStyle.actionSheet)
+            let alert = UIAlertController(title: "Swipe", message: "Choose a language", preferredStyle: UIAlertController.Style.actionSheet)
             alert.popoverPresentationController?.sourceView = self.view
             alert.popoverPresentationController?.sourceRect = btnLanguage!.frame
             for language in languages {
@@ -447,7 +447,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
                     let langId = language["id"] as? String else {
                     continue
                 }
-                alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.default, handler: { (_:UIAlertAction) -> Void in
+                alert.addAction(UIAlertAction(title: title, style: UIAlertAction.Style.default, handler: { (_:UIAlertAction) -> Void in
                     //print("SwipeB language selected \(langId)")
                     self.documentViewer?.reloadWithLanguageId(langId)
 #if os(iOS)
