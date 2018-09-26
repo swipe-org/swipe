@@ -52,7 +52,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     private var fVisibleUI = true
     @IBOutlet var toolbar:UIView?
     @IBOutlet var bottombar:UIView?
-    @IBOutlet var slider:UISlider!
+    @IBOutlet var slider:UISlider?
     @IBOutlet var labelTitle:UILabel?
     @IBOutlet var btnExport:UIButton?
     @IBOutlet var btnMore:UIButton?
@@ -108,7 +108,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
         
 #if os(iOS)
         btnExport?.isEnabled = false
-        slider.isHidden = true
+        slider?.isHidden = true
 #endif
 
         if let document = self.jsonDocument {
@@ -342,7 +342,7 @@ class SwipeBrowser: UIViewController, SwipeDocumentViewerDelegate {
     }
 
     @IBAction func slided(_ sender:UISlider) {
-        MyLog("SWBrows \(slider.value)")
+        MyLog("SWBrows \(sender.value)")
     }
 #else
     func tapped() {

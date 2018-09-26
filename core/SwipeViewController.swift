@@ -543,8 +543,8 @@ class SwipeViewController: UIViewController, UIScrollViewDelegate, SwipeDocument
                     scrollView.insertSubview(view, aboveSubview: aboveSubview)
                 }
             } else {
-                let view = page.loadView({ (Void) -> (Void) in
-                    callback?(index)
+                let view = page.loadView({ () -> (Void) in
+                    (callback?(index))!
                 })
                 view.frame = frame
                 

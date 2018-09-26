@@ -12,7 +12,7 @@ import UIKit
 #endif
 
 class SwipeMarkdown {
-    private var attrs = [String:[String:Any]]()
+    private var attrs = [String:[NSAttributedStringKey:Any]]()
     private var prefixes = [
         "-":"\u{2022} ", // bullet (U+2022), http://graphemica.com/%E2%80%A2
         "```":" ",
@@ -20,7 +20,7 @@ class SwipeMarkdown {
     private let scale:CGSize
     private var shadow:NSShadow?
 
-    func attributesWith(_ fontSize:CGFloat, paragraphSpacing:CGFloat, fontName:String? = nil) -> [String:Any] {
+    func attributesWith(_ fontSize:CGFloat, paragraphSpacing:CGFloat, fontName:String? = nil) -> [NSAttributedStringKey:Any] {
         let style = NSMutableParagraphStyle()
         style.lineBreakMode = NSLineBreakMode.byWordWrapping
         style.paragraphSpacing = paragraphSpacing * scale.height
@@ -29,15 +29,15 @@ class SwipeMarkdown {
            let namedFont = UIFont(name: name, size: fontSize * scale.height) {
             font = namedFont
         }
-        var attrs = [NSFontAttributeName: font, NSParagraphStyleAttributeName: style] as [String : Any]
+        var attrs = [NSAttributedStringKey.font: font, NSAttributedStringKey.paragraphStyle: style]
         if let shadow = self.shadow {
-            attrs[NSShadowAttributeName] = shadow
+            attrs[NSAttributedStringKey.shadow] = shadow
         }
         return attrs
     }
 
     // Use function instead of lazy initializer to work around a probable bug in Swift
-    private func genAttrs() -> [String:[String:Any]] {
+    private func genAttrs() -> [String:[NSAttributedStringKey:Any]] {
         return [
             "#": self.attributesWith(32, paragraphSpacing: 16),
             "##": self.attributesWith(28, paragraphSpacing: 14),
@@ -61,14 +61,14 @@ class SwipeMarkdown {
            let styles = markdownInfo["styles"] as? [String:Any] {
             for (keyMark, value) in styles {
                 if let attrInfo = value as? [String:Any] {
-                    var attrCopy:[String:Any]
+                    var attrCopy:[NSAttributedStringKey:Any]
                     if let attr = attrs[keyMark] {
                         attrCopy = attr
                     } else {
                         attrCopy = self.attributesWith(20, paragraphSpacing: 10)
                     }
                     let styleCopy = NSMutableParagraphStyle()
-                    if let style = attrCopy[NSParagraphStyleAttributeName] as? NSParagraphStyle {
+                    if let style = attrCopy[NSAttributedStringKey.paragraphStyle] as? NSParagraphStyle {
                         // WARNING: copy all properties
                         styleCopy.lineBreakMode = style.lineBreakMode
                         styleCopy.paragraphSpacing = style.paragraphSpacing
@@ -78,9 +78,9 @@ class SwipeMarkdown {
                         switch(keyAttr) {
                         case "color":
                             // the value MUST be UIColor or NSColor, not CGColor
-                            attrCopy[NSForegroundColorAttributeName] = UIColor(cgColor:SwipeParser.parseColor(attrValue))
+                            attrCopy[NSAttributedStringKey.foregroundColor] = UIColor(cgColor:SwipeParser.parseColor(attrValue))
                         case "font":
-                            attrCopy[NSFontAttributeName] = SwipeParser.parseFont(attrValue, scale:scale, full:dimension.height)
+                            attrCopy[NSAttributedStringKey.font] = SwipeParser.parseFont(attrValue, scale:scale, full:dimension.height)
                         case "prefix":
                             if let prefix = attrValue as? String {
                                 prefixes[keyMark] = prefix
@@ -108,7 +108,7 @@ class SwipeMarkdown {
                             break;
                         }
                     }
-                    attrCopy[NSParagraphStyleAttributeName] = styleCopy
+                    attrCopy[NSAttributedStringKey.paragraphStyle] = styleCopy
                     attrs[keyMark] = attrCopy
                 }
             }

@@ -132,7 +132,7 @@ class SwipeView: SwipeNode {
         tapped()
     }
     
-    func didTap(_ recognizer: UITapGestureRecognizer) {
+    @objc func didTap(_ recognizer: UITapGestureRecognizer) {
         if let actions = eventHandler.actionsFor("tapped"), fEnabled {
             execute(self, actions: actions)
             completeTap()
@@ -144,7 +144,7 @@ class SwipeView: SwipeNode {
         }
     }
     
-    func didDoubleTap(_ recognizer: UITapGestureRecognizer) {
+    @objc func didDoubleTap(_ recognizer: UITapGestureRecognizer) {
         if let actions = eventHandler.actionsFor("doubleTapped"), fEnabled  {
             execute(self, actions: actions)
         }

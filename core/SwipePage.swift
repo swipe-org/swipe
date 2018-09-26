@@ -24,7 +24,7 @@ extension UIResponder {
         return UIResponder._currentFirstResponder
     }
     
-    internal func findFirstResponder(sender: Any) {
+    @objc internal func findFirstResponder(sender: Any) {
         UIResponder._currentFirstResponder = self
     }
 }
@@ -513,7 +513,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
     }
     
 #if !os(tvOS)
-    func keyboardWillShow(notification: Notification) {
+    @objc func keyboardWillShow(notification: Notification) {
         if let info = notification.userInfo {
             if let kbFrame = info[UIKeyboardFrameBeginUserInfoKey] as? CGRect {
                 if let fr = findFirstResponder() {
@@ -528,7 +528,7 @@ class SwipePage: SwipeView, SwipeElementDelegate {
         }
     }
     
-    func keyboardWillHide(notification: Notification) {
+    @objc func keyboardWillHide(notification: Notification) {
         if let _ = notification.userInfo {
             if findFirstResponder() != nil {
                 let myFrame = self.view!.frame

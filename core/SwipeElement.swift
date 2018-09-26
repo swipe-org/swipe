@@ -678,7 +678,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
             let videoLayer = XAVPlayerLayer(player: videoPlayer)
             videoLayer.frame = CGRect(x: 0.0, y: 0.0, width: w, height: h)
             if fScaleToFill {
-                videoLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+                videoLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
             }
             layer.addSublayer(videoLayer)
 
@@ -1152,7 +1152,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         return SwipePath.parse(shape0, w: w, h: h, scale: scale)
     }
     
-    func buttonPressed() {
+    @objc func buttonPressed() {
         MyLog("SWElem buttonPressed", level: 1)
         layer?.opacity = 1.0
         if let delegate = self.delegate {
@@ -1160,12 +1160,12 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         }
     }
 
-    func touchDown() {
+    @objc func touchDown() {
         MyLog("SWElem touchDown", level: 1)
         layer?.opacity = 0.5
     }
     
-    func touchUpOutside() {
+    @objc func touchUpOutside() {
         MyLog("SWElem touchUpOutside", level: 1)
         layer?.opacity = 1.0
     }
@@ -1330,7 +1330,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         }
     }
     
-    static func processTextInfo(_ info:[String:Any], dimension:CGSize, scale:CGSize) -> ([String:Any], String, Bool, Bool, CTFont, CGFloat) {
+    static func processTextInfo(_ info:[String:Any], dimension:CGSize, scale:CGSize) -> ([NSAttributedStringKey:Any], String, Bool, Bool, CTFont, CGFloat) {
         var fTextBottom = false
         var fTextTop = false
         let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
@@ -1373,19 +1373,19 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
         let fontNames = SwipeParser.parseFontName(info, markdown: false)
         func createFont() -> CTFont {
             for fontName in fontNames {
-                return CTFontCreateWithName(fontName as CFString?, fontSize, nil)
+                return CTFontCreateWithName((fontName as CFString?)!, fontSize, nil)
             }
-            return CTFontCreateWithName("Helvetica" as CFString?, fontSize, nil)
+            return CTFontCreateWithName(("Helvetica" as CFString?)!, fontSize, nil)
         }
         let font:CTFont = createFont()
-        let attr:[String:Any] = [
-            NSFontAttributeName:font,
+        let attr:[NSAttributedStringKey:Any] = [
+            NSAttributedStringKey.font:font,
             //NSForegroundColorAttributeName:UIColor(CGColor: SwipeParser.parseColor(info["textColor"], defaultColor: UIColor.blackColor().CGColor)),
-            NSParagraphStyleAttributeName:paragraphStyle]
+            NSAttributedStringKey.paragraphStyle:paragraphStyle]
         return (attr, alignmentMode, fTextTop, fTextBottom, font, fontSize)
     }
     
-    static func processTextStorage(_ text:String, attr:[String:Any], fTextBottom:Bool, fTextTop:Bool, rcBound:CGRect) -> CGRect {
+    static func processTextStorage(_ text:String, attr:[NSAttributedStringKey:Any], fTextBottom:Bool, fTextTop:Bool, rcBound:CGRect) -> CGRect {
         let textStorage = NSTextStorage(string: text, attributes: attr)
         let manager = NSLayoutManager()
         textStorage.addLayoutManager(manager)
