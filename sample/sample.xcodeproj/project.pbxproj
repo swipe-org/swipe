@@ -721,7 +721,7 @@
 					tutorial,
 				);
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1030;
 				ORGANIZATIONNAME = "Satoshi Nakajima";
 				TargetAttributes = {
 					7473AC481D6D3E5600DA34B1 = {
@@ -730,7 +730,7 @@
 					74EA71761BD047F0006808EA = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = H34BY2CCCD;
-						LastSwiftMigration = 0940;
+						LastSwiftMigration = 1030;
 					};
 					74EA71E01BD0B0EE006808EA = {
 						CreatedOnToolsVersion = 7.1;
@@ -740,7 +740,7 @@
 			};
 			buildConfigurationList = 74EA71721BD047F0006808EA /* Build configuration list for PBXProject "sample" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -1095,6 +1095,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1150,6 +1151,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1205,8 +1207,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = swipe.swipe.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1222,8 +1223,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = swipe.swipe.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
