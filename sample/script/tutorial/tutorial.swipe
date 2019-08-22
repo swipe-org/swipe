@@ -2,7 +2,6 @@
     "title": "Swipe Tutorial",
     "dimension":[1280, 0],
     "orientation":"landscape",
-    "resources":["tutorial"],
     "templates": {
         "elements":{
             "body": { "x":"center", "w":"66.7%" },
