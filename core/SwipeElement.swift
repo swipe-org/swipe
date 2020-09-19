@@ -736,7 +736,7 @@ class SwipeElement: SwipeView, SwipeViewDelegate {
                         DispatchQueue.main.async() {
                             MyLog("SWElem duration=\(duration) from \(self.videoStart) seeking=\(self.fSeeking)", level:0)
                             let time = CMTime(seconds: Double(self.videoStart + duration), preferredTimescale: 600)
-                            videoPlayer.addBoundaryTimeObserver(forTimes: [time as NSValue], queue: nil) {
+                            videoPlayer.addBoundaryTimeObserver(forTimes: [NSValue(time: time)], queue: nil) {
                                 [weak self] in
                                 MyLog("SWElem timeObserver pausing", level:0)
                                 videoPlayer.pause()
